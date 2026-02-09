@@ -125,7 +125,7 @@ export function ContactForm() {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="w-full bg-primary-500 font-sans hover:bg-primary-600 sm:w-auto"
+                className="w-full bg-primary-500 text-white font-sans hover:bg-primary-600 sm:w-auto"
               >
                 <Send className="mr-2 h-4 w-4" />
                 {isPending ? t("sending") : t("send")}

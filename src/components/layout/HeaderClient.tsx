@@ -52,7 +52,7 @@ export function HeaderClient({
         {ctaButton && (
           <Button
             asChild
-            className="hidden bg-primary-500 font-sans hover:bg-primary-600 sm:inline-flex"
+            className="hidden bg-primary-500 text-white font-sans hover:bg-primary-600 sm:inline-flex"
           >
             <Link href={ctaButton.url as "/"}>{ctaButton.label}</Link>
           </Button>

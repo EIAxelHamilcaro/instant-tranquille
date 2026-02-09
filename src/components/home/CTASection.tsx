@@ -27,7 +27,7 @@ export function CTASection({
         <h2 className="text-3xl font-bold text-white sm:text-4xl">
           {t("ctaTitle")}
         </h2>
-        <p className="mt-3 text-lg text-primary-100">{t("ctaSubtitle")}</p>
+        <p className="mt-3 text-lg text-primary-50">{t("ctaSubtitle")}</p>
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <ExternalLinkButton
             href={airbnbUrl}

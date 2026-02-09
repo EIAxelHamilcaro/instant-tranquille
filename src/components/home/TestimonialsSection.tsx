@@ -21,9 +21,9 @@ import type { CmsTestimonial } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
 const sourceColors: Record<string, string> = {
-  airbnb: "bg-[#FF5A5F]/10 text-[#FF5A5F]",
+  airbnb: "bg-[#FF5A5F]/10 text-[#B7363B]",
   booking: "bg-[#003580]/10 text-[#003580]",
-  google: "bg-[#4285F4]/10 text-[#4285F4]",
+  google: "bg-[#4285F4]/10 text-[#2B5DAD]",
   direct: "bg-primary-100 text-primary-700",
 };
 

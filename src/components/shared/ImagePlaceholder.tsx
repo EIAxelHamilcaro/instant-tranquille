@@ -41,9 +41,9 @@ export function ImagePlaceholder({
       )}
       style={{ aspectRatio }}
     >
-      <Icon className="h-12 w-12 text-sand-400" />
+      <Icon className="h-12 w-12 text-sand-600" />
       {label && (
-        <span className="mt-2 text-sm font-medium text-sand-500">{label}</span>
+        <span className="mt-2 text-sm font-medium text-sand-700">{label}</span>
       )}
     </div>
   );

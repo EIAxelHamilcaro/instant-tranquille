@@ -173,7 +173,7 @@ export function TestimonialForm() {
               <Button
                 type="submit"
                 disabled={isPending || (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)}
-                className="w-full bg-primary-500 font-sans hover:bg-primary-600 sm:w-auto"
+                className="w-full bg-primary-500 text-white font-sans hover:bg-primary-600 sm:w-auto"
               >
                 <Send className="mr-2 h-4 w-4" />
                 {isPending

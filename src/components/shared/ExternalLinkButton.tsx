@@ -16,7 +16,7 @@ export function ExternalLinkButton({
     primary:
       "bg-primary-500 text-white hover:bg-primary-600",
     earth:
-      "bg-earth-500 text-white hover:bg-earth-600",
+      "bg-earth-700 text-white hover:bg-earth-800",
     outline:
       "border-2 border-primary-500 text-primary-600 hover:bg-primary-50",
   };
