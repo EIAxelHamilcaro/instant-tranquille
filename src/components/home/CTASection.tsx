@@ -1,9 +1,12 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { ExternalLinkButton } from "@/components/shared/ExternalLinkButton";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
+import { useReveal } from "@/lib/useReveal";
 
 type BookingLinks = {
   airbnb?: string | null;
@@ -17,18 +20,21 @@ export function CTASection({
   bookingLinks?: BookingLinks | null;
 }) {
   const t = useTranslations("home");
+  const ref = useReveal();
 
   const airbnbUrl = bookingLinks?.airbnb || "#";
   const bookingUrl = bookingLinks?.booking || "#";
 
   return (
-    <section className="bg-primary-500 py-16">
+    <section className="bg-primary-500 py-16" ref={ref}>
       <Container className="text-center">
-        <h2 className="text-3xl font-bold text-white sm:text-4xl">
+        <h2 className="reveal text-3xl font-bold text-white sm:text-4xl">
           {t("ctaTitle")}
         </h2>
-        <p className="mt-3 text-lg text-primary-50">{t("ctaSubtitle")}</p>
-        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <p className="reveal mt-3 text-lg text-white" style={{ "--stagger": 1 } as React.CSSProperties}>
+          {t("ctaSubtitle")}
+        </p>
+        <div className="reveal mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center" style={{ "--stagger": 2 } as React.CSSProperties}>
           <ExternalLinkButton
             href={airbnbUrl}
             variant="earth"
@@ -46,7 +52,7 @@ export function CTASection({
             asChild
             variant="outline"
             size="lg"
-            className="min-w-[200px] border-white/30 font-sans text-white hover:bg-white/10"
+            className="min-w-[200px] border-white/30 font-sans text-white hover:bg-white/10 active:scale-[0.98]"
           >
             <Link href="/contact">
               <Mail className="mr-2 h-4 w-4" />

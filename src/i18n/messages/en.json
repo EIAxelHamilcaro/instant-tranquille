@@ -76,7 +76,9 @@
     "cancellation": "Cancellation",
     "deposit": "Security deposit",
     "checkInOut": "Check-in / Check-out",
-    "additionalPolicies": "Additional information"
+    "additionalPolicies": "Additional information",
+    "contactCta": "Have a question about rates or availability?",
+    "contactButton": "Contact us"
   },
   "contact": {
     "title": "Contact",
@@ -126,7 +128,8 @@
     "error": "Something went wrong",
     "errorDesc": "We apologize for the inconvenience. Please try again.",
     "retry": "Try again",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "skipToContent": "Skip to main content"
   },
   "footer": {
     "description": "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",

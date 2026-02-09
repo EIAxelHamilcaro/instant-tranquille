@@ -6,6 +6,7 @@ import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapSection } from "@/components/contact/MapPlaceholder";
 import { AccessInstructions } from "@/components/contact/AccessInstructions";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 export async function generateMetadata({
   params,
@@ -53,6 +54,12 @@ export default async function ContactPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <Breadcrumbs
+        items={[
+          { label: locale === "fr" ? "Accueil" : "Home", href: "/" },
+          { label: "Contact" },
+        ]}
       />
       <ContactForm />
       <MapSection

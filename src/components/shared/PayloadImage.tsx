@@ -48,6 +48,7 @@ export function PayloadImage({
   }
 
   const dimensions = sizeDimensions[size];
+  const quality = priority ? 85 : 75;
 
   if (fill) {
     return (
@@ -57,6 +58,8 @@ export function PayloadImage({
         fill
         className={className}
         priority={priority}
+        quality={quality}
+        {...(priority && { fetchPriority: "high" })}
         sizes={
           size === "hero"
             ? "100vw"
@@ -76,6 +79,8 @@ export function PayloadImage({
       height={sizeData?.height || dimensions.height}
       className={className}
       priority={priority}
+      quality={quality}
+      {...(priority && { fetchPriority: "high" })}
     />
   );
 }

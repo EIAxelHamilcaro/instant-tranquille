@@ -254,6 +254,36 @@ export async function getFeaturedRecommendations(locale: string, draft = false) 
   )();
 }
 
+export async function getAllApprovedTestimonials(locale: string, draft = false) {
+  if (draft) {
+    const payload = await getPayload();
+    const result = await payload.find({
+      collection: "testimonials",
+      where: { status: { equals: "approved" } },
+      sort: "-stayDate",
+      locale: locale as "fr" | "en",
+      limit: 100,
+      draft: true,
+    });
+    return result.docs as unknown as CmsTestimonial[];
+  }
+  return unstable_cache(
+    async () => {
+      const payload = await getPayload();
+      const result = await payload.find({
+        collection: "testimonials",
+        where: { status: { equals: "approved" } },
+        sort: "-stayDate",
+        locale: locale as "fr" | "en",
+        limit: 100,
+      });
+      return result.docs as unknown as CmsTestimonial[];
+    },
+    ["testimonials-approved", locale],
+    { revalidate: 3600, tags: ["testimonials"] },
+  )();
+}
+
 export async function getPageBySlug(slug: string, locale: string, draft = false) {
   if (draft) {
     const payload = await getPayload();

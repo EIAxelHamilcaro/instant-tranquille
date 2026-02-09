@@ -76,7 +76,9 @@
     "cancellation": "Annulation",
     "deposit": "Caution",
     "checkInOut": "Arrivée / Départ",
-    "additionalPolicies": "Informations complémentaires"
+    "additionalPolicies": "Informations complémentaires",
+    "contactCta": "Une question sur nos tarifs ou disponibilités ?",
+    "contactButton": "Nous contacter"
   },
   "contact": {
     "title": "Contact",
@@ -126,7 +128,8 @@
     "error": "Une erreur est survenue",
     "errorDesc": "Nous nous excusons pour ce désagrément. Veuillez réessayer.",
     "retry": "Réessayer",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "skipToContent": "Aller au contenu principal"
   },
   "footer": {
     "description": "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",

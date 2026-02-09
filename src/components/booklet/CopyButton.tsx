@@ -25,8 +25,8 @@ export function CopyButton({
     <button
       onClick={handleCopy}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md bg-sand-100 px-3 py-1.5 font-sans text-sm font-medium transition-colors hover:bg-sand-200",
-        copied && "bg-green-100 text-green-700",
+        "inline-flex items-center gap-1.5 rounded-md bg-sand-100 px-3 py-1.5 font-sans text-sm font-medium transition-all hover:bg-sand-200 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
+        copied && "scale-105 bg-green-100 text-green-700",
         className,
       )}
     >
@@ -41,6 +41,9 @@ export function CopyButton({
           {value}
         </>
       )}
+      <span className="sr-only" aria-live="polite">
+        {copied ? t("copied") : ""}
+      </span>
     </button>
   );
 }

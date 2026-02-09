@@ -7,6 +7,7 @@ import { getPricingConfig } from "@/lib/queries";
 import { PricingTable } from "@/components/rates/PricingTable";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { RatesPageClient } from "@/components/live-preview/RatesPageClient";
 
 export async function generateMetadata({
@@ -68,6 +69,12 @@ export default async function RatesPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <Breadcrumbs
+        items={[
+          { label: locale === "fr" ? "Accueil" : "Home", href: "/" },
+          { label: locale === "fr" ? "Tarifs & Réservation" : "Rates & Booking" },
+        ]}
       />
       <PricingTable
         seasons={pricingConfig.seasons || []}

@@ -94,6 +94,7 @@
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
+  font-size-adjust: from-font;
 }
 
 .frontend-app :is(h1, h2, h3, h4, h5, h6) {
@@ -103,6 +104,169 @@
 @layer base {
   * {
     border-color: var(--color-border);
+  }
+}
+
+/* ─── Focus visible fallback ─── */
+.frontend-app a:focus-visible,
+.frontend-app button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* ─── Keyframes ─── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes grow-width {
+  from { width: 0; }
+  to { width: 4rem; }
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Reveal classes (triggered by data-visible from IntersectionObserver) ─── */
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale,
+.reveal-fade,
+.reveal-grow {
+  opacity: 0;
+}
+
+.reveal[data-visible] {
+  animation: fade-up 0.6s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+.reveal-left[data-visible] {
+  animation: slide-in-left 0.6s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+.reveal-right[data-visible] {
+  animation: slide-in-right 0.6s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+.reveal-scale[data-visible] {
+  animation: scale-in 0.5s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+.reveal-fade[data-visible] {
+  animation: fade-in 0.6s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+.reveal-grow[data-visible] {
+  animation: grow-width 0.6s ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 100ms);
+}
+
+/* ─── Hero animations (immediate, no IO needed) ─── */
+.hero-title {
+  animation: hero-fade-up 0.8s ease-out 0.1s both;
+}
+
+.hero-subtitle {
+  animation: hero-fade-up 0.8s ease-out 0.3s both;
+}
+
+.hero-buttons {
+  animation: hero-fade-up 0.8s ease-out 0.5s both;
+}
+
+/* ─── Section heading underline grow ─── */
+.heading-underline[data-visible] {
+  animation: grow-width 0.6s ease-out 0.3s both;
+}
+
+/* ─── Header scroll shadow ─── */
+header[data-scrolled] {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale,
+  .reveal-fade,
+  .reveal-grow,
+  .hero-title,
+  .hero-subtitle,
+  .hero-buttons,
+  .heading-underline {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

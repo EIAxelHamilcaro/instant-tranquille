@@ -4,19 +4,95 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import * as LucideIcons from "lucide-react";
+import {
+  Check,
+  Wifi,
+  Car,
+  Trees,
+  Home,
+  Tv,
+  Flame,
+  Snowflake,
+  WashingMachine,
+  Wind,
+  Utensils,
+  CookingPot,
+  Microwave,
+  Coffee,
+  Refrigerator,
+  BedDouble,
+  Bath,
+  ShowerHead,
+  Armchair,
+  BookOpen,
+  Baby,
+  Dog,
+  Dumbbell,
+  Bike,
+  Waves,
+  Sun,
+  Flower,
+  Fence,
+  Gamepad2,
+  Music,
+  Lock,
+  ShieldCheck,
+  Droplets,
+  Plug,
+  AirVent,
+  Fan,
+  Heater,
+  Lamp,
+  type LucideIcon,
+} from "lucide-react";
 import type { CmsAmenity } from "@/lib/queries";
+
+const iconMap: Record<string, LucideIcon> = {
+  check: Check,
+  wifi: Wifi,
+  car: Car,
+  trees: Trees,
+  home: Home,
+  tv: Tv,
+  flame: Flame,
+  snowflake: Snowflake,
+  "washing-machine": WashingMachine,
+  wind: Wind,
+  utensils: Utensils,
+  "cooking-pot": CookingPot,
+  microwave: Microwave,
+  coffee: Coffee,
+  refrigerator: Refrigerator,
+  "bed-double": BedDouble,
+  bath: Bath,
+  "shower-head": ShowerHead,
+  armchair: Armchair,
+  "book-open": BookOpen,
+  baby: Baby,
+  dog: Dog,
+  dumbbell: Dumbbell,
+  bike: Bike,
+  waves: Waves,
+  sun: Sun,
+  flower: Flower,
+  fence: Fence,
+  "gamepad-2": Gamepad2,
+  music: Music,
+  lock: Lock,
+  "shield-check": ShieldCheck,
+  droplets: Droplets,
+  plug: Plug,
+  "air-vent": AirVent,
+  fan: Fan,
+  heater: Heater,
+  lamp: Lamp,
+};
 
 const categoryOrder = ["indoor", "outdoor", "kitchen", "comfort"] as const;
 
-function getIcon(iconName: string | null | undefined): LucideIcons.LucideIcon {
-  if (!iconName) return LucideIcons.Check;
-  const pascalCase = iconName
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
-  const icon = (LucideIcons as Record<string, unknown>)[pascalCase];
-  return (icon as LucideIcons.LucideIcon) || LucideIcons.Check;
+function getIcon(iconName: string | null | undefined): LucideIcon {
+  if (!iconName) return Check;
+  return iconMap[iconName] || Check;
 }
 
 export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {

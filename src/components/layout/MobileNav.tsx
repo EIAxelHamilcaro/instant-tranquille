@@ -25,7 +25,7 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-72 bg-background">
-        <nav className="mt-8 flex flex-col gap-4">
+        <nav aria-label="Navigation mobile" className="mt-8 flex flex-col gap-4">
           {navItems.map((item) =>
             item.isExternal ? (
               <a

@@ -19,6 +19,7 @@ import {
 import { Quote } from "lucide-react";
 import type { CmsTestimonial } from "@/lib/queries";
 import { cn } from "@/lib/utils";
+import { useReveal } from "@/lib/useReveal";
 
 const sourceColors: Record<string, string> = {
   airbnb: "bg-[#FF5A5F]/10 text-[#B7363B]",
@@ -33,6 +34,7 @@ export function TestimonialsSection({
   testimonials: CmsTestimonial[];
 }) {
   const t = useTranslations("home");
+  const ref = useReveal();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -55,7 +57,7 @@ export function TestimonialsSection({
   if (!testimonials.length) return null;
 
   return (
-    <section className="py-20">
+    <section className="reveal py-20" ref={ref}>
       <Container>
         <SectionHeading title={t("testimonialsTitle")} />
         <div className="mx-auto max-w-5xl px-12">
@@ -75,7 +77,7 @@ export function TestimonialsSection({
                 >
                   <Card className="border-sand-200 h-full bg-white">
                     <CardContent className="flex h-full flex-col p-6">
-                      <Quote className="mb-3 h-8 w-8 shrink-0 text-primary-200" />
+                      <Quote className="mb-3 h-8 w-8 shrink-0 text-primary-200" aria-hidden="true" />
                       <p className="mb-4 flex-1 text-sm leading-relaxed italic text-foreground/80">
                         &ldquo;{testimonial.text}&rdquo;
                       </p>
@@ -114,24 +116,35 @@ export function TestimonialsSection({
             <CarouselNext />
           </Carousel>
 
-          {/* Dots */}
+          {/* Dots with touch target + aria-live counter */}
           {count > 1 && (
-            <div className="mt-6 flex justify-center gap-2">
-              {Array.from({ length: count }).map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={`Aller au témoignage ${i + 1}`}
-                  className={cn(
-                    "h-2 rounded-full transition-all",
-                    i === current
-                      ? "w-6 bg-primary-600"
-                      : "w-2 bg-primary-200 hover:bg-primary-300",
-                  )}
-                  onClick={() => api?.scrollTo(i)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="mt-6 flex justify-center gap-1" role="tablist">
+                {Array.from({ length: count }).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === current}
+                    aria-label={`Témoignage ${i + 1} sur ${count}`}
+                    className="flex h-11 w-11 items-center justify-center"
+                    onClick={() => api?.scrollTo(i)}
+                  >
+                    <span
+                      className={cn(
+                        "block h-2 rounded-full transition-all",
+                        i === current
+                          ? "w-6 bg-primary-600"
+                          : "w-2 bg-primary-200 hover:bg-primary-300",
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
+              <p className="sr-only" aria-live="polite">
+                Témoignage {current + 1} sur {count}
+              </p>
+            </>
           )}
         </div>
       </Container>

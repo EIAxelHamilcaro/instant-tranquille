@@ -33,17 +33,17 @@ export function HeroSection({ heroImage }: { heroImage?: any }) {
       )}
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
-        <h1 className="text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
+        <h1 className="hero-title text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
           {t("heroTitle")}
         </h1>
-        <p className="mt-6 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
+        <p className="hero-subtitle mt-6 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
           {t("heroSubtitle")}
         </p>
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="hero-buttons mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Button
             asChild
             size="lg"
-            className="bg-primary-500 px-8 font-sans text-lg text-white shadow-lg hover:bg-primary-600"
+            className="bg-primary-500 px-8 font-sans text-lg text-white shadow-lg hover:bg-primary-600 active:scale-[0.98]"
           >
             <Link href="/le-gite">{t("heroCta")}</Link>
           </Button>
@@ -51,7 +51,7 @@ export function HeroSection({ heroImage }: { heroImage?: any }) {
             asChild
             variant="outline"
             size="lg"
-            className="border-white/40 bg-white/10 px-8 font-sans text-lg text-white shadow-lg backdrop-blur-sm hover:bg-white/20"
+            className="border-white/40 bg-white/10 px-8 font-sans text-lg text-white shadow-lg backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
           >
             <Link href="/tarifs-reservation">{t("ctaAirbnb")}</Link>
           </Button>
@@ -59,7 +59,7 @@ export function HeroSection({ heroImage }: { heroImage?: any }) {
       </div>
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown className="h-8 w-8 text-white/60" />
+        <ChevronDown className="h-8 w-8 text-white/60" aria-hidden="true" />
       </div>
     </section>
   );

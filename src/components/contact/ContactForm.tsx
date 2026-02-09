@@ -28,8 +28,8 @@ export function ContactForm() {
           <SectionHeading title={t("formTitle")} />
 
           {state.success ? (
-            <div className="rounded-lg border border-green-200 bg-green-50 p-6 text-center">
-              <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-500" />
+            <div role="status" aria-live="polite" className="rounded-lg border border-green-200 bg-green-50 p-6 text-center">
+              <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-500" aria-hidden="true" />
               <p className="font-sans font-medium text-green-800">
                 {t("success")}
               </p>
@@ -116,8 +116,8 @@ export function ContactForm() {
               </div>
 
               {state.error && (
-                <div className="flex items-center gap-2 text-sm text-red-600">
-                  <AlertCircle className="h-4 w-4" />
+                <div role="alert" className="flex items-center gap-2 text-sm text-red-600">
+                  <AlertCircle className="h-4 w-4" aria-hidden="true" />
                   {t("error")}
                 </div>
               )}

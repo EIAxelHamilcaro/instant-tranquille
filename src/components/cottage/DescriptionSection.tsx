@@ -1,8 +1,13 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { Users, BedDouble, Bath, Maximize } from "lucide-react";
+import { useReveal } from "@/lib/useReveal";
 
 type PropertyDetails = {
   maxGuests?: number | null;
@@ -17,6 +22,8 @@ export function DescriptionSection({
   propertyDetails?: PropertyDetails | null;
 }) {
   const t = useTranslations("cottage");
+  const tRates = useTranslations("rates");
+  const ref = useReveal();
 
   const stats = [
     {
@@ -42,14 +49,20 @@ export function DescriptionSection({
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-20" ref={ref}>
       <Container>
         <div className="grid items-start gap-12 lg:grid-cols-2">
-          <div>
-            <SectionHeading title={t("descriptionTitle")} centered={false} />
+          <div className="reveal-left">
+            <SectionHeading title={t("descriptionTitle")} centered={false} as="h1" />
             <p className="text-lg leading-relaxed text-foreground/80">
               {t("descriptionText")}
             </p>
+            <Button
+              asChild
+              className="mt-6 bg-primary-500 font-sans text-white hover:bg-primary-600 active:scale-[0.98]"
+            >
+              <Link href="/tarifs-reservation">{tRates("title")}</Link>
+            </Button>
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {stats.map(({ icon: Icon, value, label }) => (
                 <div
@@ -65,7 +78,7 @@ export function DescriptionSection({
               ))}
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="reveal-right space-y-4">
             <ImagePlaceholder
               aspectRatio="4/3"
               icon="home"

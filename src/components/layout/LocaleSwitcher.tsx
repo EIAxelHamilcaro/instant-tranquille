@@ -14,11 +14,12 @@ export function LocaleSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-sand-300 p-0.5 font-sans text-sm">
+    <div className="flex items-center gap-1 rounded-full border border-sand-300 p-0.5 font-sans text-sm" role="group" aria-label="Langue">
       <button
         onClick={() => switchLocale("fr")}
+        aria-current={locale === "fr" ? "true" : undefined}
         className={cn(
-          "rounded-full px-2.5 py-1 transition-colors",
+          "rounded-full px-3 py-2.5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
           locale === "fr"
             ? "bg-primary-500 text-white"
             : "text-foreground hover:bg-sand-100",
@@ -28,8 +29,9 @@ export function LocaleSwitcher() {
       </button>
       <button
         onClick={() => switchLocale("en")}
+        aria-current={locale === "en" ? "true" : undefined}
         className={cn(
-          "rounded-full px-2.5 py-1 transition-colors",
+          "rounded-full px-3 py-2.5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
           locale === "en"
             ? "bg-primary-500 text-white"
             : "text-foreground hover:bg-sand-100",

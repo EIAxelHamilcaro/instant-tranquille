@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -188,6 +190,15 @@ export function PricingTable({
             </div>
           </div>
         )}
+
+        <div className="mt-10 text-center">
+          <p className="mb-4 text-sm text-muted-foreground">
+            {t("contactCta")}
+          </p>
+          <Button asChild className="bg-primary-500 text-white font-sans hover:bg-primary-600">
+            <Link href={"/contact" as "/"}>{t("contactButton")}</Link>
+          </Button>
+        </div>
       </Container>
     </section>
   );

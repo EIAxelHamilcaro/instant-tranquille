@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
@@ -5,6 +7,7 @@ import { ExternalLinkButton } from "@/components/shared/ExternalLinkButton";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
+import { useReveal } from "@/lib/useReveal";
 
 type BookingLinksData = {
   airbnb?: string | null;
@@ -19,12 +22,13 @@ export function BookingLinks({
 }) {
   const t = useTranslations("rates");
   const tHome = useTranslations("home");
+  const ref = useReveal();
 
   const airbnbUrl = bookingLinks?.airbnb || "#";
   const bookingUrl = bookingLinks?.booking || "#";
 
   return (
-    <section className="bg-sand-100 py-16">
+    <section className="reveal bg-sand-100 py-16" ref={ref}>
       <Container className="text-center">
         <SectionHeading title={t("bookTitle")} subtitle={t("bookSubtitle")} />
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -46,7 +50,7 @@ export function BookingLinks({
             asChild
             variant="outline"
             size="lg"
-            className="min-w-[220px] border-primary-500 font-sans text-primary-600 hover:bg-primary-50"
+            className="min-w-[220px] border-primary-500 font-sans text-primary-600 hover:bg-primary-50 active:scale-[0.98]"
           >
             <Link href="/contact">
               <Mail className="mr-2 h-4 w-4" />

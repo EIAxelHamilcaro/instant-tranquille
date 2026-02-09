@@ -1,8 +1,11 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Card, CardContent } from "@/components/ui/card";
 import { Car, Clock, MapPin } from "lucide-react";
+import { useReveal } from "@/lib/useReveal";
 
 interface AccessRoute {
   from: string;
@@ -17,6 +20,7 @@ interface AccessInstructionsProps {
 
 export function AccessInstructions({ routes }: AccessInstructionsProps) {
   const t = useTranslations("contact");
+  const ref = useReveal();
 
   const defaultRoutes: AccessRoute[] = [
     {
@@ -42,12 +46,16 @@ export function AccessInstructions({ routes }: AccessInstructionsProps) {
   const displayRoutes = routes && routes.length > 0 ? routes : defaultRoutes;
 
   return (
-    <section className="py-20">
+    <section className="py-20" ref={ref}>
       <Container>
         <SectionHeading title={t("accessTitle")} />
         <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-3">
-          {displayRoutes.map((route) => (
-            <Card key={route.from} className="border-sand-200">
+          {displayRoutes.map((route, i) => (
+            <Card
+              key={route.from}
+              className="reveal-scale border-sand-200"
+              style={{ "--stagger": i } as React.CSSProperties}
+            >
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center gap-2">
                   <Car className="h-5 w-5 text-primary-500" />

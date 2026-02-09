@@ -267,6 +267,38 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: "faqs",
+      type: "array",
+      label: "FAQ (Questions fréquentes)",
+      admin: {
+        description:
+          "Questions/réponses affichées dans les résultats Google (rich snippets FAQ)",
+      },
+      fields: [
+        {
+          name: "question",
+          type: "text",
+          label: "Question",
+          required: true,
+          localized: true,
+          admin: {
+            placeholder: "Combien de personnes le gîte peut-il accueillir ?",
+          },
+        },
+        {
+          name: "answer",
+          type: "textarea",
+          label: "Réponse",
+          required: true,
+          localized: true,
+          admin: {
+            placeholder:
+              "Le gîte peut accueillir jusqu'à 6 personnes dans 3 chambres.",
+          },
+        },
+      ],
+    },
+    {
       name: "defaultSeo",
       type: "group",
       label: "Référencement par défaut",

@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
@@ -7,6 +9,7 @@ import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { Badge } from "@/components/ui/badge";
 import { MapPin } from "lucide-react";
 import type { CmsRecommendation } from "@/lib/queries";
+import { useReveal } from "@/lib/useReveal";
 
 const categoryLabels: Record<string, string> = {
   restaurants: "Restaurant",
@@ -23,18 +26,20 @@ export function NearbyAttractions({
   recommendations: CmsRecommendation[];
 }) {
   const t = useTranslations("cottage");
+  const ref = useReveal();
 
   if (!recommendations.length) return null;
 
   return (
-    <section className="py-20">
+    <section className="py-20" ref={ref}>
       <Container>
         <SectionHeading title={t("nearbyTitle")} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {recommendations.map((rec) => (
+          {recommendations.map((rec, i) => (
             <Card
               key={rec.id}
-              className="overflow-hidden border-sand-200"
+              className="reveal-scale overflow-hidden border-sand-200 transition-all hover:-translate-y-0.5 hover:shadow-md"
+              style={{ "--stagger": i } as React.CSSProperties}
             >
               {rec.photo && typeof rec.photo === "object" ? (
                 <PayloadImage
