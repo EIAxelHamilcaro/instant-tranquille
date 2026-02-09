@@ -56,26 +56,6 @@ async function seed() {
     console.log("Error uploading hero image:", e);
   }
 
-  // Reset and create admin user
-  try {
-    const existingUsers = await payload.find({ collection: "users", limit: 100 });
-    for (const user of existingUsers.docs) {
-      await payload.delete({ collection: "users", id: user.id });
-    }
-    console.log(`Deleted ${existingUsers.docs.length} existing users`);
-    await payload.create({
-      collection: "users",
-      data: {
-        email: "admin@linstant-tranquille.fr",
-        password: "changeme123",
-        name: "Admin",
-      },
-    });
-    console.log("Admin user created");
-  } catch (e) {
-    console.log("Error with admin user:", e);
-  }
-
   // Seed testimonials
   const testimonials = [
     {

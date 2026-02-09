@@ -24,6 +24,16 @@ import { PricingConfig } from "@/globals/PricingConfig";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const allowedOrigins = [siteUrl];
+try {
+  const u = new URL(siteUrl);
+  const wwwVariant = u.hostname.startsWith("www.")
+    ? siteUrl.replace("://www.", "://")
+    : siteUrl.replace("://", "://www.");
+  allowedOrigins.push(wwwVariant);
+} catch {}
+
 export default buildConfig({
   i18n: {
     supportedLanguages: { fr },
@@ -98,6 +108,6 @@ export default buildConfig({
     defaultLocale: "fr",
     fallback: true,
   },
-  cors: [process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"],
-  csrf: [process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"],
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
 });
