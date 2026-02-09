@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fdfcf9;
+  --foreground: #4d4640;
+  --primary-50: #eef5f0;
+  --primary-100: #d4e8d9;
+  --primary-200: #a9d1b3;
+  --primary-300: #7eba8d;
+  --primary-400: #5e9a6f;
+  --primary-500: #4a7c59;
+  --primary-600: #3b6347;
+  --primary-700: #2d4a35;
+  --primary-800: #1e3224;
+  --primary-900: #0f1912;
+  --earth-50: #faf5ee;
+  --earth-100: #f0e4d0;
+  --earth-200: #e1c9a1;
+  --earth-300: #d2ae72;
+  --earth-400: #c59a5e;
+  --earth-500: #b8864f;
+  --earth-600: #936b3f;
+  --earth-700: #6e5030;
+  --earth-800: #493620;
+  --earth-900: #251b10;
+  --sand-50: #fdfcf9;
+  --sand-100: #f7f3ea;
+  --sand-200: #ede5d4;
+  --sand-300: #e3d7be;
+  --sand-400: #d9c9a8;
+  --sand-500: #d4c097;
+  --sand-600: #b8a57a;
+  --sand-700: #8c7d5c;
+  --sand-800: #5f553e;
+  --sand-900: #332d21;
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-earth-50: var(--earth-50);
+  --color-earth-100: var(--earth-100);
+  --color-earth-200: var(--earth-200);
+  --color-earth-300: var(--earth-300);
+  --color-earth-400: var(--earth-400);
+  --color-earth-500: var(--earth-500);
+  --color-earth-600: var(--earth-600);
+  --color-earth-700: var(--earth-700);
+  --color-earth-800: var(--earth-800);
+  --color-earth-900: var(--earth-900);
+  --color-sand-50: var(--sand-50);
+  --color-sand-100: var(--sand-100);
+  --color-sand-200: var(--sand-200);
+  --color-sand-300: var(--sand-300);
+  --color-sand-400: var(--sand-400);
+  --color-sand-500: var(--sand-500);
+  --color-sand-600: var(--sand-600);
+  --color-sand-700: var(--sand-700);
+  --color-sand-800: var(--sand-800);
+  --color-sand-900: var(--sand-900);
+  --color-card: #ffffff;
+  --color-card-foreground: var(--foreground);
+  --color-border: var(--sand-200);
+  --color-input: var(--sand-200);
+  --color-ring: var(--primary-500);
+  --color-muted: var(--sand-100);
+  --color-muted-foreground: #78716c;
+  --color-accent: var(--sand-100);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Lora", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* Scoped to frontend only — Payload admin uses its own styles */
+.frontend-app {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+.frontend-app :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-heading);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break-before {
+    break-before: page;
+  }
+}

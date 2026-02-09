@@ -7,20 +7,53 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "seed": "node -r ./scripts/patch-next-env.cjs --import tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.4.2",
+    "@payloadcms/db-postgres": "^3.75.0",
+    "@payloadcms/live-preview-react": "^3.75.0",
+    "@payloadcms/next": "^3.75.0",
+    "@payloadcms/richtext-lexical": "^3.75.0",
+    "@payloadcms/storage-vercel-blob": "^3.75.0",
+    "@payloadcms/translations": "^3.75.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.563.0",
     "next": "16.1.6",
+    "next-intl": "^4.8.2",
+    "payload": "^3.75.0",
+    "radix-ui": "^1.4.3",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-leaflet": "^5.0.0",
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@next/env": "^16.1.6",
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "@parcel/watcher",
+      "esbuild",
+      "sharp"
+    ]
   }
 }
