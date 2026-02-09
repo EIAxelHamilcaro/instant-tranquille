@@ -3,6 +3,7 @@ import { isAuthenticated, isPublic } from "@/lib/access";
 
 export const ContactMessages: CollectionConfig = {
   slug: "contact-messages",
+  lockDocuments: false,
   labels: { singular: "Message", plural: "Messages" },
   admin: {
     group: "Contenu",

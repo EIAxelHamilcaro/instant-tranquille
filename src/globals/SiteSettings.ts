@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
+  lockDocuments: false,
   label: "Paramètres du site",
   hooks: revalidateGlobal("site-settings"),
   versions: { drafts: true, max: 25 },

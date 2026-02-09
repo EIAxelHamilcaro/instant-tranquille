@@ -3,6 +3,7 @@ import { isAuthenticated } from "@/lib/access";
 
 export const Users: CollectionConfig = {
   slug: "users",
+  lockDocuments: false,
   labels: { singular: "Utilisateur", plural: "Utilisateurs" },
   auth: true,
   admin: {

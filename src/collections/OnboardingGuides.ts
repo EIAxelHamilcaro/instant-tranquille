@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const OnboardingGuides: CollectionConfig = {
   slug: "onboarding-guides",
+  lockDocuments: false,
   labels: { singular: "Livret d'accueil", plural: "Livrets d'accueil" },
   hooks: revalidateCollection("onboarding-guides"),
   admin: {

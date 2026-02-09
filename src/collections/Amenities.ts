@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const Amenities: CollectionConfig = {
   slug: "amenities",
+  lockDocuments: false,
   labels: { singular: "Équipement", plural: "Équipements" },
   hooks: revalidateCollection("amenities"),
   admin: {

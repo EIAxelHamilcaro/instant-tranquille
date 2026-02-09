@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const Footer: GlobalConfig = {
   slug: "footer",
+  lockDocuments: false,
   label: "Pied de page",
   hooks: revalidateGlobal("footer"),
   versions: { drafts: true, max: 25 },

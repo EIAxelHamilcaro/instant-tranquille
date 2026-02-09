@@ -108,6 +108,4 @@ export default buildConfig({
     defaultLocale: "fr",
     fallback: true,
   },
-  cors: allowedOrigins,
-  csrf: allowedOrigins,
 });

@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const Header: GlobalConfig = {
   slug: "header",
+  lockDocuments: false,
   label: "En-tête",
   hooks: revalidateGlobal("header"),
   versions: { drafts: true, max: 25 },

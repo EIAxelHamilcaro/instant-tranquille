@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const Pages: CollectionConfig = {
   slug: "pages",
+  lockDocuments: false,
   labels: { singular: "Page", plural: "Pages" },
   hooks: revalidateCollection("pages"),
   versions: {

@@ -4,6 +4,7 @@ import { revalidateCollection } from "@/lib/revalidate";
 
 export const Media: CollectionConfig = {
   slug: "media",
+  lockDocuments: false,
   labels: { singular: "Média", plural: "Médias" },
   hooks: revalidateCollection("media"),
   upload: {

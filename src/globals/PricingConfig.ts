@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const PricingConfig: GlobalConfig = {
   slug: "pricing-config",
+  lockDocuments: false,
   label: "Tarifs & Réservation",
   hooks: revalidateGlobal("pricing-config"),
   versions: { drafts: true, max: 25 },

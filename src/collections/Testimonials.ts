@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
+  lockDocuments: false,
   labels: { singular: "Témoignage", plural: "Témoignages" },
   admin: {
     useAsTitle: "guestName",

@@ -5,6 +5,7 @@ import { previewUrl } from "@/lib/preview-url";
 
 export const LocalRecommendations: CollectionConfig = {
   slug: "local-recommendations",
+  lockDocuments: false,
   labels: { singular: "Recommandation", plural: "Recommandations" },
   hooks: revalidateCollection("recommendations"),
   admin: {
