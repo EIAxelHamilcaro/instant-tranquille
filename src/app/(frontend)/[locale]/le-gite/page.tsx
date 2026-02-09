@@ -29,7 +29,7 @@ export async function generateMetadata({
     "le-gite",
     locale as Locale,
     "/le-gite",
-    `${messages.cottage.title} — L'Instant Tranquille`,
+    messages.cottage.title,
     messages.cottage.description,
   );
 }

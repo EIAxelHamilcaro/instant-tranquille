@@ -19,7 +19,7 @@ export async function generateMetadata({
     "contact",
     locale as Locale,
     "/contact",
-    `${messages.contact.title} — L'Instant Tranquille`,
+    messages.contact.title,
     messages.contact.description,
   );
 }

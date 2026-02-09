@@ -21,7 +21,7 @@ export async function generateMetadata({
     "tarifs-reservation",
     locale as Locale,
     "/tarifs-reservation",
-    `${messages.rates.title} — L'Instant Tranquille`,
+    messages.rates.title,
     messages.rates.description,
   );
 }

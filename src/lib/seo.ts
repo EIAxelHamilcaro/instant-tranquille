@@ -11,6 +11,7 @@ type PageSeoProps = {
   path: string;
   ogImage?: string;
   noIndex?: boolean;
+  absoluteTitle?: boolean;
 };
 
 export function generatePageMetadata({
@@ -20,13 +21,18 @@ export function generatePageMetadata({
   path,
   ogImage,
   noIndex,
+  absoluteTitle,
 }: PageSeoProps): Metadata {
   const url = `${SITE_URL}${path}`;
   const alternateFr = `${SITE_URL}${path}`;
   const alternateEn = `${SITE_URL}/en${path === "/" ? "" : path}`;
 
+  const ogTitle = title.includes("L'Instant Tranquille")
+    ? title
+    : `${title} — L'Instant Tranquille`;
+
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     ...(noIndex && { robots: { index: false, follow: false } }),
     alternates: {
@@ -37,7 +43,7 @@ export function generatePageMetadata({
       },
     },
     openGraph: {
-      title,
+      title: ogTitle,
       description,
       url,
       siteName: "L'Instant Tranquille",
@@ -60,6 +66,7 @@ export async function generateCmsPageMetadata(
   path: string,
   fallbackTitle: string,
   fallbackDescription: string,
+  options?: { absoluteTitle?: boolean },
 ): Promise<Metadata> {
   const [page, siteSettings] = await Promise.all([
     getPageBySlug(slug, locale),
@@ -82,5 +89,6 @@ export async function generateCmsPageMetadata(
     locale,
     path,
     ogImage,
+    absoluteTitle: options?.absoluteTitle,
   });
 }

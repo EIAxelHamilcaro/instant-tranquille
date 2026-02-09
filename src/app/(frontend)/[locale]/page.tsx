@@ -30,8 +30,9 @@ export async function generateMetadata({
     "home",
     locale as Locale,
     "/",
-    messages.metadata.title,
+    `L'Instant Tranquille — ${messages.metadata.title}`,
     messages.metadata.description,
+    { absoluteTitle: true },
   );
 }
 

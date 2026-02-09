@@ -26,7 +26,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "booklet" });
 
   return {
-    title: `${t("title")} — L'Instant Tranquille`,
+    title: t("title"),
     robots: { index: false, follow: false },
   };
 }

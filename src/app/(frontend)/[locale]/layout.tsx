@@ -9,7 +9,10 @@ import { Footer } from "@/components/layout/Footer";
 import { playfairDisplay, lora, inter } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "L'Instant Tranquille — Gîte de charme en Sologne",
+  title: {
+    template: "%s — L'Instant Tranquille",
+    default: "L'Instant Tranquille — Gîte de charme en Sologne",
+  },
   description:
     "Découvrez L'Instant Tranquille, un gîte de charme au cœur de la Sologne.",
 };
