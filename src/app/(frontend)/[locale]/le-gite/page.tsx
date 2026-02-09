@@ -12,7 +12,7 @@ import {
 import { DescriptionSection } from "@/components/cottage/DescriptionSection";
 import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { AmenitiesList } from "@/components/cottage/AmenitiesList";
-import { FloorPlanSection } from "@/components/cottage/FloorPlanSection";
+
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
@@ -93,7 +93,6 @@ export default async function CottagePage({
       <PhotoGallery images={cottagePage?.heroImage ? [cottagePage.heroImage] : []} />
       <LeafDivider />
       <AmenitiesList amenities={amenities} />
-      <FloorPlanSection />
       <NearbyAttractions recommendations={recommendations} />
     </>
   );

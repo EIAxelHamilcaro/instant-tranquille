@@ -1,9 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 import { type Locale } from "@/i18n/config";
+import { getPayload } from "@/lib/payload";
 import { generateCmsPageMetadata } from "@/lib/seo";
 import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { MapPlaceholder } from "@/components/contact/MapPlaceholder";
+import { MapSection } from "@/components/contact/MapPlaceholder";
 import { AccessInstructions } from "@/components/contact/AccessInstructions";
 
 export async function generateMetadata({
@@ -31,6 +32,17 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const payload = await getPayload();
+  const siteSettings = await payload.findGlobal({
+    slug: "site-settings",
+  });
+
+  const coordinates = siteSettings?.contact?.coordinates;
+  const siteName = siteSettings?.siteName as string | undefined;
+  const accessRoutes = siteSettings?.accessRoutes as
+    | { from: string; duration: string; distance: string; description: string }[]
+    | undefined;
+
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: "Accueil", url: "/" },
     { name: "Contact", url: "/contact" },
@@ -43,8 +55,13 @@ export default async function ContactPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
       <ContactForm />
-      <MapPlaceholder />
-      <AccessInstructions />
+      <MapSection
+        lat={coordinates?.lat}
+        lng={coordinates?.lng}
+        zoom={coordinates?.zoom as number | undefined}
+        markerLabel={(coordinates?.markerLabel as string | undefined) ?? siteName}
+      />
+      <AccessInstructions routes={accessRoutes} />
     </>
   );
 }

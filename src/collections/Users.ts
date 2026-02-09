@@ -19,7 +19,11 @@ export const Users: CollectionConfig = {
     {
       name: "name",
       type: "text",
-      label: "Nom",
+      label: "Nom complet",
+      admin: {
+        description: "Votre prénom et nom",
+        placeholder: "Marie Dupont",
+      },
     },
   ],
 };

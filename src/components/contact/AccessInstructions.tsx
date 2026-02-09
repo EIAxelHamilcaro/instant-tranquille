@@ -4,10 +4,21 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Card, CardContent } from "@/components/ui/card";
 import { Car, Clock, MapPin } from "lucide-react";
 
-export function AccessInstructions() {
+interface AccessRoute {
+  from: string;
+  duration: string;
+  distance: string;
+  description: string;
+}
+
+interface AccessInstructionsProps {
+  routes?: AccessRoute[] | null;
+}
+
+export function AccessInstructions({ routes }: AccessInstructionsProps) {
   const t = useTranslations("contact");
 
-  const routes = [
+  const defaultRoutes: AccessRoute[] = [
     {
       from: t("fromParis"),
       duration: "2h00",
@@ -28,12 +39,14 @@ export function AccessInstructions() {
     },
   ];
 
+  const displayRoutes = routes && routes.length > 0 ? routes : defaultRoutes;
+
   return (
     <section className="py-20">
       <Container>
         <SectionHeading title={t("accessTitle")} />
         <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-3">
-          {routes.map((route) => (
+          {displayRoutes.map((route) => (
             <Card key={route.from} className="border-sand-200">
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center gap-2">

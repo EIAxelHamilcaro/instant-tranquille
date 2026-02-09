@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { getPayload } from "@/lib/payload";
 
 const contactSchema = z.object({
   name: z.string().min(1).max(200),
@@ -34,9 +35,11 @@ export async function submitContactForm(
   }
 
   try {
-    // For now, log the contact form submission
-    // In production, integrate with an email service (Resend, SendGrid, etc.)
-    console.log("Contact form submission:", parsed.data);
+    const payload = await getPayload();
+    await payload.create({
+      collection: "contact-messages",
+      data: parsed.data,
+    });
 
     return { success: true };
   } catch {

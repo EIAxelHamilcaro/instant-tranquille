@@ -31,13 +31,25 @@ export const Media: CollectionConfig = {
     {
       name: "alt",
       type: "text",
+      label: "Texte alternatif",
       required: true,
       localized: true,
+      admin: {
+        description:
+          "Décrivez l'image en quelques mots (important pour le référencement)",
+        placeholder: "Vue du gîte depuis le jardin",
+      },
     },
     {
       name: "caption",
       type: "text",
+      label: "Légende",
       localized: true,
+      admin: {
+        description:
+          "Texte affiché sous l'image (optionnel)",
+        placeholder: "Le gîte au printemps",
+      },
     },
   ],
 };

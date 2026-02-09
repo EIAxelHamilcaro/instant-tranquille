@@ -26,33 +26,60 @@ export const Testimonials: CollectionConfig = {
     {
       name: "guestName",
       type: "text",
+      label: "Nom du voyageur",
       required: true,
+      admin: {
+        description: "Prénom et nom de la personne",
+        placeholder: "Sophie et Marc Dupont",
+      },
     },
     {
       name: "guestOrigin",
       type: "text",
+      label: "Provenance",
       localized: true,
+      admin: {
+        description: "Ville ou pays d'origine",
+        placeholder: "Paris, France",
+      },
     },
     {
       name: "rating",
       type: "number",
+      label: "Note",
       required: true,
       min: 1,
       max: 5,
+      admin: {
+        description: "Note de 1 à 5 étoiles",
+      },
     },
     {
       name: "text",
       type: "textarea",
+      label: "Texte du témoignage",
       required: true,
       localized: true,
+      admin: {
+        description: "L'avis complet du voyageur",
+      },
     },
     {
       name: "stayDate",
       type: "date",
+      label: "Date du séjour",
+      admin: {
+        description:
+          "Quand ce voyageur a séjourné au gîte",
+      },
     },
     {
       name: "source",
       type: "select",
+      label: "Plateforme d'origine",
+      admin: {
+        description: "D'où vient cet avis",
+      },
       options: [
         { label: "Airbnb", value: "airbnb" },
         { label: "Booking.com", value: "booking" },
@@ -63,23 +90,29 @@ export const Testimonials: CollectionConfig = {
     {
       name: "status",
       type: "select",
+      label: "Statut",
       required: true,
       defaultValue: "pending",
+      admin: {
+        position: "sidebar",
+        description:
+          "« En attente » = à valider, « Approuvé » = visible sur le site, « Rejeté » = masqué",
+      },
       options: [
         { label: "En attente", value: "pending" },
         { label: "Approuvé", value: "approved" },
         { label: "Rejeté", value: "rejected" },
       ],
-      admin: {
-        position: "sidebar",
-      },
     },
     {
       name: "featured",
       type: "checkbox",
+      label: "Mettre en avant",
       defaultValue: false,
       admin: {
         position: "sidebar",
+        description:
+          "Cochez pour afficher cet avis en priorité sur la page d'accueil",
       },
     },
   ],

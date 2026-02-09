@@ -1,9 +1,25 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 
-export function MapPlaceholder() {
+export interface MapSectionProps {
+  lat?: number | null;
+  lng?: number | null;
+  zoom?: number | null;
+  markerLabel?: string | null;
+}
+
+const MapClient = dynamic(() => import("./MapClient"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[400px] w-full animate-pulse rounded-xl bg-sand-200" />
+  ),
+});
+
+export function MapSection({ lat, lng, zoom, markerLabel }: MapSectionProps) {
   const t = useTranslations("contact");
 
   return (
@@ -11,12 +27,7 @@ export function MapPlaceholder() {
       <Container>
         <SectionHeading title={t("mapTitle")} />
         <div className="mx-auto max-w-4xl">
-          <ImagePlaceholder
-            aspectRatio="16/9"
-            icon="map-pin"
-            label="Carte — Sologne, Centre-Val de Loire"
-            className="rounded-xl"
-          />
+          <MapClient lat={lat} lng={lng} zoom={zoom} markerLabel={markerLabel} />
         </div>
       </Container>
     </section>

@@ -5,7 +5,6 @@ import type { CmsAmenity, CmsRecommendation } from "@/lib/queries";
 import { DescriptionSection } from "@/components/cottage/DescriptionSection";
 import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { AmenitiesList } from "@/components/cottage/AmenitiesList";
-import { FloorPlanSection } from "@/components/cottage/FloorPlanSection";
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 
@@ -38,7 +37,6 @@ export function CottagePageClient({
       <PhotoGallery images={data.images} />
       <LeafDivider />
       <AmenitiesList amenities={data.amenities} />
-      <FloorPlanSection />
       <NearbyAttractions recommendations={data.recommendations} />
     </>
   );
