@@ -68,12 +68,17 @@ export function TestimonialsSection({
               Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }),
             ]}
             className="w-full"
+            aria-roledescription="carousel"
+            aria-label="Témoignages de nos hôtes"
           >
             <CarouselContent className="-ml-4">
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial, index) => (
                 <CarouselItem
                   key={testimonial.id}
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`Témoignage ${index + 1} sur ${testimonials.length}`}
                 >
                   <Card className="border-sand-200 h-full bg-white">
                     <CardContent className="flex h-full flex-col p-6">

@@ -6,11 +6,13 @@ export function ExternalLinkButton({
   children,
   variant = "primary",
   className,
+  "aria-label": ariaLabel,
 }: {
   href: string;
   children: React.ReactNode;
   variant?: "primary" | "earth" | "outline";
   className?: string;
+  "aria-label"?: string;
 }) {
   const variants = {
     primary:
@@ -26,6 +28,7 @@ export function ExternalLinkButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={ariaLabel}
       className={cn(
         "inline-flex items-center gap-2 rounded-lg px-6 py-3 font-sans text-sm font-semibold transition-colors",
         variants[variant],

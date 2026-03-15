@@ -37,6 +37,7 @@ export function CTASection({
               href={bookingLinks.airbnb}
               variant="earth"
               className="min-w-[200px] justify-center"
+              aria-label={`${t("ctaAirbnb")} — ouvre dans un nouvel onglet`}
             >
               {t("ctaAirbnb")}
             </ExternalLinkButton>
@@ -45,6 +46,7 @@ export function CTASection({
             <ExternalLinkButton
               href={bookingLinks.booking}
               className="min-w-[200px] justify-center bg-white text-primary-700 hover:bg-sand-100"
+              aria-label={`${t("ctaBooking")} — ouvre dans un nouvel onglet`}
             >
               {t("ctaBooking")}
             </ExternalLinkButton>

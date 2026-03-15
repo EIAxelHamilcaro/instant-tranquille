@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { type Locale } from "@/i18n/config";
@@ -50,8 +50,8 @@ export default async function FrontendLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const skipText =
-    locale === "fr" ? "Aller au contenu principal" : "Skip to main content";
+  const t = await getTranslations({ locale, namespace: "common" });
+  const skipText = t("skipToContent");
 
   return (
     <html lang={locale} suppressHydrationWarning>

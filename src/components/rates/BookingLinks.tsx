@@ -34,6 +34,7 @@ export function BookingLinks({
               href={bookingLinks.airbnb}
               variant="earth"
               className="min-w-[220px] justify-center"
+              aria-label={`${tHome("ctaAirbnb")} — ouvre dans un nouvel onglet`}
             >
               {tHome("ctaAirbnb")}
             </ExternalLinkButton>
@@ -43,6 +44,7 @@ export function BookingLinks({
               href={bookingLinks.booking}
               variant="primary"
               className="min-w-[220px] justify-center"
+              aria-label={`${tHome("ctaBooking")} — ouvre dans un nouvel onglet`}
             >
               {tHome("ctaBooking")}
             </ExternalLinkButton>

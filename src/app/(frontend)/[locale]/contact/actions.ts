@@ -20,6 +20,27 @@ export async function submitContactForm(
   _prevState: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  // Validate Turnstile token if configured
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+  if (turnstileSecret) {
+    const token = formData.get("cf-turnstile-response") as string;
+    if (!token) {
+      return { success: false, error: "captcha_required" };
+    }
+    const verifyRes = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ secret: turnstileSecret, response: token }),
+      },
+    );
+    const verification = (await verifyRes.json()) as { success: boolean };
+    if (!verification.success) {
+      return { success: false, error: "captcha_failed" };
+    }
+  }
+
   const raw = {
     name: formData.get("name"),
     email: formData.get("email"),
