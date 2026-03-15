@@ -57,6 +57,9 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
     },
   ];
 
+  const hasAnyPolicy = policyItems.some(p => p.content);
+  if (!hasAnyPolicy) return null;
+
   return (
     <section className="py-20">
       <Container>

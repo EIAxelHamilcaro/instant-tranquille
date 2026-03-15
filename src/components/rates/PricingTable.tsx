@@ -95,15 +95,13 @@ export function PricingTable({
                       : ""}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {season.nightlyRate}
-                    {symbol}
+                    {season.nightlyRate != null ? `${season.nightlyRate}${symbol}` : "—"}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {season.weeklyRate}
-                    {symbol}
+                    {season.weeklyRate != null ? `${season.weeklyRate}${symbol}` : "—"}
                   </TableCell>
                   <TableCell className="text-right text-muted-foreground">
-                    {season.minimumStay} {t("nights")}
+                    {season.minimumStay != null ? `${season.minimumStay} ${t("nights")}` : "—"}
                   </TableCell>
                 </TableRow>
               ))}
@@ -133,8 +131,7 @@ export function PricingTable({
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-xl font-bold">
-                      {season.nightlyRate}
-                      {symbol}
+                      {season.nightlyRate != null ? `${season.nightlyRate}${symbol}` : "—"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perNight")}
@@ -142,15 +139,16 @@ export function PricingTable({
                   </div>
                   <div>
                     <p className="text-xl font-bold">
-                      {season.weeklyRate}
-                      {symbol}
+                      {season.weeklyRate != null ? `${season.weeklyRate}${symbol}` : "—"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perWeek")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xl font-bold">{season.minimumStay}</p>
+                    <p className="text-xl font-bold">
+                      {season.minimumStay != null ? season.minimumStay : "—"}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {t("minStay")} {t("nights")}
                     </p>
@@ -182,8 +180,7 @@ export function PricingTable({
                     )}
                   </div>
                   <p className="font-semibold">
-                    {fee.amount}
-                    {symbol}
+                    {fee.amount != null ? `${fee.amount}${symbol}` : "—"}
                   </p>
                 </div>
               ))}

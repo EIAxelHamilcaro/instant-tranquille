@@ -34,11 +34,16 @@ export async function generateMetadata({
 async function getGuide(accessToken: string, locale: string, draft = false) {
   try {
     const payload = await getPayload();
+    const now = new Date().toISOString();
     const result = await payload.find({
       collection: "onboarding-guides",
       where: {
-        accessToken: { equals: accessToken },
-        isActive: { equals: true },
+        and: [
+          { accessToken: { equals: accessToken } },
+          { isActive: { equals: true } },
+          { or: [{ validFrom: { exists: false } }, { validFrom: { less_than_equal: now } }] },
+          { or: [{ validUntil: { exists: false } }, { validUntil: { greater_than_equal: now } }] },
+        ],
       },
       locale: locale as "fr" | "en",
       limit: 1,
@@ -58,6 +63,8 @@ export default async function BookletPage({
 }) {
   const { locale, accessToken } = await params;
   setRequestLocale(locale);
+
+  const t = await getTranslations({ locale, namespace: "booklet" });
 
   const { isEnabled: isDraft } = await draftMode();
 
@@ -147,7 +154,7 @@ export default async function BookletPage({
 
           <section id="map" className="scroll-mt-20">
             <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-              Carte des environs
+              {t("map")}
             </h2>
             <ImagePlaceholder
               aspectRatio="16/9"

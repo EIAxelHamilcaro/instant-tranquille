@@ -2,7 +2,23 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  lexicalEditor,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  StrikethroughFeature,
+  HeadingFeature,
+  ParagraphFeature,
+  LinkFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  BlockquoteFeature,
+  HorizontalRuleFeature,
+  AlignFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+} from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { fr } from "@payloadcms/translations/languages/fr";
 import sharp from "sharp";
@@ -81,7 +97,27 @@ export default buildConfig({
     ContactMessages,
   ],
   globals: [SiteSettings, Header, Footer, PricingConfig],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: () => [
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      StrikethroughFeature(),
+      HeadingFeature({ enabledHeadingSizes: ["h2", "h3", "h4"] }),
+      ParagraphFeature(),
+      LinkFeature({}),
+      OrderedListFeature(),
+      UnorderedListFeature(),
+      BlockquoteFeature(),
+      HorizontalRuleFeature(),
+      AlignFeature(),
+      FixedToolbarFeature(),
+      InlineToolbarFeature(),
+    ],
+  }),
+  serverURL: process.env.NEXT_PUBLIC_SITE_URL || "",
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   secret: process.env.PAYLOAD_SECRET || "",
   db: postgresAdapter({
     pool: {

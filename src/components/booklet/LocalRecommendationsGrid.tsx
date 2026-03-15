@@ -18,10 +18,12 @@ type Recommendation = {
 };
 
 const categories = [
-  { value: "restaurants", label: "Restaurants" },
-  { value: "castles", label: "Châteaux" },
-  { value: "nature", label: "Nature" },
-  { value: "activities", label: "Activités" },
+  { value: "restaurants", labelKey: "categoryRestaurants" },
+  { value: "castles", labelKey: "categoryCastles" },
+  { value: "nature", labelKey: "categoryNature" },
+  { value: "activities", labelKey: "categoryActivities" },
+  { value: "markets", labelKey: "categoryMarkets" },
+  { value: "services", labelKey: "categoryServices" },
 ] as const;
 
 export function LocalRecommendationsGrid({
@@ -63,7 +65,7 @@ export function LocalRecommendationsGrid({
                 value={cat.value}
                 className="font-sans text-sm data-[state=active]:bg-primary-500 data-[state=active]:text-white"
               >
-                {cat.label}
+                {t(cat.labelKey)}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -109,7 +111,7 @@ export function LocalRecommendationsGrid({
                             className="flex items-center gap-1 hover:text-primary-600"
                           >
                             <ExternalLink className="h-3 w-3" />
-                            Site web
+                            {t("websiteLabel")}
                           </a>
                         )}
                       </div>
@@ -121,7 +123,7 @@ export function LocalRecommendationsGrid({
           ))}
         </Tabs>
       ) : (
-        <p className="text-muted-foreground">Aucune recommandation pour le moment.</p>
+        <p className="text-muted-foreground">{t("noRecommendations")}</p>
       )}
     </section>
   );

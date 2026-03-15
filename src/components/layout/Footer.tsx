@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getFooterData, getSiteSettings } from "@/lib/queries";
+import { getTranslations } from "next-intl/server";
 import { Trees, Mail, Phone, MapPin } from "lucide-react";
 
 type NavColumn = {
@@ -8,9 +9,10 @@ type NavColumn = {
 };
 
 export async function Footer({ locale }: { locale: string }) {
-  const [footerData, siteSettings] = await Promise.all([
+  const [footerData, siteSettings, t] = await Promise.all([
     getFooterData(locale),
     getSiteSettings(locale),
+    getTranslations({ locale, namespace: "footer" }),
   ]);
 
   const footer = footerData as Record<string, any>;
@@ -74,7 +76,7 @@ export async function Footer({ locale }: { locale: string }) {
           {contact && (
             <div>
               <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-sand-400">
-                Contact
+                {t("contact")}
               </h3>
               <div className="mt-4 flex flex-col gap-3 text-sm text-sand-300">
                 {contact.email && (

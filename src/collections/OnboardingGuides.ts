@@ -1,5 +1,6 @@
+import crypto from "crypto";
 import type { CollectionConfig } from "payload";
-import { isAuthenticated, isPublic } from "@/lib/access";
+import { isAuthenticated, isActiveGuideOrAdmin } from "@/lib/access";
 import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
 
@@ -7,7 +8,25 @@ export const OnboardingGuides: CollectionConfig = {
   slug: "onboarding-guides",
   lockDocuments: false,
   labels: { singular: "Livret d'accueil", plural: "Livrets d'accueil" },
-  hooks: revalidateCollection("onboarding-guides"),
+  hooks: {
+    ...revalidateCollection("onboarding-guides"),
+    beforeValidate: [
+      ({ data, operation }) => {
+        if (operation === "create" && data && !data.accessToken) {
+          data.accessToken = crypto.randomBytes(12).toString("hex");
+        }
+        return data;
+      },
+    ],
+    beforeChange: [
+      ({ data, originalDoc, operation }) => {
+        if (operation === "update" && originalDoc?.accessToken) {
+          data.accessToken = originalDoc.accessToken;
+        }
+        return data;
+      },
+    ],
+  },
   admin: {
     useAsTitle: "title",
     group: "Contenu",
@@ -22,7 +41,7 @@ export const OnboardingGuides: CollectionConfig = {
   },
   access: {
     create: isAuthenticated,
-    read: isPublic,
+    read: isActiveGuideOrAdmin,
     update: isAuthenticated,
     delete: isAuthenticated,
   },
@@ -47,8 +66,8 @@ export const OnboardingGuides: CollectionConfig = {
       unique: true,
       admin: {
         description:
-          "Token unique pour l'URL du livret (ex: dupont-2024-mars)",
-        placeholder: "dupont-2024-mars",
+          "Token unique pour l'URL du livret (auto-généré à la création si laissé vide)",
+        placeholder: "Laisser vide pour auto-générer",
       },
     },
     {
@@ -60,6 +79,24 @@ export const OnboardingGuides: CollectionConfig = {
         position: "sidebar",
         description:
           "Décochez pour rendre ce livret temporairement inaccessible",
+      },
+    },
+    {
+      name: "validFrom",
+      type: "date",
+      label: "Valide à partir de",
+      admin: {
+        description: "Laisser vide = actif immédiatement",
+        position: "sidebar",
+      },
+    },
+    {
+      name: "validUntil",
+      type: "date",
+      label: "Valide jusqu'au",
+      admin: {
+        description: "Laisser vide = pas d'expiration",
+        position: "sidebar",
       },
     },
     {

@@ -24,28 +24,29 @@ export function BookingLinks({
   const tHome = useTranslations("home");
   const ref = useReveal();
 
-  const airbnbUrl = bookingLinks?.airbnb || "#";
-  const bookingUrl = bookingLinks?.booking || "#";
-
   return (
     <section className="reveal bg-sand-100 py-16" ref={ref}>
       <Container className="text-center">
         <SectionHeading title={t("bookTitle")} subtitle={t("bookSubtitle")} />
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <ExternalLinkButton
-            href={airbnbUrl}
-            variant="earth"
-            className="min-w-[220px] justify-center"
-          >
-            {tHome("ctaAirbnb")}
-          </ExternalLinkButton>
-          <ExternalLinkButton
-            href={bookingUrl}
-            variant="primary"
-            className="min-w-[220px] justify-center"
-          >
-            {tHome("ctaBooking")}
-          </ExternalLinkButton>
+          {bookingLinks?.airbnb && (
+            <ExternalLinkButton
+              href={bookingLinks.airbnb}
+              variant="earth"
+              className="min-w-[220px] justify-center"
+            >
+              {tHome("ctaAirbnb")}
+            </ExternalLinkButton>
+          )}
+          {bookingLinks?.booking && (
+            <ExternalLinkButton
+              href={bookingLinks.booking}
+              variant="primary"
+              className="min-w-[220px] justify-center"
+            >
+              {tHome("ctaBooking")}
+            </ExternalLinkButton>
+          )}
           <Button
             asChild
             variant="outline"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { Separator } from "@/components/ui/separator";
 import { LivretTableOfContents } from "@/components/booklet/LivretTableOfContents";
@@ -31,6 +32,7 @@ export function BookletPageClient({
 }: {
   initialData: BookletPageData;
 }) {
+  const t = useTranslations("booklet");
   const { data } = useLivePreview<BookletPageData>({
     initialData,
     serverURL: process.env.NEXT_PUBLIC_SITE_URL || "",
@@ -110,7 +112,7 @@ export function BookletPageClient({
 
           <section id="map" className="scroll-mt-20">
             <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-              Carte des environs
+              {t("map")}
             </h2>
             <ImagePlaceholder
               aspectRatio="16/9"

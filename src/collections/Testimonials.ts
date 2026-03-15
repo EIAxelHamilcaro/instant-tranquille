@@ -18,7 +18,7 @@ export const Testimonials: CollectionConfig = {
   },
   access: {
     create: isPublic,
-    read: isPublic,
+    read: ({ req: { user } }) => user ? true : { status: { equals: "approved" } },
     update: isAuthenticated,
     delete: isAuthenticated,
   },

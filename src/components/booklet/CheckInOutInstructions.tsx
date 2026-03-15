@@ -31,10 +31,7 @@ export function CheckInOutInstructions({
             {checkIn ? (
               <RichTextRenderer content={checkIn} />
             ) : (
-              <p className="text-sm text-foreground/80">
-                Arrivée à partir de 16h00. Merci de nous prévenir de votre heure
-                d'arrivée estimée.
-              </p>
+              <p className="text-sm text-foreground/80">{t("checkInFallback")}</p>
             )}
           </CardContent>
         </Card>
@@ -50,10 +47,7 @@ export function CheckInOutInstructions({
             {checkOut ? (
               <RichTextRenderer content={checkOut} />
             ) : (
-              <p className="text-sm text-foreground/80">
-                Départ avant 10h00. Merci de laisser le logement dans l'état où
-                vous l'avez trouvé.
-              </p>
+              <p className="text-sm text-foreground/80">{t("checkOutFallback")}</p>
             )}
           </CardContent>
         </Card>

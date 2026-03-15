@@ -5,6 +5,8 @@ import { Book } from "lucide-react";
 export function HouseRulesSection({ content }: { content: any }) {
   const t = useTranslations("booklet");
 
+  if (!content) return null;
+
   return (
     <section id="rules" className="scroll-mt-20">
       <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">

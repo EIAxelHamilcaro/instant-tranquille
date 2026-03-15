@@ -118,7 +118,18 @@
     "checkOut": "Départ",
     "checkInOut": "Arrivée & Départ",
     "notFound": "Livret introuvable",
-    "notFoundDesc": "Ce livret d'accueil n'existe pas ou n'est plus actif."
+    "notFoundDesc": "Ce livret d'accueil n'existe pas ou n'est plus actif.",
+    "checkInFallback": "Arrivée à partir de 16h00. Merci de nous prévenir de votre heure d'arrivée estimée.",
+    "checkOutFallback": "Départ avant 10h00. Merci de laisser le logement dans l'état où vous l'avez trouvé.",
+    "emergencyNumber": "Urgences : 112",
+    "categoryRestaurants": "Restaurants",
+    "categoryCastles": "Châteaux",
+    "categoryNature": "Nature",
+    "categoryActivities": "Activités",
+    "categoryMarkets": "Marchés",
+    "categoryServices": "Services",
+    "websiteLabel": "Site web",
+    "noRecommendations": "Aucune recommandation pour le moment."
   },
   "common": {
     "learnMore": "En savoir plus",
@@ -135,6 +146,7 @@
     "description": "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
     "navigation": "Navigation",
     "legal": "Mentions légales",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "contact": "Contact"
   }
 }

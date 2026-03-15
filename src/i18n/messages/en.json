@@ -118,7 +118,18 @@
     "checkOut": "Check-out",
     "checkInOut": "Check-in & Check-out",
     "notFound": "Booklet not found",
-    "notFoundDesc": "This welcome booklet does not exist or is no longer active."
+    "notFoundDesc": "This welcome booklet does not exist or is no longer active.",
+    "checkInFallback": "Check-in from 4:00 PM. Please let us know your estimated arrival time.",
+    "checkOutFallback": "Check-out before 10:00 AM. Please leave the property as you found it.",
+    "emergencyNumber": "Emergency: 112",
+    "categoryRestaurants": "Restaurants",
+    "categoryCastles": "Castles",
+    "categoryNature": "Nature",
+    "categoryActivities": "Activities",
+    "categoryMarkets": "Markets",
+    "categoryServices": "Services",
+    "websiteLabel": "Website",
+    "noRecommendations": "No recommendations available at the moment."
   },
   "common": {
     "learnMore": "Learn more",
@@ -135,6 +146,7 @@
     "description": "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
     "navigation": "Navigation",
     "legal": "Legal notice",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "contact": "Contact"
   }
 }

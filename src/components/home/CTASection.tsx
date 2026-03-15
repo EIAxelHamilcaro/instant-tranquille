@@ -22,9 +22,6 @@ export function CTASection({
   const t = useTranslations("home");
   const ref = useReveal();
 
-  const airbnbUrl = bookingLinks?.airbnb || "#";
-  const bookingUrl = bookingLinks?.booking || "#";
-
   return (
     <section className="bg-primary-500 py-16" ref={ref}>
       <Container className="text-center">
@@ -35,19 +32,23 @@ export function CTASection({
           {t("ctaSubtitle")}
         </p>
         <div className="reveal mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center" style={{ "--stagger": 2 } as React.CSSProperties}>
-          <ExternalLinkButton
-            href={airbnbUrl}
-            variant="earth"
-            className="min-w-[200px] justify-center"
-          >
-            {t("ctaAirbnb")}
-          </ExternalLinkButton>
-          <ExternalLinkButton
-            href={bookingUrl}
-            className="min-w-[200px] justify-center bg-white text-primary-700 hover:bg-sand-100"
-          >
-            {t("ctaBooking")}
-          </ExternalLinkButton>
+          {bookingLinks?.airbnb && (
+            <ExternalLinkButton
+              href={bookingLinks.airbnb}
+              variant="earth"
+              className="min-w-[200px] justify-center"
+            >
+              {t("ctaAirbnb")}
+            </ExternalLinkButton>
+          )}
+          {bookingLinks?.booking && (
+            <ExternalLinkButton
+              href={bookingLinks.booking}
+              className="min-w-[200px] justify-center bg-white text-primary-700 hover:bg-sand-100"
+            >
+              {t("ctaBooking")}
+            </ExternalLinkButton>
+          )}
           <Button
             asChild
             variant="outline"

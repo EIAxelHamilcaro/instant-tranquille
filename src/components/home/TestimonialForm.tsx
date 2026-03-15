@@ -124,12 +124,13 @@ export function TestimonialForm() {
                     htmlFor="stayDate"
                     className="mb-1.5 block font-sans text-sm font-medium"
                   >
-                    {t("testimonialStayDate")}
+                    {t("testimonialStayDate")} *
                   </label>
                   <Input
                     id="stayDate"
                     name="stayDate"
                     type="date"
+                    required
                     className="border-sand-300 bg-white"
                   />
                 </div>

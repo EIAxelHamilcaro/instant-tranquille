@@ -1,11 +1,12 @@
 import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "./CopyButton";
+import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
 import { KeyRound, MapPin, Car } from "lucide-react";
 
 type ArrivalData = {
   accessCode?: string | null;
-  instructions?: string | null;
+  instructions?: unknown;
   parkingInfo?: string | null;
 };
 
@@ -37,9 +38,9 @@ export function ArrivalInstructions({ data }: { data: ArrivalData }) {
       )}
 
       {data.instructions && (
-        <p className="mb-4 leading-relaxed text-foreground/80">
-          {data.instructions}
-        </p>
+        <div className="mb-4 leading-relaxed text-foreground/80">
+          <RichTextRenderer content={data.instructions} />
+        </div>
       )}
 
       {data.parkingInfo && (

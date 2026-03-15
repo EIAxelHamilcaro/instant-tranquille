@@ -8,7 +8,7 @@ const testimonialSchema = z.object({
   guestOrigin: z.string().max(200).optional(),
   rating: z.coerce.number().int().min(1).max(5),
   text: z.string().min(10).max(2000),
-  stayDate: z.string().optional(),
+  stayDate: z.string().min(1),
 });
 
 export type TestimonialFormState = {
@@ -46,7 +46,7 @@ export async function submitTestimonial(
     guestOrigin: formData.get("guestOrigin") || undefined,
     rating: formData.get("rating"),
     text: formData.get("text"),
-    stayDate: formData.get("stayDate") || undefined,
+    stayDate: formData.get("stayDate"),
   };
 
   const parsed = testimonialSchema.safeParse(raw);
@@ -65,7 +65,7 @@ export async function submitTestimonial(
         guestOrigin: parsed.data.guestOrigin || "",
         rating: parsed.data.rating,
         text: parsed.data.text,
-        stayDate: parsed.data.stayDate || undefined,
+        stayDate: parsed.data.stayDate,
         source: "direct",
         status: "pending",
         featured: false,
