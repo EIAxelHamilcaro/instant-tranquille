@@ -1,5 +1,5 @@
 import { draftMode } from "next/headers";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { type Locale } from "@/i18n/config";
 import { generateCmsPageMetadata } from "@/lib/seo";
 import {
@@ -48,17 +48,18 @@ export default async function CottagePage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [siteSettings, amenities, recommendations, cottagePage] =
+  const [siteSettings, amenities, recommendations, cottagePage, tNav] =
     await Promise.all([
       getSiteSettings(locale, isDraft),
       getAmenities(locale, isDraft),
       getFeaturedRecommendations(locale, isDraft),
       getPageBySlug("le-gite", locale, isDraft),
+      getTranslations({ locale, namespace: "nav" }),
     ]);
 
   const breadcrumbs = generateBreadcrumbJsonLd([
-    { name: "Accueil", url: "/" },
-    { name: "Le Gîte", url: "/le-gite" },
+    { name: tNav("home"), url: "/" },
+    { name: tNav("cottage"), url: "/le-gite" },
   ]);
 
   const settings = siteSettings as Record<string, any>;
@@ -121,11 +122,16 @@ export default async function CottagePage({
       />
       <Breadcrumbs
         items={[
-          { label: locale === "fr" ? "Accueil" : "Home", href: "/" },
-          { label: locale === "fr" ? "Le Gîte" : "The Cottage" },
+          { label: tNav("home"), href: "/" },
+          { label: tNav("cottage") },
         ]}
       />
-      <DescriptionSection propertyDetails={propertyDetails} />
+      <DescriptionSection
+        propertyDetails={propertyDetails}
+        descriptionTitle={cottagePage?.descriptionTitle ?? null}
+        descriptionText={cottagePage?.descriptionText ?? null}
+        previewImages={cottagePage?.previewImages ?? null}
+      />
       <PhotoGallery images={cottagePage?.heroImage ? [cottagePage.heroImage] : []} />
       <LeafDivider />
       <AmenitiesList amenities={amenities} />

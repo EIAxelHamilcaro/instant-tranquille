@@ -31,8 +31,9 @@ export async function Header({ locale }: { locale: string }) {
     : null;
 
   const siteName = (settings.siteName as string) || "L'Instant Tranquille";
+  const logo = settings.logo as { url?: string | null; alt?: string | null; width?: number | null; height?: number | null } | null | undefined;
 
   return (
-    <HeaderClient navItems={navItems} ctaButton={ctaButton} siteName={siteName} />
+    <HeaderClient navItems={navItems} ctaButton={ctaButton} siteName={siteName} logo={logo} />
   );
 }

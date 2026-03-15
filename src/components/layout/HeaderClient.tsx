@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Trees } from "lucide-react";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MobileNav } from "./MobileNav";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type NavItem = {
   label: string;
@@ -15,14 +17,23 @@ type NavItem = {
   highlight?: boolean | null;
 };
 
+type LogoMedia = {
+  url?: string | null;
+  alt?: string | null;
+  width?: number | null;
+  height?: number | null;
+};
+
 export function HeaderClient({
   navItems,
   ctaButton,
   siteName,
+  logo,
 }: {
   navItems: NavItem[];
   ctaButton: { label: string; url: string } | null;
   siteName: string;
+  logo?: LogoMedia | null;
 }) {
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
@@ -53,7 +64,18 @@ export function HeaderClient({
           href="/"
           className="flex items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
         >
-          <Trees className="h-7 w-7 text-primary-500" />
+          {logo?.url ? (
+            <Image
+              src={logo.url}
+              alt={logo.alt || siteName}
+              width={logo.width || 28}
+              height={logo.height || 28}
+              className="h-7 w-auto"
+              priority
+            />
+          ) : (
+            <Trees className="h-7 w-7 text-primary-500" />
+          )}
           <span className="font-heading text-xl font-bold text-foreground">
             {siteName}
           </span>
@@ -77,7 +99,14 @@ export function HeaderClient({
                 key={item.url}
                 href={item.url as "/"}
                 aria-current={isActive ? "page" : undefined}
-                className="rounded-md px-3 py-2 font-sans text-sm font-medium text-foreground/80 transition-colors hover:bg-sand-100 hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                className={cn(
+                  "rounded-md px-3 py-2 font-sans text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
+                  isActive
+                    ? "font-bold text-primary-600 underline underline-offset-4"
+                    : item.highlight
+                      ? "bg-primary-50 text-primary-600 hover:bg-primary-100"
+                      : "text-foreground/80 hover:bg-sand-100 hover:text-foreground",
+                )}
               >
                 {item.label}
               </Link>

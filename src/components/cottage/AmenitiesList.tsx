@@ -88,7 +88,7 @@ const iconMap: Record<string, LucideIcon> = {
   lamp: Lamp,
 };
 
-const categoryOrder = ["indoor", "outdoor", "kitchen", "comfort"] as const;
+const categoryOrder = ["indoor", "outdoor", "kitchen", "comfort", "bedroom", "bathroom", "tech"] as const;
 
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Check;
@@ -120,8 +120,11 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
           defaultValue={availableCategories[0]}
           className="mx-auto max-w-3xl"
         >
-          <TabsList className="mb-8 grid w-full grid-cols-4 bg-sand-100">
-            {categoryOrder.map((key) => (
+          <TabsList
+            className="mb-8 grid w-full bg-sand-100"
+            style={{ gridTemplateColumns: `repeat(${availableCategories.length}, minmax(0, 1fr))` }}
+          >
+            {availableCategories.map((key) => (
               <TabsTrigger
                 key={key}
                 value={key}
@@ -132,7 +135,7 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
             ))}
           </TabsList>
 
-          {categoryOrder.map((key) => (
+          {availableCategories.map((key) => (
             <TabsContent key={key} value={key}>
               <div className="grid gap-4 sm:grid-cols-2">
                 {(grouped[key] || []).map((amenity) => {

@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getFooterData, getSiteSettings } from "@/lib/queries";
 import { getTranslations } from "next-intl/server";
-import { Trees, Mail, Phone, MapPin } from "lucide-react";
+import { Trees, Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 
 type NavColumn = {
   title: string;
@@ -23,11 +23,17 @@ export async function Footer({ locale }: { locale: string }) {
   const navColumns: NavColumn[] = (footer.navColumns || []) as NavColumn[];
   const description = footer.description as string | undefined;
   const legalText = footer.legalText as string | undefined;
+  const socialLinks = settings.socialLinks as { facebook?: string; instagram?: string; pinterest?: string; youtube?: string; tiktok?: string } | undefined;
+
+  const totalColumns = navColumns.length + (contact ? 1 : 0);
+  const gridClass = totalColumns === 2 ? "md:grid-cols-2"
+    : totalColumns >= 3 ? "md:grid-cols-3"
+    : "";
 
   return (
     <footer className="border-t border-sand-200 bg-primary-900 text-sand-200">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className={`grid gap-8 ${gridClass}`}>
           <div>
             <div className="flex items-center gap-2">
               <Trees className="h-6 w-6 text-primary-300" />
@@ -39,6 +45,65 @@ export async function Footer({ locale }: { locale: string }) {
               <p className="mt-3 text-sm leading-relaxed text-sand-300">
                 {description}
               </p>
+            )}
+            {socialLinks && (socialLinks.facebook || socialLinks.instagram || socialLinks.pinterest || socialLinks.youtube || socialLinks.tiktok) && (
+              <div className="mt-4 flex items-center gap-3">
+                {socialLinks.facebook && (
+                  <a
+                    href={socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="rounded-md text-sand-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
+                  >
+                    <Facebook className="h-5 w-5" />
+                  </a>
+                )}
+                {socialLinks.instagram && (
+                  <a
+                    href={socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="rounded-md text-sand-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
+                  >
+                    <Instagram className="h-5 w-5" />
+                  </a>
+                )}
+                {socialLinks.pinterest && (
+                  <a
+                    href={socialLinks.pinterest}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Pinterest"
+                    className="rounded-md text-xs font-bold text-sand-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
+                  >
+                    P
+                  </a>
+                )}
+                {socialLinks.youtube && (
+                  <a
+                    href={socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                    className="rounded-md text-xs font-bold text-sand-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
+                  >
+                    YT
+                  </a>
+                )}
+                {socialLinks.tiktok && (
+                  <a
+                    href={socialLinks.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                    className="rounded-md text-xs font-bold text-sand-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
+                  >
+                    TT
+                  </a>
+                )}
+              </div>
             )}
           </div>
 

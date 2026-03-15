@@ -35,6 +35,8 @@ export function ImagePlaceholder({
 
   return (
     <div
+      role="img"
+      aria-label={label || "Image placeholder"}
       className={cn(
         "flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-sand-300 bg-sand-100",
         className,

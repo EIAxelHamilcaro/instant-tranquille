@@ -54,7 +54,10 @@
       "indoor": "Intérieur",
       "outdoor": "Extérieur",
       "kitchen": "Cuisine",
-      "comfort": "Confort"
+      "comfort": "Confort",
+      "bedroom": "Chambre",
+      "bathroom": "Salle de bain",
+      "tech": "Technologie"
     },
     "floorPlanTitle": "Plan du gîte",
     "nearbyTitle": "Aux alentours"

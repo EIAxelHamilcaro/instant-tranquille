@@ -4,8 +4,19 @@ import { Button } from "@/components/ui/button";
 import { PayloadImage } from "@/components/shared/PayloadImage";
 import { ChevronDown } from "lucide-react";
 
-export function HeroSection({ heroImage }: { heroImage?: any }) {
+export function HeroSection({
+  heroImage,
+  heroTitle,
+  heroSubtitle,
+}: {
+  heroImage?: any;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+}) {
   const t = useTranslations("home");
+
+  const title = heroTitle || t("heroTitle");
+  const subtitle = heroSubtitle || t("heroSubtitle");
 
   const hasImage = heroImage && typeof heroImage === "object" && heroImage.url;
 
@@ -34,10 +45,10 @@ export function HeroSection({ heroImage }: { heroImage?: any }) {
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
         <h1 className="hero-title text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-          {t("heroTitle")}
+          {title}
         </h1>
         <p className="hero-subtitle mt-6 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
-          {t("heroSubtitle")}
+          {subtitle}
         </p>
         <div className="hero-buttons mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Button

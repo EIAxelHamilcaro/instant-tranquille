@@ -111,7 +111,12 @@ export default async function HomePage({
         <HomePageClient
           initialData={{
             heroImage,
-            introImage: homePage?.heroImage ?? null,
+            heroTitle: homePage?.heroTitle ?? null,
+            heroSubtitle: homePage?.heroSubtitle ?? null,
+            introImage: homePage?.introImage ?? homePage?.heroImage ?? null,
+            introTitle: homePage?.introTitle ?? null,
+            introText: homePage?.introText ?? null,
+            highlights: homePage?.highlights ?? null,
             testimonials,
             bookingLinks,
           }}
@@ -132,10 +137,18 @@ export default async function HomePage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
-      <HeroSection heroImage={heroImage} />
-      <IntroSection introImage={homePage?.heroImage ?? null} />
+      <HeroSection
+        heroImage={heroImage}
+        heroTitle={homePage?.heroTitle ?? null}
+        heroSubtitle={homePage?.heroSubtitle ?? null}
+      />
+      <IntroSection
+        introImage={homePage?.introImage ?? homePage?.heroImage ?? null}
+        introTitle={homePage?.introTitle ?? null}
+        introText={homePage?.introText ?? null}
+      />
       <LeafDivider />
-      <HighlightsSection />
+      <HighlightsSection highlights={homePage?.highlights ?? null} />
       <TestimonialsSection testimonials={testimonials} />
       <TestimonialForm />
       <CTASection bookingLinks={bookingLinks} />

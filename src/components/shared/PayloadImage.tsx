@@ -59,7 +59,6 @@ export function PayloadImage({
         className={className}
         priority={priority}
         quality={quality}
-        {...(priority && { fetchPriority: "high" })}
         sizes={
           size === "hero"
             ? "100vw"
@@ -80,7 +79,6 @@ export function PayloadImage({
       className={className}
       priority={priority}
       quality={quality}
-      {...(priority && { fetchPriority: "high" })}
     />
   );
 }

@@ -10,9 +10,22 @@ import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { CTASection } from "@/components/home/CTASection";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 
+type CmsHighlight = {
+  icon?: string | null;
+  title?: string | null;
+  description?: string | null;
+  linkUrl?: string | null;
+  linkLabel?: string | null;
+};
+
 export type HomePageData = {
   heroImage: CmsMedia | string | number | null;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
   introImage: CmsMedia | string | number | null;
+  introTitle?: string | null;
+  introText?: unknown;
+  highlights?: CmsHighlight[] | null;
   testimonials: CmsTestimonial[];
   bookingLinks?: {
     airbnb?: string | null;
@@ -30,10 +43,18 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
 
   return (
     <>
-      <HeroSection heroImage={data.heroImage} />
-      <IntroSection introImage={data.introImage} />
+      <HeroSection
+        heroImage={data.heroImage}
+        heroTitle={data.heroTitle}
+        heroSubtitle={data.heroSubtitle}
+      />
+      <IntroSection
+        introImage={data.introImage}
+        introTitle={data.introTitle}
+        introText={data.introText}
+      />
       <LeafDivider />
-      <HighlightsSection />
+      <HighlightsSection highlights={data.highlights} />
       <TestimonialsSection testimonials={data.testimonials} />
       <TestimonialForm />
       <CTASection bookingLinks={data.bookingLinks} />

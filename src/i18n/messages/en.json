@@ -54,7 +54,10 @@
       "indoor": "Indoor",
       "outdoor": "Outdoor",
       "kitchen": "Kitchen",
-      "comfort": "Comfort"
+      "comfort": "Comfort",
+      "bedroom": "Bedroom",
+      "bathroom": "Bathroom",
+      "tech": "Technology"
     },
     "floorPlanTitle": "Floor plan",
     "nearbyTitle": "Nearby attractions"
