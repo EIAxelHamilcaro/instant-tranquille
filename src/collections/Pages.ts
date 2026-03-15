@@ -381,57 +381,6 @@ export const Pages: CollectionConfig = {
           ],
         },
 
-        // ── Tab: SEO ────────────────────────────────────────────────────────
-        {
-          label: "SEO",
-          fields: [
-            {
-              name: "seo",
-              type: "group",
-              label: "Référencement (SEO)",
-              admin: {
-                description:
-                  "Ces champs améliorent la visibilité sur Google et les réseaux sociaux",
-              },
-              fields: [
-                {
-                  name: "metaTitle",
-                  type: "text",
-                  label: "Titre Google",
-                  localized: true,
-                  maxLength: 60,
-                  admin: {
-                    description:
-                      "Titre affiché dans les résultats Google (50-60 caractères). Laissez vide pour utiliser le titre de la page",
-                    placeholder: "L'Instant Tranquille — Gîte en Sologne",
-                  },
-                },
-                {
-                  name: "metaDescription",
-                  type: "textarea",
-                  label: "Description Google",
-                  localized: true,
-                  admin: {
-                    description:
-                      "Texte affiché sous le titre dans Google (150-160 caractères). Donnez envie de cliquer !",
-                    placeholder:
-                      "Découvrez notre gîte de charme au cœur de la Sologne...",
-                  },
-                },
-                {
-                  name: "ogImage",
-                  type: "upload",
-                  label: "Image de partage",
-                  relationTo: "media",
-                  admin: {
-                    description:
-                      "Image affichée quand la page est partagée sur Facebook ou Twitter (1200×630 recommandé)",
-                  },
-                },
-              ],
-            },
-          ],
-        },
       ],
     },
   ],

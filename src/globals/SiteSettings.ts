@@ -396,10 +396,9 @@ export const SiteSettings: GlobalConfig = {
                   type: "textarea",
                   label: "Description Google par défaut",
                   localized: true,
-                  maxLength: 160,
                   admin: {
                     description:
-                      "Description affichée dans Google si la page n'en a pas (max. 160 caractères)",
+                      "Description affichée dans Google si la page n'en a pas (150-160 caractères recommandés)",
                   },
                 },
                 {

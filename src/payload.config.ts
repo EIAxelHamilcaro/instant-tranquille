@@ -20,6 +20,7 @@ import {
   InlineToolbarFeature,
 } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { seoPlugin } from "@payloadcms/plugin-seo";
 import { fr } from "@payloadcms/translations/languages/fr";
 import sharp from "sharp";
 
@@ -125,6 +126,18 @@ export default buildConfig({
     },
   }),
   plugins: [
+    seoPlugin({
+      collections: ["pages"],
+      uploadsCollection: "media",
+      tabbedUI: true,
+      generateTitle: ({ doc }) => {
+        const title = typeof doc?.title === "string" ? doc.title : "";
+        return title ? `${title} — L'Instant Tranquille` : "L'Instant Tranquille";
+      },
+      generateDescription: ({ doc }) => {
+        return typeof doc?.metaDescription === "string" ? doc.metaDescription : "";
+      },
+    }),
     vercelBlobStorage({
       collections: {
         media: true,

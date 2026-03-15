@@ -58,6 +58,20 @@ export type CmsPage = {
   heroTitle?: string | null;
   heroSubtitle?: string | null;
   heroImage?: CmsMedia | string | number | null;
+  introTitle?: string | null;
+  introText?: unknown;
+  introImage?: CmsMedia | string | number | null;
+  gallery?: Array<{ image?: CmsMedia | string | number | null; caption?: string | null }> | null;
+  highlights?: Array<{
+    icon?: string | null;
+    title?: string | null;
+    description?: string | null;
+    linkUrl?: string | null;
+    linkLabel?: string | null;
+  }> | null;
+  descriptionTitle?: string | null;
+  descriptionText?: unknown;
+  previewImages?: Array<{ image?: CmsMedia | string | number | null; label?: string | null }> | null;
   content?: unknown;
   seo?: {
     metaTitle?: string | null;
@@ -199,6 +213,7 @@ export async function getAmenities(locale: string, draft = false) {
     const payload = await getPayload();
     const result = await payload.find({
       collection: "amenities",
+      where: { enabled: { not_equals: false } },
       sort: "order",
       locale: locale as "fr" | "en",
       limit: 100,
@@ -211,6 +226,7 @@ export async function getAmenities(locale: string, draft = false) {
       const payload = await getPayload();
       const result = await payload.find({
         collection: "amenities",
+        where: { enabled: { not_equals: false } },
         sort: "order",
         locale: locale as "fr" | "en",
         limit: 100,

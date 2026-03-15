@@ -3,6 +3,7 @@ import type { CollectionConfig } from "payload";
 import { isAuthenticated, isActiveGuideOrAdmin } from "@/lib/access";
 import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { validatePhone } from "@/lib/validators";
 
 export const OnboardingGuides: CollectionConfig = {
   slug: "onboarding-guides",
@@ -357,6 +358,7 @@ export const OnboardingGuides: CollectionConfig = {
                       type: "text",
                       label: "Téléphone",
                       required: true,
+                      validate: validatePhone,
                       admin: {
                         description: "Numéro à appeler",
                         placeholder: "+33 6 12 34 56 78",

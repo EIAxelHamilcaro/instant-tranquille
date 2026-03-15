@@ -9,6 +9,7 @@ export const Media: CollectionConfig = {
   hooks: revalidateCollection("media"),
   upload: {
     staticDir: "media",
+    filesizeLimit: 5 * 1024 * 1024,
     imageSizes: [
       { name: "thumbnail", width: 400, height: 300 },
       { name: "card", width: 768, height: 512 },

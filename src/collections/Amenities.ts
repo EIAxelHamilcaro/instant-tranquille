@@ -67,6 +67,9 @@ export const Amenities: CollectionConfig = {
         { label: "Extérieur", value: "outdoor" },
         { label: "Cuisine", value: "kitchen" },
         { label: "Confort", value: "comfort" },
+        { label: "Chambre", value: "bedroom" },
+        { label: "Salle de bain", value: "bathroom" },
+        { label: "Technologie", value: "tech" },
       ],
     },
     {
@@ -87,6 +90,16 @@ export const Amenities: CollectionConfig = {
         position: "sidebar",
         description:
           "Plus le nombre est petit, plus l'équipement apparaît en premier (0, 1, 2...)",
+      },
+    },
+    {
+      name: "enabled",
+      type: "checkbox",
+      label: "Actif",
+      defaultValue: true,
+      admin: {
+        position: "sidebar",
+        description: "Décochez pour masquer cet équipement du site",
       },
     },
   ],

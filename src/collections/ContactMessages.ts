@@ -9,7 +9,7 @@ export const ContactMessages: CollectionConfig = {
     group: "Contenu",
     useAsTitle: "subject",
     description: "Messages reçus via le formulaire de contact",
-    defaultColumns: ["name", "subject", "email", "createdAt"],
+    defaultColumns: ["name", "email", "subject", "createdAt", "readStatus"],
   },
   access: {
     create: isPublic,
