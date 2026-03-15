@@ -204,7 +204,6 @@ export const PricingConfig: GlobalConfig = {
               admin: {
                 description:
                   "Adresses de vos annonces sur les plateformes de location",
-                initCollapsed: true,
               },
               fields: [
                 {
@@ -263,7 +262,6 @@ export const PricingConfig: GlobalConfig = {
               admin: {
                 description:
                   "Règles, horaires et politiques de location",
-                initCollapsed: true,
               },
               fields: [
                 {

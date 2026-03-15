@@ -76,7 +76,6 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description:
                   "Informations pratiques sur la capacité et la taille du logement",
-                initCollapsed: true,
               },
               fields: [
                 {
@@ -124,7 +123,6 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description:
                   "Vos informations de contact affichées sur le site",
-                initCollapsed: true,
               },
               fields: [
                 {
@@ -161,8 +159,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description:
                       "Pour la carte interactive du site (trouvable via Google Maps)",
-                    initCollapsed: true,
-                  },
+                      },
                   fields: [
                     {
                       name: "lat",
@@ -215,7 +212,6 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description:
                   "Routes d'accès au gîte depuis les grandes villes",
-                initCollapsed: true,
               },
               fields: [
                 {

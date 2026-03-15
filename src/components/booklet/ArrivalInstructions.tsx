@@ -37,9 +37,9 @@ export function ArrivalInstructions({ data }: { data: ArrivalData }) {
         </Card>
       )}
 
-      {data.instructions && (
+      {data.instructions != null && (
         <div className="mb-4 leading-relaxed text-foreground/80">
-          <RichTextRenderer content={data.instructions} />
+          <RichTextRenderer content={data.instructions as Record<string, unknown>} />
         </div>
       )}
 
