@@ -88,6 +88,7 @@ export const Header: GlobalConfig = {
           name: "label",
           type: "text",
           label: "Texte du bouton",
+          required: true,
           localized: true,
           admin: {
             description: "Ce qui s'affiche sur le bouton",
