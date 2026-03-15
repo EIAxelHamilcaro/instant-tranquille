@@ -74,11 +74,16 @@ export function NearbyAttractions({
                 <h3 className="font-heading text-base font-semibold">
                   {rec.name}
                 </h3>
-                {typeof rec.description === "string" && rec.description && (
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {rec.description}
-                  </p>
-                )}
+                {rec.description != null && (() => {
+                  // Handle both plain text and legacy richText JSON
+                  const desc = typeof rec.description === "string" ? rec.description : "";
+                  if (!desc || desc.startsWith("{")) return null;
+                  return (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {desc}
+                    </p>
+                  );
+                })()}
               </CardContent>
             </Card>
           ))}
