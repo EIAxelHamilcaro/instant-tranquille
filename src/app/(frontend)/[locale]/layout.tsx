@@ -7,6 +7,7 @@ import { type Locale } from "@/i18n/config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { playfairDisplay, lora, inter } from "@/lib/fonts";
+import { getSiteSettings } from "@/lib/queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -15,21 +16,34 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    template: "%s — L'Instant Tranquille",
-    default: "L'Instant Tranquille — Gîte de charme en Sologne",
-  },
-  description:
-    "Découvrez L'Instant Tranquille, un gîte de charme au cœur de la Sologne.",
-  category: "travel",
-  formatDetection: {
-    telephone: false,
-    email: false,
-    address: false,
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!routing.locales.includes(locale as Locale)) {
+    notFound();
+  }
+  const settings = (await getSiteSettings(locale)) as Record<string, any>;
+  const siteName = settings.siteName || "L'Instant Tranquille";
+  const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      template: `%s — ${siteName}`,
+      default: `${siteName} — ${messages.metadata.title}`,
+    },
+    description: messages.metadata.description,
+    category: "travel",
+    formatDetection: {
+      telephone: false,
+      email: false,
+      address: false,
+    },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -56,11 +70,6 @@ export default async function FrontendLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fal.media" />
-        <link
-          rel="dns-prefetch"
-          href="https://tile.openstreetmap.org"
-        />
         <link
           rel="dns-prefetch"
           href="https://challenges.cloudflare.com"

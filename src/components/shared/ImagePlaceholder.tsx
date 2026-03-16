@@ -43,7 +43,7 @@ export function ImagePlaceholder({
       )}
       style={{ aspectRatio }}
     >
-      <Icon className="h-12 w-12 text-sand-600" />
+      <Icon className="h-12 w-12 text-sand-600" aria-hidden="true" />
       {label && (
         <span className="mt-2 text-sm font-medium text-sand-700">{label}</span>
       )}

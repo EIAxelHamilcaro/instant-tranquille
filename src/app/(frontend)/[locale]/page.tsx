@@ -5,6 +5,7 @@ import { generateCmsPageMetadata } from "@/lib/seo";
 import {
   generateLodgingBusinessJsonLd,
   generateFAQJsonLd,
+  extractPlainText,
 } from "@/lib/jsonld";
 import {
   getSiteSettings,
@@ -70,6 +71,8 @@ export default async function HomePage({
     typeof homePage.heroImage === "object" &&
     (homePage.heroImage as Record<string, any>).sizes?.hero?.url;
 
+  const propertyDetails = settings.propertyDetails as { bedrooms?: number; maxGuests?: number } | undefined;
+
   const jsonLd = generateLodgingBusinessJsonLd({
     telephone: contact?.phone,
     email: contact?.email,
@@ -77,19 +80,24 @@ export default async function HomePage({
     lat: contact?.coordinates?.lat,
     lng: contact?.coordinates?.lng,
     address: contact?.address,
-    priceRange: "$$",
     checkInTime: pricing.policies?.checkIn,
     checkOutTime: pricing.policies?.checkOut,
+    numberOfRooms: propertyDetails?.bedrooms,
     amenities,
     testimonials: allTestimonials,
   });
 
-  const faqs = (settings.faqs as { question: string; answer: string }[]) || [];
+  const rawFaqs = (settings.faqs as { question: string; answer: unknown }[]) || [];
+  const faqs = rawFaqs.map((faq) => ({
+    question: faq.question,
+    answer: typeof faq.answer === "string" ? faq.answer : extractPlainText(faq.answer),
+  }));
   const faqJsonLd = generateFAQJsonLd(faqs);
 
   const bookingLinks = pricing.bookingLinks as {
     airbnb?: string | null;
     booking?: string | null;
+    abritel?: string | null;
     email?: string | null;
   } | undefined;
 
@@ -113,10 +121,14 @@ export default async function HomePage({
             heroImage,
             heroTitle: homePage?.heroTitle ?? null,
             heroSubtitle: homePage?.heroSubtitle ?? null,
-            introImage: homePage?.introImage ?? homePage?.heroImage ?? null,
+            introImage: homePage?.introImage ?? null,
             introTitle: homePage?.introTitle ?? null,
             introText: homePage?.introText ?? null,
             highlights: homePage?.highlights ?? null,
+            highlightsTitle: homePage?.highlightsTitle ?? null,
+            testimonialsTitle: homePage?.testimonialsTitle ?? null,
+            ctaTitle: homePage?.ctaTitle ?? null,
+            ctaSubtitle: homePage?.ctaSubtitle ?? null,
             testimonials,
             bookingLinks,
           }}
@@ -143,15 +155,25 @@ export default async function HomePage({
         heroSubtitle={homePage?.heroSubtitle ?? null}
       />
       <IntroSection
-        introImage={homePage?.introImage ?? homePage?.heroImage ?? null}
+        introImage={homePage?.introImage ?? null}
         introTitle={homePage?.introTitle ?? null}
         introText={homePage?.introText ?? null}
       />
       <LeafDivider />
-      <HighlightsSection highlights={homePage?.highlights ?? null} />
-      <TestimonialsSection testimonials={testimonials} />
+      <HighlightsSection
+        highlights={homePage?.highlights ?? null}
+        title={homePage?.highlightsTitle ?? null}
+      />
+      <TestimonialsSection
+        testimonials={testimonials}
+        title={homePage?.testimonialsTitle ?? null}
+      />
       <TestimonialForm />
-      <CTASection bookingLinks={bookingLinks} />
+      <CTASection
+        bookingLinks={bookingLinks}
+        ctaTitle={homePage?.ctaTitle ?? null}
+        ctaSubtitle={homePage?.ctaSubtitle ?? null}
+      />
     </>
   );
 }

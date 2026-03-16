@@ -1,4 +1,7 @@
+"use client";
+
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, AlertTriangle } from "lucide-react";
 
@@ -10,27 +13,31 @@ type EmergencyContact = {
 };
 
 export function EmergencyContacts({
+  id,
+  sectionTitle,
+  emergencyLabel,
   contacts,
 }: {
+  id?: string;
+  sectionTitle?: string | null;
+  emergencyLabel?: string | null;
   contacts: EmergencyContact[];
 }) {
   const t = useTranslations("booklet");
 
-  if (!contacts?.length) return null;
-
   return (
-    <section id="emergency" className="scroll-mt-20">
+    <section id={id ?? "emergency"} className="scroll-mt-20">
       <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-        <Phone className="h-6 w-6 text-primary-500" />
-        {t("emergency")}
+        <Phone className="h-6 w-6 text-primary-500" aria-hidden="true" />
+        {sectionTitle || t("emergency")}
       </h2>
 
       <Card className="border-red-200 bg-red-50">
         <CardContent className="p-6">
           <div className="mb-4 flex items-center gap-2 text-red-700">
-            <AlertTriangle className="h-5 w-5" />
+            <AlertTriangle className="h-5 w-5" aria-hidden="true" />
             <span className="font-sans text-sm font-semibold">
-              {t("emergencyNumber")}
+              {emergencyLabel || t("emergencyNumber")}
             </span>
           </div>
 
@@ -55,13 +62,12 @@ export function EmergencyContacts({
                     </p>
                   )}
                 </div>
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="flex items-center gap-1 rounded-md bg-primary-500 px-3 py-1.5 font-sans text-xs font-medium text-white hover:bg-primary-600"
-                >
-                  <Phone className="h-3 w-3" />
-                  {contact.phone}
-                </a>
+                <Button asChild size="sm" className="bg-primary-500 text-white hover:bg-primary-600">
+                  <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>
+                    <Phone className="h-3 w-3" aria-hidden="true" />
+                    {contact.phone}
+                  </a>
+                </Button>
               </div>
             ))}
           </div>

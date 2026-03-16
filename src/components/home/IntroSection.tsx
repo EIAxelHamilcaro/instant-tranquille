@@ -53,14 +53,14 @@ export function IntroSection({
               <PayloadImage
                 media={introImage}
                 size="card"
-                alt="Vue extérieure du gîte"
+                alt={t("introImageAlt")}
                 className="rounded-xl"
               />
             ) : (
               <ImagePlaceholder
                 aspectRatio="4/3"
                 icon="home"
-                label="Vue extérieure du gîte"
+                label={t("introImageAlt")}
                 className="rounded-xl"
               />
             )}

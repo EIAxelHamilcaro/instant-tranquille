@@ -10,6 +10,10 @@ export async function GET(request: NextRequest) {
     return new Response("Invalid secret", { status: 401 });
   }
 
+  if (!slug.startsWith("/") || slug.startsWith("//")) {
+    return new Response("Invalid slug", { status: 400 });
+  }
+
   const draft = await draftMode();
   draft.enable();
 

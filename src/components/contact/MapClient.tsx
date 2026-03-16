@@ -58,7 +58,9 @@ export default function MapClient({ lat, lng, zoom, markerLabel }: MapClientProp
   return (
     <div
       ref={mapRef}
-      className="h-[400px] w-full rounded-xl"
+      role="application"
+      aria-label={label}
+      className="h-[250px] w-full rounded-xl sm:h-[350px] md:h-[400px]"
     />
   );
 }

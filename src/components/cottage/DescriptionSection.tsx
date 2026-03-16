@@ -43,16 +43,16 @@ export function DescriptionSection({
 
   const stats = [
     propertyDetails?.maxGuests != null
-      ? { icon: Users, value: String(propertyDetails.maxGuests), label: "voyageurs" }
+      ? { icon: Users, value: String(propertyDetails.maxGuests), label: t("guests") }
       : null,
     propertyDetails?.bedrooms != null
-      ? { icon: BedDouble, value: String(propertyDetails.bedrooms), label: "chambres" }
+      ? { icon: BedDouble, value: String(propertyDetails.bedrooms), label: t("bedrooms") }
       : null,
     propertyDetails?.bathrooms != null
-      ? { icon: Bath, value: String(propertyDetails.bathrooms), label: "salles de bain" }
+      ? { icon: Bath, value: String(propertyDetails.bathrooms), label: t("bathrooms") }
       : null,
     propertyDetails?.surface != null
-      ? { icon: Maximize, value: `${propertyDetails.surface}m²`, label: "surface" }
+      ? { icon: Maximize, value: `${propertyDetails.surface}m²`, label: t("surface") }
       : null,
   ].filter(Boolean) as { icon: typeof Users; value: string; label: string }[];
 
@@ -87,7 +87,7 @@ export function DescriptionSection({
                     key={label}
                     className="rounded-lg bg-sand-100 p-4 text-center"
                   >
-                    <Icon className="mx-auto mb-2 h-6 w-6 text-primary-500" />
+                    <Icon className="mx-auto mb-2 h-6 w-6 text-primary-500" aria-hidden="true" />
                     <p className="font-heading text-2xl font-bold text-foreground">
                       {value}
                     </p>
@@ -104,18 +104,18 @@ export function DescriptionSection({
                   <PayloadImage
                     media={previewImages[0].image}
                     size="card"
-                    alt={previewImages[0].label || "Vue du gîte"}
+                    alt={previewImages[0].label || t("cottageView")}
                     className="rounded-xl w-full"
                   />
                 )}
                 {previewImages.length > 1 && (
                   <div className="grid grid-cols-2 gap-4">
-                    {previewImages.slice(1, 3).map((item, i) => (
+                    {previewImages.slice(1).map((item, i) => (
                       <PayloadImage
                         key={i}
                         media={item.image}
                         size="thumbnail"
-                        alt={item.label || "Vue du gîte"}
+                        alt={item.label || t("cottageView")}
                         className="rounded-lg w-full"
                       />
                     ))}
@@ -127,20 +127,20 @@ export function DescriptionSection({
                 <ImagePlaceholder
                   aspectRatio="4/3"
                   icon="home"
-                  label="Salon principal"
+                  label={t("placeholderLiving")}
                   className="rounded-xl"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <ImagePlaceholder
                     aspectRatio="1"
                     icon="bed"
-                    label="Chambre"
+                    label={t("placeholderBedroom")}
                     className="rounded-lg"
                   />
                   <ImagePlaceholder
                     aspectRatio="1"
                     icon="trees"
-                    label="Jardin"
+                    label={t("placeholderGarden")}
                     className="rounded-lg"
                   />
                 </div>

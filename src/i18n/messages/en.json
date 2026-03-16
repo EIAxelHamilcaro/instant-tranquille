@@ -14,6 +14,7 @@
     "heroTitle": "L'Instant Tranquille",
     "heroSubtitle": "Your nature retreat in the heart of Sologne",
     "heroCta": "Discover the cottage",
+    "heroCta2": "See rates",
     "introTitle": "Welcome to Sologne",
     "introText": "Nestled in the heart of Sologne's forests, L'Instant Tranquille offers an idyllic setting for a rejuvenating getaway. Just a short drive from the Loire Valley castles, enjoy the absolute calm of the French countryside.",
     "highlightsTitle": "Why choose us",
@@ -31,6 +32,8 @@
     "ctaAirbnb": "Book on Airbnb",
     "ctaBooking": "Book on Booking",
     "ctaContact": "Contact us",
+    "ctaAbritel": "Book on Abritel",
+    "ctaEmailDirect": "Book directly",
     "testimonialFormTitle": "Share your experience",
     "testimonialFormSubtitle": "Your feedback matters! Help future travelers discover L'Instant Tranquille.",
     "testimonialName": "Your name",
@@ -41,7 +44,15 @@
     "testimonialSubmit": "Submit review",
     "testimonialSubmitting": "Submitting...",
     "testimonialSuccess": "Thank you for your review! It will be published after moderation.",
-    "testimonialError": "An error occurred. Please try again."
+    "testimonialError": "An error occurred. Please try again.",
+    "errorNameRequired": "Please enter your name",
+    "errorTextTooShort": "Your review must be at least 10 characters",
+    "errorDateRequired": "Please enter your stay date",
+    "star": "star",
+    "stars": "stars",
+    "testimonialsAriaLabel": "Our guests' testimonials",
+    "testimonialSlide": "Testimonial {current} of {total}",
+    "introImageAlt": "Cottage exterior view"
   },
   "cottage": {
     "title": "The Cottage",
@@ -59,8 +70,16 @@
       "bathroom": "Bathroom",
       "tech": "Technology"
     },
-    "floorPlanTitle": "Floor plan",
-    "nearbyTitle": "Nearby attractions"
+    "openImage": "Open image",
+    "nearbyTitle": "Nearby attractions",
+    "guests": "guests",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "surface": "surface",
+    "cottageView": "Cottage view",
+    "placeholderLiving": "Living room",
+    "placeholderBedroom": "Bedroom",
+    "placeholderGarden": "Garden"
   },
   "rates": {
     "title": "Rates & Booking",
@@ -81,7 +100,13 @@
     "checkInOut": "Check-in / Check-out",
     "additionalPolicies": "Additional information",
     "contactCta": "Have a question about rates or availability?",
-    "contactButton": "Contact us"
+    "contactButton": "Contact us",
+    "checkInLabel": "Check-in: ",
+    "checkOutLabel": "Check-out: ",
+    "feeTypePerStay": "per stay",
+    "feeTypePerNight": "per night",
+    "feeTypePerPerson": "per person",
+    "calendarTitle": "Seasonal calendar"
   },
   "contact": {
     "title": "Contact",
@@ -96,11 +121,13 @@
     "sending": "Sending...",
     "success": "Message sent successfully! We'll get back to you shortly.",
     "error": "An error occurred. Please try again.",
+    "errorNameRequired": "Please enter your name",
+    "errorEmailInvalid": "Please enter a valid email",
+    "errorSubjectRequired": "Please enter a subject",
+    "errorMessageRequired": "Please write your message",
     "mapTitle": "Find us",
     "accessTitle": "How to get here",
-    "fromParis": "From Paris",
-    "fromTours": "From Tours",
-    "fromOrleans": "From Orléans"
+    "interactiveMap": "Interactive map"
   },
   "booklet": {
     "title": "Welcome Booklet",
@@ -132,7 +159,9 @@
     "categoryMarkets": "Markets",
     "categoryServices": "Services",
     "websiteLabel": "Website",
-    "noRecommendations": "No recommendations available at the moment."
+    "noRecommendations": "No recommendations available at the moment.",
+    "interactiveMap": "Interactive map",
+    "customSection": "Custom Section"
   },
   "common": {
     "learnMore": "Learn more",
@@ -143,12 +172,16 @@
     "errorDesc": "We apologize for the inconvenience. Please try again.",
     "retry": "Try again",
     "loading": "Loading...",
-    "skipToContent": "Skip to main content"
+    "skipToContent": "Skip to main content",
+    "opensNewTab": "opens in a new tab",
+    "mainNav": "Main navigation",
+    "navMenu": "Navigation menu",
+    "languageSwitcher": "Language",
+    "starRating": "{rating} out of 5 stars",
+    "mobileNav": "Mobile navigation"
   },
   "footer": {
     "description": "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
-    "navigation": "Navigation",
-    "legal": "Legal notice",
     "rights": "All rights reserved.",
     "contact": "Contact"
   }

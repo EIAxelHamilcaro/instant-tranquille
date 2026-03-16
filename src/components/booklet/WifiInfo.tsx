@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "./CopyButton";
@@ -8,16 +10,16 @@ type WifiData = {
   password?: string | null;
 };
 
-export function WifiInfo({ data }: { data: WifiData }) {
+export function WifiInfo({ id, sectionTitle, data }: { id?: string; sectionTitle?: string | null; data: WifiData }) {
   const t = useTranslations("booklet");
 
   if (!data.networkName && !data.password) return null;
 
   return (
-    <section id="wifi" className="scroll-mt-20">
+    <section id={id ?? "wifi"} className="scroll-mt-20">
       <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-        <Wifi className="h-6 w-6 text-primary-500" />
-        {t("wifi")}
+        <Wifi className="h-6 w-6 text-primary-500" aria-hidden="true" />
+        {sectionTitle || t("wifi")}
       </h2>
 
       <Card className="border-sand-200">

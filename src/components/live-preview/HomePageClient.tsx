@@ -26,10 +26,15 @@ export type HomePageData = {
   introTitle?: string | null;
   introText?: unknown;
   highlights?: CmsHighlight[] | null;
+  highlightsTitle?: string | null;
+  testimonialsTitle?: string | null;
+  ctaTitle?: string | null;
+  ctaSubtitle?: string | null;
   testimonials: CmsTestimonial[];
   bookingLinks?: {
     airbnb?: string | null;
     booking?: string | null;
+    abritel?: string | null;
     email?: string | null;
   };
 };
@@ -54,10 +59,20 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
         introText={data.introText}
       />
       <LeafDivider />
-      <HighlightsSection highlights={data.highlights} />
-      <TestimonialsSection testimonials={data.testimonials} />
+      <HighlightsSection
+        highlights={data.highlights}
+        title={data.highlightsTitle}
+      />
+      <TestimonialsSection
+        testimonials={data.testimonials}
+        title={data.testimonialsTitle}
+      />
       <TestimonialForm />
-      <CTASection bookingLinks={data.bookingLinks} />
+      <CTASection
+        bookingLinks={data.bookingLinks}
+        ctaTitle={data.ctaTitle}
+        ctaSubtitle={data.ctaSubtitle}
+      />
     </>
   );
 }

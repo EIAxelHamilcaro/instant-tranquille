@@ -2,17 +2,10 @@
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
 import { PricingTable } from "@/components/rates/PricingTable";
+import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
-
-type Season = {
-  name: string;
-  dateRange?: { start: string; end: string } | null;
-  nightlyRate?: number | null;
-  weeklyRate?: number | null;
-  minimumStay?: number | null;
-  color?: string | null;
-};
+import type { CmsSeason } from "@/lib/queries";
 
 type AdditionalFee = {
   name: string;
@@ -24,6 +17,7 @@ type AdditionalFee = {
 type BookingLinksData = {
   airbnb?: string | null;
   booking?: string | null;
+  abritel?: string | null;
   email?: string | null;
 };
 
@@ -36,7 +30,7 @@ type Policies = {
 };
 
 export type RatesPageData = {
-  seasons: Season[];
+  seasons: CmsSeason[];
   additionalFees: AdditionalFee[];
   currency: string;
   bookingLinks?: BookingLinksData | null;
@@ -59,6 +53,10 @@ export function RatesPageClient({
       <PricingTable
         seasons={data.seasons || []}
         additionalFees={data.additionalFees || []}
+        currency={data.currency || "EUR"}
+      />
+      <SeasonCalendar
+        seasons={data.seasons || []}
         currency={data.currency || "EUR"}
       />
       <BookingLinks bookingLinks={data.bookingLinks} />

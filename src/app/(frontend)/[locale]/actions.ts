@@ -8,12 +8,20 @@ const testimonialSchema = z.object({
   guestOrigin: z.string().max(200).optional(),
   rating: z.coerce.number().int().min(1).max(5),
   text: z.string().min(10).max(2000),
-  stayDate: z.string().min(1),
+  stayDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
 export type TestimonialFormState = {
   success: boolean;
   error?: string;
+  fieldErrors?: Partial<Record<"guestName" | "text" | "stayDate" | "rating", string>>;
+  values?: {
+    guestName?: string;
+    guestOrigin?: string;
+    rating?: number;
+    text?: string;
+    stayDate?: string;
+  };
 };
 
 export async function submitTestimonial(
@@ -49,10 +57,25 @@ export async function submitTestimonial(
     stayDate: formData.get("stayDate"),
   };
 
+  const values = {
+    guestName: (raw.guestName as string) || "",
+    guestOrigin: (raw.guestOrigin as string) || "",
+    rating: Number(raw.rating) || 5,
+    text: (raw.text as string) || "",
+    stayDate: (raw.stayDate as string) || "",
+  };
+
   const parsed = testimonialSchema.safeParse(raw);
 
   if (!parsed.success) {
-    return { success: false, error: "validation_error" };
+    const fieldErrors: TestimonialFormState["fieldErrors"] = {};
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0] as keyof typeof fieldErrors;
+      if (field && !fieldErrors[field]) {
+        fieldErrors[field] = issue.code;
+      }
+    }
+    return { success: false, error: "validation_error", fieldErrors, values };
   }
 
   try {
@@ -67,13 +90,12 @@ export async function submitTestimonial(
         text: parsed.data.text,
         stayDate: parsed.data.stayDate,
         source: "direct",
-        status: "pending",
-        featured: false,
       },
     });
 
     return { success: true };
-  } catch {
-    return { success: false, error: "server_error" };
+  } catch (err) {
+    console.error("[submitTestimonial] Error:", err);
+    return { success: false, error: "server_error", values };
   }
 }

@@ -55,8 +55,10 @@ type CmsHighlight = {
 
 export function HighlightsSection({
   highlights: cmsHighlights,
+  title: cmsTitle,
 }: {
   highlights?: CmsHighlight[] | null;
+  title?: string | null;
 }) {
   const t = useTranslations("home");
   const ref = useReveal();
@@ -66,7 +68,7 @@ export function HighlightsSection({
   return (
     <section className="bg-sand-100 py-20" ref={ref}>
       <Container>
-        <SectionHeading title={t("highlightsTitle")} />
+        <SectionHeading title={cmsTitle || t("highlightsTitle")} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {useCms
             ? cmsHighlights.map((highlight, i) => {
@@ -78,7 +80,7 @@ export function HighlightsSection({
                   >
                     <CardContent className="p-6 text-center">
                       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
-                        <Icon className="h-7 w-7 text-primary-500" />
+                        <Icon className="h-7 w-7 text-primary-500" aria-hidden="true" />
                       </div>
                       <h3 className="font-heading text-lg font-semibold">
                         {highlight.title}
@@ -113,7 +115,7 @@ export function HighlightsSection({
                   >
                     <CardContent className="p-6 text-center">
                       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
-                        <Icon className="h-7 w-7 text-primary-500" />
+                        <Icon className="h-7 w-7 text-primary-500" aria-hidden="true" />
                       </div>
                       <h3 className="font-heading text-lg font-semibold">
                         {t(titleKey)}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export function HeaderClient({
   siteName: string;
   logo?: LogoMedia | null;
 }) {
+  const tCommon = useTranslations("common");
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
 
@@ -74,14 +76,14 @@ export function HeaderClient({
               priority
             />
           ) : (
-            <Trees className="h-7 w-7 text-primary-500" />
+            <Trees className="h-7 w-7 text-primary-500" aria-hidden="true" />
           )}
           <span className="font-heading text-xl font-bold text-foreground">
             {siteName}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Navigation principale">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={tCommon("mainNav")}>
           {navItems.map((item) => {
             const isActive = !item.isExternal && pathname === item.url;
             return item.isExternal ? (

@@ -1,11 +1,11 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { Trees, ArrowLeft } from "lucide-react";
 
-export default function NotFound() {
-  const t = useTranslations("common");
+export default async function NotFound() {
+  const t = await getTranslations("common");
 
   return (
     <Container className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">

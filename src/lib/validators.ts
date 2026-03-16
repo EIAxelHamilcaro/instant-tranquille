@@ -2,7 +2,8 @@ export function validatePhone(value: unknown): string | true {
   if (!value) return true; // let required handle this
   if (typeof value !== "string") return "Le numéro de téléphone doit être une chaîne de caractères";
   const cleaned = value.replace(/[\s\-().]/g, "");
-  if (!/^\+?[0-9]{7,15}$/.test(cleaned)) {
+  // Accept short emergency numbers (15, 17, 18, 112, etc.) and standard numbers
+  if (!/^\+?[0-9]{2,15}$/.test(cleaned)) {
     return "Le numéro de téléphone n'est pas valide (ex: +33 6 12 34 56 78)";
   }
   return true;

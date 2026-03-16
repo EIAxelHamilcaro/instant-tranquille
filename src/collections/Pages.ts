@@ -29,6 +29,13 @@ const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req }) => {
 
 const revalidateHooks = revalidateCollection("pages");
 
+// Helper conditions
+const isHome = (data: Record<string, unknown> | undefined) => data?.slug === "home";
+const isGite = (data: Record<string, unknown> | undefined) => data?.slug === "le-gite";
+const hasHero = (data: Record<string, unknown> | undefined) => data?.slug !== "le-gite";
+const hasHeroOrContent = (data: Record<string, unknown> | undefined) =>
+  data?.slug !== "home" && data?.slug !== "le-gite";
+
 export const Pages: CollectionConfig = {
   slug: "pages",
   lockDocuments: false,
@@ -109,10 +116,13 @@ export const Pages: CollectionConfig = {
         {
           label: "Contenu",
           fields: [
-            // Collapsible: Hero
+            // Hero (home, tarifs-reservation, contact — PAS le-gite)
             {
               type: "collapsible",
               label: "Hero",
+              admin: {
+                condition: (data) => hasHero(data),
+              },
               fields: [
                 {
                   name: "heroImage",
@@ -122,6 +132,7 @@ export const Pages: CollectionConfig = {
                   admin: {
                     description:
                       "Grande image affichée en haut de la page (1920×1080 recommandé)",
+                    condition: (data) => hasHero(data),
                   },
                 },
                 {
@@ -131,6 +142,7 @@ export const Pages: CollectionConfig = {
                   localized: true,
                   admin: {
                     description: "Grand titre sur l'image de bannière",
+                    condition: (data) => hasHero(data),
                   },
                 },
                 {
@@ -140,15 +152,19 @@ export const Pages: CollectionConfig = {
                   localized: true,
                   admin: {
                     description: "Texte affiché sous le titre de la bannière",
+                    condition: (data) => hasHero(data),
                   },
                 },
               ],
             },
 
-            // Collapsible: Introduction
+            // Introduction (home only)
             {
               type: "collapsible",
               label: "Introduction",
+              admin: {
+                condition: (data) => isHome(data),
+              },
               fields: [
                 {
                   name: "introTitle",
@@ -157,6 +173,7 @@ export const Pages: CollectionConfig = {
                   localized: true,
                   admin: {
                     description: "Titre de la section d'introduction sous la bannière",
+                    condition: (data) => isHome(data),
                   },
                 },
                 {
@@ -167,17 +184,18 @@ export const Pages: CollectionConfig = {
                   admin: {
                     description:
                       "Texte d'accroche affiché juste après la bannière. Utilisez la barre d'outils pour mettre en forme",
+                    condition: (data) => isHome(data),
                   },
                 },
               ],
             },
 
-            // Collapsible: Highlights (home only)
+            // Highlights (home only)
             {
               type: "collapsible",
               label: "Highlights",
               admin: {
-                condition: (data) => data?.slug === "home",
+                condition: (data) => isHome(data),
               },
               fields: [
                 {
@@ -187,7 +205,7 @@ export const Pages: CollectionConfig = {
                   admin: {
                     description:
                       "Vignettes mises en avant sur la page d'accueil (atouts du gîte)",
-                    condition: (data) => data?.slug === "home",
+                    condition: (data) => isHome(data),
                   },
                   fields: [
                     {
@@ -238,12 +256,67 @@ export const Pages: CollectionConfig = {
               ],
             },
 
-            // Collapsible: Description (le-gite only)
+            // Titres de sections (home only)
+            {
+              type: "collapsible",
+              label: "Titres de sections",
+              admin: {
+                condition: (data) => isHome(data),
+              },
+              fields: [
+                {
+                  name: "highlightsTitle",
+                  type: "text",
+                  label: "Titre section Highlights",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Titre de la section « Pourquoi nous choisir » (laisser vide = valeur par défaut)",
+                    condition: (data) => isHome(data),
+                  },
+                },
+                {
+                  name: "testimonialsTitle",
+                  type: "text",
+                  label: "Titre section Témoignages",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Titre de la section témoignages (laisser vide = valeur par défaut)",
+                    condition: (data) => isHome(data),
+                  },
+                },
+                {
+                  name: "ctaTitle",
+                  type: "text",
+                  label: "Titre CTA",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Titre de la section d'appel à l'action en bas de page (laisser vide = valeur par défaut)",
+                    condition: (data) => isHome(data),
+                  },
+                },
+                {
+                  name: "ctaSubtitle",
+                  type: "text",
+                  label: "Sous-titre CTA",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Sous-titre de la section d'appel à l'action (laisser vide = valeur par défaut)",
+                    condition: (data) => isHome(data),
+                  },
+                },
+              ],
+            },
+
+            // Description (le-gite only)
             {
               type: "collapsible",
               label: "Description",
               admin: {
-                condition: (data) => data?.slug === "le-gite",
+                condition: (data) => isGite(data),
               },
               fields: [
                 {
@@ -253,7 +326,7 @@ export const Pages: CollectionConfig = {
                   localized: true,
                   admin: {
                     description: "Titre de la section de description du gîte",
-                    condition: (data) => data?.slug === "le-gite",
+                    condition: (data) => isGite(data),
                   },
                 },
                 {
@@ -264,16 +337,19 @@ export const Pages: CollectionConfig = {
                   admin: {
                     description:
                       "Description détaillée du gîte. Utilisez la barre d'outils pour mettre en forme",
-                    condition: (data) => data?.slug === "le-gite",
+                    condition: (data) => isGite(data),
                   },
                 },
               ],
             },
 
-            // Collapsible: Contenu principal
+            // Contenu principal (tarifs-reservation, contact)
             {
               type: "collapsible",
               label: "Contenu principal",
+              admin: {
+                condition: (data) => hasHeroOrContent(data),
+              },
               fields: [
                 {
                   name: "content",
@@ -283,6 +359,7 @@ export const Pages: CollectionConfig = {
                   admin: {
                     description:
                       "Texte principal de la page. Utilisez la barre d'outils pour mettre en forme",
+                    condition: (data) => hasHeroOrContent(data),
                   },
                 },
               ],
@@ -294,6 +371,7 @@ export const Pages: CollectionConfig = {
         {
           label: "Médias",
           fields: [
+            // Image d'introduction (home only)
             {
               name: "introImage",
               type: "upload",
@@ -302,13 +380,17 @@ export const Pages: CollectionConfig = {
               admin: {
                 description:
                   "Image illustrant la section d'introduction (affichée à côté du texte d'intro)",
+                condition: (data) => isHome(data),
               },
             },
 
-            // Collapsible: Galerie
+            // Galerie (le-gite only)
             {
               type: "collapsible",
               label: "Galerie",
+              admin: {
+                condition: (data) => isGite(data),
+              },
               fields: [
                 {
                   name: "gallery",
@@ -316,6 +398,7 @@ export const Pages: CollectionConfig = {
                   label: "Photos de la galerie",
                   admin: {
                     description: "Photos affichées dans la galerie de la page",
+                    condition: (data) => isGite(data),
                   },
                   fields: [
                     {
@@ -339,23 +422,22 @@ export const Pages: CollectionConfig = {
               ],
             },
 
-            // Collapsible: Images aperçu (le-gite only)
+            // Images aperçu (le-gite only)
             {
               type: "collapsible",
               label: "Images aperçu",
               admin: {
-                condition: (data) => data?.slug === "le-gite",
+                condition: (data) => isGite(data),
               },
               fields: [
                 {
                   name: "previewImages",
                   type: "array",
                   label: "Images aperçu",
-                  maxRows: 3,
                   admin: {
                     description:
-                      "Jusqu'à 3 images mises en avant sur la page du gîte (aperçu avant galerie complète)",
-                    condition: (data) => data?.slug === "le-gite",
+                      "Images mises en avant dans la section description du gîte (1ère = grande, suivantes = grille)",
+                    condition: (data) => isGite(data),
                   },
                   fields: [
                     {

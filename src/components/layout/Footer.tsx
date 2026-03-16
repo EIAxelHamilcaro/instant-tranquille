@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getFooterData, getSiteSettings } from "@/lib/queries";
 import { getTranslations } from "next-intl/server";
+import { Separator } from "@/components/ui/separator";
 import { Trees, Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 
 type NavColumn = {
@@ -25,7 +26,7 @@ export async function Footer({ locale }: { locale: string }) {
   const legalText = footer.legalText as string | undefined;
   const socialLinks = settings.socialLinks as { facebook?: string; instagram?: string; pinterest?: string; youtube?: string; tiktok?: string } | undefined;
 
-  const totalColumns = navColumns.length + (contact ? 1 : 0);
+  const totalColumns = 1 + navColumns.length + (contact ? 1 : 0);
   const gridClass = totalColumns === 2 ? "md:grid-cols-2"
     : totalColumns >= 3 ? "md:grid-cols-3"
     : "";
@@ -36,7 +37,7 @@ export async function Footer({ locale }: { locale: string }) {
         <div className={`grid gap-8 ${gridClass}`}>
           <div>
             <div className="flex items-center gap-2">
-              <Trees className="h-6 w-6 text-primary-300" />
+              <Trees className="h-6 w-6 text-primary-300" aria-hidden="true" />
               <span className="font-heading text-lg font-bold text-white">
                 {siteName}
               </span>
@@ -149,7 +150,7 @@ export async function Footer({ locale }: { locale: string }) {
                     href={`mailto:${contact.email}`}
                     className="flex items-center gap-2 rounded-md py-1 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
                   >
-                    <Mail className="h-4 w-4 text-primary-300" />
+                    <Mail className="h-4 w-4 text-primary-300" aria-hidden="true" />
                     {contact.email}
                   </a>
                 )}
@@ -158,13 +159,13 @@ export async function Footer({ locale }: { locale: string }) {
                     href={`tel:${contact.phone.replace(/\s/g, "")}`}
                     className="flex items-center gap-2 rounded-md py-1 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
                   >
-                    <Phone className="h-4 w-4 text-primary-300" />
+                    <Phone className="h-4 w-4 text-primary-300" aria-hidden="true" />
                     {contact.phone}
                   </a>
                 )}
                 {contact.address && (
                   <div className="flex items-start gap-2 py-1">
-                    <MapPin className="mt-0.5 h-4 w-4 text-primary-300" />
+                    <MapPin className="mt-0.5 h-4 w-4 text-primary-300" aria-hidden="true" />
                     <span>{contact.address}</span>
                   </div>
                 )}
@@ -173,10 +174,11 @@ export async function Footer({ locale }: { locale: string }) {
           )}
         </div>
 
-        <div className="mt-10 border-t border-primary-800 pt-6 text-center text-xs text-sand-500">
+        <Separator className="mt-10 bg-primary-800" />
+        <div className="pt-6 text-center text-xs text-sand-500">
           <p>
             &copy; {new Date().getFullYear()} {siteName}.{" "}
-            {legalText || "Tous droits réservés."}
+            {legalText || t("rights")}
           </p>
         </div>
       </div>

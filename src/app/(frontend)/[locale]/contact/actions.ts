@@ -14,6 +14,14 @@ const contactSchema = z.object({
 export type ContactFormState = {
   success: boolean;
   error?: string;
+  fieldErrors?: Partial<Record<"name" | "email" | "subject" | "message", string>>;
+  values?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    subject?: string;
+    message?: string;
+  };
 };
 
 export async function submitContactForm(
@@ -49,10 +57,25 @@ export async function submitContactForm(
     message: formData.get("message"),
   };
 
+  const values = {
+    name: (raw.name as string) || "",
+    email: (raw.email as string) || "",
+    phone: (raw.phone as string) || "",
+    subject: (raw.subject as string) || "",
+    message: (raw.message as string) || "",
+  };
+
   const parsed = contactSchema.safeParse(raw);
 
   if (!parsed.success) {
-    return { success: false, error: "validation_error" };
+    const fieldErrors: ContactFormState["fieldErrors"] = {};
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0] as keyof typeof fieldErrors;
+      if (field && !fieldErrors[field]) {
+        fieldErrors[field] = issue.code;
+      }
+    }
+    return { success: false, error: "validation_error", fieldErrors, values };
   }
 
   try {
@@ -64,6 +87,6 @@ export async function submitContactForm(
 
     return { success: true };
   } catch {
-    return { success: false, error: "server_error" };
+    return { success: false, error: "server_error", values };
   }
 }

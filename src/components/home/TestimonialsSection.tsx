@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/carousel";
 import { Quote } from "lucide-react";
 import type { CmsTestimonial } from "@/lib/queries";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useReveal } from "@/lib/useReveal";
 
@@ -30,8 +31,10 @@ const sourceColors: Record<string, string> = {
 
 export function TestimonialsSection({
   testimonials,
+  title: cmsTitle,
 }: {
   testimonials: CmsTestimonial[];
+  title?: string | null;
 }) {
   const t = useTranslations("home");
   const ref = useReveal();
@@ -54,13 +57,13 @@ export function TestimonialsSection({
     };
   }, [api, onSelect]);
 
-  if (!testimonials.length) return null;
+  if (!testimonials?.length) return null;
 
   return (
-    <section className="reveal py-20" ref={ref}>
+    <section className="py-20" ref={ref}>
       <Container>
-        <SectionHeading title={t("testimonialsTitle")} />
-        <div className="mx-auto max-w-5xl px-12">
+        <SectionHeading title={cmsTitle || t("testimonialsTitle")} />
+        <div className="reveal mx-auto max-w-5xl px-12" style={{ "--stagger": 1 } as React.CSSProperties}>
           <Carousel
             setApi={setApi}
             opts={{ loop: true, align: "start" }}
@@ -69,7 +72,7 @@ export function TestimonialsSection({
             ]}
             className="w-full"
             aria-roledescription="carousel"
-            aria-label="Témoignages de nos hôtes"
+            aria-label={t("testimonialsAriaLabel")}
           >
             <CarouselContent className="-ml-4">
               {testimonials.map((testimonial, index) => (
@@ -78,7 +81,7 @@ export function TestimonialsSection({
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                   role="group"
                   aria-roledescription="slide"
-                  aria-label={`Témoignage ${index + 1} sur ${testimonials.length}`}
+                  aria-label={t("testimonialSlide", { current: index + 1, total: testimonials.length })}
                 >
                   <Card className="border-sand-200 h-full bg-white">
                     <CardContent className="flex h-full flex-col p-6">
@@ -126,13 +129,14 @@ export function TestimonialsSection({
             <>
               <div className="mt-6 flex justify-center gap-1" role="tablist">
                 {Array.from({ length: count }).map((_, i) => (
-                  <button
+                  <Button
                     key={i}
+                    variant="ghost"
                     type="button"
                     role="tab"
                     aria-selected={i === current}
-                    aria-label={`Témoignage ${i + 1} sur ${count}`}
-                    className="flex h-11 w-11 items-center justify-center"
+                    aria-label={t("testimonialSlide", { current: i + 1, total: count })}
+                    className="h-11 w-11 p-0"
                     onClick={() => api?.scrollTo(i)}
                   >
                     <span
@@ -143,11 +147,11 @@ export function TestimonialsSection({
                           : "w-2 bg-primary-200 hover:bg-primary-300",
                       )}
                     />
-                  </button>
+                  </Button>
                 ))}
               </div>
               <p className="sr-only" aria-live="polite">
-                Témoignage {current + 1} sur {count}
+                {t("testimonialSlide", { current: current + 1, total: count })}
               </p>
             </>
           )}

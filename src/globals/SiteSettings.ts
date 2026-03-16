@@ -45,7 +45,7 @@ export const SiteSettings: GlobalConfig = {
               label: "Slogan",
               localized: true,
               admin: {
-                description: "Phrase d'accroche courte",
+                description: "Phrase d'accroche courte (non utilisé actuellement sur le site)",
                 placeholder: "Votre parenthèse nature en Sologne",
               },
             },
@@ -56,7 +56,7 @@ export const SiteSettings: GlobalConfig = {
               localized: true,
               admin: {
                 description:
-                  "Présentation générale du gîte en quelques phrases",
+                  "Présentation générale du gîte (non utilisé actuellement sur le site)",
               },
             },
             {
@@ -82,6 +82,7 @@ export const SiteSettings: GlobalConfig = {
                   name: "maxGuests",
                   type: "number",
                   label: "Capacité maximale",
+                  min: 1,
                   admin: {
                     description: "Nombre maximum de voyageurs",
                   },
@@ -90,6 +91,7 @@ export const SiteSettings: GlobalConfig = {
                   name: "bedrooms",
                   type: "number",
                   label: "Chambres",
+                  min: 1,
                   admin: {
                     description: "Nombre de chambres à coucher",
                   },
@@ -98,6 +100,7 @@ export const SiteSettings: GlobalConfig = {
                   name: "bathrooms",
                   type: "number",
                   label: "Salles de bain",
+                  min: 1,
                   admin: {
                     description:
                       "Nombre de salles de bain / salles d'eau",
@@ -107,6 +110,7 @@ export const SiteSettings: GlobalConfig = {
                   name: "surface",
                   type: "number",
                   label: "Surface",
+                  min: 1,
                   admin: { description: "En m²" },
                 },
               ],
@@ -165,6 +169,8 @@ export const SiteSettings: GlobalConfig = {
                       name: "lat",
                       type: "number",
                       label: "Latitude",
+                      min: -90,
+                      max: 90,
                       admin: {
                         description: "Coordonnée nord/sud",
                         placeholder: "47.4833",
@@ -174,6 +180,8 @@ export const SiteSettings: GlobalConfig = {
                       name: "lng",
                       type: "number",
                       label: "Longitude",
+                      min: -180,
+                      max: 180,
                       admin: {
                         description: "Coordonnée est/ouest",
                         placeholder: "1.7667",

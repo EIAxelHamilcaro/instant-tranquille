@@ -4,18 +4,11 @@ import { useTranslations } from "next-intl";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
 import { Star, MapPin, Phone, ExternalLink } from "lucide-react";
+import type { NormalizedRecommendation } from "@/lib/booklet-utils";
 
-type Recommendation = {
-  name: string;
-  category: string;
-  description?: string;
-  address?: string | null;
-  phone?: string | null;
-  website?: string | null;
-  distanceFromGite?: string | null;
-};
+type Recommendation = NormalizedRecommendation;
 
 const categories = [
   { value: "restaurants", labelKey: "categoryRestaurants" },
@@ -27,8 +20,12 @@ const categories = [
 ] as const;
 
 export function LocalRecommendationsGrid({
+  id,
+  sectionTitle,
   recommendations,
 }: {
+  id?: string;
+  sectionTitle?: string | null;
   recommendations: Recommendation[];
 }) {
   const t = useTranslations("booklet");
@@ -50,10 +47,10 @@ export function LocalRecommendationsGrid({
   );
 
   return (
-    <section id="recommendations" className="scroll-mt-20">
+    <section id={id ?? "recommendations"} className="scroll-mt-20">
       <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-        <Star className="h-6 w-6 text-primary-500" />
-        {t("recommendations")}
+        <Star className="h-6 w-6 text-primary-500" aria-hidden="true" />
+        {sectionTitle || t("recommendations")}
       </h2>
 
       {nonEmptyCategories.length > 0 ? (
@@ -84,22 +81,26 @@ export function LocalRecommendationsGrid({
                           variant="secondary"
                           className="mt-1 bg-sand-100"
                         >
-                          <MapPin className="mr-1 h-3 w-3" />
+                          <MapPin className="mr-1 h-3 w-3" aria-hidden="true" />
                           {rec.distanceFromGite}
                         </Badge>
                       )}
-                      {rec.description && (
+                      {rec.richDescription ? (
+                        <div className="mt-2 text-sm text-foreground/80">
+                          <RichTextRenderer content={rec.richDescription as Record<string, unknown>} />
+                        </div>
+                      ) : rec.description ? (
                         <p className="mt-2 text-sm text-foreground/80">
                           {rec.description}
                         </p>
-                      )}
+                      ) : null}
                       <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
                         {rec.phone && (
                           <a
-                            href={`tel:${rec.phone}`}
+                            href={`tel:${rec.phone.replace(/\s/g, "")}`}
                             className="flex items-center gap-1 hover:text-primary-600"
                           >
-                            <Phone className="h-3 w-3" />
+                            <Phone className="h-3 w-3" aria-hidden="true" />
                             {rec.phone}
                           </a>
                         )}
@@ -110,7 +111,7 @@ export function LocalRecommendationsGrid({
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 hover:text-primary-600"
                           >
-                            <ExternalLink className="h-3 w-3" />
+                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
                             {t("websiteLabel")}
                           </a>
                         )}

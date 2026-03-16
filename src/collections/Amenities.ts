@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
 import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { validateLucideIcon } from "@/lib/validators";
 
 export const Amenities: CollectionConfig = {
   slug: "amenities",
@@ -47,6 +48,7 @@ export const Amenities: CollectionConfig = {
       name: "icon",
       type: "text",
       label: "Icône",
+      validate: validateLucideIcon,
       admin: {
         description:
           "Nom de l'icône Lucide (ex: wifi, bed-double, utensils)",
@@ -86,6 +88,7 @@ export const Amenities: CollectionConfig = {
       type: "number",
       label: "Ordre d'affichage",
       defaultValue: 0,
+      min: 0,
       admin: {
         position: "sidebar",
         description:

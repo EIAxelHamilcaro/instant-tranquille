@@ -18,7 +18,7 @@ export const Testimonials: CollectionConfig = {
   },
   access: {
     create: isPublic,
-    read: ({ req: { user } }) => user ? true : { status: { equals: "approved" } },
+    read: ({ req: { user } }) => (user ? true : { status: { equals: "approved" } }),
     update: isAuthenticated,
     delete: isAuthenticated,
   },
@@ -29,6 +29,8 @@ export const Testimonials: CollectionConfig = {
       type: "text",
       label: "Nom du voyageur",
       required: true,
+      minLength: 2,
+      maxLength: 200,
       admin: {
         description: "Prénom et nom de la personne",
         placeholder: "Sophie et Marc Dupont",
@@ -39,6 +41,7 @@ export const Testimonials: CollectionConfig = {
       type: "text",
       label: "Provenance",
       localized: true,
+      maxLength: 200,
       admin: {
         description: "Ville ou pays d'origine",
         placeholder: "Paris, France",
@@ -51,6 +54,10 @@ export const Testimonials: CollectionConfig = {
       required: true,
       min: 1,
       max: 5,
+      validate: (value: number | null | undefined) => {
+        if (value != null && !Number.isInteger(value)) return "La note doit être un nombre entier";
+        return true;
+      },
       admin: {
         description: "Note de 1 à 5 étoiles",
       },
@@ -61,6 +68,8 @@ export const Testimonials: CollectionConfig = {
       label: "Texte du témoignage",
       required: true,
       localized: true,
+      minLength: 10,
+      maxLength: 2000,
       admin: {
         description: "L'avis complet du voyageur",
       },
@@ -72,6 +81,9 @@ export const Testimonials: CollectionConfig = {
       admin: {
         description:
           "Quand ce voyageur a séjourné au gîte",
+        date: {
+          displayFormat: "dd/MM/yyyy",
+        },
       },
     },
     {
@@ -94,6 +106,10 @@ export const Testimonials: CollectionConfig = {
       label: "Statut",
       required: true,
       defaultValue: "pending",
+      access: {
+        create: ({ req: { user } }) => Boolean(user),
+        update: ({ req: { user } }) => Boolean(user),
+      },
       admin: {
         position: "sidebar",
         description:
@@ -110,6 +126,10 @@ export const Testimonials: CollectionConfig = {
       type: "checkbox",
       label: "Mettre en avant",
       defaultValue: false,
+      access: {
+        create: ({ req: { user } }) => Boolean(user),
+        update: ({ req: { user } }) => Boolean(user),
+      },
       admin: {
         position: "sidebar",
         description:

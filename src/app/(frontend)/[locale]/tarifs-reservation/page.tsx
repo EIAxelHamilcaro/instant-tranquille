@@ -5,6 +5,7 @@ import { generateCmsPageMetadata } from "@/lib/seo";
 import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
 import { getPricingConfig } from "@/lib/queries";
 import { PricingTable } from "@/components/rates/PricingTable";
+import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -39,9 +40,10 @@ export default async function RatesPage({
 
   const pricingConfig = await getPricingConfig(locale, isDraft) as Record<string, any>;
 
+  const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
   const breadcrumbs = generateBreadcrumbJsonLd([
-    { name: "Accueil", url: "/" },
-    { name: "Tarifs & Réservation", url: "/tarifs-reservation" },
+    { name: messages.nav.home, url: "/" },
+    { name: messages.rates.title, url: "/tarifs-reservation" },
   ]);
 
   if (isDraft) {
@@ -72,13 +74,17 @@ export default async function RatesPage({
       />
       <Breadcrumbs
         items={[
-          { label: locale === "fr" ? "Accueil" : "Home", href: "/" },
-          { label: locale === "fr" ? "Tarifs & Réservation" : "Rates & Booking" },
+          { label: messages.nav.home, href: "/" },
+          { label: messages.rates.title },
         ]}
       />
       <PricingTable
         seasons={pricingConfig.seasons || []}
         additionalFees={pricingConfig.additionalFees || []}
+        currency={(pricingConfig.currency as string) || "EUR"}
+      />
+      <SeasonCalendar
+        seasons={pricingConfig.seasons || []}
         currency={(pricingConfig.currency as string) || "EUR"}
       />
       <BookingLinks bookingLinks={pricingConfig.bookingLinks} />

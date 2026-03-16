@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { type Locale } from "@/i18n/config";
+import { getPathname } from "@/i18n/navigation";
 import { getSiteSettings, getPageBySlug } from "./queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -24,8 +25,10 @@ export function generatePageMetadata({
   absoluteTitle,
 }: PageSeoProps): Metadata {
   const url = `${SITE_URL}${path}`;
-  const alternateFr = `${SITE_URL}${path}`;
-  const alternateEn = `${SITE_URL}/en${path === "/" ? "" : path}`;
+  const frPath = getPathname({ href: path as any, locale: "fr" });
+  const enPath = getPathname({ href: path as any, locale: "en" });
+  const alternateFr = `${SITE_URL}${frPath}`;
+  const alternateEn = `${SITE_URL}/en${enPath === "/" ? "" : enPath}`;
 
   const ogTitle = title.includes("L'Instant Tranquille")
     ? title

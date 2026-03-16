@@ -44,7 +44,7 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
       title: t("checkInOut"),
       content:
         policies?.checkIn || policies?.checkOut
-          ? `${policies?.checkIn ? `Arrivée : ${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? " — " : ""}${policies?.checkOut ? `Départ : ${policies.checkOut}` : ""}`
+          ? `${policies?.checkIn ? `${t("checkInLabel")}${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? " — " : ""}${policies?.checkOut ? `${t("checkOutLabel")}${policies.checkOut}` : ""}`
           : null,
       isRichText: false,
     },
@@ -76,7 +76,7 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
                   >
                     <AccordionTrigger className="font-sans text-base hover:text-primary-600 hover:no-underline">
                       <span className="flex items-center gap-3">
-                        <Icon className="h-5 w-5 text-primary-500" />
+                        <Icon className="h-5 w-5 text-primary-500" aria-hidden="true" />
                         {title}
                       </span>
                     </AccordionTrigger>

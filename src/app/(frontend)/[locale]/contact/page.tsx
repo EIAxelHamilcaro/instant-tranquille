@@ -1,6 +1,7 @@
+import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 import { type Locale } from "@/i18n/config";
-import { getPayload } from "@/lib/payload";
+import { getSiteSettings } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
 import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -33,10 +34,8 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const payload = await getPayload();
-  const siteSettings = await payload.findGlobal({
-    slug: "site-settings",
-  });
+  const { isEnabled: isDraft } = await draftMode();
+  const siteSettings = await getSiteSettings(locale, isDraft) as Record<string, any>;
 
   const coordinates = siteSettings?.contact?.coordinates;
   const siteName = siteSettings?.siteName as string | undefined;
@@ -44,9 +43,10 @@ export default async function ContactPage({
     | { from: string; duration: string; distance: string; description: string }[]
     | undefined;
 
+  const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
   const breadcrumbs = generateBreadcrumbJsonLd([
-    { name: "Accueil", url: "/" },
-    { name: "Contact", url: "/contact" },
+    { name: messages.nav.home, url: "/" },
+    { name: messages.contact.title, url: "/contact" },
   ]);
 
   return (
@@ -57,8 +57,8 @@ export default async function ContactPage({
       />
       <Breadcrumbs
         items={[
-          { label: locale === "fr" ? "Accueil" : "Home", href: "/" },
-          { label: "Contact" },
+          { label: messages.nav.home, href: "/" },
+          { label: messages.contact.title },
         ]}
       />
       <ContactForm />

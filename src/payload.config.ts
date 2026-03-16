@@ -64,7 +64,7 @@ export default buildConfig({
     components: {
       graphics: {
         Logo: "/components/payload/Logo",
-        Icon: "/components/payload/Logo",
+        Icon: "/components/payload/Icon",
       },
       beforeDashboard: ["/components/payload/BeforeDashboard"],
     },
@@ -119,7 +119,7 @@ export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || "",
   cors: allowedOrigins,
   csrf: allowedOrigins,
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: process.env.PAYLOAD_SECRET!,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL!,
@@ -135,13 +135,12 @@ export default buildConfig({
         return title ? `${title} — L'Instant Tranquille` : "L'Instant Tranquille";
       },
       generateDescription: ({ doc }) => {
-        return typeof doc?.metaDescription === "string" ? doc.metaDescription : "";
+        const meta = doc?.meta as Record<string, unknown> | undefined;
+        return typeof meta?.description === "string" ? meta.description : "";
       },
     }),
     vercelBlobStorage({
-      collections: {
-        media: true,
-      },
+      collections: { media: true },
       token: process.env.BLOB_READ_WRITE_TOKEN!,
     }),
   ],

@@ -49,6 +49,7 @@ export type CmsRecommendation = {
   website?: string | null;
   featured?: boolean | null;
   order?: number | null;
+  coordinates?: { lat?: number | null; lng?: number | null } | null;
 };
 
 export type CmsPage = {
@@ -69,6 +70,10 @@ export type CmsPage = {
     linkUrl?: string | null;
     linkLabel?: string | null;
   }> | null;
+  highlightsTitle?: string | null;
+  testimonialsTitle?: string | null;
+  ctaTitle?: string | null;
+  ctaSubtitle?: string | null;
   descriptionTitle?: string | null;
   descriptionText?: unknown;
   previewImages?: Array<{ image?: CmsMedia | string | number | null; label?: string | null }> | null;
@@ -78,6 +83,18 @@ export type CmsPage = {
     metaDescription?: string | null;
     ogImage?: CmsMedia | string | number | null;
   } | null;
+};
+
+export type CmsSeason = {
+  name: string;
+  startMonth?: string | null;
+  startDay?: number | null;
+  endMonth?: string | null;
+  endDay?: number | null;
+  nightlyRate?: number | null;
+  weeklyRate?: number | null;
+  minimumStay?: number | null;
+  color?: string | null;
 };
 
 // ─── Globals ───────────────────────────────────────────────

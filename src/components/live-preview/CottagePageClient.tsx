@@ -15,7 +15,10 @@ export type CottagePageData = {
     bathrooms?: number | null;
     surface?: number | null;
   };
-  images: unknown[];
+  descriptionTitle?: string | null;
+  descriptionText?: unknown;
+  previewImages?: { image?: unknown; label?: string | null }[] | null;
+  gallery: { image?: any; caption?: string | null }[];
   amenities: CmsAmenity[];
   recommendations: CmsRecommendation[];
 };
@@ -33,8 +36,13 @@ export function CottagePageClient({
 
   return (
     <>
-      <DescriptionSection propertyDetails={data.propertyDetails} />
-      <PhotoGallery images={data.images} />
+      <DescriptionSection
+        propertyDetails={data.propertyDetails}
+        descriptionTitle={data.descriptionTitle}
+        descriptionText={data.descriptionText}
+        previewImages={data.previewImages}
+      />
+      <PhotoGallery gallery={data.gallery} />
       <LeafDivider />
       <AmenitiesList amenities={data.amenities} />
       <NearbyAttractions recommendations={data.recommendations} />

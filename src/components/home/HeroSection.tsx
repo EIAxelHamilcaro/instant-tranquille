@@ -64,7 +64,7 @@ export function HeroSection({
             size="lg"
             className="border-white/40 bg-white/10 px-8 font-sans text-lg text-white shadow-lg backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
           >
-            <Link href="/tarifs-reservation">{t("ctaAirbnb")}</Link>
+            <Link href="/tarifs-reservation">{t("heroCta2")}</Link>
           </Button>
         </div>
       </div>

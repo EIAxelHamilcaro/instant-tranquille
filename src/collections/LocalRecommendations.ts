@@ -40,6 +40,7 @@ export const LocalRecommendations: CollectionConfig = {
       type: "number",
       label: "Ordre d'affichage",
       defaultValue: 0,
+      min: 0,
       admin: {
         position: "sidebar",
         description:
@@ -158,6 +159,8 @@ export const LocalRecommendations: CollectionConfig = {
                       name: "lat",
                       type: "number",
                       label: "Latitude",
+                      min: -90,
+                      max: 90,
                       admin: {
                         description: "Coordonnée GPS nord/sud",
                         placeholder: "47.6161",
@@ -167,6 +170,8 @@ export const LocalRecommendations: CollectionConfig = {
                       name: "lng",
                       type: "number",
                       label: "Longitude",
+                      min: -180,
+                      max: 180,
                       admin: {
                         description: "Coordonnée GPS est/ouest",
                         placeholder: "1.5170",

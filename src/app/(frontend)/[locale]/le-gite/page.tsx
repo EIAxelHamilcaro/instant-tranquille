@@ -19,6 +19,7 @@ import { AmenitiesList } from "@/components/cottage/AmenitiesList";
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { AreaMap } from "@/components/shared/AreaMap";
 import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
 
 export async function generateMetadata({
@@ -72,12 +73,17 @@ export default async function CottagePage({
     surface?: number | null;
   } | undefined;
 
+  // Use first gallery image or first preview image for JSON-LD (no hero on this page)
+  const firstImage =
+    (cottagePage?.gallery?.[0]?.image && typeof cottagePage.gallery[0].image === "object"
+      ? (cottagePage.gallery[0].image as Record<string, any>).sizes?.hero?.url
+      : null) ||
+    (cottagePage?.previewImages?.[0]?.image && typeof cottagePage.previewImages[0].image === "object"
+      ? (cottagePage.previewImages[0].image as Record<string, any>).sizes?.hero?.url
+      : null);
+
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
-    heroImage:
-      cottagePage?.heroImage &&
-      typeof cottagePage.heroImage === "object"
-        ? (cottagePage.heroImage as Record<string, any>).sizes?.hero?.url
-        : undefined,
+    heroImage: firstImage || undefined,
     maxGuests: propertyDetails?.maxGuests,
     bedrooms: propertyDetails?.bedrooms,
     bathrooms: propertyDetails?.bathrooms,
@@ -101,7 +107,10 @@ export default async function CottagePage({
         <CottagePageClient
           initialData={{
             propertyDetails,
-            images: cottagePage?.heroImage ? [cottagePage.heroImage] : [],
+            descriptionTitle: cottagePage?.descriptionTitle ?? null,
+            descriptionText: cottagePage?.descriptionText ?? null,
+            previewImages: cottagePage?.previewImages ?? null,
+            gallery: cottagePage?.gallery ?? [],
             amenities,
             recommendations,
           }}
@@ -132,10 +141,14 @@ export default async function CottagePage({
         descriptionText={cottagePage?.descriptionText ?? null}
         previewImages={cottagePage?.previewImages ?? null}
       />
-      <PhotoGallery images={cottagePage?.heroImage ? [cottagePage.heroImage] : []} />
+      <PhotoGallery gallery={cottagePage?.gallery ?? []} />
       <LeafDivider />
       <AmenitiesList amenities={amenities} />
       <NearbyAttractions recommendations={recommendations} />
+      <AreaMap
+        lat={contact?.coordinates?.lat}
+        lng={contact?.coordinates?.lng}
+      />
     </>
   );
 }

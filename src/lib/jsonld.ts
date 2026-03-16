@@ -2,7 +2,24 @@ import type { CmsTestimonial, CmsAmenity } from "./queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+/**
+ * Extract plain text from a Lexical richText node (recursive).
+ */
+export function extractPlainText(node: unknown): string {
+  if (!node || typeof node !== "object") return "";
+  const n = node as Record<string, unknown>;
+  if (typeof n.text === "string") return n.text;
+  if (Array.isArray(n.children)) {
+    return n.children.map(extractPlainText).join(" ");
+  }
+  if (n.root && typeof n.root === "object") {
+    return extractPlainText(n.root);
+  }
+  return "";
+}
+
 type LodgingBusinessOptions = {
+  description?: string | null;
   telephone?: string | null;
   email?: string | null;
   heroImage?: string | null;
@@ -12,6 +29,8 @@ type LodgingBusinessOptions = {
   priceRange?: string | null;
   checkInTime?: string | null;
   checkOutTime?: string | null;
+  numberOfRooms?: number | null;
+  petsAllowed?: boolean | null;
   amenities?: CmsAmenity[];
   testimonials?: CmsTestimonial[];
 };
@@ -68,6 +87,7 @@ export function generateLodgingBusinessJsonLd(options?: LodgingBusinessOptions) 
     "@type": "LodgingBusiness",
     name: "L'Instant Tranquille",
     description:
+      options?.description ||
       "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
     url: SITE_URL,
     ...(options?.telephone && { telephone: options.telephone }),
@@ -88,8 +108,8 @@ export function generateLodgingBusinessJsonLd(options?: LodgingBusinessOptions) 
         },
       }),
     amenityFeature: amenityFeatures,
-    numberOfRooms: 3,
-    petsAllowed: false,
+    ...(options?.numberOfRooms != null && { numberOfRooms: options.numberOfRooms }),
+    ...(options?.petsAllowed != null && { petsAllowed: options.petsAllowed }),
     ...(options?.priceRange && { priceRange: options.priceRange }),
     ...(options?.checkInTime && { checkinTime: options.checkInTime }),
     ...(options?.checkOutTime && { checkoutTime: options.checkOutTime }),
@@ -116,6 +136,8 @@ export function generateFAQJsonLd(faqs: { question: string; answer: string }[]) 
 }
 
 export function generateVacationRentalJsonLd(options?: {
+  description?: string | null;
+  url?: string | null;
   heroImage?: string | null;
   maxGuests?: number | null;
   bedrooms?: number | null;
@@ -130,8 +152,9 @@ export function generateVacationRentalJsonLd(options?: {
     "@type": "VacationRental",
     name: "L'Instant Tranquille",
     description:
+      options?.description ||
       "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
-    url: `${SITE_URL}/le-gite`,
+    url: options?.url || `${SITE_URL}/le-gite`,
     ...(options?.heroImage && { image: options.heroImage }),
     address: {
       "@type": "PostalAddress",

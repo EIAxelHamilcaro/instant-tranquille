@@ -100,7 +100,7 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
 
   const grouped = categoryOrder.reduce(
     (acc, cat) => {
-      acc[cat] = amenities.filter((a) => a.category === cat);
+      acc[cat] = (amenities ?? []).filter((a) => a.category === cat);
       return acc;
     },
     {} as Record<string, CmsAmenity[]>,
@@ -121,14 +121,13 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
           className="mx-auto max-w-3xl"
         >
           <TabsList
-            className="mb-8 grid w-full bg-sand-100"
-            style={{ gridTemplateColumns: `repeat(${availableCategories.length}, minmax(0, 1fr))` }}
+            className="mb-8 flex w-full overflow-x-auto bg-sand-100"
           >
             {availableCategories.map((key) => (
               <TabsTrigger
                 key={key}
                 value={key}
-                className="font-sans text-sm data-[state=active]:bg-primary-500 data-[state=active]:text-white"
+                className="min-w-[80px] shrink-0 font-sans text-sm data-[state=active]:bg-primary-500 data-[state=active]:text-white"
               >
                 {t(`amenityCategories.${key}`)}
               </TabsTrigger>
@@ -146,7 +145,7 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
                       className="flex items-center gap-3 rounded-lg border border-sand-200 bg-white p-4"
                     >
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-50">
-                        <Icon className="h-5 w-5 text-primary-500" />
+                        <Icon className="h-5 w-5 text-primary-500" aria-hidden="true" />
                       </div>
                       <span className="font-sans text-sm font-medium">
                         {amenity.name}
