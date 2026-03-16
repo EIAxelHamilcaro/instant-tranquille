@@ -121,7 +121,7 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
           className="mx-auto max-w-3xl"
         >
           <TabsList
-            className="mb-8 flex w-full overflow-x-auto bg-sand-100"
+            className="mb-8 flex h-auto w-full flex-wrap bg-sand-100"
           >
             {availableCategories.map((key) => (
               <TabsTrigger
