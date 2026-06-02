@@ -1,12 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import { type Locale } from "@/i18n/config";
-import { Header } from "@/components/layout/Header";
+import { NextIntlClientProvider } from "next-intl";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import { Footer } from "@/components/layout/Footer";
-import { playfairDisplay, lora, inter } from "@/lib/fonts";
+import { Header } from "@/components/layout/Header";
+import type { Locale } from "@/i18n/config";
+import { routing } from "@/i18n/routing";
+import { inter, lora, playfairDisplay } from "@/lib/fonts";
 import { getSiteSettings } from "@/lib/queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -70,11 +74,11 @@ export default async function FrontendLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link
-          rel="dns-prefetch"
-          href="https://challenges.cloudflare.com"
-        />
+        <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
+        <link rel="preconnect" href="https://tile.openstreetmap.org" />
+        <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
         <meta name="geo.region" content="FR-CVL" />
+        <meta name="geo.placename" content="Romorantin-Lanthenay, Sologne" />
       </head>
       <body
         className={`${playfairDisplay.variable} ${lora.variable} ${inter.variable} antialiased`}

@@ -1,7 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { useTranslations, useLocale } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Badge } from "@/components/ui/badge";
@@ -9,17 +9,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { CmsSeason } from "@/lib/queries";
 
 const bgColorMap: Record<string, string> = {
-  green: "bg-green-200",
-  orange: "bg-orange-200",
-  red: "bg-red-300",
-  purple: "bg-purple-200",
+  green: "bg-primary-200",
+  orange: "bg-earth-200",
+  red: "bg-earth-400",
+  purple: "bg-primary-500",
 };
 
 const badgeColorMap: Record<string, string> = {
-  green: "bg-green-100 text-green-800 border-green-300",
-  orange: "bg-orange-100 text-orange-800 border-orange-300",
-  red: "bg-red-100 text-red-800 border-red-300",
-  purple: "bg-purple-100 text-purple-800 border-purple-300",
+  green: "bg-primary-100 text-primary-800 border-primary-200",
+  orange: "bg-earth-100 text-earth-800 border-earth-200",
+  red: "bg-earth-200 text-earth-900 border-earth-400",
+  purple: "bg-primary-200 text-primary-900 border-primary-400",
 };
 
 type DayColor = { color: string; seasonName: string };
@@ -32,7 +32,14 @@ function buildDayColorMap(seasons: CmsSeason[]): Map<string, DayColor> {
   const map = new Map<string, DayColor>();
 
   for (const season of seasons) {
-    if (!season.startMonth || !season.startDay || !season.endMonth || !season.endDay || !season.color) continue;
+    if (
+      !season.startMonth ||
+      !season.startDay ||
+      !season.endMonth ||
+      !season.endDay ||
+      !season.color
+    )
+      continue;
 
     const sm = parseInt(season.startMonth);
     const sd = season.startDay;
@@ -55,7 +62,10 @@ function buildDayColorMap(seasons: CmsSeason[]): Map<string, DayColor> {
           inRange = afterStart && beforeEnd;
         }
         if (inRange) {
-          map.set(`${month}-${day}`, { color: season.color, seasonName: season.name });
+          map.set(`${month}-${day}`, {
+            color: season.color,
+            seasonName: season.name,
+          });
         }
       }
     }
@@ -64,7 +74,13 @@ function buildDayColorMap(seasons: CmsSeason[]): Map<string, DayColor> {
   return map;
 }
 
-export function SeasonCalendar({ seasons, currency }: { seasons: CmsSeason[]; currency: string }) {
+export function SeasonCalendar({
+  seasons,
+  currency,
+}: {
+  seasons: CmsSeason[];
+  currency: string;
+}) {
   const t = useTranslations("rates");
   const locale = useLocale();
 
@@ -74,12 +90,16 @@ export function SeasonCalendar({ seasons, currency }: { seasons: CmsSeason[]; cu
 
   const monthNames = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(locale, { month: "short" });
-    return Array.from({ length: 12 }, (_, i) => fmt.format(new Date(2001, i, 1)));
+    return Array.from({ length: 12 }, (_, i) =>
+      fmt.format(new Date(2001, i, 1)),
+    );
   }, [locale]);
 
   const monthNamesFull = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(locale, { month: "long" });
-    return Array.from({ length: 12 }, (_, i) => fmt.format(new Date(2001, i, 1)));
+    return Array.from({ length: 12 }, (_, i) =>
+      fmt.format(new Date(2001, i, 1)),
+    );
   }, [locale]);
 
   // Only show seasons that have valid date ranges
@@ -107,7 +127,8 @@ export function SeasonCalendar({ seasons, currency }: { seasons: CmsSeason[]; cu
               {season.name}
               {season.nightlyRate != null && (
                 <span className="font-normal opacity-75">
-                  {season.nightlyRate}{symbol}/n
+                  {season.nightlyRate}
+                  {symbol}/n
                 </span>
               )}
             </Badge>
@@ -129,14 +150,16 @@ export function SeasonCalendar({ seasons, currency }: { seasons: CmsSeason[]; cu
                     {Array.from({ length: days }, (_, dayIdx) => {
                       const day = dayIdx + 1;
                       const entry = dayColorMap.get(`${month}-${day}`);
-                      const bg = entry ? bgColorMap[entry.color] || "bg-gray-100" : "bg-gray-100";
+                      const bg = entry
+                        ? bgColorMap[entry.color] || "bg-sand-100"
+                        : "bg-sand-100";
                       return (
                         <div
                           key={day}
                           className={`flex h-[18px] items-center justify-center text-[10px] leading-none ${bg}`}
                           title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? ` — ${entry.seasonName}` : ""}`}
                         >
-                          <span className="text-gray-600">{day}</span>
+                          <span className="text-muted-foreground">{day}</span>
                         </div>
                       );
                     })}
@@ -153,32 +176,35 @@ export function SeasonCalendar({ seasons, currency }: { seasons: CmsSeason[]; cu
             const month = monthIdx + 1;
             const days = daysInMonth(month);
             // First day of month (0=Sun for JS, we want Mon=0)
-            const firstDayOfWeek = (new Date(2001, monthIdx, 1).getDay() + 6) % 7;
+            const firstDayOfWeek =
+              (new Date(2001, monthIdx, 1).getDay() + 6) % 7;
             return (
               <Card key={month} className="border-sand-200 p-2">
                 <CardContent className="p-0">
-                <div className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  {monthNames[monthIdx]}
-                </div>
-                <div className="grid grid-cols-7 gap-px">
-                  {/* Empty cells for offset */}
-                  {Array.from({ length: firstDayOfWeek }, (_, i) => (
-                    <div key={`empty-${i}`} className="h-4" />
-                  ))}
-                  {Array.from({ length: days }, (_, dayIdx) => {
-                    const day = dayIdx + 1;
-                    const entry = dayColorMap.get(`${month}-${day}`);
-                    const bg = entry ? bgColorMap[entry.color] || "bg-gray-100" : "bg-gray-100";
-                    return (
-                      <div
-                        key={day}
-                        className={`flex h-4 items-center justify-center rounded-sm text-[8px] leading-none ${bg}`}
-                      >
-                        <span className="text-gray-700">{day}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                  <div className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {monthNames[monthIdx]}
+                  </div>
+                  <div className="grid grid-cols-7 gap-px">
+                    {/* Empty cells for offset */}
+                    {Array.from({ length: firstDayOfWeek }, (_, i) => (
+                      <div key={`empty-${i}`} className="h-4" />
+                    ))}
+                    {Array.from({ length: days }, (_, dayIdx) => {
+                      const day = dayIdx + 1;
+                      const entry = dayColorMap.get(`${month}-${day}`);
+                      const bg = entry
+                        ? bgColorMap[entry.color] || "bg-sand-100"
+                        : "bg-sand-100";
+                      return (
+                        <div
+                          key={day}
+                          className={`flex h-4 items-center justify-center rounded-sm text-[8px] leading-none ${bg}`}
+                        >
+                          <span className="text-foreground">{day}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </CardContent>
               </Card>
             );

@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateGlobal } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateGlobal } from "@/lib/revalidate";
 import { validatePhone, validateUrl } from "@/lib/validators";
 
 export const SiteSettings: GlobalConfig = {
@@ -16,8 +16,7 @@ export const SiteSettings: GlobalConfig = {
   },
   admin: {
     group: "Configuration",
-    description:
-      "Informations générales, coordonnées et réglages du site",
+    description: "Informations générales, coordonnées et réglages du site",
     livePreview: {
       url: ({ locale }) => previewUrl("/", { locale }),
     },
@@ -35,8 +34,7 @@ export const SiteSettings: GlobalConfig = {
               label: "Nom du site",
               defaultValue: "L'Instant Tranquille",
               admin: {
-                description:
-                  "Nom qui apparaît dans le navigateur et l'en-tête",
+                description: "Nom qui apparaît dans le navigateur et l'en-tête",
               },
             },
             {
@@ -45,7 +43,8 @@ export const SiteSettings: GlobalConfig = {
               label: "Slogan",
               localized: true,
               admin: {
-                description: "Phrase d'accroche courte (non utilisé actuellement sur le site)",
+                description:
+                  "Phrase d'accroche courte (non utilisé actuellement sur le site)",
                 placeholder: "Votre parenthèse nature en Sologne",
               },
             },
@@ -65,8 +64,7 @@ export const SiteSettings: GlobalConfig = {
               label: "Logo",
               relationTo: "media",
               admin: {
-                description:
-                  "Logo affiché dans l'en-tête du site (optionnel)",
+                description: "Logo affiché dans l'en-tête du site (optionnel)",
               },
             },
             {
@@ -102,8 +100,7 @@ export const SiteSettings: GlobalConfig = {
                   label: "Salles de bain",
                   min: 1,
                   admin: {
-                    description:
-                      "Nombre de salles de bain / salles d'eau",
+                    description: "Nombre de salles de bain / salles d'eau",
                   },
                 },
                 {
@@ -112,6 +109,15 @@ export const SiteSettings: GlobalConfig = {
                   label: "Surface",
                   min: 1,
                   admin: { description: "En m²" },
+                },
+                {
+                  name: "petsAllowed",
+                  type: "checkbox",
+                  label: "Animaux acceptés",
+                  admin: {
+                    description:
+                      "Cochez si les animaux de compagnie sont les bienvenus",
+                  },
                 },
               ],
             },
@@ -153,7 +159,28 @@ export const SiteSettings: GlobalConfig = {
                   type: "textarea",
                   label: "Adresse postale",
                   admin: {
-                    description: "Adresse complète du gîte",
+                    description: "Numéro et rue du gîte",
+                  },
+                },
+                {
+                  name: "city",
+                  type: "text",
+                  label: "Ville",
+                  admin: {
+                    description:
+                      "Commune du gîte — essentiel pour le référencement local Google",
+                    placeholder: "Romorantin-Lanthenay",
+                    width: "50%",
+                  },
+                },
+                {
+                  name: "postalCode",
+                  type: "text",
+                  label: "Code postal",
+                  admin: {
+                    description: "Code postal de la commune",
+                    placeholder: "41200",
+                    width: "50%",
                   },
                 },
                 {
@@ -163,7 +190,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description:
                       "Pour la carte interactive du site (trouvable via Google Maps)",
-                      },
+                  },
                   fields: [
                     {
                       name: "lat",
@@ -218,8 +245,7 @@ export const SiteSettings: GlobalConfig = {
               type: "array",
               label: "Itinéraires d'accès",
               admin: {
-                description:
-                  "Routes d'accès au gîte depuis les grandes villes",
+                description: "Routes d'accès au gîte depuis les grandes villes",
               },
               fields: [
                 {
@@ -278,10 +304,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Page Facebook",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Adresse complète de votre page Facebook",
-                    placeholder:
-                      "https://facebook.com/linstanttranquille",
+                    description: "Adresse complète de votre page Facebook",
+                    placeholder: "https://facebook.com/linstanttranquille",
                   },
                 },
                 {
@@ -290,10 +314,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Profil Instagram",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Adresse complète de votre profil Instagram",
-                    placeholder:
-                      "https://instagram.com/linstanttranquille",
+                    description: "Adresse complète de votre profil Instagram",
+                    placeholder: "https://instagram.com/linstanttranquille",
                   },
                 },
                 {
@@ -302,10 +324,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Profil Pinterest",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Adresse complète de votre profil Pinterest",
-                    placeholder:
-                      "https://pinterest.com/linstanttranquille",
+                    description: "Adresse complète de votre profil Pinterest",
+                    placeholder: "https://pinterest.com/linstanttranquille",
                   },
                 },
                 {
@@ -314,10 +334,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Chaîne YouTube",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Adresse complète de votre chaîne YouTube",
-                    placeholder:
-                      "https://youtube.com/@linstanttranquille",
+                    description: "Adresse complète de votre chaîne YouTube",
+                    placeholder: "https://youtube.com/@linstanttranquille",
                   },
                 },
                 {
@@ -326,10 +344,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Profil TikTok",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Adresse complète de votre profil TikTok",
-                    placeholder:
-                      "https://tiktok.com/@linstanttranquille",
+                    description: "Adresse complète de votre profil TikTok",
+                    placeholder: "https://tiktok.com/@linstanttranquille",
                   },
                 },
               ],
@@ -371,12 +387,12 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: "SEO par défaut",
+          label: "Référencement Google",
           fields: [
             {
               name: "defaultSeo",
               type: "group",
-              label: "Référencement par défaut",
+              label: "Apparence dans Google et réseaux sociaux",
               admin: {
                 description:
                   "Ces valeurs sont utilisées quand une page n'a pas ses propres réglages SEO",
@@ -391,8 +407,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description:
                       "Titre affiché dans Google si la page n'a pas de titre SEO (max. 60 caractères)",
-                    placeholder:
-                      "L'Instant Tranquille — Gîte en Sologne",
+                    placeholder: "L'Instant Tranquille — Gîte en Sologne",
                   },
                 },
                 {

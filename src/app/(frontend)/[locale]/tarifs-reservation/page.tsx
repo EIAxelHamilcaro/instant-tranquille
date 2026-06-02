@@ -1,15 +1,15 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
-import { type Locale } from "@/i18n/config";
-import { generateCmsPageMetadata } from "@/lib/seo";
-import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
-import { getPricingConfig } from "@/lib/queries";
-import { PricingTable } from "@/components/rates/PricingTable";
-import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
+import { RatesPageClient } from "@/components/live-preview/RatesPageClient";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
+import { PricingTable } from "@/components/rates/PricingTable";
+import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
-import { RatesPageClient } from "@/components/live-preview/RatesPageClient";
+import type { Locale } from "@/i18n/config";
+import { generateBreadcrumbJsonLd, generatePricingJsonLd } from "@/lib/jsonld";
+import { getPricingConfig } from "@/lib/queries";
+import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -38,13 +38,20 @@ export default async function RatesPage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const pricingConfig = await getPricingConfig(locale, isDraft) as Record<string, any>;
+  const pricingConfig = (await getPricingConfig(locale, isDraft)) as Record<
+    string,
+    any
+  >;
 
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: messages.nav.home, url: "/" },
     { name: messages.rates.title, url: "/tarifs-reservation" },
   ]);
+
+  const pricingJsonLd = generatePricingJsonLd(pricingConfig.seasons, {
+    currency: (pricingConfig.currency as string) || "EUR",
+  });
 
   if (isDraft) {
     return (
@@ -53,6 +60,12 @@ export default async function RatesPage({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
         />
+        {pricingJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+          />
+        )}
         <RatesPageClient
           initialData={{
             seasons: pricingConfig.seasons || [],
@@ -72,12 +85,21 @@ export default async function RatesPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
+      {pricingJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+        />
+      )}
       <Breadcrumbs
         items={[
           { label: messages.nav.home, href: "/" },
           { label: messages.rates.title },
         ]}
       />
+      <h1 className="sr-only">
+        Tarifs du gîte en Sologne — location à Romorantin-Lanthenay
+      </h1>
       <PricingTable
         seasons={pricingConfig.seasons || []}
         additionalFees={pricingConfig.additionalFees || []}

@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateGlobal } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateGlobal } from "@/lib/revalidate";
 import { validateUrl } from "@/lib/validators";
 
 export const PricingConfig: GlobalConfig = {
@@ -32,19 +32,15 @@ export const PricingConfig: GlobalConfig = {
             {
               name: "currency",
               type: "text",
-              label: "Devise",
               defaultValue: "EUR",
-              admin: {
-                description: "Code de la monnaie utilisée (EUR = Euro)",
-              },
+              admin: { hidden: true },
             },
             {
               name: "seasons",
               type: "array",
               label: "Saisons tarifaires",
               admin: {
-                description:
-                  "Définissez vos tarifs par période de l'année",
+                description: "Définissez vos tarifs par période de l'année",
               },
               fields: [
                 {
@@ -143,8 +139,7 @@ export const PricingConfig: GlobalConfig = {
                   defaultValue: 2,
                   min: 1,
                   admin: {
-                    description:
-                      "Nombre minimum de nuits pour réserver",
+                    description: "Nombre minimum de nuits pour réserver",
                   },
                 },
                 {
@@ -228,7 +223,9 @@ export const PricingConfig: GlobalConfig = {
           ],
         },
         {
-          label: "Réservation",
+          label: "Liens Airbnb et plateformes",
+          description:
+            "Collez ici les liens vers vos annonces pour que les boutons « Réserver » du site pointent vers les bons endroits.",
           fields: [
             {
               name: "bookingLinks",
@@ -255,8 +252,7 @@ export const PricingConfig: GlobalConfig = {
                   label: "Annonce Booking",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Lien complet de votre annonce Booking.com",
+                    description: "Lien complet de votre annonce Booking.com",
                     placeholder: "https://www.booking.com/hotel/...",
                   },
                 },
@@ -266,8 +262,7 @@ export const PricingConfig: GlobalConfig = {
                   label: "Annonce Abritel",
                   validate: validateUrl,
                   admin: {
-                    description:
-                      "Lien complet de votre annonce Abritel",
+                    description: "Lien complet de votre annonce Abritel",
                     placeholder: "https://www.abritel.fr/...",
                   },
                 },
@@ -276,8 +271,7 @@ export const PricingConfig: GlobalConfig = {
                   type: "email",
                   label: "Email réservation",
                   admin: {
-                    description:
-                      "Email dédié aux réservations directes",
+                    description: "Email dédié aux réservations directes",
                     placeholder: "contact@linstant-tranquille.fr",
                   },
                 },
@@ -293,8 +287,7 @@ export const PricingConfig: GlobalConfig = {
               type: "group",
               label: "Politiques",
               admin: {
-                description:
-                  "Règles, horaires et politiques de location",
+                description: "Règles, horaires et politiques de location",
               },
               fields: [
                 {

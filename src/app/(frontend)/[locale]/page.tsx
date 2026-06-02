@@ -1,28 +1,29 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
-import { type Locale } from "@/i18n/config";
-import { generateCmsPageMetadata } from "@/lib/seo";
+import { CTASection } from "@/components/home/CTASection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { HighlightsSection } from "@/components/home/HighlightsSection";
+import { IntroSection } from "@/components/home/IntroSection";
+import { TestimonialForm } from "@/components/home/TestimonialForm";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { HomePageClient } from "@/components/live-preview/HomePageClient";
+import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { Locale } from "@/i18n/config";
 import {
-  generateLodgingBusinessJsonLd,
-  generateFAQJsonLd,
+  computePriceRange,
   extractPlainText,
+  generateFAQJsonLd,
+  generateLodgingBusinessJsonLd,
 } from "@/lib/jsonld";
 import {
-  getSiteSettings,
-  getFeaturedTestimonials,
   getAllApprovedTestimonials,
-  getPricingConfig,
-  getPageBySlug,
   getAmenities,
+  getFeaturedTestimonials,
+  getPageBySlug,
+  getPricingConfig,
+  getSiteSettings,
 } from "@/lib/queries";
-import { HeroSection } from "@/components/home/HeroSection";
-import { IntroSection } from "@/components/home/IntroSection";
-import { HighlightsSection } from "@/components/home/HighlightsSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { CTASection } from "@/components/home/CTASection";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
-import { LeafDivider } from "@/components/shared/LeafDivider";
-import { HomePageClient } from "@/components/live-preview/HomePageClient";
+import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -52,15 +53,21 @@ export default async function HomePage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [siteSettings, testimonials, allTestimonials, pricingConfig, homePage, amenities] =
-    await Promise.all([
-      getSiteSettings(locale, isDraft),
-      getFeaturedTestimonials(locale, isDraft),
-      getAllApprovedTestimonials(locale, isDraft),
-      getPricingConfig(locale, isDraft),
-      getPageBySlug("home", locale, isDraft),
-      getAmenities(locale, isDraft),
-    ]);
+  const [
+    siteSettings,
+    testimonials,
+    allTestimonials,
+    pricingConfig,
+    homePage,
+    amenities,
+  ] = await Promise.all([
+    getSiteSettings(locale, isDraft),
+    getFeaturedTestimonials(locale, isDraft),
+    getAllApprovedTestimonials(locale, isDraft),
+    getPricingConfig(locale, isDraft),
+    getPageBySlug("home", locale, isDraft),
+    getAmenities(locale, isDraft),
+  ]);
 
   const settings = siteSettings as Record<string, any>;
   const contact = settings.contact as Record<string, any> | undefined;
@@ -71,7 +78,9 @@ export default async function HomePage({
     typeof homePage.heroImage === "object" &&
     (homePage.heroImage as Record<string, any>).sizes?.hero?.url;
 
-  const propertyDetails = settings.propertyDetails as { bedrooms?: number; maxGuests?: number } | undefined;
+  const propertyDetails = settings.propertyDetails as
+    | { bedrooms?: number; maxGuests?: number; petsAllowed?: boolean }
+    | undefined;
 
   const jsonLd = generateLodgingBusinessJsonLd({
     telephone: contact?.phone,
@@ -80,6 +89,10 @@ export default async function HomePage({
     lat: contact?.coordinates?.lat,
     lng: contact?.coordinates?.lng,
     address: contact?.address,
+    city: contact?.city,
+    postalCode: contact?.postalCode,
+    priceRange: computePriceRange(pricing.seasons, pricing.currency),
+    petsAllowed: propertyDetails?.petsAllowed,
     checkInTime: pricing.policies?.checkIn,
     checkOutTime: pricing.policies?.checkOut,
     numberOfRooms: propertyDetails?.bedrooms,
@@ -87,19 +100,25 @@ export default async function HomePage({
     testimonials: allTestimonials,
   });
 
-  const rawFaqs = (settings.faqs as { question: string; answer: unknown }[]) || [];
+  const rawFaqs =
+    (settings.faqs as { question: string; answer: unknown }[]) || [];
   const faqs = rawFaqs.map((faq) => ({
     question: faq.question,
-    answer: typeof faq.answer === "string" ? faq.answer : extractPlainText(faq.answer),
+    answer:
+      typeof faq.answer === "string"
+        ? faq.answer
+        : extractPlainText(faq.answer),
   }));
   const faqJsonLd = generateFAQJsonLd(faqs);
 
-  const bookingLinks = pricing.bookingLinks as {
-    airbnb?: string | null;
-    booking?: string | null;
-    abritel?: string | null;
-    email?: string | null;
-  } | undefined;
+  const bookingLinks = pricing.bookingLinks as
+    | {
+        airbnb?: string | null;
+        booking?: string | null;
+        abritel?: string | null;
+        email?: string | null;
+      }
+    | undefined;
 
   const heroImage = homePage?.heroImage ?? null;
 

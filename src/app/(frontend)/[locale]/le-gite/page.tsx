@@ -1,26 +1,26 @@
 import { draftMode } from "next/headers";
-import { setRequestLocale, getTranslations } from "next-intl/server";
-import { type Locale } from "@/i18n/config";
-import { generateCmsPageMetadata } from "@/lib/seo";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { AmenitiesList } from "@/components/cottage/AmenitiesList";
+import { DescriptionSection } from "@/components/cottage/DescriptionSection";
+import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
+import { PhotoGallery } from "@/components/cottage/PhotoGallery";
+import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
+import { AreaMap } from "@/components/shared/AreaMap";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { Locale } from "@/i18n/config";
 import {
   generateBreadcrumbJsonLd,
   generateVacationRentalJsonLd,
 } from "@/lib/jsonld";
 import {
-  getSiteSettings,
+  getAllApprovedTestimonials,
   getAmenities,
   getFeaturedRecommendations,
   getPageBySlug,
+  getSiteSettings,
 } from "@/lib/queries";
-import { DescriptionSection } from "@/components/cottage/DescriptionSection";
-import { PhotoGallery } from "@/components/cottage/PhotoGallery";
-import { AmenitiesList } from "@/components/cottage/AmenitiesList";
-
-import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
-import { LeafDivider } from "@/components/shared/LeafDivider";
-import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
-import { AreaMap } from "@/components/shared/AreaMap";
-import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
+import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -49,14 +49,21 @@ export default async function CottagePage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [siteSettings, amenities, recommendations, cottagePage, tNav] =
-    await Promise.all([
-      getSiteSettings(locale, isDraft),
-      getAmenities(locale, isDraft),
-      getFeaturedRecommendations(locale, isDraft),
-      getPageBySlug("le-gite", locale, isDraft),
-      getTranslations({ locale, namespace: "nav" }),
-    ]);
+  const [
+    siteSettings,
+    amenities,
+    recommendations,
+    cottagePage,
+    testimonials,
+    tNav,
+  ] = await Promise.all([
+    getSiteSettings(locale, isDraft),
+    getAmenities(locale, isDraft),
+    getFeaturedRecommendations(locale, isDraft),
+    getPageBySlug("le-gite", locale, isDraft),
+    getAllApprovedTestimonials(locale, isDraft),
+    getTranslations({ locale, namespace: "nav" }),
+  ]);
 
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: tNav("home"), url: "/" },
@@ -66,20 +73,25 @@ export default async function CottagePage({
   const settings = siteSettings as Record<string, any>;
   const contact = settings.contact as Record<string, any> | undefined;
 
-  const propertyDetails = settings.propertyDetails as {
-    maxGuests?: number | null;
-    bedrooms?: number | null;
-    bathrooms?: number | null;
-    surface?: number | null;
-  } | undefined;
+  const propertyDetails = settings.propertyDetails as
+    | {
+        maxGuests?: number | null;
+        bedrooms?: number | null;
+        bathrooms?: number | null;
+        surface?: number | null;
+      }
+    | undefined;
 
   // Use first gallery image or first preview image for JSON-LD (no hero on this page)
   const firstImage =
-    (cottagePage?.gallery?.[0]?.image && typeof cottagePage.gallery[0].image === "object"
+    (cottagePage?.gallery?.[0]?.image &&
+    typeof cottagePage.gallery[0].image === "object"
       ? (cottagePage.gallery[0].image as Record<string, any>).sizes?.hero?.url
       : null) ||
-    (cottagePage?.previewImages?.[0]?.image && typeof cottagePage.previewImages[0].image === "object"
-      ? (cottagePage.previewImages[0].image as Record<string, any>).sizes?.hero?.url
+    (cottagePage?.previewImages?.[0]?.image &&
+    typeof cottagePage.previewImages[0].image === "object"
+      ? (cottagePage.previewImages[0].image as Record<string, any>).sizes?.hero
+          ?.url
       : null);
 
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
@@ -91,6 +103,10 @@ export default async function CottagePage({
     lat: contact?.coordinates?.lat,
     lng: contact?.coordinates?.lng,
     address: contact?.address,
+    city: contact?.city,
+    postalCode: contact?.postalCode,
+    amenities,
+    testimonials,
   });
 
   if (isDraft) {
@@ -102,7 +118,9 @@ export default async function CottagePage({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(vacationRentalJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(vacationRentalJsonLd),
+          }}
         />
         <CottagePageClient
           initialData={{
@@ -127,13 +145,12 @@ export default async function CottagePage({
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(vacationRentalJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(vacationRentalJsonLd),
+        }}
       />
       <Breadcrumbs
-        items={[
-          { label: tNav("home"), href: "/" },
-          { label: tNav("cottage") },
-        ]}
+        items={[{ label: tNav("home"), href: "/" }, { label: tNav("cottage") }]}
       />
       <DescriptionSection
         propertyDetails={propertyDetails}

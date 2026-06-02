@@ -7,9 +7,21 @@ type MediaObject = {
   width?: number | null;
   height?: number | null;
   sizes?: {
-    thumbnail?: { url?: string | null; width?: number | null; height?: number | null } | null;
-    card?: { url?: string | null; width?: number | null; height?: number | null } | null;
-    hero?: { url?: string | null; width?: number | null; height?: number | null } | null;
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
   } | null;
 };
 
@@ -79,6 +91,13 @@ export function PayloadImage({
       className={className}
       priority={priority}
       quality={quality}
+      sizes={
+        size === "hero"
+          ? "100vw"
+          : size === "card"
+            ? "(max-width: 768px) 100vw, 768px"
+            : "(max-width: 640px) 50vw, 400px"
+      }
     />
   );
 }
