@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# L'Instant Tranquille
 
-## Getting Started
+Site vitrine d'un gîte en Sologne (Romorantin-Lanthenay, Loir-et-Cher) : présentation du logement,
+galerie photos, tarifs, contact, et livret d'accueil privé pour les voyageurs. Pensé pour le
+**référencement local** et une **gestion autonome** du contenu via le CMS.
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router) · React 19 · Payload CMS 3 (PostgreSQL/Neon, Vercel Blob) · next-intl (FR/EN) ·
+Tailwind CSS v4 · shadcn/ui · Biome · TypeScript · Zod.
+
+## Démarrage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env   # renseigner DATABASE_URL, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL, BLOB_READ_WRITE_TOKEN
+pnpm dev               # http://localhost:3000  (admin : /admin)
+pnpm seed              # (optionnel) données d'exemple
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Le schéma de base est synchronisé par Payload au démarrage en mode dev. Après l'ajout d'un champ,
+> relancer `pnpm dev` avant un `pnpm build` de production.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Commande | Rôle |
+|----------|------|
+| `pnpm dev` | Serveur de développement |
+| `pnpm build` / `pnpm start` | Build / serveur de production |
+| `pnpm lint` / `pnpm format` | Biome (lint / format) |
+| `pnpm seed` | Peuple la base de données |
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/(frontend)/[locale]/   pages publiques (home, le-gite, tarifs-reservation, contact, livret)
+  app/(payload)/admin/       back-office Payload
+  collections/ globals/      modèle de contenu (CMS)
+  components/                sections vitrine, layout, shared, ui (shadcn), live-preview
+  lib/                       queries, seo, jsonld, access, validators, fonts
+  i18n/                      routing + messages fr/en  (proxy.ts = middleware next-intl)
+  styles/globals.css         design tokens (palette champêtre, fonts)
+docs/REFONTE.md              état de la refonte, reste à faire, bloquants
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Déploiement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vercel (ou équivalent). Variables requises : `DATABASE_URL`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL`
+(domaine réel), `BLOB_READ_WRITE_TOKEN`. Pour activer les notifications de contact et l'anti-spam :
+`RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Détails et feuille de route : voir [`docs/REFONTE.md`](docs/REFONTE.md) et [`CLAUDE.md`](CLAUDE.md).
