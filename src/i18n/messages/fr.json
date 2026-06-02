@@ -106,7 +106,8 @@
     "feeTypePerStay": "par séjour",
     "feeTypePerNight": "par nuit",
     "feeTypePerPerson": "par personne",
-    "calendarTitle": "Calendrier saisonnier"
+    "calendarTitle": "Calendrier saisonnier",
+    "h1": "Tarifs du gîte en Sologne — location à Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
@@ -127,7 +128,8 @@
     "errorMessageRequired": "Veuillez écrire votre message",
     "mapTitle": "Nous trouver",
     "accessTitle": "Comment venir",
-    "interactiveMap": "Carte interactive"
+    "interactiveMap": "Carte interactive",
+    "h1": "Contacter L'Instant Tranquille — gîte en Sologne à Romorantin-Lanthenay"
   },
   "booklet": {
     "title": "Livret d'accueil",

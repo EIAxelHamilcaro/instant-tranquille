@@ -22,6 +22,13 @@ const badgeColorMap: Record<string, string> = {
   purple: "bg-primary-200 text-primary-900 border-primary-400",
 };
 
+const textColorMap: Record<string, string> = {
+  green: "text-foreground",
+  orange: "text-foreground",
+  red: "text-earth-900",
+  purple: "text-white",
+};
+
 type DayColor = { color: string; seasonName: string };
 
 function daysInMonth(month: number): number {
@@ -153,13 +160,16 @@ export function SeasonCalendar({
                       const bg = entry
                         ? bgColorMap[entry.color] || "bg-sand-100"
                         : "bg-sand-100";
+                      const fg = entry
+                        ? textColorMap[entry.color] || "text-foreground"
+                        : "text-muted-foreground";
                       return (
                         <div
                           key={day}
                           className={`flex h-[18px] items-center justify-center text-[10px] leading-none ${bg}`}
                           title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? ` — ${entry.seasonName}` : ""}`}
                         >
-                          <span className="text-muted-foreground">{day}</span>
+                          <span className={fg}>{day}</span>
                         </div>
                       );
                     })}
@@ -195,12 +205,15 @@ export function SeasonCalendar({
                       const bg = entry
                         ? bgColorMap[entry.color] || "bg-sand-100"
                         : "bg-sand-100";
+                      const fg = entry
+                        ? textColorMap[entry.color] || "text-foreground"
+                        : "text-muted-foreground";
                       return (
                         <div
                           key={day}
                           className={`flex h-4 items-center justify-center rounded-sm text-[8px] leading-none ${bg}`}
                         >
-                          <span className="text-foreground">{day}</span>
+                          <span className={fg}>{day}</span>
                         </div>
                       );
                     })}

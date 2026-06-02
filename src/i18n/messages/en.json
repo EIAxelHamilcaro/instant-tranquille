@@ -106,7 +106,8 @@
     "feeTypePerStay": "per stay",
     "feeTypePerNight": "per night",
     "feeTypePerPerson": "per person",
-    "calendarTitle": "Seasonal calendar"
+    "calendarTitle": "Seasonal calendar",
+    "h1": "Holiday cottage rates in Sologne — rental in Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
@@ -127,7 +128,8 @@
     "errorMessageRequired": "Please write your message",
     "mapTitle": "Find us",
     "accessTitle": "How to get here",
-    "interactiveMap": "Interactive map"
+    "interactiveMap": "Interactive map",
+    "h1": "Contact L'Instant Tranquille — holiday cottage in Sologne, Romorantin-Lanthenay"
   },
   "booklet": {
     "title": "Welcome Booklet",

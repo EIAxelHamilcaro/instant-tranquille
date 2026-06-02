@@ -66,6 +66,7 @@ export default async function RatesPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
           />
         )}
+        <h1 className="sr-only">{messages.rates.h1}</h1>
         <RatesPageClient
           initialData={{
             seasons: pricingConfig.seasons || [],
@@ -97,9 +98,7 @@ export default async function RatesPage({
           { label: messages.rates.title },
         ]}
       />
-      <h1 className="sr-only">
-        Tarifs du gîte en Sologne — location à Romorantin-Lanthenay
-      </h1>
+      <h1 className="sr-only">{messages.rates.h1}</h1>
       <PricingTable
         seasons={pricingConfig.seasons || []}
         additionalFees={pricingConfig.additionalFees || []}

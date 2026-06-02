@@ -81,10 +81,7 @@ export default async function ContactPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
       />
-      <h1 className="sr-only">
-        Contacter L&apos;Instant Tranquille — gîte en Sologne à
-        Romorantin-Lanthenay
-      </h1>
+      <h1 className="sr-only">{messages.contact.h1}</h1>
       <Breadcrumbs
         items={[
           { label: messages.nav.home, href: "/" },

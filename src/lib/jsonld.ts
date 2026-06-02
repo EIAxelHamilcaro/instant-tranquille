@@ -23,9 +23,12 @@ function buildReviewFields(
   return {
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: (
-        testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length
-      ).toFixed(1),
+      ratingValue: Number(
+        (
+          testimonials.reduce((sum, t) => sum + t.rating, 0) /
+          testimonials.length
+        ).toFixed(1),
+      ),
       reviewCount: testimonials.length,
       bestRating: 5,
       worstRating: 1,
@@ -77,30 +80,16 @@ type LodgingBusinessOptions = {
 export function generateLodgingBusinessJsonLd(
   options?: LodgingBusinessOptions,
 ) {
-  const amenityFeatures =
+  const amenityFeature =
     options?.amenities && options.amenities.length > 0
-      ? options.amenities.map((a) => ({
-          "@type": "LocationFeatureSpecification",
-          name: a.name,
-          value: true,
-        }))
-      : [
-          {
+      ? {
+          amenityFeature: options.amenities.map((a) => ({
             "@type": "LocationFeatureSpecification",
-            name: "WiFi",
+            name: a.name,
             value: true,
-          },
-          {
-            "@type": "LocationFeatureSpecification",
-            name: "Parking",
-            value: true,
-          },
-          {
-            "@type": "LocationFeatureSpecification",
-            name: "Jardin",
-            value: true,
-          },
-        ];
+          })),
+        }
+      : {};
 
   return {
     "@context": "https://schema.org",
@@ -123,7 +112,7 @@ export function generateLodgingBusinessJsonLd(
           longitude: options.lng,
         },
       }),
-    amenityFeature: amenityFeatures,
+    ...amenityFeature,
     ...(options?.numberOfRooms != null && {
       numberOfRooms: options.numberOfRooms,
     }),
@@ -182,6 +171,7 @@ export function generateVacationRentalJsonLd(options?: {
     "@context": "https://schema.org",
     "@type": "VacationRental",
     "@id": `${SITE_URL}/le-gite#rental`,
+    containedInPlace: { "@id": BUSINESS_ID },
     name: "L'Instant Tranquille",
     description:
       options?.description ||
@@ -246,13 +236,6 @@ export function computePriceRange(
 }
 
 function seasonToOffer(season: CmsSeason, currency: string) {
-  const year = new Date().getFullYear();
-  const pad = (n: number) => String(n).padStart(2, "0");
-  const toDate = (month?: string | null, day?: number | null) =>
-    month && day ? `${year}-${pad(Number(month))}-${pad(day)}` : undefined;
-  const validFrom = toDate(season.startMonth, season.startDay);
-  const validThrough = toDate(season.endMonth, season.endDay);
-
   return {
     "@type": "Offer",
     name: season.name,
@@ -266,8 +249,6 @@ function seasonToOffer(season: CmsSeason, currency: string) {
         unitText: "par nuit",
       },
     }),
-    ...(validFrom && { validFrom }),
-    ...(validThrough && { validThrough }),
     ...(season.minimumStay && {
       eligibleQuantity: {
         "@type": "QuantitativeValue",
@@ -294,7 +275,6 @@ export function generatePricingJsonLd(
     "@type": "LodgingBusiness",
     "@id": BUSINESS_ID,
     name: "L'Instant Tranquille",
-    url: `${SITE_URL}/tarifs-reservation`,
     ...(priceRange && { priceRange }),
     makesOffer: offers,
   };
