@@ -42,8 +42,8 @@ function formatPeriod(
     month: "long",
     day: "numeric",
   });
-  const start = fmt.format(new Date(2001, parseInt(sm) - 1, sd));
-  const end = fmt.format(new Date(2001, parseInt(em) - 1, ed));
+  const start = fmt.format(new Date(2001, parseInt(sm, 10) - 1, sd));
+  const end = fmt.format(new Date(2001, parseInt(em, 10) - 1, ed));
   return `${start} — ${end}`;
 }
 

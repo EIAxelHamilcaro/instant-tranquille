@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { getPayload } from "@/lib/payload";
 
 function richText(...paragraphs: string[]) {

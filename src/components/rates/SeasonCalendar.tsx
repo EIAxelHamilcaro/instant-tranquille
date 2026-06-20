@@ -48,9 +48,9 @@ function buildDayColorMap(seasons: CmsSeason[]): Map<string, DayColor> {
     )
       continue;
 
-    const sm = parseInt(season.startMonth);
+    const sm = parseInt(season.startMonth, 10);
     const sd = season.startDay;
-    const em = parseInt(season.endMonth);
+    const em = parseInt(season.endMonth, 10);
     const ed = season.endDay;
     const isCrossYear = sm > em || (sm === em && sd > ed);
 

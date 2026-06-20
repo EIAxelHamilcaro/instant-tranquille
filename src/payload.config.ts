@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import {
@@ -19,10 +21,8 @@ import {
 } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { fr } from "@payloadcms/translations/languages/fr";
-import path from "path";
 import { buildConfig } from "payload";
 import sharp from "sharp";
-import { fileURLToPath } from "url";
 import { Amenities } from "@/collections/Amenities";
 import { ContactMessages } from "@/collections/ContactMessages";
 import { LocalRecommendations } from "@/collections/LocalRecommendations";

@@ -49,7 +49,7 @@ export default async function ContactPage({
   const coordinatesRaw = contactRaw?.coordinates as
     | Record<string, unknown>
     | undefined;
-  const coordinates = coordinatesRaw;
+  const _coordinates = coordinatesRaw;
   const siteName = siteSettings?.siteName as string | undefined;
   const accessRoutes = siteSettings?.accessRoutes as
     | {

@@ -1,5 +1,3 @@
-import { Trees } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { getHeaderData, getSiteSettings } from "@/lib/queries";
 import { HeaderClient } from "./HeaderClient";
 
