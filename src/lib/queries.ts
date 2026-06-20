@@ -308,6 +308,36 @@ export async function getFeaturedRecommendations(
   )();
 }
 
+export async function getAllRecommendations(locale: string, draft = false) {
+  if (draft) {
+    const payload = await getPayload();
+    const result = await payload.find({
+      collection: "local-recommendations",
+      sort: "order",
+      locale: locale as "fr" | "en",
+      limit: 100,
+      depth: 1,
+      draft: true,
+    });
+    return result.docs as unknown as CmsRecommendation[];
+  }
+  return unstable_cache(
+    async () => {
+      const payload = await getPayload();
+      const result = await payload.find({
+        collection: "local-recommendations",
+        sort: "order",
+        locale: locale as "fr" | "en",
+        limit: 100,
+        depth: 1,
+      });
+      return result.docs as unknown as CmsRecommendation[];
+    },
+    ["recommendations-all", locale],
+    { revalidate: 3600, tags: ["recommendations"] },
+  )();
+}
+
 export async function getAllApprovedTestimonials(
   locale: string,
   draft = false,

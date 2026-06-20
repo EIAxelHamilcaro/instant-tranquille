@@ -6,6 +6,7 @@
   "nav": {
     "home": "Home",
     "cottage": "The Cottage",
+    "surroundings": "Surroundings",
     "rates": "Rates & Booking",
     "contact": "Contact",
     "book": "Book now"
@@ -203,5 +204,51 @@
     "description": "Holiday cottage in Sologne, 3 bedrooms, Romorantin-Lanthenay.",
     "rights": "All rights reserved.",
     "contact": "Contact"
+  },
+  "surroundings": {
+    "title": "Surroundings",
+    "description": "Explore the Sologne region from the cottage: châteaux, forests, lakes, restaurants and activities nearby.",
+    "h1": "Things to do in Sologne — activities and visits from Romorantin-Lanthenay",
+    "eyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroTitle": "The Surroundings",
+    "heroSubtitle": "Châteaux, nature, equestrian sport — the Sologne within easy reach",
+    "introTitle": "A convenient base",
+    "categoryTitle": "Nearby attractions",
+    "mapTitle": "Area map",
+    "categories": {
+      "castles": "Châteaux & Monuments",
+      "restaurants": "Restaurants",
+      "nature": "Nature & Walking",
+      "activities": "Activities",
+      "markets": "Markets",
+      "equestrian": "Equestrian & Horse Sports",
+      "services": "Services"
+    },
+    "distance": "Distance",
+    "website": "Website",
+    "noItems": "No recommendations in this category yet."
+  },
+  "equestrian": {
+    "sectionTitle": "Riders & equestrian sports",
+    "eyebrow": "Equestrian Sologne",
+    "intro": "The Sologne is a leading equestrian region. The cottage is a practical base for riders travelling to competitions or on a leisure stay.",
+    "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
+    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year — one of the most important showjumping competitions on the national calendar. Approximately 17 km from the cottage (20 minutes by car).",
+    "venuesTitle": "Nearby equestrian venues",
+    "distanceLabel": "Distance",
+    "websiteLabel": "Official website",
+    "faqTitle": "Frequently asked questions — riders",
+    "faq": {
+      "q1": "Does the cottage accommodate horses?",
+      "a1": "No, the cottage has no horse-boarding facilities. It is aimed at riders looking for comfortable accommodation close to equestrian venues, with their horses stabled at the local centres or yards nearby.",
+      "q2": "How far is the Grand Parquet de Lamotte-Beuvron?",
+      "a2": "Approximately 17 km from the cottage, around 20 minutes by car via the D724.",
+      "q3": "Are there any riding centres nearby for leisure activities?",
+      "a3": "Several equestrian centres are accessible within a 30 km radius of Romorantin-Lanthenay. We can provide contacts on request.",
+      "q4": "Is the parking at the Grand Parquet suitable for horse trailers and lorries?",
+      "a4": "The Grand Parquet has dedicated parking for vehicles with trailers during competitions. It is advisable to check parking instructions with the organiser before each event."
+    },
+    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron — FFE equestrian venue",
+    "placeholderLabel": "Grand Parquet photo (coming soon)"
   }
 }

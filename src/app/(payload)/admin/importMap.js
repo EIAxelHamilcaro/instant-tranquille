@@ -32,6 +32,7 @@ import { default as default_a1ae3598c2696583190688ef44e074ae } from "../../../co
 import { default as default_6f64da3861999de587a3ed586829047d } from "../../../components/payload/Icon";
 import { default as default_c6fe5946efe4ec376b0411c30a8f0d79 } from "../../../components/payload/Logo";
 
+/** @type import('payload').ImportMap */
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell":
     RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,

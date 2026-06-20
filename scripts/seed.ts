@@ -438,6 +438,12 @@ async function seed() {
           highlight: false,
         },
         {
+          label: "Les Alentours",
+          url: "/les-alentours",
+          isExternal: false,
+          highlight: false,
+        },
+        {
           label: "Tarifs & Réservation",
           url: "/tarifs-reservation",
           isExternal: false,
@@ -462,6 +468,12 @@ async function seed() {
         {
           label: "The Cottage",
           url: "/le-gite",
+          isExternal: false,
+          highlight: false,
+        },
+        {
+          label: "Surroundings",
+          url: "/les-alentours",
           isExternal: false,
           highlight: false,
         },
@@ -496,6 +508,7 @@ async function seed() {
           links: [
             { label: "Accueil", url: "/", isExternal: false },
             { label: "Le Gîte", url: "/le-gite", isExternal: false },
+            { label: "Les Alentours", url: "/les-alentours", isExternal: false },
             {
               label: "Tarifs",
               url: "/tarifs-reservation",
@@ -536,6 +549,7 @@ async function seed() {
           links: [
             { label: "Home", url: "/", isExternal: false },
             { label: "The Cottage", url: "/le-gite", isExternal: false },
+            { label: "Surroundings", url: "/les-alentours", isExternal: false },
             { label: "Rates", url: "/tarifs-reservation", isExternal: false },
             { label: "Contact", url: "/contact", isExternal: false },
           ],

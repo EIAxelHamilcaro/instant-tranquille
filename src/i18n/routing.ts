@@ -21,5 +21,9 @@ export const routing = defineRouting({
       fr: "/livret-accueil/[accessToken]",
       en: "/welcome-booklet/[accessToken]",
     },
+    "/les-alentours": {
+      fr: "/les-alentours",
+      en: "/surroundings",
+    },
   },
 });

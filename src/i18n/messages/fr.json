@@ -6,6 +6,7 @@
   "nav": {
     "home": "Accueil",
     "cottage": "Le Gîte",
+    "surroundings": "Les Alentours",
     "rates": "Tarifs & Réservation",
     "contact": "Contact",
     "book": "Réserver"
@@ -203,5 +204,51 @@
     "description": "Gîte en Sologne, 3 chambres, Romorantin-Lanthenay.",
     "rights": "Tous droits réservés.",
     "contact": "Contact"
+  },
+  "surroundings": {
+    "title": "Les Alentours",
+    "description": "Découvrez la Sologne depuis le gîte : châteaux, forêts, étangs, restaurants et activités à proximité.",
+    "h1": "Que faire en Sologne — activités et visites depuis Romorantin-Lanthenay",
+    "eyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroTitle": "Les Alentours",
+    "heroSubtitle": "Châteaux, nature, équitation — la Sologne à portée de route",
+    "introTitle": "Un point de départ commode",
+    "categoryTitle": "À découvrir aux alentours",
+    "mapTitle": "Carte des alentours",
+    "categories": {
+      "castles": "Châteaux & Monuments",
+      "restaurants": "Restaurants",
+      "nature": "Nature & Randonnées",
+      "activities": "Activités",
+      "markets": "Marchés",
+      "equestrian": "Équitation & Sports équestres",
+      "services": "Services"
+    },
+    "distance": "Distance",
+    "website": "Site web",
+    "noItems": "Aucune recommandation dans cette catégorie pour le moment."
+  },
+  "equestrian": {
+    "sectionTitle": "Cavaliers & sports équestres",
+    "eyebrow": "Sologne équestre",
+    "intro": "La Sologne est une région équestre de premier plan. Le gîte constitue une base pratique pour les cavaliers en déplacement pour des concours ou un séjour de loisir.",
+    "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
+    "grandParquetText": "Site fédéral de la FFE (Fédération Française d'Équitation), le Grand Parquet accueille chaque année le Generali Open de France, l'un des concours de saut d'obstacles les plus importants du calendrier national. À environ 17 km du gîte (20 minutes en voiture).",
+    "venuesTitle": "Sites équestres à proximité",
+    "distanceLabel": "Distance",
+    "websiteLabel": "Site officiel",
+    "faqTitle": "Questions fréquentes — cavaliers",
+    "faq": {
+      "q1": "Le gîte accepte-t-il les chevaux ?",
+      "a1": "Non, le gîte n'a pas de structures d'hébergement pour les chevaux. Il s'adresse aux cavaliers qui souhaitent un logement confortable à proximité des sites équestres, leurs montures étant hébergées sur place dans les centres ou écuries des environs.",
+      "q2": "Quelle est la distance jusqu'au Grand Parquet de Lamotte-Beuvron ?",
+      "a2": "Environ 17 km depuis le gîte, soit 20 minutes en voiture par la D724.",
+      "q3": "Y a-t-il des centres équestres proches pour les activités de loisir ?",
+      "a3": "Plusieurs centres équestres sont accessibles dans un rayon de 30 km autour de Romorantin-Lanthenay. Nous pouvons vous communiquer des adresses sur demande.",
+      "q4": "Le parking est-il adapté pour remorques et van à chevaux au Grand Parquet ?",
+      "a4": "Le Grand Parquet dispose d'un parking spécifique pour véhicules avec remorques lors des concours. Il est recommandé de vérifier les consignes de stationnement auprès de l'organisateur avant chaque événement."
+    },
+    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron — site équestre FFE",
+    "placeholderLabel": "Photo Grand Parquet (à venir)"
   }
 }
