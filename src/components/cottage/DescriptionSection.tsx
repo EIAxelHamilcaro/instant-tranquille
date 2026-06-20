@@ -28,11 +28,13 @@ export function DescriptionSection({
   descriptionTitle,
   descriptionText,
   previewImages,
+  titleAs = "h1",
 }: {
   propertyDetails?: PropertyDetails | null;
   descriptionTitle?: string | null;
   descriptionText?: unknown;
   previewImages?: PreviewImage[] | null;
+  titleAs?: "h1" | "h2" | "h3";
 }) {
   const t = useTranslations("cottage");
   const tRates = useTranslations("rates");
@@ -79,7 +81,7 @@ export function DescriptionSection({
       <Container>
         <div className="grid items-start gap-12 lg:grid-cols-2">
           <div className="reveal-left">
-            <SectionHeading title={title} centered={false} as="h1" />
+            <SectionHeading title={title} centered={false} as={titleAs} />
             {hasRichText ? (
               <RichTextRenderer
                 content={descriptionText}

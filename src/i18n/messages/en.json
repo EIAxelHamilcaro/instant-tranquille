@@ -85,7 +85,9 @@
     "cottageView": "Cottage view",
     "placeholderLiving": "Living room",
     "placeholderBedroom": "Bedroom",
-    "placeholderGarden": "Garden"
+    "placeholderGarden": "Garden",
+    "heroEyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroImageAlt": "Interior of L'Instant Tranquille cottage in Sologne"
   },
   "rates": {
     "title": "Rates & Booking",

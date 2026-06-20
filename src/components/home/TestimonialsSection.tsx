@@ -60,7 +60,7 @@ export function TestimonialsSection({
   if (!testimonials?.length) return null;
 
   return (
-    <section className="py-20" ref={ref}>
+    <section className="bg-sand-100 py-20" ref={ref}>
       <Container>
         <SectionHeading title={cmsTitle || t("testimonialsTitle")} />
         <div
@@ -93,7 +93,7 @@ export function TestimonialsSection({
                     total: testimonials.length,
                   })}
                 >
-                  <Card className="border-sand-200 h-full bg-white">
+                  <Card className="border-sand-200 h-full bg-sand-50">
                     <CardContent className="flex h-full flex-col p-6">
                       <Quote
                         className="mb-3 h-8 w-8 shrink-0 text-primary-200"

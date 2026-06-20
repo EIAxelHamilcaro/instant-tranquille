@@ -1,6 +1,7 @@
 import { draftMode } from "next/headers";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AmenitiesList } from "@/components/cottage/AmenitiesList";
+import { CottageHeroSection } from "@/components/cottage/CottageHeroSection";
 import { DescriptionSection } from "@/components/cottage/DescriptionSection";
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { PhotoGallery } from "@/components/cottage/PhotoGallery";
@@ -158,6 +159,13 @@ export default async function CottagePage({
           __html: JSON.stringify(vacationRentalJsonLd),
         }}
       />
+      <CottageHeroSection
+        heroImage={
+          cottagePage?.previewImages?.[0]?.image ??
+          cottagePage?.gallery?.[0]?.image ??
+          null
+        }
+      />
       <Breadcrumbs
         items={[{ label: tNav("home"), href: "/" }, { label: tNav("cottage") }]}
       />
@@ -166,6 +174,7 @@ export default async function CottagePage({
         descriptionTitle={cottagePage?.descriptionTitle ?? null}
         descriptionText={cottagePage?.descriptionText ?? null}
         previewImages={cottagePage?.previewImages ?? null}
+        titleAs="h2"
       />
       <PhotoGallery gallery={cottagePage?.gallery ?? []} />
       <LeafDivider />

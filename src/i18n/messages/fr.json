@@ -85,7 +85,9 @@
     "cottageView": "Vue du gîte",
     "placeholderLiving": "Salon principal",
     "placeholderBedroom": "Chambre",
-    "placeholderGarden": "Jardin"
+    "placeholderGarden": "Jardin",
+    "heroEyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroImageAlt": "Intérieur du gîte L'Instant Tranquille en Sologne"
   },
   "rates": {
     "title": "Tarifs & Réservation",
