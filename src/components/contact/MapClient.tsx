@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import L from "leaflet";
+import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 
 const DEFAULT_LAT = 47.4833;
@@ -15,7 +15,12 @@ interface MapClientProps {
   markerLabel?: string | null;
 }
 
-export default function MapClient({ lat, lng, zoom, markerLabel }: MapClientProps) {
+export default function MapClient({
+  lat,
+  lng,
+  zoom,
+  markerLabel,
+}: MapClientProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
 

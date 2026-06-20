@@ -1,20 +1,20 @@
 "use client";
 
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useActionState, useState, useRef } from "react";
+import { useActionState, useRef, useState } from "react";
+import {
+  type ContactFormState,
+  submitContactForm,
+} from "@/app/(frontend)/[locale]/contact/actions";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import {
-  submitContactForm,
-  type ContactFormState,
-} from "@/app/(frontend)/[locale]/contact/actions";
 
 const fieldErrorKeys: Record<string, string> = {
   name: "errorNameRequired",
@@ -39,8 +39,15 @@ export function ContactForm() {
           <SectionHeading title={t("formTitle")} />
 
           {state.success ? (
-            <div role="status" aria-live="polite" className="rounded-lg border border-green-200 bg-green-50 p-6 text-center">
-              <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-500" aria-hidden="true" />
+            <div
+              role="status"
+              aria-live="polite"
+              className="rounded-lg border border-green-200 bg-green-50 p-6 text-center"
+            >
+              <CheckCircle
+                className="mx-auto mb-3 h-10 w-10 text-green-500"
+                aria-hidden="true"
+              />
               <p className="font-sans font-medium text-green-800">
                 {t("success")}
               </p>
@@ -60,11 +67,18 @@ export function ContactForm() {
                     defaultValue={state.values?.name}
                     aria-required="true"
                     aria-invalid={!!state.fieldErrors?.name}
-                    aria-describedby={state.fieldErrors?.name ? "name-error" : undefined}
-                    className={cn("border-sand-300 bg-white", state.fieldErrors?.name && "border-red-400")}
+                    aria-describedby={
+                      state.fieldErrors?.name ? "name-error" : undefined
+                    }
+                    className={cn(
+                      "border-sand-300 bg-white",
+                      state.fieldErrors?.name && "border-red-400",
+                    )}
                   />
                   {state.fieldErrors?.name && (
-                    <p id="name-error" className="mt-1 text-xs text-red-600">{t(fieldErrorKeys.name)}</p>
+                    <p id="name-error" className="mt-1 text-xs text-red-600">
+                      {t(fieldErrorKeys.name)}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -79,11 +93,18 @@ export function ContactForm() {
                     defaultValue={state.values?.email}
                     aria-required="true"
                     aria-invalid={!!state.fieldErrors?.email}
-                    aria-describedby={state.fieldErrors?.email ? "email-error" : undefined}
-                    className={cn("border-sand-300 bg-white", state.fieldErrors?.email && "border-red-400")}
+                    aria-describedby={
+                      state.fieldErrors?.email ? "email-error" : undefined
+                    }
+                    className={cn(
+                      "border-sand-300 bg-white",
+                      state.fieldErrors?.email && "border-red-400",
+                    )}
                   />
                   {state.fieldErrors?.email && (
-                    <p id="email-error" className="mt-1 text-xs text-red-600">{t(fieldErrorKeys.email)}</p>
+                    <p id="email-error" className="mt-1 text-xs text-red-600">
+                      {t(fieldErrorKeys.email)}
+                    </p>
                   )}
                 </div>
               </div>
@@ -113,11 +134,18 @@ export function ContactForm() {
                     defaultValue={state.values?.subject}
                     aria-required="true"
                     aria-invalid={!!state.fieldErrors?.subject}
-                    aria-describedby={state.fieldErrors?.subject ? "subject-error" : undefined}
-                    className={cn("border-sand-300 bg-white", state.fieldErrors?.subject && "border-red-400")}
+                    aria-describedby={
+                      state.fieldErrors?.subject ? "subject-error" : undefined
+                    }
+                    className={cn(
+                      "border-sand-300 bg-white",
+                      state.fieldErrors?.subject && "border-red-400",
+                    )}
                   />
                   {state.fieldErrors?.subject && (
-                    <p id="subject-error" className="mt-1 text-xs text-red-600">{t(fieldErrorKeys.subject)}</p>
+                    <p id="subject-error" className="mt-1 text-xs text-red-600">
+                      {t(fieldErrorKeys.subject)}
+                    </p>
                   )}
                 </div>
               </div>
@@ -135,11 +163,18 @@ export function ContactForm() {
                   rows={6}
                   defaultValue={state.values?.message}
                   aria-invalid={!!state.fieldErrors?.message}
-                  aria-describedby={state.fieldErrors?.message ? "message-error" : undefined}
-                  className={cn("border-sand-300 bg-white", state.fieldErrors?.message && "border-red-400")}
+                  aria-describedby={
+                    state.fieldErrors?.message ? "message-error" : undefined
+                  }
+                  className={cn(
+                    "border-sand-300 bg-white",
+                    state.fieldErrors?.message && "border-red-400",
+                  )}
                 />
                 {state.fieldErrors?.message && (
-                  <p id="message-error" className="mt-1 text-xs text-red-600">{t(fieldErrorKeys.message)}</p>
+                  <p id="message-error" className="mt-1 text-xs text-red-600">
+                    {t(fieldErrorKeys.message)}
+                  </p>
                 )}
               </div>
 
@@ -154,11 +189,18 @@ export function ContactForm() {
                 />
               )}
 
-              <input type="hidden" name="cf-turnstile-response" value={turnstileToken} />
+              <input
+                type="hidden"
+                name="cf-turnstile-response"
+                value={turnstileToken}
+              />
 
               <div aria-live="polite" aria-atomic="true">
                 {state.error && state.error !== "validation_error" && (
-                  <div role="alert" className="flex items-center gap-2 text-sm text-red-600">
+                  <div
+                    role="alert"
+                    className="flex items-center gap-2 text-sm text-red-600"
+                  >
                     <AlertCircle className="h-4 w-4" aria-hidden="true" />
                     {t("error")}
                   </div>
@@ -167,7 +209,11 @@ export function ContactForm() {
 
               <Button
                 type="submit"
-                disabled={isPending || (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)}
+                disabled={
+                  isPending ||
+                  (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
+                    !turnstileToken)
+                }
                 className="w-full bg-primary-500 text-white font-sans hover:bg-primary-600 sm:w-auto"
               >
                 <Send className="mr-2 h-4 w-4" aria-hidden="true" />

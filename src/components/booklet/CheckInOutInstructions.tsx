@@ -1,9 +1,9 @@
 "use client";
 
+import { Clock, LogIn, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Card, CardContent } from "@/components/ui/card";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
-import { LogIn, LogOut, Clock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function CheckInOutInstructions({
   id,
@@ -16,9 +16,9 @@ export function CheckInOutInstructions({
   id?: string;
   sectionTitle?: string | null;
   checkInTime?: string | null;
-  checkIn: any;
+  checkIn: unknown;
   checkOutTime?: string | null;
-  checkOut: any;
+  checkOut: unknown;
 }) {
   const t = useTranslations("booklet");
 
@@ -46,7 +46,9 @@ export function CheckInOutInstructions({
             {checkIn ? (
               <RichTextRenderer content={checkIn} />
             ) : !checkInTime ? (
-              <p className="text-sm text-foreground/80">{t("checkInFallback")}</p>
+              <p className="text-sm text-foreground/80">
+                {t("checkInFallback")}
+              </p>
             ) : null}
           </CardContent>
         </Card>
@@ -67,7 +69,9 @@ export function CheckInOutInstructions({
             {checkOut ? (
               <RichTextRenderer content={checkOut} />
             ) : !checkOutTime ? (
-              <p className="text-sm text-foreground/80">{t("checkOutFallback")}</p>
+              <p className="text-sm text-foreground/80">
+                {t("checkOutFallback")}
+              </p>
             ) : null}
           </CardContent>
         </Card>

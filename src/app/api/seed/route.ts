@@ -14,7 +14,9 @@ function richText(...paragraphs: string[]) {
         indent: 0,
         version: 1,
         textFormat: 0,
-        children: [{ type: "text", mode: "normal", text, format: 0, style: "" }],
+        children: [
+          { type: "text", mode: "normal", text, format: 0, style: "" },
+        ],
       })),
     },
   };
@@ -32,7 +34,13 @@ export async function POST() {
   const heroImageId: number | null = null;
 
   // Clean collections to avoid duplicates on re-seed
-  for (const col of ["testimonials", "amenities", "local-recommendations", "onboarding-guides", "pages"] as const) {
+  for (const col of [
+    "testimonials",
+    "amenities",
+    "local-recommendations",
+    "onboarding-guides",
+    "pages",
+  ] as const) {
     try {
       const existing = await payload.find({ collection: col, limit: 500 });
       for (const doc of existing.docs) {
@@ -46,7 +54,10 @@ export async function POST() {
 
   // Reset and create admin user
   try {
-    const existingUsers = await payload.find({ collection: "users", limit: 100 });
+    const existingUsers = await payload.find({
+      collection: "users",
+      limit: 100,
+    });
     for (const user of existingUsers.docs) {
       await payload.delete({ collection: "users", id: user.id });
     }
@@ -55,7 +66,9 @@ export async function POST() {
       collection: "users",
       data: {
         email: process.env.SEED_ADMIN_EMAIL || "admin@instant-tranquille.com",
-        password: process.env.SEED_ADMIN_PASSWORD || crypto.randomBytes(16).toString("hex"),
+        password:
+          process.env.SEED_ADMIN_PASSWORD ||
+          crypto.randomBytes(16).toString("hex"),
         name: "Admin",
       },
     });
@@ -119,18 +132,100 @@ export async function POST() {
 
   // Seed amenities
   const amenities = [
-    { name: "WiFi haut débit", icon: "wifi", category: "comfort" as const, order: 1, description: "Connexion fibre optique disponible dans tout le gîte" },
-    { name: "TV écran plat", icon: "tv", category: "indoor" as const, order: 2, description: "Télévision connectée avec accès aux plateformes de streaming" },
-    { name: "Lave-linge", icon: "washing-machine", category: "indoor" as const, order: 3, description: "Lave-linge à disposition avec produits de lavage fournis" },
-    { name: "Literie premium", icon: "bed-double", category: "indoor" as const, order: 4, description: "Matelas haut de gamme et couettes douillettes pour un sommeil réparateur" },
-    { name: "Cheminée", icon: "flame", category: "indoor" as const, order: 5, description: "Cheminée à foyer fermé pour des soirées chaleureuses en hiver" },
-    { name: "Cuisine équipée", icon: "chef-hat", category: "kitchen" as const, order: 6, description: "Tout le nécessaire pour préparer de bons repas : vaisselle, ustensiles, épices" },
-    { name: "Machine à café", icon: "coffee", category: "kitchen" as const, order: 7, description: "Machine à café Nespresso avec capsules de bienvenue offertes" },
-    { name: "Four & plaques", icon: "cooking-pot", category: "kitchen" as const, order: 8, description: "Four traditionnel et plaques à induction pour cuisiner comme à la maison" },
-    { name: "Parking privé", icon: "car", category: "outdoor" as const, order: 9, description: "Deux places de parking privées et sécurisées devant le gîte" },
-    { name: "Jardin 3000m²", icon: "flower-2", category: "outdoor" as const, order: 10, description: "Grand jardin clos et arboré, idéal pour les enfants et les moments de détente" },
-    { name: "Barbecue", icon: "flame", category: "outdoor" as const, order: 11, description: "Barbecue au charbon avec ustensiles et table de jardin pour les repas en extérieur" },
-    { name: "Chauffage central", icon: "thermometer", category: "comfort" as const, order: 12, description: "Chauffage central au gaz pour un confort optimal en toute saison" },
+    {
+      name: "WiFi haut débit",
+      icon: "wifi",
+      category: "comfort" as const,
+      order: 1,
+      description: "Connexion fibre optique disponible dans tout le gîte",
+    },
+    {
+      name: "TV écran plat",
+      icon: "tv",
+      category: "indoor" as const,
+      order: 2,
+      description:
+        "Télévision connectée avec accès aux plateformes de streaming",
+    },
+    {
+      name: "Lave-linge",
+      icon: "washing-machine",
+      category: "indoor" as const,
+      order: 3,
+      description: "Lave-linge à disposition avec produits de lavage fournis",
+    },
+    {
+      name: "Literie premium",
+      icon: "bed-double",
+      category: "indoor" as const,
+      order: 4,
+      description:
+        "Matelas haut de gamme et couettes douillettes pour un sommeil réparateur",
+    },
+    {
+      name: "Cheminée",
+      icon: "flame",
+      category: "indoor" as const,
+      order: 5,
+      description:
+        "Cheminée à foyer fermé pour des soirées chaleureuses en hiver",
+    },
+    {
+      name: "Cuisine équipée",
+      icon: "chef-hat",
+      category: "kitchen" as const,
+      order: 6,
+      description:
+        "Tout le nécessaire pour préparer de bons repas : vaisselle, ustensiles, épices",
+    },
+    {
+      name: "Machine à café",
+      icon: "coffee",
+      category: "kitchen" as const,
+      order: 7,
+      description:
+        "Machine à café Nespresso avec capsules de bienvenue offertes",
+    },
+    {
+      name: "Four & plaques",
+      icon: "cooking-pot",
+      category: "kitchen" as const,
+      order: 8,
+      description:
+        "Four traditionnel et plaques à induction pour cuisiner comme à la maison",
+    },
+    {
+      name: "Parking privé",
+      icon: "car",
+      category: "outdoor" as const,
+      order: 9,
+      description:
+        "Deux places de parking privées et sécurisées devant le gîte",
+    },
+    {
+      name: "Jardin 3000m²",
+      icon: "flower-2",
+      category: "outdoor" as const,
+      order: 10,
+      description:
+        "Grand jardin clos et arboré, idéal pour les enfants et les moments de détente",
+    },
+    {
+      name: "Barbecue",
+      icon: "flame",
+      category: "outdoor" as const,
+      order: 11,
+      description:
+        "Barbecue au charbon avec ustensiles et table de jardin pour les repas en extérieur",
+    },
+    {
+      name: "Chauffage central",
+      icon: "thermometer",
+      category: "comfort" as const,
+      order: 12,
+      description:
+        "Chauffage central au gaz pour un confort optimal en toute saison",
+    },
   ];
 
   for (const amenity of amenities) {
@@ -155,7 +250,8 @@ export async function POST() {
       distanceFromGite: "30 min",
       featured: true,
       order: 1,
-      description: "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance. Son escalier à double révolution attribué à Léonard de Vinci et son domaine de 5 440 hectares en font une visite incontournable.",
+      description:
+        "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance. Son escalier à double révolution attribué à Léonard de Vinci et son domaine de 5 440 hectares en font une visite incontournable.",
       coordinates: { lat: 47.6161, lng: 1.517 },
     },
     {
@@ -167,7 +263,8 @@ export async function POST() {
       distanceFromGite: "25 min",
       featured: true,
       order: 2,
-      description: "Château remarquablement meublé qui inspira Hergé pour Moulinsart. L'exposition « Les Secrets de Moulinsart », ses jardins à la française et ses croisières sur le canal raviront toute la famille.",
+      description:
+        "Château remarquablement meublé qui inspira Hergé pour Moulinsart. L'exposition « Les Secrets de Moulinsart », ses jardins à la française et ses croisières sur le canal raviront toute la famille.",
       coordinates: { lat: 47.5003, lng: 1.4581 },
     },
     {
@@ -179,7 +276,8 @@ export async function POST() {
       distanceFromGite: "55 min",
       featured: true,
       order: 3,
-      description: "Le « Château des Dames », enjambant le Cher. Un joyau de l'architecture Renaissance avec ses galeries, ses jardins de Diane de Poitiers et Catherine de Médicis, et son potager de fleurs.",
+      description:
+        "Le « Château des Dames », enjambant le Cher. Un joyau de l'architecture Renaissance avec ses galeries, ses jardins de Diane de Poitiers et Catherine de Médicis, et son potager de fleurs.",
       coordinates: { lat: 47.3249, lng: 1.0705 },
     },
     {
@@ -191,7 +289,8 @@ export async function POST() {
       distanceFromGite: "35 min",
       featured: false,
       order: 4,
-      description: "Résidence royale de 7 rois et 10 reines de France, le château de Blois présente un panorama unique de l'architecture française du XIIIe au XVIIe siècle. Son spectacle son et lumière estival est féerique.",
+      description:
+        "Résidence royale de 7 rois et 10 reines de France, le château de Blois présente un panorama unique de l'architecture française du XIIIe au XVIIe siècle. Son spectacle son et lumière estival est féerique.",
       coordinates: { lat: 47.5861, lng: 1.3308 },
     },
     // ── Activités ──
@@ -204,7 +303,8 @@ export async function POST() {
       distanceFromGite: "45 min",
       featured: true,
       order: 5,
-      description: "L'un des 5 plus beaux zoos du monde. Plus de 35 000 animaux dont les célèbres pandas géants, koalas et lamantins. Ne manquez pas le spectacle d'oiseaux en vol libre et la serre tropicale.",
+      description:
+        "L'un des 5 plus beaux zoos du monde. Plus de 35 000 animaux dont les célèbres pandas géants, koalas et lamantins. Ne manquez pas le spectacle d'oiseaux en vol libre et la serre tropicale.",
       coordinates: { lat: 47.2481, lng: 1.3547 },
     },
     {
@@ -216,7 +316,8 @@ export async function POST() {
       distanceFromGite: "35 min",
       featured: false,
       order: 6,
-      description: "Musée unique en Europe dédié à la magie et au père de la magie moderne. Spectacles de magie en live, collections d'automates et illusions en tout genre. Les dragons de la façade sont inoubliables !",
+      description:
+        "Musée unique en Europe dédié à la magie et au père de la magie moderne. Spectacles de magie en live, collections d'automates et illusions en tout genre. Les dragons de la façade sont inoubliables !",
       coordinates: { lat: 47.5867, lng: 1.3303 },
     },
     // ── Restaurants ──
@@ -229,7 +330,8 @@ export async function POST() {
       distanceFromGite: "30 min",
       featured: true,
       order: 7,
-      description: "Restaurant étoilé Michelin du chef Christophe Hay, ambassadeur de la cuisine locavore en Val de Loire. Produits du potager, poissons de Loire et gibier de Sologne sublimés avec créativité.",
+      description:
+        "Restaurant étoilé Michelin du chef Christophe Hay, ambassadeur de la cuisine locavore en Val de Loire. Produits du potager, poissons de Loire et gibier de Sologne sublimés avec créativité.",
       coordinates: { lat: 47.5929, lng: 1.4376 },
     },
     {
@@ -241,7 +343,8 @@ export async function POST() {
       distanceFromGite: "30 min",
       featured: true,
       order: 8,
-      description: "Face au château de Chambord, une brasserie de charme proposant une cuisine traditionnelle soignée. Terrasse avec vue imprenable sur le château. Idéal pour un déjeuner après la visite.",
+      description:
+        "Face au château de Chambord, une brasserie de charme proposant une cuisine traditionnelle soignée. Terrasse avec vue imprenable sur le château. Idéal pour un déjeuner après la visite.",
       coordinates: { lat: 47.6164, lng: 1.5124 },
     },
     {
@@ -252,7 +355,8 @@ export async function POST() {
       distanceFromGite: "25 min",
       featured: false,
       order: 9,
-      description: "Cuisine traditionnelle du terroir solognot dans un cadre rustique et chaleureux, à deux pas du château de Cheverny. Gibier de saison, tarte Tatin maison et vins de Loire.",
+      description:
+        "Cuisine traditionnelle du terroir solognot dans un cadre rustique et chaleureux, à deux pas du château de Cheverny. Gibier de saison, tarte Tatin maison et vins de Loire.",
       coordinates: { lat: 47.5004, lng: 1.4574 },
     },
     // ── Nature ──
@@ -265,7 +369,8 @@ export async function POST() {
       distanceFromGite: "40 min",
       featured: true,
       order: 10,
-      description: "Conservatoire de la faune et la flore de Sologne. 300 hectares de sentiers balisés à travers landes, forêts et étangs. Observatoires pour le brame du cerf en automne. Entrée libre.",
+      description:
+        "Conservatoire de la faune et la flore de Sologne. 300 hectares de sentiers balisés à travers landes, forêts et étangs. Observatoires pour le brame du cerf en automne. Entrée libre.",
       coordinates: { lat: 47.6494, lng: 2.0036 },
     },
     {
@@ -275,7 +380,8 @@ export async function POST() {
       distanceFromGite: "15 min",
       featured: true,
       order: 11,
-      description: "Sentier de randonnée balisé de 8 km autour des étangs typiques de Sologne. Paysages de landes et de forêts, observation d'oiseaux et de la faune sauvage. Accessible toute l'année.",
+      description:
+        "Sentier de randonnée balisé de 8 km autour des étangs typiques de Sologne. Paysages de landes et de forêts, observation d'oiseaux et de la faune sauvage. Accessible toute l'année.",
       coordinates: { lat: 47.39, lng: 1.72 },
     },
     // ── Marchés ──
@@ -286,7 +392,8 @@ export async function POST() {
       distanceFromGite: "20 min",
       featured: true,
       order: 12,
-      description: "Grand marché les mercredi et samedi matins. Producteurs locaux, fromages de chèvre AOP Selles-sur-Cher, miel de Sologne, asperges de Contres en saison. La ville mérite aussi une balade au bord de la Sauldre.",
+      description:
+        "Grand marché les mercredi et samedi matins. Producteurs locaux, fromages de chèvre AOP Selles-sur-Cher, miel de Sologne, asperges de Contres en saison. La ville mérite aussi une balade au bord de la Sauldre.",
       coordinates: { lat: 47.3564, lng: 1.7486 },
     },
     {
@@ -296,7 +403,8 @@ export async function POST() {
       distanceFromGite: "35 min",
       featured: false,
       order: 13,
-      description: "Marché couvert et marché de plein air le samedi matin au pied du château. Produits du Val de Loire : vins AOC, rillettes de Tours, chocolats artisanaux et fruits de saison.",
+      description:
+        "Marché couvert et marché de plein air le samedi matin au pied du château. Produits du Val de Loire : vins AOC, rillettes de Tours, chocolats artisanaux et fruits de saison.",
       coordinates: { lat: 47.5852, lng: 1.3316 },
     },
   ];
@@ -304,7 +412,10 @@ export async function POST() {
   const recommendationIds: number[] = [];
   for (const rec of recommendationsData) {
     try {
-      const created = await payload.create({ collection: "local-recommendations", data: rec });
+      const created = await payload.create({
+        collection: "local-recommendations",
+        data: rec,
+      });
       recommendationIds.push(created.id as number);
     } catch {
       results.push(`Recommendation ${rec.name} might already exist`);
@@ -327,7 +438,7 @@ export async function POST() {
             instructions: richText(
               "Entrez le code 4589# sur le digicode à gauche de la porte d'entrée principale.",
               "La clé se trouve dans la boîte à clés fixée au mur à droite de la porte, code 1234. Tournez les molettes pour composer le code, tirez le couvercle vers le bas.",
-              "Une fois à l'intérieur, refermez la boîte à clés et mélangez les molettes."
+              "Une fois à l'intérieur, refermez la boîte à clés et mélangez les molettes.",
             ),
             parkingInfo:
               "Deux places de parking sont disponibles devant le gîte. Merci de vous garer sur les emplacements prévus.",
@@ -338,7 +449,7 @@ export async function POST() {
               "Merci de respecter le calme du voisinage, particulièrement entre 22h et 8h.",
               "Le gîte est entièrement non-fumeur. Vous pouvez fumer à l'extérieur, des cendriers sont à disposition sur la terrasse.",
               "Les animaux de compagnie sont acceptés sous réserve d'accord préalable. Un supplément de 30€ par séjour sera demandé.",
-              "Merci de trier vos déchets : poubelle jaune pour le recyclage, poubelle verte pour les ordures ménagères."
+              "Merci de trier vos déchets : poubelle jaune pour le recyclage, poubelle verte pour les ordures ménagères.",
             ),
           },
           {
@@ -354,7 +465,7 @@ export async function POST() {
                 instructions: richText(
                   "La machine à laver se trouve dans le cellier, derrière la cuisine.",
                   "Utilisez le programme « Coton 40°C » pour le linge courant. Les dosettes de lessive sont fournies dans le placard au-dessus.",
-                  "Étendoir à linge disponible dans le cellier et corde à linge dans le jardin."
+                  "Étendoir à linge disponible dans le cellier et corde à linge dans le jardin.",
                 ),
               },
               {
@@ -362,7 +473,7 @@ export async function POST() {
                 instructions: richText(
                   "Le bois est stocké sous l'abri à droite de l'entrée. Apportez quelques bûches et du petit bois.",
                   "Ouvrez le clapet d'aération en tirant la manette en bas à droite du foyer. Allumez le feu avec les allume-feux fournis.",
-                  "Une fois le feu bien pris, vous pouvez refermer partiellement la vitre. N'oubliez pas de refermer le clapet quand le feu est totalement éteint."
+                  "Une fois le feu bien pris, vous pouvez refermer partiellement la vitre. N'oubliez pas de refermer le clapet quand le feu est totalement éteint.",
                 ),
               },
               {
@@ -370,13 +481,18 @@ export async function POST() {
                 instructions: richText(
                   "L'enceinte Bluetooth se trouve dans le salon sur le meuble TV.",
                   "Allumez-la avec le bouton sur le dessus. Cherchez « IT-Speaker » dans vos appareils Bluetooth et connectez-vous.",
-                  "Le volume se règle directement depuis votre téléphone ou avec les boutons +/- sur l'enceinte."
+                  "Le volume se règle directement depuis votre téléphone ou avec les boutons +/- sur l'enceinte.",
                 ),
               },
             ],
           },
           ...(recommendationIds.length > 0
-            ? [{ blockType: "recommendations" as const, items: recommendationIds }]
+            ? [
+                {
+                  blockType: "recommendations" as const,
+                  items: recommendationIds,
+                },
+              ]
             : []),
           {
             blockType: "map",
@@ -384,10 +500,30 @@ export async function POST() {
           {
             blockType: "emergency",
             contacts: [
-              { name: "Propriétaires", role: "Hôtes", phone: "+33 6 12 34 56 78", available: "8h-22h" },
-              { name: "SAMU", role: "Urgences médicales", phone: "15", available: "24h/24" },
-              { name: "Pompiers", role: "Incendie / Secours", phone: "18", available: "24h/24" },
-              { name: "Gendarmerie", role: "Police", phone: "17", available: "24h/24" },
+              {
+                name: "Propriétaires",
+                role: "Hôtes",
+                phone: "+33 6 12 34 56 78",
+                available: "8h-22h",
+              },
+              {
+                name: "SAMU",
+                role: "Urgences médicales",
+                phone: "15",
+                available: "24h/24",
+              },
+              {
+                name: "Pompiers",
+                role: "Incendie / Secours",
+                phone: "18",
+                available: "24h/24",
+              },
+              {
+                name: "Gendarmerie",
+                role: "Police",
+                phone: "17",
+                available: "24h/24",
+              },
             ],
           },
           {
@@ -395,12 +531,12 @@ export async function POST() {
             checkInInstructions: richText(
               "L'arrivée se fait à partir de 16h00. Si vous souhaitez arriver plus tôt, contactez-nous pour vérifier la disponibilité.",
               "À votre arrivée, vous trouverez un petit panier de bienvenue sur la table de la cuisine avec quelques produits locaux.",
-              "Faites le tour du gîte pour vous familiariser avec les équipements. N'hésitez pas à nous appeler si vous avez la moindre question."
+              "Faites le tour du gîte pour vous familiariser avec les équipements. N'hésitez pas à nous appeler si vous avez la moindre question.",
             ),
             checkOutInstructions: richText(
               "Le départ est prévu avant 10h00 le jour du check-out.",
               "Avant de partir, merci de : vider le réfrigérateur, sortir les poubelles dans les bacs prévus, éteindre tous les appareils et le chauffage.",
-              "Remettez la clé dans la boîte à clés et mélangez les molettes. Envoyez-nous un petit message pour nous prévenir de votre départ."
+              "Remettez la clé dans la boîte à clés et mélangez les molettes. Envoyez-nous un petit message pour nous prévenir de votre départ.",
             ),
           },
         ],
@@ -423,11 +559,12 @@ export async function POST() {
       content: richText(
         "Bienvenue à L'Instant Tranquille, votre gîte de charme niché au cœur de la Sologne. Entre forêts majestueuses et châteaux de la Loire, notre maison vous offre un cadre idéal pour une escapade ressourçante.",
         "Entièrement rénové avec soin, le gîte allie le charme de l'ancien au confort moderne. Profitez de 120m² d'espace de vie, d'un jardin arboré de 3000m² et d'un calme absolu pour vous reconnecter à l'essentiel.",
-        "Que vous soyez en couple, en famille ou entre amis, L'Instant Tranquille est le point de départ idéal pour découvrir les trésors de la région : Chambord, Cheverny, Beauval et bien d'autres merveilles vous attendent."
+        "Que vous soyez en couple, en famille ou entre amis, L'Instant Tranquille est le point de départ idéal pour découvrir les trésors de la région : Chambord, Cheverny, Beauval et bien d'autres merveilles vous attendent.",
       ),
       seo: {
         metaTitle: "L'Instant Tranquille — Gîte de charme en Sologne",
-        metaDescription: "Découvrez L'Instant Tranquille, gîte de charme au cœur de la Sologne. 120m², 3 chambres, jardin arboré. Idéal pour explorer les châteaux de la Loire.",
+        metaDescription:
+          "Découvrez L'Instant Tranquille, gîte de charme au cœur de la Sologne. 120m², 3 chambres, jardin arboré. Idéal pour explorer les châteaux de la Loire.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -442,11 +579,12 @@ export async function POST() {
         "Le gîte L'Instant Tranquille est une maison de caractère entièrement rénovée, offrant 120m² de surface habitable sur deux niveaux. Chaque détail a été pensé pour votre confort et votre bien-être.",
         "Au rez-de-chaussée, un grand séjour lumineux avec cheminée s'ouvre sur une cuisine entièrement équipée. Une première chambre avec lit double et une salle d'eau complètent ce niveau.",
         "À l'étage, deux chambres spacieuses (un lit double et deux lits simples) partagent une grande salle de bain avec baignoire. Un coin lecture sous les toits offre un espace de détente supplémentaire.",
-        "À l'extérieur, le jardin clos de 3000m² est un véritable havre de paix. Barbecue, salon de jardin, transats et jeux pour enfants sont à votre disposition pour profiter des beaux jours."
+        "À l'extérieur, le jardin clos de 3000m² est un véritable havre de paix. Barbecue, salon de jardin, transats et jeux pour enfants sont à votre disposition pour profiter des beaux jours.",
       ),
       seo: {
         metaTitle: "Le Gîte — L'Instant Tranquille en Sologne",
-        metaDescription: "Découvrez notre gîte de charme en Sologne : 120m², 3 chambres, jardin de 3000m², cheminée. Entièrement rénové avec goût pour un séjour inoubliable.",
+        metaDescription:
+          "Découvrez notre gîte de charme en Sologne : 120m², 3 chambres, jardin de 3000m², cheminée. Entièrement rénové avec goût pour un séjour inoubliable.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -459,11 +597,12 @@ export async function POST() {
       content: richText(
         "Nos tarifs varient selon la saison pour vous offrir le meilleur rapport qualité-prix tout au long de l'année. Le gîte est loué dans son intégralité, pour une capacité maximale de 6 personnes.",
         "La réservation peut s'effectuer directement via nos plateformes partenaires Airbnb et Booking, ou en nous contactant par e-mail pour bénéficier de nos meilleurs tarifs en direct.",
-        "Un acompte de 30% est demandé à la réservation, le solde étant à régler à l'arrivée. Nous acceptons les virements bancaires et les paiements par carte."
+        "Un acompte de 30% est demandé à la réservation, le solde étant à régler à l'arrivée. Nous acceptons les virements bancaires et les paiements par carte.",
       ),
       seo: {
         metaTitle: "Tarifs & Réservation — L'Instant Tranquille",
-        metaDescription: "Consultez nos tarifs et réservez votre séjour au gîte L'Instant Tranquille en Sologne. Tarifs à partir de 90€/nuit. Réservation simple et rapide.",
+        metaDescription:
+          "Consultez nos tarifs et réservez votre séjour au gîte L'Instant Tranquille en Sologne. Tarifs à partir de 90€/nuit. Réservation simple et rapide.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -475,11 +614,12 @@ export async function POST() {
       _status: "published" as const,
       content: richText(
         "Vous avez une question sur le gîte, la disponibilité ou la région ? N'hésitez pas à nous contacter, nous vous répondrons dans les meilleurs délais.",
-        "Nous sommes disponibles par e-mail et par téléphone du lundi au samedi, de 9h à 19h. Pour les demandes de réservation, merci de préciser vos dates de séjour et le nombre de personnes."
+        "Nous sommes disponibles par e-mail et par téléphone du lundi au samedi, de 9h à 19h. Pour les demandes de réservation, merci de préciser vos dates de séjour et le nombre de personnes.",
       ),
       seo: {
         metaTitle: "Contact — L'Instant Tranquille",
-        metaDescription: "Contactez-nous pour toute question ou demande de réservation pour le gîte L'Instant Tranquille en Sologne. Réponse rapide garantie.",
+        metaDescription:
+          "Contactez-nous pour toute question ou demande de réservation pour le gîte L'Instant Tranquille en Sologne. Réponse rapide garantie.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -517,7 +657,12 @@ export async function POST() {
           facebook: "https://www.facebook.com/linstanttranquille",
           instagram: "https://www.instagram.com/linstanttranquille",
         },
-        propertyDetails: { maxGuests: 6, bedrooms: 3, bathrooms: 2, surface: 120 },
+        propertyDetails: {
+          maxGuests: 6,
+          bedrooms: 3,
+          bathrooms: 2,
+          surface: 120,
+        },
         defaultSeo: {
           metaTitle: "L'Instant Tranquille — Gîte de charme en Sologne",
           metaDescription:
@@ -540,15 +685,70 @@ export async function POST() {
         _status: "published",
         currency: "EUR",
         seasons: [
-          { name: "Basse saison", startMonth: "11", startDay: 1, endMonth: "3", endDay: 31, nightlyRate: 90, weeklyRate: 540, minimumStay: 2, color: "green" },
-          { name: "Moyenne saison", startMonth: "4", startDay: 1, endMonth: "6", endDay: 30, nightlyRate: 120, weeklyRate: 720, minimumStay: 3, color: "orange" },
-          { name: "Haute saison", startMonth: "7", startDay: 1, endMonth: "8", endDay: 31, nightlyRate: 150, weeklyRate: 900, minimumStay: 7, color: "red" },
-          { name: "Très haute saison", startMonth: "12", startDay: 20, endMonth: "1", endDay: 5, nightlyRate: 170, weeklyRate: 1020, minimumStay: 3, color: "purple" },
+          {
+            name: "Basse saison",
+            startMonth: "11",
+            startDay: 1,
+            endMonth: "3",
+            endDay: 31,
+            nightlyRate: 90,
+            weeklyRate: 540,
+            minimumStay: 2,
+            color: "green",
+          },
+          {
+            name: "Moyenne saison",
+            startMonth: "4",
+            startDay: 1,
+            endMonth: "6",
+            endDay: 30,
+            nightlyRate: 120,
+            weeklyRate: 720,
+            minimumStay: 3,
+            color: "orange",
+          },
+          {
+            name: "Haute saison",
+            startMonth: "7",
+            startDay: 1,
+            endMonth: "8",
+            endDay: 31,
+            nightlyRate: 150,
+            weeklyRate: 900,
+            minimumStay: 7,
+            color: "red",
+          },
+          {
+            name: "Très haute saison",
+            startMonth: "12",
+            startDay: 20,
+            endMonth: "1",
+            endDay: 5,
+            nightlyRate: 170,
+            weeklyRate: 1020,
+            minimumStay: 3,
+            color: "purple",
+          },
         ],
         additionalFees: [
-          { name: "Ménage de fin de séjour", amount: 60, type: "per_stay", description: "Obligatoire" },
-          { name: "Linge de lit", amount: 15, type: "per_person", description: "Optionnel, draps et serviettes" },
-          { name: "Taxe de séjour", amount: 1.1, type: "per_night", description: "Par personne et par nuit" },
+          {
+            name: "Ménage de fin de séjour",
+            amount: 60,
+            type: "per_stay",
+            description: "Obligatoire",
+          },
+          {
+            name: "Linge de lit",
+            amount: 15,
+            type: "per_person",
+            description: "Optionnel, draps et serviettes",
+          },
+          {
+            name: "Taxe de séjour",
+            amount: 1.1,
+            type: "per_night",
+            description: "Par personne et par nuit",
+          },
         ],
         bookingLinks: {
           airbnb: "https://www.airbnb.fr",
@@ -561,17 +761,17 @@ export async function POST() {
           cancellation: richText(
             "Annulation gratuite jusqu'à 30 jours avant la date d'arrivée. L'acompte est intégralement remboursé.",
             "Entre 30 et 14 jours avant l'arrivée, 50% de l'acompte est retenu.",
-            "Moins de 14 jours avant l'arrivée, l'acompte n'est pas remboursable. Nous vous recommandons de souscrire une assurance annulation voyage."
+            "Moins de 14 jours avant l'arrivée, l'acompte n'est pas remboursable. Nous vous recommandons de souscrire une assurance annulation voyage.",
           ),
           deposit: richText(
             "Un acompte de 30% du montant total du séjour est demandé à la réservation pour confirmer votre réservation.",
             "Le solde est à régler à l'arrivée, par virement bancaire ou carte de paiement.",
-            "Une caution de 300€ est demandée à l'arrivée (chèque ou empreinte de carte) et restituée après l'état des lieux de sortie."
+            "Une caution de 300€ est demandée à l'arrivée (chèque ou empreinte de carte) et restituée après l'état des lieux de sortie.",
           ),
           additional: richText(
             "Le ménage de fin de séjour est obligatoire (60€). Vous pouvez également laisser le gîte propre et rangé pour éviter ces frais — un guide de ménage est à votre disposition.",
             "Les draps et serviettes peuvent être fournis moyennant un supplément de 15€ par personne. Vous pouvez aussi apporter les vôtres.",
-            "Les arrivées et départs en dehors des horaires standards sont possibles sur demande, sous réserve de disponibilité."
+            "Les arrivées et départs en dehors des horaires standards sont possibles sur demande, sous réserve de disponibilité.",
           ),
         },
       },
@@ -591,16 +791,33 @@ export async function POST() {
         _status: "published",
         navItems: [
           { label: "Accueil", url: "/", isExternal: false, highlight: false },
-          { label: "Le Gîte", url: "/le-gite", isExternal: false, highlight: false },
-          { label: "Tarifs & Réservation", url: "/tarifs-reservation", isExternal: false, highlight: false },
-          { label: "Contact", url: "/contact", isExternal: false, highlight: false },
+          {
+            label: "Le Gîte",
+            url: "/le-gite",
+            isExternal: false,
+            highlight: false,
+          },
+          {
+            label: "Tarifs & Réservation",
+            url: "/tarifs-reservation",
+            isExternal: false,
+            highlight: false,
+          },
+          {
+            label: "Contact",
+            url: "/contact",
+            isExternal: false,
+            highlight: false,
+          },
         ],
         ctaButton: { label: "Réserver", url: "/tarifs-reservation" },
       },
     });
     // Add EN labels — use the existing navItem IDs
     const headerDoc = await payload.findGlobal({ slug: "header" });
-    const existingNavItems = (headerDoc.navItems || []) as Array<Record<string, unknown>>;
+    const existingNavItems = (headerDoc.navItems || []) as Array<
+      Record<string, unknown>
+    >;
     const enLabels = ["Home", "The Cottage", "Rates & Booking", "Contact"];
     await payload.updateGlobal({
       slug: "header",
@@ -627,26 +844,51 @@ export async function POST() {
       draft: false,
       data: {
         _status: "published",
-        description: "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
+        description:
+          "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
         navColumns: [
-          { title: "Navigation", links: [
-            { label: "Accueil", url: "/", isExternal: false },
-            { label: "Le Gîte", url: "/le-gite", isExternal: false },
-            { label: "Tarifs", url: "/tarifs-reservation", isExternal: false },
-            { label: "Contact", url: "/contact", isExternal: false },
-          ]},
-          { title: "Ressources", links: [
-            { label: "Airbnb", url: "https://www.airbnb.fr", isExternal: true },
-            { label: "Booking", url: "https://www.booking.com", isExternal: true },
-          ]},
+          {
+            title: "Navigation",
+            links: [
+              { label: "Accueil", url: "/", isExternal: false },
+              { label: "Le Gîte", url: "/le-gite", isExternal: false },
+              {
+                label: "Tarifs",
+                url: "/tarifs-reservation",
+                isExternal: false,
+              },
+              { label: "Contact", url: "/contact", isExternal: false },
+            ],
+          },
+          {
+            title: "Ressources",
+            links: [
+              {
+                label: "Airbnb",
+                url: "https://www.airbnb.fr",
+                isExternal: true,
+              },
+              {
+                label: "Booking",
+                url: "https://www.booking.com",
+                isExternal: true,
+              },
+            ],
+          },
         ],
-        legalText: "L'Instant Tranquille — Gîte de vacances en Sologne. Tous droits réservés.",
+        legalText:
+          "L'Instant Tranquille — Gîte de vacances en Sologne. Tous droits réservés.",
       },
     });
     const footerDoc = await payload.findGlobal({ slug: "footer" });
-    const existingColumns = (footerDoc.navColumns || []) as Array<Record<string, unknown>>;
+    const existingColumns = (footerDoc.navColumns || []) as Array<
+      Record<string, unknown>
+    >;
     const enColumns = [
-      { title: "Navigation", linkLabels: ["Home", "The Cottage", "Rates", "Contact"] },
+      {
+        title: "Navigation",
+        linkLabels: ["Home", "The Cottage", "Rates", "Contact"],
+      },
       { title: "Resources", linkLabels: ["Airbnb", "Booking"] },
     ];
     await payload.updateGlobal({
@@ -654,16 +896,20 @@ export async function POST() {
       locale: "en",
       draft: false,
       data: {
-        description: "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
+        description:
+          "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
         navColumns: existingColumns.map((col, i) => ({
           ...col,
           title: enColumns[i].title,
-          links: ((col.links || []) as Array<Record<string, unknown>>).map((link, j) => ({
-            ...link,
-            label: enColumns[i].linkLabels[j],
-          })),
+          links: ((col.links || []) as Array<Record<string, unknown>>).map(
+            (link, j) => ({
+              ...link,
+              label: enColumns[i].linkLabels[j],
+            }),
+          ),
         })),
-        legalText: "L'Instant Tranquille — Holiday cottage in Sologne. All rights reserved.",
+        legalText:
+          "L'Instant Tranquille — Holiday cottage in Sologne. All rights reserved.",
       },
     });
     results.push("Footer FR+EN updated");
@@ -679,15 +925,70 @@ export async function POST() {
       draft: false,
       data: {
         seasons: [
-          { name: "Low season", startMonth: "11", startDay: 1, endMonth: "3", endDay: 31, nightlyRate: 90, weeklyRate: 540, minimumStay: 2, color: "green" },
-          { name: "Mid season", startMonth: "4", startDay: 1, endMonth: "6", endDay: 30, nightlyRate: 120, weeklyRate: 720, minimumStay: 3, color: "orange" },
-          { name: "High season", startMonth: "7", startDay: 1, endMonth: "8", endDay: 31, nightlyRate: 150, weeklyRate: 900, minimumStay: 7, color: "red" },
-          { name: "Peak season", startMonth: "12", startDay: 20, endMonth: "1", endDay: 5, nightlyRate: 170, weeklyRate: 1020, minimumStay: 3, color: "purple" },
+          {
+            name: "Low season",
+            startMonth: "11",
+            startDay: 1,
+            endMonth: "3",
+            endDay: 31,
+            nightlyRate: 90,
+            weeklyRate: 540,
+            minimumStay: 2,
+            color: "green",
+          },
+          {
+            name: "Mid season",
+            startMonth: "4",
+            startDay: 1,
+            endMonth: "6",
+            endDay: 30,
+            nightlyRate: 120,
+            weeklyRate: 720,
+            minimumStay: 3,
+            color: "orange",
+          },
+          {
+            name: "High season",
+            startMonth: "7",
+            startDay: 1,
+            endMonth: "8",
+            endDay: 31,
+            nightlyRate: 150,
+            weeklyRate: 900,
+            minimumStay: 7,
+            color: "red",
+          },
+          {
+            name: "Peak season",
+            startMonth: "12",
+            startDay: 20,
+            endMonth: "1",
+            endDay: 5,
+            nightlyRate: 170,
+            weeklyRate: 1020,
+            minimumStay: 3,
+            color: "purple",
+          },
         ],
         additionalFees: [
-          { name: "End-of-stay cleaning", amount: 60, type: "per_stay", description: "Mandatory" },
-          { name: "Bed linen", amount: 15, type: "per_person", description: "Optional, sheets and towels" },
-          { name: "Tourist tax", amount: 1.1, type: "per_night", description: "Per person per night" },
+          {
+            name: "End-of-stay cleaning",
+            amount: 60,
+            type: "per_stay",
+            description: "Mandatory",
+          },
+          {
+            name: "Bed linen",
+            amount: 15,
+            type: "per_person",
+            description: "Optional, sheets and towels",
+          },
+          {
+            name: "Tourist tax",
+            amount: 1.1,
+            type: "per_night",
+            description: "Per person per night",
+          },
         ],
         policies: {
           checkIn: "From 4:00 PM",
@@ -695,17 +996,17 @@ export async function POST() {
           cancellation: richText(
             "Free cancellation up to 30 days before arrival. The deposit is fully refunded.",
             "Between 30 and 14 days before arrival, 50% of the deposit is retained.",
-            "Less than 14 days before arrival, the deposit is non-refundable. We recommend purchasing trip cancellation insurance."
+            "Less than 14 days before arrival, the deposit is non-refundable. We recommend purchasing trip cancellation insurance.",
           ),
           deposit: richText(
             "A deposit of 30% of the total stay amount is required at booking to confirm your reservation.",
             "The balance is due upon arrival, by bank transfer or card payment.",
-            "A security deposit of €300 is required upon arrival (check or card hold) and returned after the departure inspection."
+            "A security deposit of €300 is required upon arrival (check or card hold) and returned after the departure inspection.",
           ),
           additional: richText(
             "End-of-stay cleaning is mandatory (€60). You may also leave the cottage clean and tidy to waive this fee — a cleaning guide is provided.",
             "Bed linen and towels can be provided for a €15 per person supplement. You may also bring your own.",
-            "Early check-in or late check-out is available upon request, subject to availability."
+            "Early check-in or late check-out is available upon request, subject to availability.",
           ),
         },
       },
@@ -717,18 +1018,60 @@ export async function POST() {
 
   // Amenities EN
   const amenitiesEN = [
-    { name: "High-speed WiFi", description: "Fibre optic connection available throughout the cottage" },
-    { name: "Flat-screen TV", description: "Smart TV with access to streaming platforms" },
-    { name: "Washing machine", description: "Washing machine available with laundry products provided" },
-    { name: "Premium bedding", description: "High-quality mattresses and cosy duvets for a restful sleep" },
-    { name: "Fireplace", description: "Closed fireplace for warm winter evenings" },
-    { name: "Fully equipped kitchen", description: "Everything you need for great meals: dishes, utensils, spices" },
-    { name: "Coffee machine", description: "Nespresso coffee machine with complimentary welcome capsules" },
-    { name: "Oven & hob", description: "Traditional oven and induction hob for home-style cooking" },
-    { name: "Private parking", description: "Two private and secure parking spaces in front of the cottage" },
-    { name: "3000m² garden", description: "Large enclosed garden with trees, ideal for children and relaxation" },
-    { name: "Barbecue", description: "Charcoal barbecue with utensils and garden table for outdoor dining" },
-    { name: "Central heating", description: "Gas central heating for optimal comfort in all seasons" },
+    {
+      name: "High-speed WiFi",
+      description: "Fibre optic connection available throughout the cottage",
+    },
+    {
+      name: "Flat-screen TV",
+      description: "Smart TV with access to streaming platforms",
+    },
+    {
+      name: "Washing machine",
+      description: "Washing machine available with laundry products provided",
+    },
+    {
+      name: "Premium bedding",
+      description:
+        "High-quality mattresses and cosy duvets for a restful sleep",
+    },
+    {
+      name: "Fireplace",
+      description: "Closed fireplace for warm winter evenings",
+    },
+    {
+      name: "Fully equipped kitchen",
+      description:
+        "Everything you need for great meals: dishes, utensils, spices",
+    },
+    {
+      name: "Coffee machine",
+      description:
+        "Nespresso coffee machine with complimentary welcome capsules",
+    },
+    {
+      name: "Oven & hob",
+      description: "Traditional oven and induction hob for home-style cooking",
+    },
+    {
+      name: "Private parking",
+      description:
+        "Two private and secure parking spaces in front of the cottage",
+    },
+    {
+      name: "3000m² garden",
+      description:
+        "Large enclosed garden with trees, ideal for children and relaxation",
+    },
+    {
+      name: "Barbecue",
+      description:
+        "Charcoal barbecue with utensils and garden table for outdoor dining",
+    },
+    {
+      name: "Central heating",
+      description: "Gas central heating for optimal comfort in all seasons",
+    },
   ];
 
   try {
@@ -754,19 +1097,71 @@ export async function POST() {
 
   // Local Recommendations EN (description is textarea, not richText)
   const recommendationsEN = [
-    { name: "Château de Chambord", description: "The largest Loire Valley castle, a French Renaissance masterpiece. Its double-helix staircase attributed to Leonardo da Vinci and 5,440-hectare estate make it unmissable." },
-    { name: "Château de Cheverny", description: "A beautifully furnished castle that inspired Hergé's Moulinsart. The \"Secrets of Moulinsart\" exhibition, French gardens and canal cruises delight the whole family." },
-    { name: "Château de Chenonceau", description: "The 'Ladies' Castle' spanning the Cher river. A Renaissance jewel with galleries, gardens by Diane de Poitiers and Catherine de Medici, and a flower kitchen garden." },
-    { name: "Château de Blois", description: "Royal residence of 7 kings and 10 queens of France, offering a unique panorama of French architecture from the 13th to 17th century. Its summer sound and light show is magical." },
-    { name: "ZooParc de Beauval", description: "One of the world's top 5 zoos. Over 35,000 animals including giant pandas, koalas and manatees. Don't miss the free-flight bird show and the tropical greenhouse." },
-    { name: "Maison de la Magie Robert-Houdin", description: "Europe's only museum dedicated to magic and the father of modern magic. Live magic shows, automaton collections and illusions galore. The facade dragons are unforgettable!" },
-    { name: "La Maison d'à Côté", description: "Michelin-starred restaurant by chef Christophe Hay, champion of locavore cuisine in the Loire Valley. Garden produce, Loire fish and Sologne game elevated with creativity." },
-    { name: "Le Grand St Michel", description: "Facing Chambord castle, a charming brasserie offering refined traditional cuisine. Terrace with stunning castle views — perfect for lunch after visiting." },
-    { name: "Auberge du Centre", description: "Traditional Sologne cuisine in a rustic and warm setting, steps from Cheverny castle. Seasonal game, homemade tarte Tatin and Loire Valley wines." },
-    { name: "Domaine du Ciran", description: "Conservatory of Sologne's wildlife and flora. 300 hectares of trails through heathlands, forests and ponds. Deer-calling observation hides in autumn. Free entry." },
-    { name: "Sologne Ponds — Villeherviers Trail", description: "8 km waymarked trail around typical Sologne ponds. Heathland and forest landscapes, birdwatching and wildlife spotting. Open year-round." },
-    { name: "Romorantin-Lanthenay Market", description: "Large market on Wednesday and Saturday mornings. Local producers, AOP Selles-sur-Cher goat cheese, Sologne honey, Contres asparagus in season. The town is worth a stroll along the Sauldre." },
-    { name: "Blois Market", description: "Covered market and open-air market on Saturday mornings at the foot of the castle. Loire Valley AOC wines, Tours rillettes, artisan chocolates and seasonal fruit." },
+    {
+      name: "Château de Chambord",
+      description:
+        "The largest Loire Valley castle, a French Renaissance masterpiece. Its double-helix staircase attributed to Leonardo da Vinci and 5,440-hectare estate make it unmissable.",
+    },
+    {
+      name: "Château de Cheverny",
+      description:
+        'A beautifully furnished castle that inspired Hergé\'s Moulinsart. The "Secrets of Moulinsart" exhibition, French gardens and canal cruises delight the whole family.',
+    },
+    {
+      name: "Château de Chenonceau",
+      description:
+        "The 'Ladies' Castle' spanning the Cher river. A Renaissance jewel with galleries, gardens by Diane de Poitiers and Catherine de Medici, and a flower kitchen garden.",
+    },
+    {
+      name: "Château de Blois",
+      description:
+        "Royal residence of 7 kings and 10 queens of France, offering a unique panorama of French architecture from the 13th to 17th century. Its summer sound and light show is magical.",
+    },
+    {
+      name: "ZooParc de Beauval",
+      description:
+        "One of the world's top 5 zoos. Over 35,000 animals including giant pandas, koalas and manatees. Don't miss the free-flight bird show and the tropical greenhouse.",
+    },
+    {
+      name: "Maison de la Magie Robert-Houdin",
+      description:
+        "Europe's only museum dedicated to magic and the father of modern magic. Live magic shows, automaton collections and illusions galore. The facade dragons are unforgettable!",
+    },
+    {
+      name: "La Maison d'à Côté",
+      description:
+        "Michelin-starred restaurant by chef Christophe Hay, champion of locavore cuisine in the Loire Valley. Garden produce, Loire fish and Sologne game elevated with creativity.",
+    },
+    {
+      name: "Le Grand St Michel",
+      description:
+        "Facing Chambord castle, a charming brasserie offering refined traditional cuisine. Terrace with stunning castle views — perfect for lunch after visiting.",
+    },
+    {
+      name: "Auberge du Centre",
+      description:
+        "Traditional Sologne cuisine in a rustic and warm setting, steps from Cheverny castle. Seasonal game, homemade tarte Tatin and Loire Valley wines.",
+    },
+    {
+      name: "Domaine du Ciran",
+      description:
+        "Conservatory of Sologne's wildlife and flora. 300 hectares of trails through heathlands, forests and ponds. Deer-calling observation hides in autumn. Free entry.",
+    },
+    {
+      name: "Sologne Ponds — Villeherviers Trail",
+      description:
+        "8 km waymarked trail around typical Sologne ponds. Heathland and forest landscapes, birdwatching and wildlife spotting. Open year-round.",
+    },
+    {
+      name: "Romorantin-Lanthenay Market",
+      description:
+        "Large market on Wednesday and Saturday mornings. Local producers, AOP Selles-sur-Cher goat cheese, Sologne honey, Contres asparagus in season. The town is worth a stroll along the Sauldre.",
+    },
+    {
+      name: "Blois Market",
+      description:
+        "Covered market and open-air market on Saturday mornings at the foot of the castle. Loire Valley AOC wines, Tours rillettes, artisan chocolates and seasonal fruit.",
+    },
   ];
 
   try {
@@ -800,7 +1195,7 @@ export async function POST() {
       content: richText(
         "Welcome to L'Instant Tranquille, your charming cottage nestled in the heart of Sologne. Between majestic forests and Loire Valley castles, our home offers the perfect setting for a restorative escape.",
         "Fully renovated with care, the cottage combines period character with modern comfort. Enjoy 120m² of living space, a tree-lined garden of 3,000m² and absolute peace and quiet to reconnect with what matters most.",
-        "Whether you're a couple, a family or a group of friends, L'Instant Tranquille is the ideal base for discovering the treasures of the region: Chambord, Cheverny, Beauval and many more wonders await you."
+        "Whether you're a couple, a family or a group of friends, L'Instant Tranquille is the ideal base for discovering the treasures of the region: Chambord, Cheverny, Beauval and many more wonders await you.",
       ),
     },
     {
@@ -812,7 +1207,7 @@ export async function POST() {
         "L'Instant Tranquille is a characterful house, fully renovated, offering 120m² of living space on two floors. Every detail has been considered for your comfort and well-being.",
         "On the ground floor, a large bright living room with a fireplace opens onto a fully equipped kitchen. A first bedroom with a double bed and a shower room complete this level.",
         "Upstairs, two spacious bedrooms (one double bed and two single beds) share a large bathroom with a bath. A reading nook under the eaves provides an extra relaxation space.",
-        "Outside, the enclosed garden of 3,000m² is a true haven of peace. A barbecue, garden furniture, sun loungers and children's games are at your disposal to make the most of fine days."
+        "Outside, the enclosed garden of 3,000m² is a true haven of peace. A barbecue, garden furniture, sun loungers and children's games are at your disposal to make the most of fine days.",
       ),
     },
     {
@@ -823,7 +1218,7 @@ export async function POST() {
       content: richText(
         "Our rates vary by season to offer you the best value for money throughout the year. The cottage is rented in its entirety, for a maximum capacity of 6 guests.",
         "Booking can be made directly through our partner platforms Airbnb and Booking, or by contacting us by email to benefit from our best direct rates.",
-        "A 30% deposit is required at the time of booking, with the balance payable on arrival. We accept bank transfers and card payments."
+        "A 30% deposit is required at the time of booking, with the balance payable on arrival. We accept bank transfers and card payments.",
       ),
     },
     {
@@ -833,7 +1228,7 @@ export async function POST() {
       heroSubtitle: "Got a question? Don't hesitate to get in touch",
       content: richText(
         "Do you have a question about the cottage, availability or the area? Don't hesitate to contact us — we'll get back to you as soon as possible.",
-        "We're available by email and phone Monday to Saturday, 9 am to 7 pm. For booking enquiries, please include your preferred dates and the number of guests."
+        "We're available by email and phone Monday to Saturday, 9 am to 7 pm. For booking enquiries, please include your preferred dates and the number of guests.",
       ),
     },
   ];
@@ -864,7 +1259,11 @@ export async function POST() {
   }
 
   // Testimonials EN (skip Wilson — already in English; translate Dupont, Martin, Müller)
-  const testimonialsEN: Array<{ guestName: string; guestOrigin: string; text: string }> = [
+  const testimonialsEN: Array<{
+    guestName: string;
+    guestOrigin: string;
+    text: string;
+  }> = [
     {
       guestName: "Marie & Pierre Dupont",
       guestOrigin: "Paris, France",

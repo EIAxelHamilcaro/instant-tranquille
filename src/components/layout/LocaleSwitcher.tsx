@@ -1,9 +1,9 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 export function LocaleSwitcher() {
@@ -22,7 +22,10 @@ export function LocaleSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-sand-300 p-0.5 font-sans text-sm" role="group" aria-label={t("languageSwitcher")}>
+    <nav
+      className="flex items-center gap-1 rounded-full border border-sand-300 p-0.5 font-sans text-sm"
+      aria-label={t("languageSwitcher")}
+    >
       <Button
         variant="ghost"
         size="sm"
@@ -51,6 +54,6 @@ export function LocaleSwitcher() {
       >
         EN
       </Button>
-    </div>
+    </nav>
   );
 }

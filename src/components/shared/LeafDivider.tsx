@@ -13,6 +13,7 @@ export function LeafDivider({ className }: { className?: string }) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="text-primary-300"
+        aria-hidden="true"
       >
         <path
           d="M0 12h48M72 12h48"

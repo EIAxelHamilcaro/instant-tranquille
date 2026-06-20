@@ -2,12 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
-import { PayloadImage } from "@/components/shared/PayloadImage";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { PayloadImage } from "@/components/shared/PayloadImage";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
-import { Link } from "@/i18n/navigation";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
 export function IntroSection({
@@ -15,7 +15,7 @@ export function IntroSection({
   introTitle,
   introText,
 }: {
-  introImage?: any;
+  introImage?: Record<string, unknown> | string | number | null;
   introTitle?: string | null;
   introText?: unknown;
 }) {
@@ -51,7 +51,9 @@ export function IntroSection({
           <div className="reveal-right">
             {introImage && typeof introImage === "object" ? (
               <PayloadImage
-                media={introImage}
+                media={
+                  introImage as Parameters<typeof PayloadImage>[0]["media"]
+                }
                 size="card"
                 alt={t("introImageAlt")}
                 className="rounded-xl"

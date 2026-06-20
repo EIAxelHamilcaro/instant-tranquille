@@ -1,11 +1,11 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { ExternalLinkButton } from "@/components/shared/ExternalLinkButton";
-import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
 type BookingLinks = {
@@ -34,10 +34,16 @@ export function CTASection({
         <h2 className="reveal text-3xl font-bold text-white sm:text-4xl">
           {cmsTitle || t("ctaTitle")}
         </h2>
-        <p className="reveal mt-3 text-lg text-white" style={{ "--stagger": 1 } as React.CSSProperties}>
+        <p
+          className="reveal mt-3 text-lg text-white"
+          style={{ "--stagger": 1 } as React.CSSProperties}
+        >
           {cmsSubtitle || t("ctaSubtitle")}
         </p>
-        <div className="reveal mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center" style={{ "--stagger": 2 } as React.CSSProperties}>
+        <div
+          className="reveal mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          style={{ "--stagger": 2 } as React.CSSProperties}
+        >
           {bookingLinks?.airbnb && (
             <ExternalLinkButton
               href={bookingLinks.airbnb}

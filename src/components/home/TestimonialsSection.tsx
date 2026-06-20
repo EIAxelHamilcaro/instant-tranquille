@@ -1,26 +1,26 @@
 "use client";
 
+import Autoplay from "embla-carousel-autoplay";
+import { Quote } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
-import Autoplay from "embla-carousel-autoplay";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { StarRating } from "@/components/shared/StarRating";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
+  type CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
-  type CarouselApi,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Quote } from "lucide-react";
 import type { CmsTestimonial } from "@/lib/queries";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useReveal } from "@/lib/useReveal";
+import { cn } from "@/lib/utils";
 
 const sourceColors: Record<string, string> = {
   airbnb: "bg-[#FF5A5F]/10 text-[#B7363B]",
@@ -63,12 +63,19 @@ export function TestimonialsSection({
     <section className="py-20" ref={ref}>
       <Container>
         <SectionHeading title={cmsTitle || t("testimonialsTitle")} />
-        <div className="reveal mx-auto max-w-5xl px-12" style={{ "--stagger": 1 } as React.CSSProperties}>
+        <div
+          className="reveal mx-auto max-w-5xl px-12"
+          style={{ "--stagger": 1 } as React.CSSProperties}
+        >
           <Carousel
             setApi={setApi}
             opts={{ loop: true, align: "start" }}
             plugins={[
-              Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }),
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: true,
+                stopOnMouseEnter: true,
+              }),
             ]}
             className="w-full"
             aria-roledescription="carousel"
@@ -81,11 +88,17 @@ export function TestimonialsSection({
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                   role="group"
                   aria-roledescription="slide"
-                  aria-label={t("testimonialSlide", { current: index + 1, total: testimonials.length })}
+                  aria-label={t("testimonialSlide", {
+                    current: index + 1,
+                    total: testimonials.length,
+                  })}
                 >
                   <Card className="border-sand-200 h-full bg-white">
                     <CardContent className="flex h-full flex-col p-6">
-                      <Quote className="mb-3 h-8 w-8 shrink-0 text-primary-200" aria-hidden="true" />
+                      <Quote
+                        className="mb-3 h-8 w-8 shrink-0 text-primary-200"
+                        aria-hidden="true"
+                      />
                       <p className="mb-4 flex-1 text-sm leading-relaxed italic text-foreground/80">
                         &ldquo;{testimonial.text}&rdquo;
                       </p>
@@ -130,12 +143,15 @@ export function TestimonialsSection({
               <div className="mt-6 flex justify-center gap-1" role="tablist">
                 {Array.from({ length: count }).map((_, i) => (
                   <Button
-                    key={i}
+                    key={`dot-${i}`}
                     variant="ghost"
                     type="button"
                     role="tab"
                     aria-selected={i === current}
-                    aria-label={t("testimonialSlide", { current: i + 1, total: count })}
+                    aria-label={t("testimonialSlide", {
+                      current: i + 1,
+                      total: count,
+                    })}
                     className="h-11 w-11 p-0"
                     onClick={() => api?.scrollTo(i)}
                   >

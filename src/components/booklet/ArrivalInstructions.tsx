@@ -1,10 +1,10 @@
 "use client";
 
+import { Car, KeyRound, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "./CopyButton";
-import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
-import { KeyRound, MapPin, Car } from "lucide-react";
 
 type ArrivalData = {
   accessCode?: string | null;
@@ -12,7 +12,15 @@ type ArrivalData = {
   parkingInfo?: string | null;
 };
 
-export function ArrivalInstructions({ id, sectionTitle, data }: { id?: string; sectionTitle?: string | null; data: ArrivalData }) {
+export function ArrivalInstructions({
+  id,
+  sectionTitle,
+  data,
+}: {
+  id?: string;
+  sectionTitle?: string | null;
+  data: ArrivalData;
+}) {
   const t = useTranslations("booklet");
 
   return (
@@ -41,7 +49,9 @@ export function ArrivalInstructions({ id, sectionTitle, data }: { id?: string; s
 
       {data.instructions != null && (
         <div className="mb-4 leading-relaxed text-foreground/80">
-          <RichTextRenderer content={data.instructions as Record<string, unknown>} />
+          <RichTextRenderer
+            content={data.instructions as Record<string, unknown>}
+          />
         </div>
       )}
 

@@ -1,10 +1,10 @@
 "use client";
 
+import { Car, Clock, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Card, CardContent } from "@/components/ui/card";
-import { Car, Clock, MapPin } from "lucide-react";
 import { useReveal } from "@/lib/useReveal";
 
 interface AccessRoute {
@@ -37,7 +37,10 @@ export function AccessInstructions({ routes }: AccessInstructionsProps) {
             >
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center gap-2">
-                  <Car className="h-5 w-5 text-primary-500" aria-hidden="true" />
+                  <Car
+                    className="h-5 w-5 text-primary-500"
+                    aria-hidden="true"
+                  />
                   <h3 className="font-heading text-lg font-semibold">
                     {route.from}
                   </h3>

@@ -1,16 +1,24 @@
 "use client";
 
+import { Wifi } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "./CopyButton";
-import { Wifi } from "lucide-react";
 
 type WifiData = {
   networkName?: string | null;
   password?: string | null;
 };
 
-export function WifiInfo({ id, sectionTitle, data }: { id?: string; sectionTitle?: string | null; data: WifiData }) {
+export function WifiInfo({
+  id,
+  sectionTitle,
+  data,
+}: {
+  id?: string;
+  sectionTitle?: string | null;
+  data: WifiData;
+}) {
   const t = useTranslations("booklet");
 
   if (!data.networkName && !data.password) return null;

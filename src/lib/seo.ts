@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { type Locale } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
 import { getPathname } from "@/i18n/navigation";
-import { getSiteSettings, getPageBySlug } from "./queries";
+import { getPageBySlug, getSiteSettings } from "./queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -93,8 +93,7 @@ export async function generateCmsPageMetadata(
 
   const title = seo?.metaTitle || fallbackTitle;
   const description = seo?.metaDescription || fallbackDescription;
-  const ogImage =
-    getMediaUrl(seo?.ogImage) || getMediaUrl(defaultSeo?.ogImage);
+  const ogImage = getMediaUrl(seo?.ogImage) || getMediaUrl(defaultSeo?.ogImage);
 
   return generatePageMetadata({
     title,

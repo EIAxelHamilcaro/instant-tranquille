@@ -1,12 +1,16 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function StarRating({ rating }: { rating: number }) {
   const t = useTranslations("common");
   return (
-    <div className="flex gap-0.5" aria-label={t("starRating", { rating })}>
+    <div
+      className="flex gap-0.5"
+      role="img"
+      aria-label={t("starRating", { rating })}
+    >
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}

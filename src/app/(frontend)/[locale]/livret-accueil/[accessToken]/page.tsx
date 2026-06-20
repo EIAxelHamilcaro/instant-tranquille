@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
-import { setRequestLocale, getTranslations } from "next-intl/server";
-import { getPayload } from "@/lib/payload";
-import { getSiteSettings } from "@/lib/queries";
+import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BookletLayout } from "@/components/booklet/BookletLayout";
 import { BookletPageClient } from "@/components/live-preview/BookletPageClient";
+import { getPayload } from "@/lib/payload";
+import { getSiteSettings } from "@/lib/queries";
 import type { BookletSection } from "@/types/booklet";
 
 export async function generateMetadata({
@@ -31,8 +31,18 @@ async function getGuide(accessToken: string, locale: string, draft = false) {
         and: [
           { accessToken: { equals: accessToken } },
           { isActive: { equals: true } },
-          { or: [{ validFrom: { exists: false } }, { validFrom: { less_than_equal: now } }] },
-          { or: [{ validUntil: { exists: false } }, { validUntil: { greater_than_equal: now } }] },
+          {
+            or: [
+              { validFrom: { exists: false } },
+              { validFrom: { less_than_equal: now } },
+            ],
+          },
+          {
+            or: [
+              { validUntil: { exists: false } },
+              { validUntil: { greater_than_equal: now } },
+            ],
+          },
         ],
       },
       locale: locale as "fr" | "en",
@@ -56,8 +66,12 @@ export default async function BookletPage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const siteSettings = await getSiteSettings(locale, isDraft) as Record<string, any>;
-  const siteName = (siteSettings?.siteName as string) || "L'Instant Tranquille";
+  const siteSettings = (await getSiteSettings(locale, isDraft)) as Record<
+    string,
+    unknown
+  >;
+  const siteName =
+    (siteSettings?.siteName as string | undefined) || "L'Instant Tranquille";
 
   const guide = await getGuide(accessToken, locale, isDraft);
 

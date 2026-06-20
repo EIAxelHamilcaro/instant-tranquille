@@ -1,20 +1,20 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useActionState, useState, useRef } from "react";
-import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Star, CheckCircle, AlertCircle, Send } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { AlertCircle, CheckCircle, Send, Star } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useActionState, useRef, useState } from "react";
 import {
   submitTestimonial,
   type TestimonialFormState,
 } from "@/app/(frontend)/[locale]/actions";
+import { Container } from "@/components/shared/Container";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 function StarInput({
   value,
@@ -30,7 +30,7 @@ function StarInput({
   const [hover, setHover] = useState(0);
 
   return (
-    <div className="flex gap-1" role="group" aria-labelledby="rating-label">
+    <div className="flex gap-1" role="toolbar" aria-labelledby="rating-label">
       {[1, 2, 3, 4, 5].map((star) => (
         <Button
           key={star}
@@ -82,7 +82,10 @@ export function TestimonialForm() {
               aria-live="polite"
               className="rounded-lg border border-green-200 bg-green-50 p-6 text-center"
             >
-              <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-500" aria-hidden="true" />
+              <CheckCircle
+                className="mx-auto mb-3 h-10 w-10 text-green-500"
+                aria-hidden="true"
+              />
               <p className="font-sans font-medium text-green-800">
                 {t("testimonialSuccess")}
               </p>
@@ -90,7 +93,11 @@ export function TestimonialForm() {
           ) : (
             <form action={formAction} className="space-y-5" noValidate>
               <input type="hidden" name="rating" value={rating} />
-              <input type="hidden" name="cf-turnstile-response" value={turnstileToken} />
+              <input
+                type="hidden"
+                name="cf-turnstile-response"
+                value={turnstileToken}
+              />
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -105,15 +112,30 @@ export function TestimonialForm() {
                     defaultValue={state.values?.guestName}
                     aria-required="true"
                     aria-invalid={!!state.fieldErrors?.guestName}
-                    aria-describedby={state.fieldErrors?.guestName ? "guestName-error" : undefined}
-                    className={cn("border-sand-300 bg-white", state.fieldErrors?.guestName && "border-red-400")}
+                    aria-describedby={
+                      state.fieldErrors?.guestName
+                        ? "guestName-error"
+                        : undefined
+                    }
+                    className={cn(
+                      "border-sand-300 bg-white",
+                      state.fieldErrors?.guestName && "border-red-400",
+                    )}
                   />
                   {state.fieldErrors?.guestName && (
-                    <p id="guestName-error" className="mt-1 text-xs text-red-600">{t("errorNameRequired")}</p>
+                    <p
+                      id="guestName-error"
+                      className="mt-1 text-xs text-red-600"
+                    >
+                      {t("errorNameRequired")}
+                    </p>
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="guestOrigin" className="mb-1.5 block font-sans">
+                  <Label
+                    htmlFor="guestOrigin"
+                    className="mb-1.5 block font-sans"
+                  >
                     {t("testimonialOrigin")}
                   </Label>
                   <Input
@@ -131,7 +153,12 @@ export function TestimonialForm() {
                   <Label id="rating-label" className="mb-1.5 block font-sans">
                     {t("testimonialRating")} *
                   </Label>
-                  <StarInput value={rating} onChange={setRating} starLabel={t("star")} starsLabel={t("stars")} />
+                  <StarInput
+                    value={rating}
+                    onChange={setRating}
+                    starLabel={t("star")}
+                    starsLabel={t("stars")}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="stayDate" className="mb-1.5 block font-sans">
@@ -145,11 +172,21 @@ export function TestimonialForm() {
                     defaultValue={state.values?.stayDate}
                     aria-required="true"
                     aria-invalid={!!state.fieldErrors?.stayDate}
-                    aria-describedby={state.fieldErrors?.stayDate ? "stayDate-error" : undefined}
-                    className={cn("border-sand-300 bg-white", state.fieldErrors?.stayDate && "border-red-400")}
+                    aria-describedby={
+                      state.fieldErrors?.stayDate ? "stayDate-error" : undefined
+                    }
+                    className={cn(
+                      "border-sand-300 bg-white",
+                      state.fieldErrors?.stayDate && "border-red-400",
+                    )}
                   />
                   {state.fieldErrors?.stayDate && (
-                    <p id="stayDate-error" className="mt-1 text-xs text-red-600">{t("errorDateRequired")}</p>
+                    <p
+                      id="stayDate-error"
+                      className="mt-1 text-xs text-red-600"
+                    >
+                      {t("errorDateRequired")}
+                    </p>
                   )}
                 </div>
               </div>
@@ -168,11 +205,18 @@ export function TestimonialForm() {
                   rows={4}
                   defaultValue={state.values?.text}
                   aria-invalid={!!state.fieldErrors?.text}
-                  aria-describedby={state.fieldErrors?.text ? "text-error" : undefined}
-                  className={cn("border-sand-300 bg-white", state.fieldErrors?.text && "border-red-400")}
+                  aria-describedby={
+                    state.fieldErrors?.text ? "text-error" : undefined
+                  }
+                  className={cn(
+                    "border-sand-300 bg-white",
+                    state.fieldErrors?.text && "border-red-400",
+                  )}
                 />
                 {state.fieldErrors?.text && (
-                  <p id="text-error" className="mt-1 text-xs text-red-600">{t("errorTextTooShort")}</p>
+                  <p id="text-error" className="mt-1 text-xs text-red-600">
+                    {t("errorTextTooShort")}
+                  </p>
                 )}
               </div>
 
@@ -189,7 +233,10 @@ export function TestimonialForm() {
 
               <div aria-live="polite" aria-atomic="true">
                 {state.error && state.error !== "validation_error" && (
-                  <div role="alert" className="flex items-center gap-2 text-sm text-red-600">
+                  <div
+                    role="alert"
+                    className="flex items-center gap-2 text-sm text-red-600"
+                  >
                     <AlertCircle className="h-4 w-4" aria-hidden="true" />
                     {t("testimonialError")}
                   </div>
@@ -198,7 +245,11 @@ export function TestimonialForm() {
 
               <Button
                 type="submit"
-                disabled={isPending || (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)}
+                disabled={
+                  isPending ||
+                  (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
+                    !turnstileToken)
+                }
                 className="w-full bg-primary-500 text-white font-sans hover:bg-primary-600 sm:w-auto"
               >
                 <Send className="mr-2 h-4 w-4" aria-hidden="true" />

@@ -1,11 +1,11 @@
 "use client";
 
+import { ExternalLink, MapPin, Phone, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
-import { Star, MapPin, Phone, ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { NormalizedRecommendation } from "@/lib/booklet-utils";
 
 type Recommendation = NormalizedRecommendation;
@@ -34,9 +34,7 @@ export function LocalRecommendationsGrid({
 
   const grouped = categories.reduce(
     (acc, cat) => {
-      acc[cat.value] = recommendations.filter(
-        (r) => r.category === cat.value,
-      );
+      acc[cat.value] = recommendations.filter((r) => r.category === cat.value);
       return acc;
     },
     {} as Record<string, Recommendation[]>,
@@ -77,17 +75,18 @@ export function LocalRecommendationsGrid({
                         {rec.name}
                       </h4>
                       {rec.distanceFromGite && (
-                        <Badge
-                          variant="secondary"
-                          className="mt-1 bg-sand-100"
-                        >
+                        <Badge variant="secondary" className="mt-1 bg-sand-100">
                           <MapPin className="mr-1 h-3 w-3" aria-hidden="true" />
                           {rec.distanceFromGite}
                         </Badge>
                       )}
                       {rec.richDescription ? (
                         <div className="mt-2 text-sm text-foreground/80">
-                          <RichTextRenderer content={rec.richDescription as Record<string, unknown>} />
+                          <RichTextRenderer
+                            content={
+                              rec.richDescription as Record<string, unknown>
+                            }
+                          />
                         </div>
                       ) : rec.description ? (
                         <p className="mt-2 text-sm text-foreground/80">
@@ -111,7 +110,10 @@ export function LocalRecommendationsGrid({
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 hover:text-primary-600"
                           >
-                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                            <ExternalLink
+                              className="h-3 w-3"
+                              aria-hidden="true"
+                            />
                             {t("websiteLabel")}
                           </a>
                         )}

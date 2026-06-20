@@ -1,6 +1,6 @@
+import { FileText } from "lucide-react";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
 import { Card, CardContent } from "@/components/ui/card";
-import { FileText } from "lucide-react";
 
 export function CustomSection({
   id,

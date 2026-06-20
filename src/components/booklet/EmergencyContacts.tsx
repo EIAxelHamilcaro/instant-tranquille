@@ -1,9 +1,9 @@
 "use client";
 
+import { AlertTriangle, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Phone, AlertTriangle } from "lucide-react";
 
 type EmergencyContact = {
   name: string;
@@ -42,9 +42,9 @@ export function EmergencyContacts({
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {contacts.map((contact, i) => (
+            {contacts.map((contact) => (
               <div
-                key={i}
+                key={contact.name}
                 className="flex items-center justify-between rounded-lg bg-white p-3"
               >
                 <div>
@@ -62,7 +62,11 @@ export function EmergencyContacts({
                     </p>
                   )}
                 </div>
-                <Button asChild size="sm" className="bg-primary-500 text-white hover:bg-primary-600">
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-primary-500 text-white hover:bg-primary-600"
+                >
                   <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>
                     <Phone className="h-3 w-3" aria-hidden="true" />
                     {contact.phone}

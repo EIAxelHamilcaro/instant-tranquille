@@ -10,9 +10,21 @@ export type CmsMedia = {
   width?: number | null;
   height?: number | null;
   sizes?: {
-    thumbnail?: { url?: string | null; width?: number | null; height?: number | null } | null;
-    card?: { url?: string | null; width?: number | null; height?: number | null } | null;
-    hero?: { url?: string | null; width?: number | null; height?: number | null } | null;
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+    } | null;
   } | null;
 };
 
@@ -62,7 +74,10 @@ export type CmsPage = {
   introTitle?: string | null;
   introText?: unknown;
   introImage?: CmsMedia | string | number | null;
-  gallery?: Array<{ image?: CmsMedia | string | number | null; caption?: string | null }> | null;
+  gallery?: Array<{
+    image?: CmsMedia | string | number | null;
+    caption?: string | null;
+  }> | null;
   highlights?: Array<{
     icon?: string | null;
     title?: string | null;
@@ -76,7 +91,10 @@ export type CmsPage = {
   ctaSubtitle?: string | null;
   descriptionTitle?: string | null;
   descriptionText?: unknown;
-  previewImages?: Array<{ image?: CmsMedia | string | number | null; label?: string | null }> | null;
+  previewImages?: Array<{
+    image?: CmsMedia | string | number | null;
+    label?: string | null;
+  }> | null;
   content?: unknown;
   seo?: {
     metaTitle?: string | null;
@@ -255,7 +273,10 @@ export async function getAmenities(locale: string, draft = false) {
   )();
 }
 
-export async function getFeaturedRecommendations(locale: string, draft = false) {
+export async function getFeaturedRecommendations(
+  locale: string,
+  draft = false,
+) {
   if (draft) {
     const payload = await getPayload();
     const result = await payload.find({
@@ -287,7 +308,10 @@ export async function getFeaturedRecommendations(locale: string, draft = false) 
   )();
 }
 
-export async function getAllApprovedTestimonials(locale: string, draft = false) {
+export async function getAllApprovedTestimonials(
+  locale: string,
+  draft = false,
+) {
   if (draft) {
     const payload = await getPayload();
     const result = await payload.find({
@@ -317,7 +341,11 @@ export async function getAllApprovedTestimonials(locale: string, draft = false) 
   )();
 }
 
-export async function getPageBySlug(slug: string, locale: string, draft = false) {
+export async function getPageBySlug(
+  slug: string,
+  locale: string,
+  draft = false,
+) {
   if (draft) {
     const payload = await getPayload();
     const result = await payload.find({

@@ -1,10 +1,10 @@
 "use client";
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
-import { PricingTable } from "@/components/rates/PricingTable";
-import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
+import { PricingTable } from "@/components/rates/PricingTable";
+import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import type { CmsSeason } from "@/lib/queries";
 
 type AdditionalFee = {

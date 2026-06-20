@@ -1,22 +1,22 @@
 "use client";
 
+import {
+  BedDouble,
+  Car,
+  Flower,
+  Home,
+  type LucideIcon,
+  MapPin,
+  Moon,
+  Sun,
+  Trees,
+  Waves,
+  Wifi,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Trees,
-  Home,
-  MapPin,
-  Moon,
-  Sun,
-  BedDouble,
-  Wifi,
-  Car,
-  Waves,
-  Flower,
-  type LucideIcon,
-} from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
@@ -39,10 +39,30 @@ function getIcon(iconName: string | null | undefined): LucideIcon {
 }
 
 const staticHighlights = [
-  { icon: Trees, titleKey: "highlightNature", descKey: "highlightNatureDesc", href: "/le-gite" as const },
-  { icon: Home, titleKey: "highlightComfort", descKey: "highlightComfortDesc", href: "/le-gite" as const },
-  { icon: MapPin, titleKey: "highlightLocation", descKey: "highlightLocationDesc", href: "/contact" as const },
-  { icon: Moon, titleKey: "highlightCalm", descKey: "highlightCalmDesc", href: "/le-gite" as const },
+  {
+    icon: Trees,
+    titleKey: "highlightNature",
+    descKey: "highlightNatureDesc",
+    href: "/le-gite" as const,
+  },
+  {
+    icon: Home,
+    titleKey: "highlightComfort",
+    descKey: "highlightComfortDesc",
+    href: "/le-gite" as const,
+  },
+  {
+    icon: MapPin,
+    titleKey: "highlightLocation",
+    descKey: "highlightLocationDesc",
+    href: "/contact" as const,
+  },
+  {
+    icon: Moon,
+    titleKey: "highlightCalm",
+    descKey: "highlightCalmDesc",
+    href: "/le-gite" as const,
+  },
 ] as const;
 
 type CmsHighlight = {
@@ -80,7 +100,10 @@ export function HighlightsSection({
                   >
                     <CardContent className="p-6 text-center">
                       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
-                        <Icon className="h-7 w-7 text-primary-500" aria-hidden="true" />
+                        <Icon
+                          className="h-7 w-7 text-primary-500"
+                          aria-hidden="true"
+                        />
                       </div>
                       <h3 className="font-heading text-lg font-semibold">
                         {highlight.title}
@@ -94,10 +117,11 @@ export function HighlightsSection({
                   </Card>
                 );
 
+                const hKey = highlight.title ?? String(i);
                 if (highlight.linkUrl) {
                   return (
                     <a
-                      key={i}
+                      key={hKey}
                       href={highlight.linkUrl}
                       className="group block"
                     >
@@ -105,28 +129,37 @@ export function HighlightsSection({
                     </a>
                   );
                 }
-                return <div key={i} className="group">{card}</div>;
+                return (
+                  <div key={hKey} className="group">
+                    {card}
+                  </div>
+                );
               })
-            : staticHighlights.map(({ icon: Icon, titleKey, descKey, href }, i) => (
-                <Link key={titleKey} href={href} className="group block">
-                  <Card
-                    className="reveal-scale border-sand-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-md"
-                    style={{ "--stagger": i } as React.CSSProperties}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
-                        <Icon className="h-7 w-7 text-primary-500" aria-hidden="true" />
-                      </div>
-                      <h3 className="font-heading text-lg font-semibold">
-                        {t(titleKey)}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                        {t(descKey)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+            : staticHighlights.map(
+                ({ icon: Icon, titleKey, descKey, href }, i) => (
+                  <Link key={titleKey} href={href} className="group block">
+                    <Card
+                      className="reveal-scale border-sand-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-md"
+                      style={{ "--stagger": i } as React.CSSProperties}
+                    >
+                      <CardContent className="p-6 text-center">
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
+                          <Icon
+                            className="h-7 w-7 text-primary-500"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <h3 className="font-heading text-lg font-semibold">
+                          {t(titleKey)}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                          {t(descKey)}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ),
+              )}
         </div>
       </Container>
     </section>

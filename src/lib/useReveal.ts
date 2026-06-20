@@ -18,7 +18,9 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
     );
 
     if (prefersReduced) {
-      targets.forEach((el) => el.setAttribute("data-visible", ""));
+      targets.forEach((el) => {
+        el.setAttribute("data-visible", "");
+      });
       return;
     }
 
@@ -34,7 +36,9 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
       { threshold: 0.15 },
     );
 
-    targets.forEach((el) => observer.observe(el));
+    targets.forEach((el) => {
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);

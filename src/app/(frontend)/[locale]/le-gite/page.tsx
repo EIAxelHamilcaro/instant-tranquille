@@ -70,8 +70,11 @@ export default async function CottagePage({
     { name: tNav("cottage"), url: "/le-gite" },
   ]);
 
-  const settings = siteSettings as Record<string, any>;
-  const contact = settings.contact as Record<string, any> | undefined;
+  const settings = siteSettings as Record<string, unknown>;
+  const contact = settings.contact as Record<string, unknown> | undefined;
+  const contactCoordinates = contact?.coordinates as
+    | Record<string, unknown>
+    | undefined;
 
   const propertyDetails = settings.propertyDetails as
     | {
@@ -86,12 +89,18 @@ export default async function CottagePage({
   const firstImage =
     (cottagePage?.gallery?.[0]?.image &&
     typeof cottagePage.gallery[0].image === "object"
-      ? (cottagePage.gallery[0].image as Record<string, any>).sizes?.hero?.url
+      ? ((
+          (cottagePage.gallery[0].image as Record<string, unknown>).sizes as
+            | Record<string, unknown>
+            | undefined
+        )?.hero as string | undefined)
       : null) ||
     (cottagePage?.previewImages?.[0]?.image &&
     typeof cottagePage.previewImages[0].image === "object"
-      ? (cottagePage.previewImages[0].image as Record<string, any>).sizes?.hero
-          ?.url
+      ? ((
+          (cottagePage.previewImages[0].image as Record<string, unknown>)
+            .sizes as Record<string, unknown> | undefined
+        )?.hero as string | undefined)
       : null);
 
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
@@ -100,11 +109,11 @@ export default async function CottagePage({
     bedrooms: propertyDetails?.bedrooms,
     bathrooms: propertyDetails?.bathrooms,
     surface: propertyDetails?.surface,
-    lat: contact?.coordinates?.lat,
-    lng: contact?.coordinates?.lng,
-    address: contact?.address,
-    city: contact?.city,
-    postalCode: contact?.postalCode,
+    lat: contactCoordinates?.lat as number | undefined,
+    lng: contactCoordinates?.lng as number | undefined,
+    address: contact?.address as string | undefined,
+    city: contact?.city as string | undefined,
+    postalCode: contact?.postalCode as string | undefined,
     amenities,
     testimonials,
   });
@@ -163,8 +172,8 @@ export default async function CottagePage({
       <AmenitiesList amenities={amenities} />
       <NearbyAttractions recommendations={recommendations} />
       <AreaMap
-        lat={contact?.coordinates?.lat}
-        lng={contact?.coordinates?.lng}
+        lat={contactCoordinates?.lat as number | undefined}
+        lng={contactCoordinates?.lng as number | undefined}
       />
     </>
   );

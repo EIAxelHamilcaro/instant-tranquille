@@ -40,10 +40,16 @@ export default async function ContactPage({
   const { isEnabled: isDraft } = await draftMode();
   const siteSettings = (await getSiteSettings(locale, isDraft)) as Record<
     string,
-    any
+    unknown
   >;
 
-  const coordinates = siteSettings?.contact?.coordinates;
+  const contactRaw = siteSettings?.contact as
+    | Record<string, unknown>
+    | undefined;
+  const coordinatesRaw = contactRaw?.coordinates as
+    | Record<string, unknown>
+    | undefined;
+  const coordinates = coordinatesRaw;
   const siteName = siteSettings?.siteName as string | undefined;
   const accessRoutes = siteSettings?.accessRoutes as
     | {
@@ -60,15 +66,14 @@ export default async function ContactPage({
     { name: messages.contact.title, url: "/contact" },
   ]);
 
-  const contactInfo = siteSettings?.contact as Record<string, any> | undefined;
   const businessJsonLd = generateLodgingBusinessJsonLd({
-    telephone: contactInfo?.phone,
-    email: contactInfo?.email,
-    address: contactInfo?.address,
-    city: contactInfo?.city,
-    postalCode: contactInfo?.postalCode,
-    lat: coordinates?.lat,
-    lng: coordinates?.lng,
+    telephone: contactRaw?.phone as string | undefined,
+    email: contactRaw?.email as string | undefined,
+    address: contactRaw?.address as string | undefined,
+    city: contactRaw?.city as string | undefined,
+    postalCode: contactRaw?.postalCode as string | undefined,
+    lat: coordinatesRaw?.lat as number | undefined,
+    lng: coordinatesRaw?.lng as number | undefined,
   });
 
   return (
@@ -90,11 +95,11 @@ export default async function ContactPage({
       />
       <ContactForm />
       <MapSection
-        lat={coordinates?.lat}
-        lng={coordinates?.lng}
-        zoom={coordinates?.zoom as number | undefined}
+        lat={coordinatesRaw?.lat as number | undefined}
+        lng={coordinatesRaw?.lng as number | undefined}
+        zoom={coordinatesRaw?.zoom as number | undefined}
         markerLabel={
-          (coordinates?.markerLabel as string | undefined) ?? siteName
+          (coordinatesRaw?.markerLabel as string | undefined) ?? siteName
         }
       />
       <AccessInstructions routes={accessRoutes} />

@@ -1,8 +1,8 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
-import { validateUrl, validateDistance, validatePhone } from "@/lib/validators";
+import { revalidateCollection } from "@/lib/revalidate";
+import { validateDistance, validatePhone, validateUrl } from "@/lib/validators";
 
 export const LocalRecommendations: CollectionConfig = {
   slug: "local-recommendations",

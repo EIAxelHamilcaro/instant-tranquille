@@ -5,15 +5,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const pages = [
-    { slug: "home", path: "/", priority: 1.0, changeFrequency: "weekly" as const },
-    { slug: "le-gite", path: "/le-gite", priority: 0.9, changeFrequency: "monthly" as const },
+    {
+      slug: "home",
+      path: "/",
+      priority: 1.0,
+      changeFrequency: "weekly" as const,
+    },
+    {
+      slug: "le-gite",
+      path: "/le-gite",
+      priority: 0.9,
+      changeFrequency: "monthly" as const,
+    },
     {
       slug: "tarifs-reservation",
       path: "/tarifs-reservation",
       priority: 0.8,
       changeFrequency: "weekly" as const,
     },
-    { slug: "contact", path: "/contact", priority: 0.7, changeFrequency: "monthly" as const },
+    {
+      slug: "contact",
+      path: "/contact",
+      priority: 0.7,
+      changeFrequency: "monthly" as const,
+    },
   ];
 
   const enPaths: Record<string, string> = {
@@ -23,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contact": "/en/contact",
   };
 
-  let pageUpdates: Record<string, Date> = {};
+  const pageUpdates: Record<string, Date> = {};
   try {
     const payload = await getPayload();
     const result = await payload.find({
@@ -32,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true },
     });
     for (const doc of result.docs) {
-      const d = doc as Record<string, any>;
+      const d = doc as Record<string, unknown>;
       if (d.slug && d.updatedAt) {
         pageUpdates[d.slug as string] = new Date(d.updatedAt as string);
       }

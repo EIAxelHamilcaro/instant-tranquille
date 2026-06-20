@@ -1,5 +1,5 @@
-import type { NextConfig } from "next";
 import { withPayload } from "@payloadcms/next/withPayload";
+import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
@@ -21,7 +21,14 @@ const nextConfig: NextConfig = {
         hostname: "*.public.blob.vercel-storage.com",
       },
       ...(process.env.NODE_ENV === "development"
-        ? [{ protocol: "http" as const, hostname: "localhost", port: "3000", pathname: "/api/media/**" }]
+        ? [
+            {
+              protocol: "http" as const,
+              hostname: "localhost",
+              port: "3000",
+              pathname: "/api/media/**",
+            },
+          ]
         : []),
     ],
   },

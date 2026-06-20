@@ -1,5 +1,6 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
+import type { RatesPageData } from "@/components/live-preview/RatesPageClient";
 import { RatesPageClient } from "@/components/live-preview/RatesPageClient";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
@@ -38,10 +39,10 @@ export default async function RatesPage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const pricingConfig = (await getPricingConfig(locale, isDraft)) as Record<
-    string,
-    any
-  >;
+  const pricingConfig = (await getPricingConfig(
+    locale,
+    isDraft,
+  )) as RatesPageData;
 
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
   const breadcrumbs = generateBreadcrumbJsonLd([
@@ -49,9 +50,11 @@ export default async function RatesPage({
     { name: messages.rates.title, url: "/tarifs-reservation" },
   ]);
 
-  const pricingJsonLd = generatePricingJsonLd(pricingConfig.seasons, {
-    currency: (pricingConfig.currency as string) || "EUR",
-  });
+  const seasons = pricingConfig.seasons ?? [];
+  const additionalFees = pricingConfig.additionalFees ?? [];
+  const currency = pricingConfig.currency || "EUR";
+
+  const pricingJsonLd = generatePricingJsonLd(seasons, { currency });
 
   if (isDraft) {
     return (
@@ -69,9 +72,9 @@ export default async function RatesPage({
         <h1 className="sr-only">{messages.rates.h1}</h1>
         <RatesPageClient
           initialData={{
-            seasons: pricingConfig.seasons || [],
-            additionalFees: pricingConfig.additionalFees || [],
-            currency: (pricingConfig.currency as string) || "EUR",
+            seasons,
+            additionalFees,
+            currency,
             bookingLinks: pricingConfig.bookingLinks,
             policies: pricingConfig.policies,
           }}
@@ -100,14 +103,11 @@ export default async function RatesPage({
       />
       <h1 className="sr-only">{messages.rates.h1}</h1>
       <PricingTable
-        seasons={pricingConfig.seasons || []}
-        additionalFees={pricingConfig.additionalFees || []}
-        currency={(pricingConfig.currency as string) || "EUR"}
+        seasons={seasons}
+        additionalFees={additionalFees}
+        currency={currency}
       />
-      <SeasonCalendar
-        seasons={pricingConfig.seasons || []}
-        currency={(pricingConfig.currency as string) || "EUR"}
-      />
+      <SeasonCalendar seasons={seasons} currency={currency} />
       <BookingLinks bookingLinks={pricingConfig.bookingLinks} />
       <PoliciesSection policies={pricingConfig.policies} />
     </>

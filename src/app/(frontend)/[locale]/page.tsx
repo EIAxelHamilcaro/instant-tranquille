@@ -69,32 +69,44 @@ export default async function HomePage({
     getAmenities(locale, isDraft),
   ]);
 
-  const settings = siteSettings as Record<string, any>;
-  const contact = settings.contact as Record<string, any> | undefined;
-  const pricing = pricingConfig as Record<string, any>;
+  const settings = siteSettings as Record<string, unknown>;
+  const contact = settings.contact as Record<string, unknown> | undefined;
+  const contactCoords = contact?.coordinates as
+    | Record<string, unknown>
+    | undefined;
+  const pricing = pricingConfig as Record<string, unknown>;
 
   const heroImageUrl =
     homePage?.heroImage &&
     typeof homePage.heroImage === "object" &&
-    (homePage.heroImage as Record<string, any>).sizes?.hero?.url;
+    ((
+      (homePage.heroImage as Record<string, unknown>).sizes as
+        | Record<string, unknown>
+        | undefined
+    )?.hero as string | undefined);
 
   const propertyDetails = settings.propertyDetails as
     | { bedrooms?: number; maxGuests?: number; petsAllowed?: boolean }
     | undefined;
 
   const jsonLd = generateLodgingBusinessJsonLd({
-    telephone: contact?.phone,
-    email: contact?.email,
+    telephone: contact?.phone as string | undefined,
+    email: contact?.email as string | undefined,
     heroImage: heroImageUrl || undefined,
-    lat: contact?.coordinates?.lat,
-    lng: contact?.coordinates?.lng,
-    address: contact?.address,
-    city: contact?.city,
-    postalCode: contact?.postalCode,
-    priceRange: computePriceRange(pricing.seasons, pricing.currency),
+    lat: contactCoords?.lat as number | undefined,
+    lng: contactCoords?.lng as number | undefined,
+    address: contact?.address as string | undefined,
+    city: contact?.city as string | undefined,
+    postalCode: contact?.postalCode as string | undefined,
+    priceRange: computePriceRange(
+      pricing.seasons as Parameters<typeof computePriceRange>[0],
+      pricing.currency as string | undefined,
+    ),
     petsAllowed: propertyDetails?.petsAllowed,
-    checkInTime: pricing.policies?.checkIn,
-    checkOutTime: pricing.policies?.checkOut,
+    checkInTime: (pricing.policies as Record<string, unknown> | undefined)
+      ?.checkIn as string | undefined,
+    checkOutTime: (pricing.policies as Record<string, unknown> | undefined)
+      ?.checkOut as string | undefined,
     numberOfRooms: propertyDetails?.bedrooms,
     amenities,
     testimonials: allTestimonials,

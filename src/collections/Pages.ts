@@ -1,13 +1,20 @@
-import type { CollectionConfig, CollectionBeforeValidateHook, CollectionBeforeChangeHook } from "payload";
+import type {
+  CollectionBeforeChangeHook,
+  CollectionBeforeValidateHook,
+  CollectionConfig,
+} from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
-import { validateSlug, validateLucideIcon } from "@/lib/validators";
+import { revalidateCollection } from "@/lib/revalidate";
+import { validateLucideIcon, validateSlug } from "@/lib/validators";
 
 // Auto-generate slug from title if empty
 const autoSlug: CollectionBeforeValidateHook = ({ data, operation }) => {
   if (operation === "create" && data && !data.slug && data.title) {
-    const title = typeof data.title === "string" ? data.title : Object.values(data.title as Record<string, string>)[0] ?? "";
+    const title =
+      typeof data.title === "string"
+        ? data.title
+        : (Object.values(data.title as Record<string, string>)[0] ?? "");
     data.slug = title
       .toLowerCase()
       .normalize("NFD")
@@ -20,7 +27,7 @@ const autoSlug: CollectionBeforeValidateHook = ({ data, operation }) => {
 };
 
 // Auto-set publishedAt when status changes to published
-const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req }) => {
+const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req: _req }) => {
   if (data?._status === "published" && !data?.publishedAt) {
     data.publishedAt = new Date().toISOString();
   }
@@ -30,9 +37,12 @@ const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req }) => {
 const revalidateHooks = revalidateCollection("pages");
 
 // Helper conditions
-const isHome = (data: Record<string, unknown> | undefined) => data?.slug === "home";
-const isGite = (data: Record<string, unknown> | undefined) => data?.slug === "le-gite";
-const hasHero = (data: Record<string, unknown> | undefined) => data?.slug !== "le-gite";
+const isHome = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "home";
+const isGite = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "le-gite";
+const hasHero = (data: Record<string, unknown> | undefined) =>
+  data?.slug !== "le-gite";
 const hasHeroOrContent = (data: Record<string, unknown> | undefined) =>
   data?.slug !== "home" && data?.slug !== "le-gite";
 
@@ -56,7 +66,9 @@ export const Pages: CollectionConfig = {
     defaultColumns: ["title", "slug", "_status", "updatedAt"],
     livePreview: {
       url: ({ data, locale }) => {
-        const slug = (data as Record<string, unknown>).slug as string | undefined;
+        const slug = (data as Record<string, unknown>).slug as
+          | string
+          | undefined;
         const path = !slug || slug === "home" ? "/" : `/${slug}`;
         return previewUrl(path, { locale });
       },
@@ -172,7 +184,8 @@ export const Pages: CollectionConfig = {
                   label: "Titre d'introduction",
                   localized: true,
                   admin: {
-                    description: "Titre de la section d'introduction sous la bannière",
+                    description:
+                      "Titre de la section d'introduction sous la bannière",
                     condition: (data) => isHome(data),
                   },
                 },
@@ -237,7 +250,8 @@ export const Pages: CollectionConfig = {
                       label: "URL du lien",
                       localized: true,
                       admin: {
-                        description: "Lien vers lequel pointe la vignette (optionnel)",
+                        description:
+                          "Lien vers lequel pointe la vignette (optionnel)",
                         placeholder: "/le-gite",
                       },
                     },
@@ -414,7 +428,8 @@ export const Pages: CollectionConfig = {
                       label: "Légende",
                       localized: true,
                       admin: {
-                        description: "Légende affichée sous la photo (optionnelle)",
+                        description:
+                          "Légende affichée sous la photo (optionnelle)",
                       },
                     },
                   ],
@@ -453,7 +468,8 @@ export const Pages: CollectionConfig = {
                       label: "Libellé",
                       localized: true,
                       admin: {
-                        description: "Libellé affiché sur ou sous l'image (optionnel)",
+                        description:
+                          "Libellé affiché sur ou sous l'image (optionnel)",
                       },
                     },
                   ],
@@ -462,7 +478,6 @@ export const Pages: CollectionConfig = {
             },
           ],
         },
-
       ],
     },
   ],

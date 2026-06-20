@@ -1,15 +1,15 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
-  Image as ImageIcon,
-  Home,
-  MapPin,
-  Utensils,
-  Trees,
   Bed,
+  Home,
+  Image as ImageIcon,
   type LucideIcon,
+  MapPin,
+  Trees,
+  Utensils,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, LucideIcon> = {
   image: ImageIcon,

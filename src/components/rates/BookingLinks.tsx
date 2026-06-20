@@ -1,12 +1,12 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ExternalLinkButton } from "@/components/shared/ExternalLinkButton";
-import { Link } from "@/i18n/navigation";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
 type BookingLinksData = {
@@ -30,7 +30,10 @@ export function BookingLinks({
     <section className="bg-sand-100 py-16" ref={ref}>
       <Container className="text-center">
         <SectionHeading title={t("bookTitle")} subtitle={t("bookSubtitle")} />
-        <div className="reveal flex flex-col items-center gap-4 sm:flex-row sm:justify-center" style={{ "--stagger": 1 } as React.CSSProperties}>
+        <div
+          className="reveal flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          style={{ "--stagger": 1 } as React.CSSProperties}
+        >
           {bookingLinks?.airbnb && (
             <ExternalLinkButton
               href={bookingLinks.airbnb}

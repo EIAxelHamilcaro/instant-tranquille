@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { usePathname } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
 import { Trees } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Link, usePathname } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MobileNav } from "./MobileNav";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 type NavItem = {
   label: string;
@@ -83,7 +82,10 @@ export function HeaderClient({
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label={tCommon("mainNav")}>
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label={tCommon("mainNav")}
+        >
           {navItems.map((item) => {
             const isActive = !item.isExternal && pathname === item.url;
             return item.isExternal ? (

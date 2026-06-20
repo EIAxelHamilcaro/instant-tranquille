@@ -1,19 +1,19 @@
 import crypto from "crypto";
 import type { CollectionConfig } from "payload";
-import { isAuthenticated, isActiveGuideOrAdmin } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
-import { previewUrl } from "@/lib/preview-url";
 import {
   ArrivalBlock,
-  WifiBlock,
-  HouseRulesBlock,
-  EquipmentBlock,
-  EmergencyBlock,
-  RecommendationsBlock,
   CheckInOutBlock,
-  MapBlock,
   CustomBlock,
+  EmergencyBlock,
+  EquipmentBlock,
+  HouseRulesBlock,
+  MapBlock,
+  RecommendationsBlock,
+  WifiBlock,
 } from "@/collections/blocks/booklet";
+import { isActiveGuideOrAdmin, isAuthenticated } from "@/lib/access";
+import { previewUrl } from "@/lib/preview-url";
+import { revalidateCollection } from "@/lib/revalidate";
 
 export const OnboardingGuides: CollectionConfig = {
   slug: "onboarding-guides",
@@ -46,7 +46,9 @@ export const OnboardingGuides: CollectionConfig = {
     defaultColumns: ["title", "accessToken", "isActive", "updatedAt"],
     livePreview: {
       url: ({ data, locale }) => {
-        const token = (data as Record<string, unknown>).accessToken as string | undefined;
+        const token = (data as Record<string, unknown>).accessToken as
+          | string
+          | undefined;
         return previewUrl(`/livret-accueil/${token || ""}`, { locale });
       },
     },

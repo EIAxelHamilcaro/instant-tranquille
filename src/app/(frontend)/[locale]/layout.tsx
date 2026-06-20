@@ -29,8 +29,9 @@ export async function generateMetadata({
   if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
-  const settings = (await getSiteSettings(locale)) as Record<string, any>;
-  const siteName = settings.siteName || "L'Instant Tranquille";
+  const settings = (await getSiteSettings(locale)) as Record<string, unknown>;
+  const siteName =
+    (settings.siteName as string | undefined) || "L'Instant Tranquille";
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return {

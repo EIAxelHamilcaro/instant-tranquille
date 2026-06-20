@@ -27,7 +27,12 @@ export function MapSection({ lat, lng, zoom, markerLabel }: MapSectionProps) {
       <Container>
         <SectionHeading title={t("mapTitle")} />
         <div className="mx-auto max-w-4xl">
-          <MapClient lat={lat} lng={lng} zoom={zoom} markerLabel={markerLabel} />
+          <MapClient
+            lat={lat}
+            lng={lng}
+            zoom={zoom}
+            markerLabel={markerLabel}
+          />
         </div>
       </Container>
     </section>

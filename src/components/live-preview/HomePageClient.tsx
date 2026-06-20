@@ -1,14 +1,14 @@
 "use client";
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
-import type { CmsMedia, CmsTestimonial } from "@/lib/queries";
-import { HeroSection } from "@/components/home/HeroSection";
-import { IntroSection } from "@/components/home/IntroSection";
-import { HighlightsSection } from "@/components/home/HighlightsSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { CTASection } from "@/components/home/CTASection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { HighlightsSection } from "@/components/home/HighlightsSection";
+import { IntroSection } from "@/components/home/IntroSection";
+import { TestimonialForm } from "@/components/home/TestimonialForm";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { CmsMedia, CmsTestimonial } from "@/lib/queries";
 
 type CmsHighlight = {
   icon?: string | null;

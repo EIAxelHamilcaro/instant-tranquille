@@ -1,16 +1,16 @@
 "use client";
 
-import type { BookletSection } from "@/types/booklet";
 import { normalizeRecommendations } from "@/lib/booklet-utils";
+import type { BookletSection } from "@/types/booklet";
 import { ArrivalInstructions } from "./ArrivalInstructions";
-import { WifiInfo } from "./WifiInfo";
-import { HouseRulesSection } from "./HouseRulesSection";
-import { EquipmentGuide } from "./EquipmentGuide";
-import { EmergencyContacts } from "./EmergencyContacts";
-import { LocalRecommendationsGrid } from "./LocalRecommendationsGrid";
 import { CheckInOutInstructions } from "./CheckInOutInstructions";
-import { MapSection } from "./MapSection";
 import { CustomSection } from "./CustomSection";
+import { EmergencyContacts } from "./EmergencyContacts";
+import { EquipmentGuide } from "./EquipmentGuide";
+import { HouseRulesSection } from "./HouseRulesSection";
+import { LocalRecommendationsGrid } from "./LocalRecommendationsGrid";
+import { MapSection } from "./MapSection";
+import { WifiInfo } from "./WifiInfo";
 
 export function BookletSectionRenderer({
   section,

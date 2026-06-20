@@ -1,15 +1,15 @@
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
-import { PayloadImage } from "@/components/shared/PayloadImage";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { PayloadImage } from "@/components/shared/PayloadImage";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 
 export function HeroSection({
   heroImage,
   heroTitle,
   heroSubtitle,
 }: {
-  heroImage?: any;
+  heroImage?: Record<string, unknown> | string | number | null;
   heroTitle?: string | null;
   heroSubtitle?: string | null;
 }) {
@@ -18,7 +18,10 @@ export function HeroSection({
   const title = heroTitle || t("heroTitle");
   const subtitle = heroSubtitle || t("heroSubtitle");
 
-  const hasImage = heroImage && typeof heroImage === "object" && heroImage.url;
+  const hasImage =
+    heroImage &&
+    typeof heroImage === "object" &&
+    (heroImage as Record<string, unknown>).url;
 
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-primary-800">
@@ -26,7 +29,7 @@ export function HeroSection({
         <>
           <div className="absolute inset-0">
             <PayloadImage
-              media={heroImage}
+              media={heroImage as Parameters<typeof PayloadImage>[0]["media"]}
               size="hero"
               fill
               priority

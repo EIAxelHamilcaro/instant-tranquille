@@ -1,8 +1,8 @@
 "use client";
 
+import { Map as MapIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
-import { Map } from "lucide-react";
 
 export function MapSection({
   id,
@@ -20,7 +20,7 @@ export function MapSection({
   return (
     <section id={id ?? "map"} className="scroll-mt-20">
       <h2 className="mb-6 flex items-center gap-3 font-heading text-2xl font-bold">
-        <Map className="h-6 w-6 text-primary-500" aria-hidden="true" />
+        <MapIcon className="h-6 w-6 text-primary-500" aria-hidden="true" />
         {sectionTitle || t("map")}
       </h2>
 

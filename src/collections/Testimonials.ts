@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateCollection } from "@/lib/revalidate";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
@@ -18,7 +18,8 @@ export const Testimonials: CollectionConfig = {
   },
   access: {
     create: isPublic,
-    read: ({ req: { user } }) => (user ? true : { status: { equals: "approved" } }),
+    read: ({ req: { user } }) =>
+      user ? true : { status: { equals: "approved" } },
     update: isAuthenticated,
     delete: isAuthenticated,
   },
@@ -55,7 +56,8 @@ export const Testimonials: CollectionConfig = {
       min: 1,
       max: 5,
       validate: (value: number | null | undefined) => {
-        if (value != null && !Number.isInteger(value)) return "La note doit être un nombre entier";
+        if (value != null && !Number.isInteger(value))
+          return "La note doit être un nombre entier";
         return true;
       },
       admin: {
@@ -79,8 +81,7 @@ export const Testimonials: CollectionConfig = {
       type: "date",
       label: "Date du séjour",
       admin: {
-        description:
-          "Quand ce voyageur a séjourné au gîte",
+        description: "Quand ce voyageur a séjourné au gîte",
         date: {
           displayFormat: "dd/MM/yyyy",
         },
