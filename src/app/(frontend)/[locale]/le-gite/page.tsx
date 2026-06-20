@@ -86,22 +86,22 @@ export default async function CottagePage({
     | undefined;
 
   // Use first gallery image or first preview image for JSON-LD (no hero on this page)
+  type CmsMedia = {
+    url?: string | null;
+    sizes?: { hero?: { url?: string | null } };
+  };
+  const _galleryMedia = cottagePage?.gallery?.[0]?.image as
+    | CmsMedia
+    | undefined;
+  const _previewMedia = cottagePage?.previewImages?.[0]?.image as
+    | CmsMedia
+    | undefined;
   const firstImage =
-    (cottagePage?.gallery?.[0]?.image &&
-    typeof cottagePage.gallery[0].image === "object"
-      ? ((
-          (cottagePage.gallery[0].image as Record<string, unknown>).sizes as
-            | Record<string, unknown>
-            | undefined
-        )?.hero as string | undefined)
-      : null) ||
-    (cottagePage?.previewImages?.[0]?.image &&
-    typeof cottagePage.previewImages[0].image === "object"
-      ? ((
-          (cottagePage.previewImages[0].image as Record<string, unknown>)
-            .sizes as Record<string, unknown> | undefined
-        )?.hero as string | undefined)
-      : null);
+    _galleryMedia?.sizes?.hero?.url ??
+    _galleryMedia?.url ??
+    _previewMedia?.sizes?.hero?.url ??
+    _previewMedia?.url ??
+    undefined;
 
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
     heroImage: firstImage || undefined,

@@ -76,14 +76,13 @@ export default async function HomePage({
     | undefined;
   const pricing = pricingConfig as Record<string, unknown>;
 
+  type CmsMedia = {
+    url?: string | null;
+    sizes?: { hero?: { url?: string | null } };
+  };
+  const _heroMedia = homePage?.heroImage as CmsMedia | undefined;
   const heroImageUrl =
-    homePage?.heroImage &&
-    typeof homePage.heroImage === "object" &&
-    ((
-      (homePage.heroImage as Record<string, unknown>).sizes as
-        | Record<string, unknown>
-        | undefined
-    )?.hero as string | undefined);
+    _heroMedia?.sizes?.hero?.url ?? _heroMedia?.url ?? undefined;
 
   const propertyDetails = settings.propertyDetails as
     | { bedrooms?: number; maxGuests?: number; petsAllowed?: boolean }
