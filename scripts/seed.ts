@@ -1,9 +1,12 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getPayload } from "payload";
-import config from "../src/payload.config";
+import nextEnv from "@next/env";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const { loadEnvConfig } = nextEnv as unknown as {
+  loadEnvConfig: (dir: string) => void;
+};
+loadEnvConfig(path.resolve(__dirname, ".."));
 const IMAGES_DIR = path.resolve(__dirname, "../public/images");
 
 // Mapping explicite des 19 .webp → métadonnées
@@ -163,6 +166,8 @@ const IMAGE_MAP = [
 ] as const;
 
 async function seed() {
+  const { getPayload } = await import("payload");
+  const { default: config } = await import("../src/payload.config");
   const payload = await getPayload({ config });
 
   // ── Purge des collections (seed re-jouable) ─────────────────────────────────
