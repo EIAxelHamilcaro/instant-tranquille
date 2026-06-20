@@ -59,7 +59,6 @@ export function HeroSection({
   const reservationHref =
     bookingLinks?.airbnb ||
     bookingLinks?.booking ||
-    bookingLinks?.abritel ||
     (bookingLinks?.email ? `mailto:${bookingLinks.email}` : null) ||
     "/tarifs-reservation";
 
