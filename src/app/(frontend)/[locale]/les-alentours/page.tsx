@@ -61,6 +61,8 @@ export default async function SurroundingsPage({
 
   const pageData = page as
     | (Record<string, unknown> & {
+        equestrianTitle?: string | null;
+        equestrianText?: unknown;
         equestrianVenues?: Array<{
           name?: string | null;
           description?: string | null;
@@ -95,7 +97,10 @@ export default async function SurroundingsPage({
 
       <CategoryGrid recommendations={recommendations} />
 
-      <EquestrianSection venues={pageData?.equestrianVenues ?? null} />
+      <EquestrianSection
+        venues={pageData?.equestrianVenues ?? null}
+        sectionTitle={pageData?.equestrianTitle ?? null}
+      />
 
       <SurroundingsMap
         recommendations={recommendations}

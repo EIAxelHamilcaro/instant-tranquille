@@ -52,9 +52,9 @@ export function SurroundingsHero({
             {eyebrow ?? t("eyebrow")}
           </p>
         )}
-        <h1 className="text-4xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl">
+        <p className="text-4xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl">
           {title ?? t("heroTitle")}
-        </h1>
+        </p>
         {(subtitle ?? t("heroSubtitle")) && (
           <p className="subtitle-editorial mt-3 max-w-xl text-base text-sand-200 drop-shadow-sm sm:text-lg">
             {subtitle ?? t("heroSubtitle")}

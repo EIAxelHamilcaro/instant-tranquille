@@ -13,9 +13,13 @@ interface EquestrianVenue {
 
 interface EquestrianSectionProps {
   venues?: EquestrianVenue[] | null;
+  sectionTitle?: string | null;
 }
 
-export function EquestrianSection({ venues }: EquestrianSectionProps) {
+export function EquestrianSection({
+  venues,
+  sectionTitle,
+}: EquestrianSectionProps) {
   const t = useTranslations("equestrian");
 
   const faqItems: Array<{ q: string; a: string }> = [
@@ -30,7 +34,7 @@ export function EquestrianSection({ venues }: EquestrianSectionProps) {
       <Container>
         <SectionHeading
           eyebrow={t("eyebrow")}
-          title={t("sectionTitle")}
+          title={sectionTitle ?? t("sectionTitle")}
           subtitle={t("intro")}
           variant="left"
           centered={false}

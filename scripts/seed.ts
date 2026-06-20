@@ -1004,6 +1004,56 @@ async function seed() {
     collection: "pages",
     locale: "fr",
     data: {
+      title: "Les Alentours",
+      slug: "les-alentours",
+      heroTitle: "Les Alentours",
+      heroSubtitle: "Châteaux, nature, équitation — la Sologne à portée de route",
+      equestrianTitle: "Cavaliers & sports équestres",
+      equestrianVenues: [
+        {
+          name: "Le Grand Parquet de Lamotte-Beuvron",
+          description:
+            "Site fédéral de la FFE, accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux.",
+          distanceFromGite: "~17 km — 20 min",
+          website: "https://www.ffe.com",
+        },
+      ],
+      _status: "published",
+    },
+  });
+  const alentoursPages = await payload.find({
+    collection: "pages",
+    where: { slug: { equals: "les-alentours" } },
+    limit: 1,
+  });
+  const alentoursId = alentoursPages.docs[0]?.id;
+  if (alentoursId) {
+    await payload.update({
+      collection: "pages",
+      id: alentoursId,
+      locale: "en",
+      data: {
+        title: "Surroundings",
+        heroTitle: "The Surroundings",
+        heroSubtitle: "Châteaux, nature, equestrian sports — Sologne at your doorstep",
+        equestrianTitle: "Riders & equestrian sports",
+        equestrianVenues: [
+          {
+            name: "Le Grand Parquet de Lamotte-Beuvron",
+            description:
+              "FFE national equestrian centre hosting the Generali Open de France and major showjumping events.",
+            distanceFromGite: "~17 km — 20 min",
+            website: "https://www.ffe.com",
+          },
+        ],
+      },
+    });
+  }
+
+  await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: {
       title: "Tarifs & Réservation",
       slug: "tarifs-reservation",
       _status: "published",
