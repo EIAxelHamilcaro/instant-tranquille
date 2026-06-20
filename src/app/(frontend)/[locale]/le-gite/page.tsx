@@ -11,7 +11,9 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import type { Locale } from "@/i18n/config";
 import {
+  buildCottageFaqItems,
   generateBreadcrumbJsonLd,
+  generateFAQJsonLd,
   generateVacationRentalJsonLd,
 } from "@/lib/jsonld";
 import {
@@ -104,6 +106,8 @@ export default async function CottagePage({
     _previewMedia?.url ??
     undefined;
 
+  const cottageFaqJsonLd = generateFAQJsonLd(buildCottageFaqItems(locale));
+
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
     heroImage: firstImage || undefined,
     maxGuests: propertyDetails?.maxGuests,
@@ -132,6 +136,14 @@ export default async function CottagePage({
             __html: JSON.stringify(vacationRentalJsonLd),
           }}
         />
+        {cottageFaqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(cottageFaqJsonLd),
+            }}
+          />
+        )}
         <CottagePageClient
           initialData={{
             propertyDetails,
@@ -159,6 +171,12 @@ export default async function CottagePage({
           __html: JSON.stringify(vacationRentalJsonLd),
         }}
       />
+      {cottageFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(cottageFaqJsonLd) }}
+        />
+      )}
       <CottageHeroSection
         heroImage={
           cottagePage?.previewImages?.[0]?.image ??

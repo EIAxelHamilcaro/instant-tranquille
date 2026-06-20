@@ -6,7 +6,12 @@ import { EquestrianSection } from "@/components/surroundings/EquestrianSection";
 import { SurroundingsHero } from "@/components/surroundings/SurroundingsHero";
 import { SurroundingsMap } from "@/components/surroundings/SurroundingsMap";
 import type { Locale } from "@/i18n/config";
-import { generateBreadcrumbJsonLd } from "@/lib/jsonld";
+import {
+  buildSurroundingsFaqItems,
+  generateBreadcrumbJsonLd,
+  generateFAQJsonLd,
+  generateGrandParquetJsonLd,
+} from "@/lib/jsonld";
 import {
   getAllRecommendations,
   getPageBySlug,
@@ -53,6 +58,11 @@ export default async function SurroundingsPage({
     { name: tNav("surroundings"), url: "/les-alentours" },
   ]);
 
+  const surroundingsFaqJsonLd = generateFAQJsonLd(
+    buildSurroundingsFaqItems(locale),
+  );
+  const grandParquetJsonLd = generateGrandParquetJsonLd();
+
   const settings = siteSettings as Record<string, unknown>;
   const contact = settings.contact as Record<string, unknown> | undefined;
   const giteCoordinates = contact?.coordinates as
@@ -82,6 +92,18 @@ export default async function SurroundingsPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      {surroundingsFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(surroundingsFaqJsonLd),
+          }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(grandParquetJsonLd) }}
       />
 
       <SurroundingsHero heroImage={page?.heroImage ?? null} />

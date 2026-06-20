@@ -95,6 +95,13 @@ export default async function HomePage({
       }
     | undefined;
 
+  const rawSameAs = settings.sameAs as
+    | Array<{ url?: string | null }>
+    | undefined;
+  const sameAsUrls = (rawSameAs ?? [])
+    .map((item) => item.url)
+    .filter((url): url is string => typeof url === "string" && url.length > 0);
+
   const jsonLd = generateLodgingBusinessJsonLd({
     telephone: contact?.phone as string | undefined,
     email: contact?.email as string | undefined,
@@ -116,6 +123,7 @@ export default async function HomePage({
     numberOfRooms: propertyDetails?.bedrooms,
     amenities,
     testimonials: allTestimonials,
+    sameAs: sameAsUrls,
   });
 
   const rawFaqs =

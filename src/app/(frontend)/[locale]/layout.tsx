@@ -11,6 +11,7 @@ import { Header } from "@/components/layout/Header";
 import type { Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
 import { inter, lora, playfairDisplay } from "@/lib/fonts";
+import { generateWebSiteJsonLd } from "@/lib/jsonld";
 import { getSiteSettings } from "@/lib/queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -72,9 +73,15 @@ export default async function FrontendLayout({
   const t = await getTranslations({ locale, namespace: "common" });
   const skipText = t("skipToContent");
 
+  const webSiteJsonLd = generateWebSiteJsonLd();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+        />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" />
         <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />

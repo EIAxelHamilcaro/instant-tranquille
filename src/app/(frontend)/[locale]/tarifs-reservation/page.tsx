@@ -8,7 +8,12 @@ import { PricingTable } from "@/components/rates/PricingTable";
 import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import type { Locale } from "@/i18n/config";
-import { generateBreadcrumbJsonLd, generatePricingJsonLd } from "@/lib/jsonld";
+import {
+  buildRatesFaqItems,
+  generateBreadcrumbJsonLd,
+  generateFAQJsonLd,
+  generatePricingJsonLd,
+} from "@/lib/jsonld";
 import { getPricingConfig } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
@@ -55,6 +60,7 @@ export default async function RatesPage({
   const currency = pricingConfig.currency || "EUR";
 
   const pricingJsonLd = generatePricingJsonLd(seasons, { currency });
+  const ratesFaqJsonLd = generateFAQJsonLd(buildRatesFaqItems(locale));
 
   if (isDraft) {
     return (
@@ -67,6 +73,12 @@ export default async function RatesPage({
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+          />
+        )}
+        {ratesFaqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(ratesFaqJsonLd) }}
           />
         )}
         <h1 className="sr-only">{messages.rates.h1}</h1>
@@ -93,6 +105,12 @@ export default async function RatesPage({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+        />
+      )}
+      {ratesFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ratesFaqJsonLd) }}
         />
       )}
       <Breadcrumbs

@@ -387,6 +387,41 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: "Plateformes & entité",
+          fields: [
+            {
+              name: "sameAs",
+              type: "array",
+              label: "Profils officiels (sameAs)",
+              admin: {
+                description:
+                  "URLs de vos profils Airbnb, Booking, Abritel, Google Business, TripAdvisor… utilisés pour la consolidation d'entité dans les moteurs de recherche et les LLMs.",
+              },
+              fields: [
+                {
+                  name: "url",
+                  type: "text",
+                  label: "URL",
+                  required: true,
+                  validate: validateUrl,
+                  admin: {
+                    placeholder: "https://www.airbnb.fr/rooms/12345678",
+                  },
+                },
+                {
+                  name: "label",
+                  type: "text",
+                  label: "Libellé",
+                  admin: {
+                    placeholder: "Airbnb",
+                    width: "40%",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: "Référencement Google",
           fields: [
             {
