@@ -137,6 +137,7 @@
   --font-heading: "Playfair Display", serif;
   --font-body: "Lora", serif;
   --font-sans: "Inter", sans-serif;
+  --font-display: var(--font-sans);
 }
 
 /* Scoped to frontend only — Payload admin uses its own styles */
@@ -147,8 +148,29 @@
   font-size-adjust: from-font;
 }
 
-.frontend-app :is(h1, h2, h3, h4, h5, h6) {
+.frontend-app h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.frontend-app :is(h2, h3, h4, h5, h6) {
   font-family: var(--font-heading);
+}
+
+/* Eyebrow label — Inter display bold, tracking serré */
+.frontend-app .eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Sous-titre éditorial / citation — Playfair italic */
+.frontend-app .subtitle-editorial,
+.frontend-app blockquote {
+  font-family: var(--font-heading);
+  font-style: italic;
 }
 
 @layer base {
