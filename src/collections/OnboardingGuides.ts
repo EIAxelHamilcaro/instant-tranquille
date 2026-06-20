@@ -85,8 +85,8 @@ export const OnboardingGuides: CollectionConfig = {
               localized: true,
               admin: {
                 description:
-                  "Nom pour identifier ce livret (ex: Famille Dupont — Mars 2024)",
-                placeholder: "Famille Dupont — Mars 2024",
+                  "Nom pour identifier ce livret (ex: Famille Dupont, Mars 2024)",
+                placeholder: "Famille Dupont, Mars 2024",
               },
             },
             {

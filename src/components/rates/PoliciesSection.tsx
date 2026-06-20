@@ -44,7 +44,7 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
       title: t("checkInOut"),
       content:
         policies?.checkIn || policies?.checkOut
-          ? `${policies?.checkIn ? `${t("checkInLabel")}${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? " — " : ""}${policies?.checkOut ? `${t("checkOutLabel")}${policies.checkOut}` : ""}`
+          ? `${policies?.checkIn ? `${t("checkInLabel")}${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? ", " : ""}${policies?.checkOut ? `${t("checkOutLabel")}${policies.checkOut}` : ""}`
           : null,
       isRichText: false,
     },

@@ -114,7 +114,7 @@ export function HeroSection({
 
         {/* Colonne droite : 2 photos paysage empilées + panneau texte (col 5/12) */}
         <div className="flex w-full flex-col lg:w-5/12">
-          {/* Photo 2 — salon cheminée */}
+          {/* Photo 2, salon cheminée */}
           <div className="relative h-[35vw] lg:h-1/2">
             <PayloadImage
               media={secondMedia as Parameters<typeof PayloadImage>[0]["media"]}
@@ -127,12 +127,13 @@ export function HeroSection({
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a2318]/20" />
           </div>
 
-          {/* Photo 3 — cuisine */}
+          {/* Photo 3, cuisine */}
           <div className="relative h-[35vw] lg:h-1/2">
             <PayloadImage
               media={thirdMedia as Parameters<typeof PayloadImage>[0]["media"]}
               size="card"
               fill
+              priority
               className="object-cover object-center"
               sizes="(max-width: 1024px) 100vw, 42vw"
             />
@@ -140,7 +141,7 @@ export function HeroSection({
           </div>
         </div>
 
-        {/* Panneau texte superposé — desktop: absolu sur la jonction; mobile: bandeau sobre en bas */}
+        {/* Panneau texte superposé, desktop: absolu sur la jonction; mobile: bandeau sobre en bas */}
         <div className="relative z-20 w-full bg-[#1a2318]/90 px-6 py-10 backdrop-blur-sm lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-auto lg:max-w-xl lg:flex-col lg:items-start lg:justify-center lg:bg-gradient-to-r lg:from-[#1a2318]/80 lg:via-[#1a2318]/60 lg:to-transparent lg:px-12 lg:py-0 lg:backdrop-blur-none">
           <p className="mb-4 font-serif text-sm italic tracking-widest text-[#d4c097]/80 lg:text-base">
             {t("heroEyebrow")}
@@ -177,7 +178,7 @@ export function HeroSection({
           </div>
         </div>
 
-        {/* Chevron bas — desktop uniquement */}
+        {/* Chevron bas, desktop uniquement */}
         <div
           className="absolute bottom-6 left-1/2 z-20 hidden -translate-x-1/2 animate-bounce motion-reduce:animate-none lg:block"
           aria-hidden="true"

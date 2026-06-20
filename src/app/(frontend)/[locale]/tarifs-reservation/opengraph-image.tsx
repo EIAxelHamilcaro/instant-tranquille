@@ -1,7 +1,7 @@
 import { OG_SIZE, renderOGTemplate } from "@/lib/og";
 
 export const runtime = "edge";
-export const alt = "Tarifs & Réservation — L'Instant Tranquille en Sologne";
+export const alt = "Tarifs & Réservation, L'Instant Tranquille en Sologne";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
@@ -12,9 +12,8 @@ export default function OGImage() {
 
   return renderOGTemplate({
     title: "Tarifs & Réservation",
-    subtitle:
-      "Réservez votre séjour en Sologne sur Airbnb, Booking ou Abritel.",
+    subtitle: "Réservez votre séjour en Sologne sur Airbnb ou Booking.",
     imageSrc,
-    tags: ["Airbnb", "Booking", "Abritel", "Sologne"],
+    tags: ["Airbnb", "Booking", "Sologne"],
   });
 }

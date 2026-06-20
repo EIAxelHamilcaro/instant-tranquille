@@ -67,7 +67,7 @@ export default buildConfig({
       beforeDashboard: ["/components/payload/BeforeDashboard"],
     },
     meta: {
-      titleSuffix: " — L'Instant Tranquille",
+      titleSuffix: ", L'Instant Tranquille",
     },
     livePreview: {
       breakpoints: [
@@ -131,7 +131,7 @@ export default buildConfig({
       generateTitle: ({ doc }) => {
         const title = typeof doc?.title === "string" ? doc.title : "";
         return title
-          ? `${title} — L'Instant Tranquille`
+          ? `${title}, L'Instant Tranquille`
           : "L'Instant Tranquille";
       },
       generateDescription: ({ doc }) => {

@@ -5,7 +5,6 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { HighlightsSection } from "@/components/home/HighlightsSection";
 import { IntroSection } from "@/components/home/IntroSection";
 import { StatsBand } from "@/components/home/StatsBand";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import {
   HomePageClient,
@@ -20,13 +19,12 @@ import {
   generateLodgingBusinessJsonLd,
 } from "@/lib/jsonld";
 import {
-  getAllApprovedTestimonials,
   getAmenities,
-  getFeaturedTestimonials,
   getPageBySlug,
   getPricingConfig,
   getSiteSettings,
 } from "@/lib/queries";
+import { REVIEWS } from "@/lib/reviews";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -41,7 +39,7 @@ export async function generateMetadata({
     "home",
     locale as Locale,
     "/",
-    `L'Instant Tranquille — ${messages.metadata.title}`,
+    `L'Instant Tranquille, ${messages.metadata.title}`,
     messages.metadata.description,
     { absoluteTitle: true },
   );
@@ -57,17 +55,8 @@ export default async function HomePage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [
-    siteSettings,
-    testimonials,
-    allTestimonials,
-    pricingConfig,
-    homePage,
-    amenities,
-  ] = await Promise.all([
+  const [siteSettings, pricingConfig, homePage, amenities] = await Promise.all([
     getSiteSettings(locale, isDraft),
-    getFeaturedTestimonials(locale, isDraft),
-    getAllApprovedTestimonials(locale, isDraft),
     getPricingConfig(locale, isDraft),
     getPageBySlug("home", locale, isDraft),
     getAmenities(locale, isDraft),
@@ -125,7 +114,7 @@ export default async function HomePage({
       ?.checkOut as string | undefined,
     numberOfRooms: propertyDetails?.bedrooms,
     amenities,
-    testimonials: allTestimonials,
+    testimonials: REVIEWS,
     sameAs: sameAsUrls,
   });
 
@@ -180,7 +169,6 @@ export default async function HomePage({
             testimonialsTitle: homePage?.testimonialsTitle ?? null,
             ctaTitle: homePage?.ctaTitle ?? null,
             ctaSubtitle: homePage?.ctaSubtitle ?? null,
-            testimonials,
             bookingLinks,
           }}
           propertyDetails={propertyDetails}
@@ -224,11 +212,7 @@ export default async function HomePage({
         highlights={homePage?.highlights ?? null}
         title={homePage?.highlightsTitle ?? null}
       />
-      <TestimonialsSection
-        testimonials={testimonials}
-        title={homePage?.testimonialsTitle ?? null}
-      />
-      <TestimonialForm />
+      <TestimonialsSection title={homePage?.testimonialsTitle ?? null} />
       <CTASection
         bookingLinks={bookingLinks}
         ctaTitle={homePage?.ctaTitle ?? null}

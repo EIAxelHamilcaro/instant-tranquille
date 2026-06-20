@@ -15,7 +15,7 @@ export function LocaleSwitcher() {
 
   function switchLocale(newLocale: string) {
     router.replace(
-      // @ts-expect-error — dynamic pathname with params
+      // @ts-expect-error, dynamic pathname with params
       { pathname, params },
       { locale: newLocale },
     );

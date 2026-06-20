@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 export const alt =
-  "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay";
+  "L'Instant Tranquille, Gîte en Sologne, Romorantin-Lanthenay";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -85,7 +85,7 @@ export default function OGImage() {
           fontFamily: "sans-serif",
         }}
       >
-        Gîte en Sologne — Romorantin-Lanthenay
+        Gîte en Sologne, Romorantin-Lanthenay
       </div>
 
       {/* Bottom bar */}

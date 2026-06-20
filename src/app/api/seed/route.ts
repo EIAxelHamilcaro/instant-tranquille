@@ -30,7 +30,7 @@ export async function POST() {
   const payload = await getPayload();
   const results: string[] = [];
 
-  // Hero image skipped — upload via Payload admin with Vercel Blob storage
+  // Hero image skipped, upload via Payload admin with Vercel Blob storage
   const heroImageId: number | null = null;
 
   // Clean collections to avoid duplicates on re-seed
@@ -374,7 +374,7 @@ export async function POST() {
       coordinates: { lat: 47.6494, lng: 2.0036 },
     },
     {
-      name: "Étangs de Sologne — Sentier de Villeherviers",
+      name: "Étangs de Sologne, Sentier de Villeherviers",
       category: "nature" as const,
       address: "41210 Villeherviers",
       distanceFromGite: "15 min",
@@ -428,7 +428,7 @@ export async function POST() {
     await payload.create({
       collection: "onboarding-guides",
       data: {
-        title: "Bienvenue — Famille Dupont",
+        title: "Bienvenue, Famille Dupont",
         accessToken: crypto.randomBytes(12).toString("hex"),
         isActive: true,
         sections: [
@@ -563,7 +563,7 @@ export async function POST() {
       ),
       seo: {
         metaTitle:
-          "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
+          "L'Instant Tranquille, Gîte en Sologne, Romorantin-Lanthenay",
         metaDescription:
           "Gîte en Sologne à Romorantin-Lanthenay (41) : 120m², 3 chambres, jardin de 3 000m², cheminée, fibre. À 40 km de Chambord. Location à la semaine ou au week-end.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
@@ -583,7 +583,7 @@ export async function POST() {
         "Jardin clos de 3 000m² : terrasse, barbecue, salon de jardin, transats, jeux pour enfants. Parking privatif sur place.",
       ),
       seo: {
-        metaTitle: "Le Gîte — L'Instant Tranquille, Romorantin-Lanthenay",
+        metaTitle: "Le Gîte, L'Instant Tranquille, Romorantin-Lanthenay",
         metaDescription:
           "Gîte 120m² à Romorantin-Lanthenay (Sologne, 41) : 3 chambres, cheminée, jardin clos 3 000m², fibre, parking. 6 personnes max. Entièrement rénové.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
@@ -601,7 +601,7 @@ export async function POST() {
         "Un acompte de 30% est demandé à la réservation, le solde étant à régler à l'arrivée. Nous acceptons les virements bancaires et les paiements par carte.",
       ),
       seo: {
-        metaTitle: "Tarifs & Réservation — L'Instant Tranquille",
+        metaTitle: "Tarifs & Réservation, L'Instant Tranquille",
         metaDescription:
           "Consultez nos tarifs et réservez votre séjour au gîte L'Instant Tranquille en Sologne. Tarifs à partir de 90€/nuit. Réservation simple et rapide.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
@@ -618,7 +618,7 @@ export async function POST() {
         "Nous sommes disponibles par e-mail et par téléphone du lundi au samedi, de 9h à 19h. Pour les demandes de réservation, merci de préciser vos dates de séjour et le nombre de personnes.",
       ),
       seo: {
-        metaTitle: "Contact — L'Instant Tranquille",
+        metaTitle: "Contact, L'Instant Tranquille",
         metaDescription:
           "Contactez-nous pour toute question ou demande de réservation pour le gîte L'Instant Tranquille en Sologne. Réponse rapide garantie.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
@@ -666,7 +666,7 @@ export async function POST() {
         },
         defaultSeo: {
           metaTitle:
-            "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
+            "L'Instant Tranquille, Gîte en Sologne, Romorantin-Lanthenay",
           metaDescription:
             "L'Instant Tranquille, gîte à Romorantin-Lanthenay (Sologne, 41) : 3 chambres, 120m², jardin 3 000m². À 40 km de Chambord et Cheverny.",
           ...(heroImageId ? { ogImage: heroImageId } : {}),
@@ -771,7 +771,7 @@ export async function POST() {
             "Une caution de 300€ est demandée à l'arrivée (chèque ou empreinte de carte) et restituée après l'état des lieux de sortie.",
           ),
           additional: richText(
-            "Le ménage de fin de séjour est obligatoire (60€). Vous pouvez également laisser le gîte propre et rangé pour éviter ces frais — un guide de ménage est à votre disposition.",
+            "Le ménage de fin de séjour est obligatoire (60€). Vous pouvez également laisser le gîte propre et rangé pour éviter ces frais, un guide de ménage est à votre disposition.",
             "Les draps et serviettes peuvent être fournis moyennant un supplément de 15€ par personne. Vous pouvez aussi apporter les vôtres.",
             "Les arrivées et départs en dehors des horaires standards sont possibles sur demande, sous réserve de disponibilité.",
           ),
@@ -783,7 +783,7 @@ export async function POST() {
     results.push(`Error updating pricing config: ${e}`);
   }
 
-  // Header — create with FR labels (default locale), then add EN
+  // Header, create with FR labels (default locale), then add EN
   try {
     await payload.updateGlobal({
       slug: "header",
@@ -815,7 +815,7 @@ export async function POST() {
         ctaButton: { label: "Réserver", url: "/tarifs-reservation" },
       },
     });
-    // Add EN labels — use the existing navItem IDs
+    // Add EN labels, use the existing navItem IDs
     const headerDoc = await payload.findGlobal({ slug: "header" });
     const existingNavItems = (headerDoc.navItems || []) as Array<
       Record<string, unknown>
@@ -838,7 +838,7 @@ export async function POST() {
     results.push(`Error updating header: ${e}`);
   }
 
-  // Footer — create with FR, then add EN using existing IDs
+  // Footer, create with FR, then add EN using existing IDs
   try {
     await payload.updateGlobal({
       slug: "footer",
@@ -879,7 +879,7 @@ export async function POST() {
           },
         ],
         legalText:
-          "L'Instant Tranquille — Gîte de vacances en Sologne. Tous droits réservés.",
+          "L'Instant Tranquille, Gîte de vacances en Sologne. Tous droits réservés.",
       },
     });
     const footerDoc = await payload.findGlobal({ slug: "footer" });
@@ -911,7 +911,7 @@ export async function POST() {
           ),
         })),
         legalText:
-          "L'Instant Tranquille — Holiday cottage in Sologne. All rights reserved.",
+          "L'Instant Tranquille, Holiday cottage in Sologne. All rights reserved.",
       },
     });
     results.push("Footer FR+EN updated");
@@ -1006,7 +1006,7 @@ export async function POST() {
             "A security deposit of €300 is required upon arrival (check or card hold) and returned after the departure inspection.",
           ),
           additional: richText(
-            "End-of-stay cleaning is mandatory (€60). You may also leave the cottage clean and tidy to waive this fee — a cleaning guide is provided.",
+            "End-of-stay cleaning is mandatory (€60). You may also leave the cottage clean and tidy to waive this fee, a cleaning guide is provided.",
             "Bed linen and towels can be provided for a €15 per person supplement. You may also bring your own.",
             "Early check-in or late check-out is available upon request, subject to availability.",
           ),
@@ -1137,7 +1137,7 @@ export async function POST() {
     {
       name: "Le Grand St Michel",
       description:
-        "Facing Chambord castle, a charming brasserie offering refined traditional cuisine. Terrace with stunning castle views — perfect for lunch after visiting.",
+        "Facing Chambord castle, a charming brasserie offering refined traditional cuisine. Terrace with stunning castle views, perfect for lunch after visiting.",
     },
     {
       name: "Auberge du Centre",
@@ -1150,7 +1150,7 @@ export async function POST() {
         "Conservatory of Sologne's wildlife and flora. 300 hectares of trails through heathlands, forests and ponds. Deer-calling observation hides in autumn. Free entry.",
     },
     {
-      name: "Sologne Ponds — Villeherviers Trail",
+      name: "Sologne Ponds, Villeherviers Trail",
       description:
         "8 km waymarked trail around typical Sologne ponds. Heathland and forest landscapes, birdwatching and wildlife spotting. Open year-round.",
     },
@@ -1229,7 +1229,7 @@ export async function POST() {
       heroTitle: "Contact us",
       heroSubtitle: "Got a question? Don't hesitate to get in touch",
       content: richText(
-        "Do you have a question about the cottage, availability or the area? Don't hesitate to contact us — we'll get back to you as soon as possible.",
+        "Do you have a question about the cottage, availability or the area? Don't hesitate to contact us, we'll get back to you as soon as possible.",
         "We're available by email and phone Monday to Saturday, 9 am to 7 pm. For booking enquiries, please include your preferred dates and the number of guests.",
       ),
     },
@@ -1260,7 +1260,7 @@ export async function POST() {
     results.push(`Error updating pages EN: ${e}`);
   }
 
-  // Testimonials EN (skip Wilson — already in English; translate Dupont, Martin, Müller)
+  // Testimonials EN (skip Wilson, already in English; translate Dupont, Martin, Müller)
   const testimonialsEN: Array<{
     guestName: string;
     guestOrigin: string;

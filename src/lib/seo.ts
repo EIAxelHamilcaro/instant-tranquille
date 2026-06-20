@@ -67,7 +67,7 @@ export function generatePageMetadata({
 
   const ogTitle = title.includes("L'Instant Tranquille")
     ? title
-    : `${title} — L'Instant Tranquille`;
+    : `${title}, L'Instant Tranquille`;
 
   const baseKeywords = locale === "fr" ? KEYWORDS_FR : KEYWORDS_EN;
   const keywords = extraKeywords

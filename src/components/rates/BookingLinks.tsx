@@ -39,7 +39,7 @@ export function BookingLinks({
               href={bookingLinks.airbnb}
               variant="earth"
               className="min-w-[220px] justify-center"
-              aria-label={`${tHome("ctaAirbnb")} — ${tCommon("opensNewTab")}`}
+              aria-label={`${tHome("ctaAirbnb")}, ${tCommon("opensNewTab")}`}
             >
               {tHome("ctaAirbnb")}
             </ExternalLinkButton>
@@ -49,19 +49,9 @@ export function BookingLinks({
               href={bookingLinks.booking}
               variant="primary"
               className="min-w-[220px] justify-center"
-              aria-label={`${tHome("ctaBooking")} — ${tCommon("opensNewTab")}`}
+              aria-label={`${tHome("ctaBooking")}, ${tCommon("opensNewTab")}`}
             >
               {tHome("ctaBooking")}
-            </ExternalLinkButton>
-          )}
-          {bookingLinks?.abritel && (
-            <ExternalLinkButton
-              href={bookingLinks.abritel}
-              variant="earth"
-              className="min-w-[220px] justify-center"
-              aria-label={`${tHome("ctaAbritel")} — ${tCommon("opensNewTab")}`}
-            >
-              {tHome("ctaAbritel")}
             </ExternalLinkButton>
           )}
           {bookingLinks?.email ? (

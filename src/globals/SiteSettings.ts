@@ -168,7 +168,7 @@ export const SiteSettings: GlobalConfig = {
                   label: "Ville",
                   admin: {
                     description:
-                      "Commune du gîte — essentiel pour le référencement local Google",
+                      "Commune du gîte, essentiel pour le référencement local Google",
                     placeholder: "Romorantin-Lanthenay",
                     width: "50%",
                   },
@@ -442,7 +442,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description:
                       "Titre affiché dans Google si la page n'a pas de titre SEO (max. 60 caractères)",
-                    placeholder: "L'Instant Tranquille — Gîte en Sologne",
+                    placeholder: "L'Instant Tranquille, Gîte en Sologne",
                   },
                 },
                 {

@@ -17,152 +17,152 @@ const IMAGE_MAP = [
     filename: "entree-commode-deco-briques.webp",
     altFr: "Entrée du gîte, commode décorée et mur de briques",
     altEn: "Gîte entrance, decorated dresser and brick wall",
-    captionFr: "L'entrée — brique et décoration artisanale",
-    captionEn: "Entrance — brick and handcrafted decor",
+    captionFr: "L'entrée, brique et décoration artisanale",
+    captionEn: "Entrance, brick and handcrafted decor",
     category: "entree",
   },
   {
     filename: "entree-detail-lampe-vase-briques.webp",
     altFr: "Détail entrée : lampe et vase devant les briques",
     altEn: "Entrance detail: lamp and vase against brick wall",
-    captionFr: "Détail entrée — ambiance chaleureuse",
-    captionEn: "Entrance detail — warm atmosphere",
+    captionFr: "Détail entrée, ambiance chaleureuse",
+    captionEn: "Entrance detail, warm atmosphere",
     category: "entree",
   },
   {
     filename: "entree-porte-manteau-papier-peint-herons.webp",
     altFr: "Entrée avec porte-manteau et papier peint hérons",
     altEn: "Entrance with coat rack and heron wallpaper",
-    captionFr: "Entrée — papier peint hérons",
-    captionEn: "Entrance — heron wallpaper",
+    captionFr: "Entrée, papier peint hérons",
+    captionEn: "Entrance, heron wallpaper",
     category: "entree",
   },
   {
     filename: "chambre-1-lit-double-vert-sauge.webp",
-    altFr: "Chambre 1 — lit double, tons vert sauge",
-    altEn: "Bedroom 1 — double bed, sage green tones",
-    captionFr: "Chambre 1 — lit double vert sauge",
-    captionEn: "Bedroom 1 — sage green double bed",
+    altFr: "Chambre 1, lit double, tons vert sauge",
+    altEn: "Bedroom 1, double bed, sage green tones",
+    captionFr: "Chambre 1, lit double vert sauge",
+    captionEn: "Bedroom 1, sage green double bed",
     category: "chambre",
   },
   {
     filename: "chambre-1-vue-ensemble-papier-peint-foret.webp",
-    altFr: "Chambre 1 — vue d'ensemble, papier peint forêt",
-    altEn: "Bedroom 1 — full view, forest wallpaper",
-    captionFr: "Chambre 1 — vue d'ensemble",
-    captionEn: "Bedroom 1 — full view",
+    altFr: "Chambre 1, vue d'ensemble, papier peint forêt",
+    altEn: "Bedroom 1, full view, forest wallpaper",
+    captionFr: "Chambre 1, vue d'ensemble",
+    captionEn: "Bedroom 1, full view",
     category: "chambre",
   },
   {
     filename: "chambre-2-lit-double-sous-pente-terracotta.webp",
-    altFr: "Chambre 2 — lit double sous les combles, tons terracotta",
-    altEn: "Bedroom 2 — double bed under the eaves, terracotta tones",
-    captionFr: "Chambre 2 — sous pente terracotta",
-    captionEn: "Bedroom 2 — terracotta sloped ceiling",
+    altFr: "Chambre 2, lit double sous les combles, tons terracotta",
+    altEn: "Bedroom 2, double bed under the eaves, terracotta tones",
+    captionFr: "Chambre 2, sous pente terracotta",
+    captionEn: "Bedroom 2, terracotta sloped ceiling",
     category: "chambre",
   },
   {
     filename: "chambre-2-tete-de-lit-sous-pente.webp",
-    altFr: "Chambre 2 — tête de lit sous les combles",
-    altEn: "Bedroom 2 — headboard under the eaves",
-    captionFr: "Chambre 2 — tête de lit",
-    captionEn: "Bedroom 2 — headboard",
+    altFr: "Chambre 2, tête de lit sous les combles",
+    altEn: "Bedroom 2, headboard under the eaves",
+    captionFr: "Chambre 2, tête de lit",
+    captionEn: "Bedroom 2, headboard",
     category: "chambre",
   },
   {
     filename: "chambre-3-lits-simples-sous-pente.webp",
-    altFr: "Chambre 3 — lits simples sous les combles",
-    altEn: "Bedroom 3 — twin beds under the eaves",
-    captionFr: "Chambre 3 — lits simples",
-    captionEn: "Bedroom 3 — twin beds",
+    altFr: "Chambre 3, lits simples sous les combles",
+    altEn: "Bedroom 3, twin beds under the eaves",
+    captionFr: "Chambre 3, lits simples",
+    captionEn: "Bedroom 3, twin beds",
     category: "chambre",
   },
   {
     filename: "sejour-canape-buffet-escalier.webp",
-    altFr: "Séjour — canapé, buffet et escalier",
-    altEn: "Living room — sofa, sideboard and staircase",
-    captionFr: "Séjour — espace de vie",
-    captionEn: "Living room — living space",
+    altFr: "Séjour, canapé, buffet et escalier",
+    altEn: "Living room, sofa, sideboard and staircase",
+    captionFr: "Séjour, espace de vie",
+    captionEn: "Living room, living space",
     category: "sejour",
   },
   {
     filename: "sejour-canape-tv-escalier.webp",
-    altFr: "Séjour — canapé, télévision et escalier",
-    altEn: "Living room — sofa, TV and staircase",
-    captionFr: "Séjour — coin télévision",
-    captionEn: "Living room — TV area",
+    altFr: "Séjour, canapé, télévision et escalier",
+    altEn: "Living room, sofa, TV and staircase",
+    captionFr: "Séjour, coin télévision",
+    captionEn: "Living room, TV area",
     category: "sejour",
   },
   {
     filename: "salon-cheminee-canapes-tv.webp",
     altFr: "Salon avec cheminée, canapés et télévision",
     altEn: "Lounge with fireplace, sofas and TV",
-    captionFr: "Salon — cheminée et confort",
-    captionEn: "Lounge — fireplace and comfort",
+    captionFr: "Salon, cheminée et confort",
+    captionEn: "Lounge, fireplace and comfort",
     category: "salon",
   },
   {
     filename: "salon-baby-foot-mur-briques.webp",
-    altFr: "Salon — baby-foot devant le mur de briques",
-    altEn: "Lounge — foosball table against brick wall",
-    captionFr: "Salon — baby-foot et briques",
-    captionEn: "Lounge — foosball and brick wall",
+    altFr: "Salon, baby-foot devant le mur de briques",
+    altEn: "Lounge, foosball table against brick wall",
+    captionFr: "Salon, baby-foot et briques",
+    captionEn: "Lounge, foosball and brick wall",
     category: "salon",
   },
   {
     filename: "cuisine-equipee-verte-poutres.webp",
     altFr: "Cuisine équipée verte avec poutres apparentes",
     altEn: "Fully equipped green kitchen with exposed beams",
-    captionFr: "Cuisine — verte et bien équipée",
-    captionEn: "Kitchen — green and fully equipped",
+    captionFr: "Cuisine, verte et bien équipée",
+    captionEn: "Kitchen, green and fully equipped",
     category: "cuisine",
   },
   {
     filename: "detail-deco-coiffeuse-miroir-chambre-1.webp",
-    altFr: "Détail décoration — coiffeuse et miroir, chambre 1",
-    altEn: "Decor detail — dressing table and mirror, bedroom 1",
-    captionFr: "Chambre 1 — coiffeuse",
-    captionEn: "Bedroom 1 — dressing table",
+    altFr: "Détail décoration, coiffeuse et miroir, chambre 1",
+    altEn: "Decor detail, dressing table and mirror, bedroom 1",
+    captionFr: "Chambre 1, coiffeuse",
+    captionEn: "Bedroom 1, dressing table",
     category: "detail",
   },
   {
     filename: "detail-deco-cuisine-cloche-bronze.webp",
-    altFr: "Détail décoration cuisine — cloche en bronze",
-    altEn: "Kitchen decor detail — bronze cloche",
-    captionFr: "Cuisine — cloche bronze",
-    captionEn: "Kitchen — bronze cloche",
+    altFr: "Détail décoration cuisine, cloche en bronze",
+    altEn: "Kitchen decor detail, bronze cloche",
+    captionFr: "Cuisine, cloche bronze",
+    captionEn: "Kitchen, bronze cloche",
     category: "detail",
   },
   {
     filename: "detail-deco-vase-visage-dore.webp",
-    altFr: "Détail décoration — vase visage doré",
-    altEn: "Decor detail — golden face vase",
-    captionFr: "Détail déco — vase doré",
-    captionEn: "Decor detail — golden vase",
+    altFr: "Détail décoration, vase visage doré",
+    altEn: "Decor detail, golden face vase",
+    captionFr: "Détail déco, vase doré",
+    captionEn: "Decor detail, golden vase",
     category: "detail",
   },
   {
     filename: "jardin-terrasse-vue-ensemble.webp",
     altFr: "Vue d'ensemble du jardin et de la terrasse",
     altEn: "Full view of the garden and terrace",
-    captionFr: "Jardin — vue d'ensemble",
-    captionEn: "Garden — full view",
+    captionFr: "Jardin, vue d'ensemble",
+    captionEn: "Garden, full view",
     category: "jardin",
   },
   {
     filename: "jardin-souche-arbre-decorative.webp",
-    altFr: "Jardin — souche d'arbre décorative",
-    altEn: "Garden — decorative tree stump",
-    captionFr: "Jardin — détail naturel",
-    captionEn: "Garden — natural detail",
+    altFr: "Jardin, souche d'arbre décorative",
+    altEn: "Garden, decorative tree stump",
+    captionFr: "Jardin, détail naturel",
+    captionEn: "Garden, natural detail",
     category: "jardin",
   },
   {
     filename: "terrasse-salon-jardin.webp",
     altFr: "Terrasse avec salon de jardin",
     altEn: "Terrace with garden furniture",
-    captionFr: "Terrasse — salon extérieur",
-    captionEn: "Terrace — outdoor lounge",
+    captionFr: "Terrasse, salon extérieur",
+    captionEn: "Terrace, outdoor lounge",
     category: "jardin",
   },
 ] as const;
@@ -371,7 +371,7 @@ async function seed() {
                   children: [
                     {
                       type: "text",
-                      text: "L'arrivée est à partir de 17h00 (boîte à clé sécurisée — arrivée autonome). Le départ est avant 10h00.",
+                      text: "L'arrivée est à partir de 17h00 (boîte à clé sécurisée, arrivée autonome). Le départ est avant 10h00.",
                     },
                   ],
                   direction: "ltr",
@@ -389,7 +389,7 @@ async function seed() {
         },
       ],
       defaultSeo: {
-        metaTitle: "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
+        metaTitle: "L'Instant Tranquille, Gîte en Sologne, Romorantin-Lanthenay",
         metaDescription:
           "Gîte en Sologne à Romorantin-Lanthenay (41200), 6 personnes, 3 chambres, 115 m². Proche Chambord, Cheverny et Grand Parquet de Lamotte-Beuvron.",
       },
@@ -506,7 +506,7 @@ async function seed() {
         },
       ],
       defaultSeo: {
-        metaTitle: "L'Instant Tranquille — Holiday Cottage in Sologne, France",
+        metaTitle: "L'Instant Tranquille, Holiday Cottage in Sologne, France",
         metaDescription:
           "Holiday cottage in Sologne, Romorantin-Lanthenay (41200), 6 guests, 3 bedrooms, 115 m². Close to Chambord, Cheverny and Grand Parquet equestrian centre.",
       },
@@ -591,7 +591,7 @@ async function seed() {
     locale: "fr",
     data: {
       description:
-        "Un gîte en Sologne à Romorantin-Lanthenay — forêts, étangs, châteaux de la Loire.",
+        "Un gîte en Sologne à Romorantin-Lanthenay, forêts, étangs, châteaux de la Loire.",
       navColumns: [
         {
           title: "Navigation",
@@ -624,7 +624,7 @@ async function seed() {
         },
       ],
       legalText:
-        "L'Instant Tranquille — Gîte en Sologne. Tous droits réservés.",
+        "L'Instant Tranquille, Gîte en Sologne. Tous droits réservés.",
     },
   });
   await payload.updateGlobal({
@@ -632,7 +632,7 @@ async function seed() {
     locale: "en",
     data: {
       description:
-        "A holiday cottage in Sologne, Romorantin-Lanthenay — forests, ponds, Loire Valley châteaux.",
+        "A holiday cottage in Sologne, Romorantin-Lanthenay, forests, ponds, Loire Valley châteaux.",
       navColumns: [
         {
           title: "Navigation",
@@ -661,7 +661,7 @@ async function seed() {
         },
       ],
       legalText:
-        "L'Instant Tranquille — Holiday cottage in Sologne. All rights reserved.",
+        "L'Instant Tranquille, Holiday cottage in Sologne. All rights reserved.",
     },
   });
 
@@ -729,7 +729,7 @@ async function seed() {
           name: "Linge de lit",
           amount: 15,
           type: "per_person",
-          description: "Optionnel — draps et serviettes",
+          description: "Optionnel, draps et serviettes",
         },
         {
           name: "Taxe de séjour",
@@ -825,7 +825,7 @@ async function seed() {
   // ── Pages ──────────────────────────────────────────────────────────────────
   console.log("Seeding Pages...");
 
-  // Page home — avec heroImages (mosaïque 3 photos) et introImage câblés
+  // Page home, avec heroImages (mosaïque 3 photos) et introImage câblés
   const heroImageId = mediaIds["salon-cheminee-canapes-tv.webp"];
   const introImageId = mediaIds["jardin-terrasse-vue-ensemble.webp"];
 
@@ -932,7 +932,7 @@ async function seed() {
                 children: [
                   {
                     type: "text",
-                    text: "In Romorantin-Lanthenay, at the heart of Sologne, this 120 m² cottage sleeps up to 6 guests in 3 bedrooms. Forests, ponds, Loire Valley châteaux — all within easy reach.",
+                    text: "In Romorantin-Lanthenay, at the heart of Sologne, this 120 m² cottage sleeps up to 6 guests in 3 bedrooms. Forests, ponds, Loire Valley châteaux, all within easy reach.",
                   },
                 ],
                 direction: "ltr",
@@ -982,7 +982,7 @@ async function seed() {
     });
   }
 
-  // Page le-gite — galerie et previewImages câblées
+  // Page le-gite, galerie et previewImages câblées
   const galleryImages = [
     "salon-cheminee-canapes-tv.webp",
     "chambre-1-lit-double-vert-sauge.webp",
@@ -1034,7 +1034,7 @@ async function seed() {
               children: [
                 {
                   type: "text",
-                  text: "Maison de 115 m² à Romorantin-Lanthenay — 3 chambres (6 couchages), 1 salle de bain, salon avec cheminée, cuisine équipée, baby-foot, jeux de société. Terrasse avec barbecue, jardin clos. Parking privé gratuit. Animaux acceptés.",
+                  text: "Maison de 115 m² à Romorantin-Lanthenay, 3 chambres (6 couchages), 1 salle de bain, salon avec cheminée, cuisine équipée, baby-foot, jeux de société. Terrasse avec barbecue, jardin clos. Parking privé gratuit. Animaux acceptés.",
                 },
               ],
               direction: "ltr",
@@ -1079,7 +1079,7 @@ async function seed() {
                 children: [
                   {
                     type: "text",
-                    text: "115 m² house in Romorantin-Lanthenay — 3 bedrooms (6 guests), 1 bathroom, lounge with fireplace, fully equipped kitchen, foosball table, board games. Terrace with barbecue, enclosed garden. Free private parking. Pets welcome.",
+                    text: "115 m² house in Romorantin-Lanthenay, 3 bedrooms (6 guests), 1 bathroom, lounge with fireplace, fully equipped kitchen, foosball table, board games. Terrace with barbecue, enclosed garden. Free private parking. Pets welcome.",
                   },
                 ],
                 direction: "ltr",
@@ -1105,14 +1105,14 @@ async function seed() {
       title: "Les Alentours",
       slug: "les-alentours",
       heroTitle: "Les Alentours",
-      heroSubtitle: "Châteaux, nature, équitation — la Sologne à portée de route",
+      heroSubtitle: "Châteaux, nature, équitation, la Sologne à portée de route",
       equestrianTitle: "Cavaliers & sports équestres",
       equestrianVenues: [
         {
           name: "Le Grand Parquet de Lamotte-Beuvron",
           description:
             "Site fédéral de la FFE, accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux.",
-          distanceFromGite: "~17 km — 20 min",
+          distanceFromGite: "~17 km, 20 min",
           website: "https://www.ffe.com",
         },
       ],
@@ -1133,14 +1133,14 @@ async function seed() {
       data: {
         title: "Surroundings",
         heroTitle: "The Surroundings",
-        heroSubtitle: "Châteaux, nature, equestrian sports — Sologne at your doorstep",
+        heroSubtitle: "Châteaux, nature, equestrian sports, Sologne at your doorstep",
         equestrianTitle: "Riders & equestrian sports",
         equestrianVenues: [
           {
             name: "Le Grand Parquet de Lamotte-Beuvron",
             description:
               "FFE national equestrian centre hosting the Generali Open de France and major showjumping events.",
-            distanceFromGite: "~17 km — 20 min",
+            distanceFromGite: "~17 km, 20 min",
             website: "https://www.ffe.com",
           },
         ],
@@ -1190,96 +1190,6 @@ async function seed() {
     });
   }
 
-  // ── Testimonials (vrais avis Airbnb/Booking) ───────────────────────────────
-  console.log("Seeding Testimonials...");
-  const testimonials: Array<{
-    guestName: string;
-    rating: number;
-    text: string;
-    source: string;
-    stayDate: string;
-    featured: boolean;
-  }> = [
-    {
-      guestName: "Julien",
-      rating: 5,
-      text: "Nous avons passé un excellent week-end de Pâques dans cette maison. Erick est un hôte accueillant, sympathique et très disponible. La maison est décorée avec goût et très fonctionnelle. Linge et literie de qualité. Cuisine très bien équipée. Nous reviendrons avec grand plaisir !",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: true,
-    },
-    {
-      guestName: "Laura",
-      rating: 5,
-      text: "Très bon séjour, accueil chaleureux dès l'arrivée. Logement impeccable et très propre. Literie confortable. Le baby-foot et les jeux de société sont un vrai plus, très convivial. Pour un logement de 3 chambres, le rapport qualité-prix est très bon. Nous recommandons sans hésiter !",
-      source: "airbnb",
-      stayDate: "2026-05-01",
-      featured: true,
-    },
-    {
-      guestName: "Hasan",
-      rating: 5,
-      text: "Logement bien refait, propre et fonctionnel. Séjour très bien passé. Communication et accueil très sympathiques. Je recommande vivement.",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: true,
-    },
-    {
-      guestName: "Stéphanie",
-      rating: 5,
-      text: "Merci pour la qualité de l'accueil. Une très belle maison agréable, décorée avec soin et chaleur. C'est avec plaisir que nous reviendrons.",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: true,
-    },
-    {
-      guestName: "Nicolas",
-      rating: 5,
-      text: "Logement parfait, très bien aménagé et décoré avec goût. Idéal pour une famille avec ados. Hôte très réactif.",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: false,
-    },
-    {
-      guestName: "Arbi",
-      rating: 5,
-      text: "Séjour très satisfaisant, conforme à la description, propre et bien équipé. Nous recommandons sans hésitation.",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: false,
-    },
-    {
-      guestName: "Philippe",
-      rating: 5,
-      text: "Logement très agréable, très bien aménagé avec beaucoup de goût, très fonctionnel. Merci pour l'accueil et la bienveillance. Nous reviendrons.",
-      source: "airbnb",
-      stayDate: "2026-04-01",
-      featured: false,
-    },
-    {
-      guestName: "Anilia",
-      rating: 5,
-      text: "J'ai adoré la maison, très bien située. Je tiens surtout à souligner la disponibilité, la gentillesse et la qualité de l'hôte.",
-      source: "booking",
-      stayDate: "2026-01-01",
-      featured: false,
-    },
-    {
-      guestName: "Stéphane",
-      rating: 5,
-      text: "Une charmante maison décorée avec goût, avec tout le confort nécessaire pour y séjourner.",
-      source: "booking",
-      stayDate: "2026-01-01",
-      featured: false,
-    },
-  ];
-  for (const t of testimonials) {
-    await payload.create({
-      collection: "testimonials",
-      locale: "fr",
-      data: { ...t, status: "approved" },
-    });
-  }
 
   // ── LocalRecommendations ───────────────────────────────────────────────────
   console.log("Seeding LocalRecommendations...");
@@ -1288,7 +1198,7 @@ async function seed() {
       name: "Centre-ville de Romorantin-Lanthenay",
       category: "activities",
       description:
-        "Boulangeries, restaurants, bars — tout à 5-10 min à pied. Marché le mercredi et le samedi matin.",
+        "Boulangeries, restaurants, bars, tout à 5-10 min à pied. Marché le mercredi et le samedi matin.",
       distanceFromGite: "5-10 min à pied",
       featured: true,
       order: 0,
@@ -1326,7 +1236,7 @@ async function seed() {
       category: "equestrian",
       description:
         "Site fédéral de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux. Base idéale pour les cavaliers en déplacement.",
-      distanceFromGite: "~17 km — 20 min",
+      distanceFromGite: "~17 km, 20 min",
       website: "https://www.ffe.com",
       featured: true,
       order: 4,

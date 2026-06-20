@@ -9,7 +9,6 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { StarRating } from "@/components/shared/StarRating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   type CarouselApi,
@@ -18,25 +17,39 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import type { CmsTestimonial } from "@/lib/queries";
+import { REVIEW_AGGREGATE, REVIEW_LINKS, REVIEWS } from "@/lib/reviews";
 import { useReveal } from "@/lib/useReveal";
 import { cn } from "@/lib/utils";
 
 const sourceColors: Record<string, string> = {
   airbnb: "bg-[#FF5A5F]/10 text-[#B7363B]",
   booking: "bg-[#003580]/10 text-[#003580]",
-  google: "bg-[#4285F4]/10 text-[#2B5DAD]",
-  direct: "bg-primary-100 text-primary-700",
 };
 
+const platforms = [
+  {
+    key: "airbnb" as const,
+    label: "Airbnb",
+    href: REVIEW_LINKS.airbnb,
+    note: `${REVIEW_AGGREGATE.airbnb.rating}/${REVIEW_AGGREGATE.airbnb.scale}`,
+    count: REVIEW_AGGREGATE.airbnb.count,
+  },
+  {
+    key: "booking" as const,
+    label: "Booking",
+    href: REVIEW_LINKS.booking,
+    note: `${REVIEW_AGGREGATE.booking.rating}/${REVIEW_AGGREGATE.booking.scale}`,
+    count: REVIEW_AGGREGATE.booking.count,
+  },
+];
+
 export function TestimonialsSection({
-  testimonials,
   title: cmsTitle,
 }: {
-  testimonials: CmsTestimonial[];
   title?: string | null;
 }) {
   const t = useTranslations("home");
+  const tCommon = useTranslations("common");
   const ref = useReveal();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -57,15 +70,41 @@ export function TestimonialsSection({
     };
   }, [api, onSelect]);
 
-  if (!testimonials?.length) return null;
-
   return (
     <section className="bg-sand-100 py-20" ref={ref}>
       <Container>
         <SectionHeading title={cmsTitle || t("testimonialsTitle")} />
+
+        <div
+          className="reveal mb-10 flex flex-wrap items-center justify-center gap-3"
+          style={{ "--stagger": 1 } as React.CSSProperties}
+        >
+          {platforms.map((p) => (
+            <a
+              key={p.key}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${p.label}, ${tCommon("opensNewTab")}`}
+              className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-4 py-2 font-sans text-sm transition-colors hover:border-primary-300 hover:bg-white"
+            >
+              <span className="font-semibold">{p.label}</span>
+              <span
+                className={cn(
+                  "rounded px-1.5 py-0.5 text-xs font-semibold",
+                  sourceColors[p.key],
+                )}
+              >
+                {p.note}
+              </span>
+              <span className="text-xs text-muted-foreground">({p.count})</span>
+            </a>
+          ))}
+        </div>
+
         <div
           className="reveal mx-auto max-w-5xl px-12"
-          style={{ "--stagger": 1 } as React.CSSProperties}
+          style={{ "--stagger": 2 } as React.CSSProperties}
         >
           <Carousel
             setApi={setApi}
@@ -82,54 +121,49 @@ export function TestimonialsSection({
             aria-label={t("testimonialsAriaLabel")}
           >
             <CarouselContent className="-ml-4">
-              {testimonials.map((testimonial, index) => (
+              {REVIEWS.map((review, index) => (
                 <CarouselItem
-                  key={testimonial.id}
+                  key={review.id}
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                   role="group"
                   aria-roledescription="slide"
                   aria-label={t("testimonialSlide", {
                     current: index + 1,
-                    total: testimonials.length,
+                    total: REVIEWS.length,
                   })}
                 >
-                  <Card className="border-sand-200 h-full bg-sand-50">
-                    <CardContent className="flex h-full flex-col p-6">
-                      <Quote
-                        className="mb-3 h-8 w-8 shrink-0 text-primary-200"
-                        aria-hidden="true"
-                      />
-                      <p className="mb-4 flex-1 text-sm leading-relaxed italic text-foreground/80">
-                        &ldquo;{testimonial.text}&rdquo;
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-sans text-sm font-semibold">
-                            {testimonial.guestName}
+                  <div className="border-sand-200 flex h-full flex-col rounded-xl border bg-sand-50 p-6">
+                    <Quote
+                      className="mb-3 h-8 w-8 shrink-0 text-primary-200"
+                      aria-hidden="true"
+                    />
+                    <p className="mb-4 flex-1 text-sm leading-relaxed italic text-foreground/80">
+                      &ldquo;{review.text}&rdquo;
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-sans text-sm font-semibold">
+                          {review.guestName}
+                        </p>
+                        {review.guestOrigin && (
+                          <p className="text-xs text-muted-foreground">
+                            {review.guestOrigin}
                           </p>
-                          {testimonial.guestOrigin && (
-                            <p className="text-xs text-muted-foreground">
-                              {testimonial.guestOrigin}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <StarRating rating={testimonial.rating} />
-                          {testimonial.source && (
-                            <Badge
-                              variant="secondary"
-                              className={
-                                sourceColors[testimonial.source] ||
-                                sourceColors.direct
-                              }
-                            >
-                              {testimonial.source}
-                            </Badge>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    </CardContent>
-                  </Card>
+                      <div className="flex flex-col items-end gap-1">
+                        <StarRating rating={review.rating} />
+                        {review.source && (
+                          <Badge
+                            variant="secondary"
+                            className={sourceColors[review.source] || ""}
+                          >
+                            {review.source}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -137,7 +171,6 @@ export function TestimonialsSection({
             <CarouselNext />
           </Carousel>
 
-          {/* Dots with touch target + aria-live counter */}
           {count > 1 && (
             <>
               <div className="mt-6 flex justify-center gap-1" role="tablist">

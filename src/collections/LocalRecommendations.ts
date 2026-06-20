@@ -147,7 +147,7 @@ export const LocalRecommendations: CollectionConfig = {
               label: "Coordonnées GPS",
               admin: {
                 description:
-                  "Position sur la carte (optionnel — trouvable via Google Maps, clic droit)",
+                  "Position sur la carte (optionnel, trouvable via Google Maps, clic droit)",
                 initCollapsed: true,
               },
               fields: [

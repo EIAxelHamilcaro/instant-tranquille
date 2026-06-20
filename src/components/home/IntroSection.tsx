@@ -32,7 +32,7 @@ export function IntroSection({
       className="relative overflow-hidden py-0"
       aria-label={title}
     >
-      {/* Fond crème décalé — occupe la moitié droite */}
+      {/* Fond crème décalé, occupe la moitié droite */}
       <div
         className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-2/5 bg-sand-100"
         aria-hidden="true"
@@ -40,7 +40,7 @@ export function IntroSection({
 
       <div className="relative mx-auto max-w-7xl">
         <div className="grid lg:grid-cols-[3fr_2fr] items-stretch">
-          {/* Image dominante — 60 % — déborde en haut et en bas */}
+          {/* Image dominante, 60 %, déborde en haut et en bas */}
           <div className="reveal-scale relative order-first lg:order-none">
             <div className="relative aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0 lg:-top-16 lg:-bottom-16 overflow-hidden">
               {introImage && typeof introImage === "object" ? (
@@ -74,7 +74,7 @@ export function IntroSection({
             />
           </div>
 
-          {/* Bloc texte — 40 % — décalé verticalement */}
+          {/* Bloc texte, 40 %, décalé verticalement */}
           <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pl-16 xl:pl-20 lg:pr-8">
             <div
               className="reveal-left"
@@ -104,7 +104,7 @@ export function IntroSection({
               )}
             </div>
 
-            {/* Bloc distances — sobre, factuel */}
+            {/* Bloc distances, sobre, factuel */}
             <div
               className="reveal mt-8 flex flex-col gap-2 text-sm text-muted-foreground border-l-2 border-primary-300 pl-4"
               style={{ "--stagger": "2" } as React.CSSProperties}

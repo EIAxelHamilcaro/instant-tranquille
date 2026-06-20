@@ -124,7 +124,7 @@ export function generateLodgingBusinessJsonLd(
     name: "L'Instant Tranquille",
     description:
       options?.description ||
-      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m² — Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
+      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m², Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
     url: SITE_URL,
     ...(sameAsUrls.length > 0 && { sameAs: sameAsUrls }),
     ...(options?.telephone && { telephone: options.telephone }),
@@ -145,16 +145,21 @@ export function generateLodgingBusinessJsonLd(
     }),
     ...(options?.petsAllowed != null && { petsAllowed: options.petsAllowed }),
     ...(options?.priceRange && { priceRange: options.priceRange }),
-    ...(options?.checkInTime && {
-      checkinTime: options.checkInTime.includes("T")
-        ? options.checkInTime
-        : `T${options.checkInTime}`,
-    }),
-    ...(options?.checkOutTime && {
-      checkoutTime: options.checkOutTime.includes("T")
-        ? options.checkOutTime
-        : `T${options.checkOutTime}`,
-    }),
+    ...(() => {
+      const toIsoTime = (v?: string | null) => {
+        if (!v) return undefined;
+        const m = v.match(/(\d{1,2})\s*[h:]\s*(\d{2})?/);
+        return m
+          ? `T${(m[1] ?? "0").padStart(2, "0")}:${m[2] ?? "00"}`
+          : undefined;
+      };
+      const ci = toIsoTime(options?.checkInTime);
+      const co = toIsoTime(options?.checkOutTime);
+      return {
+        ...(ci && { checkinTime: ci }),
+        ...(co && { checkoutTime: co }),
+      };
+    })(),
     ...buildReviewFields(options?.testimonials),
   };
 }
@@ -199,7 +204,7 @@ export function generateVacationRentalJsonLd(options?: {
     name: "L'Instant Tranquille",
     description:
       options?.description ||
-      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m² — Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
+      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m², Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
     url: options?.url || `${SITE_URL}/le-gite`,
     ...(options?.heroImage && { image: options.heroImage }),
     address: buildPostalAddress(options),
@@ -292,7 +297,7 @@ export function generateGrandParquetJsonLd() {
     "@id": "https://www.grandparquet.com/#venue",
     name: "Le Grand Parquet de Lamotte-Beuvron",
     description:
-      "Site fédéral de la FFE (Fédération Française d'Équitation), accueille le Generali Open de France — concours de saut d'obstacles du calendrier national. À environ 17 km du gîte L'Instant Tranquille.",
+      "Site fédéral de la FFE (Fédération Française d'Équitation), accueille le Generali Open de France, concours de saut d'obstacles du calendrier national. À environ 17 km du gîte L'Instant Tranquille.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Lamotte-Beuvron",
@@ -449,7 +454,7 @@ export function buildRatesFaqItems(locale: string): {
       {
         question: "What is the minimum stay?",
         answer:
-          "The minimum stay varies by season — typically 2 nights in low season and 7 nights in high season (July–August). Check the seasonal calendar for details.",
+          "The minimum stay varies by season, typically 2 nights in low season and 7 nights in high season (July–August). Check the seasonal calendar for details.",
       },
       {
         question: "Is a deposit required?",
@@ -473,7 +478,7 @@ export function buildRatesFaqItems(locale: string): {
     {
       question: "Quelle est la durée minimale de séjour ?",
       answer:
-        "La durée minimale varie selon la saison — généralement 2 nuits en basse saison et 7 nuits en haute saison (juillet–août). Consultez le calendrier saisonnier pour les détails.",
+        "La durée minimale varie selon la saison, généralement 2 nuits en basse saison et 7 nuits en haute saison (juillet–août). Consultez le calendrier saisonnier pour les détails.",
     },
     {
       question: "Une caution est-elle demandée ?",
@@ -483,7 +488,7 @@ export function buildRatesFaqItems(locale: string): {
     {
       question: "Quels sont les horaires d'arrivée et de départ ?",
       answer:
-        "L'arrivée est à partir de 17h00 (boîte à clé sécurisée — arrivée autonome) et le départ avant 10h00.",
+        "L'arrivée est à partir de 17h00 (boîte à clé sécurisée, arrivée autonome) et le départ avant 10h00.",
     },
     {
       question:
@@ -514,7 +519,7 @@ export function buildSurroundingsFaqItems(locale: string): {
         question:
           "Is the cottage close to the Grand Parquet de Lamotte-Beuvron?",
         answer:
-          "Yes, the Grand Parquet de Lamotte-Beuvron (FFE federal equestrian venue, host of the Generali Open de France) is approximately 17 km from the cottage — about 20 minutes by car via the D724.",
+          "Yes, the Grand Parquet de Lamotte-Beuvron (FFE federal equestrian venue, host of the Generali Open de France) is approximately 17 km from the cottage, about 20 minutes by car via the D724.",
       },
       {
         question: "Are there cycling or hiking trails near the cottage?",

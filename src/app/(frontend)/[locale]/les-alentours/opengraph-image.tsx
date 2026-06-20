@@ -2,7 +2,7 @@ import { OG_SIZE, renderOGTemplate } from "@/lib/og";
 
 export const runtime = "edge";
 export const alt =
-  "Les Alentours — Châteaux, nature et sports équestres en Sologne";
+  "Les Alentours, Châteaux, nature et sports équestres en Sologne";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

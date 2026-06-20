@@ -49,20 +49,6 @@ function BookingLogo({ className }: { className?: string }) {
   );
 }
 
-function AbritelLogo({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M12 1.5L1.5 8.25V22.5h7.5v-7.5h6v7.5h7.5V8.25L12 1.5zm0 2.598L20.25 9.3V21H16.5v-7.5H7.5V21H3.75V9.3L12 4.098z" />
-    </svg>
-  );
-}
-
 export function CTASection({
   bookingLinks,
   ctaTitle: cmsTitle,
@@ -72,8 +58,7 @@ export function CTASection({
   const tCommon = useTranslations("common");
   const ref = useReveal();
 
-  const hasAnyPlatformLink =
-    bookingLinks?.airbnb || bookingLinks?.booking || bookingLinks?.abritel;
+  const hasAnyPlatformLink = bookingLinks?.airbnb || bookingLinks?.booking;
 
   return (
     <section className="relative overflow-hidden py-28 sm:py-36" ref={ref}>
@@ -129,7 +114,7 @@ export function CTASection({
               href={bookingLinks.airbnb}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${t("ctaAirbnb")} — ${tCommon("opensNewTab")}`}
+              aria-label={`${t("ctaAirbnb")}, ${tCommon("opensNewTab")}`}
               className="inline-flex items-center gap-2.5 rounded-lg bg-[#FF385C] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#E31C5F] active:scale-[0.98]"
             >
               <AirbnbLogo className="h-5 w-5 shrink-0" />
@@ -142,24 +127,11 @@ export function CTASection({
               href={bookingLinks.booking}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${t("ctaBooking")} — ${tCommon("opensNewTab")}`}
+              aria-label={`${t("ctaBooking")}, ${tCommon("opensNewTab")}`}
               className="inline-flex items-center gap-2.5 rounded-lg bg-[#003580] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#00224f] active:scale-[0.98]"
             >
               <BookingLogo className="h-5 w-5 shrink-0" />
               {t("ctaBooking")}
-            </a>
-          )}
-
-          {bookingLinks?.abritel && (
-            <a
-              href={bookingLinks.abritel}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${t("ctaAbritel")} — ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-[#1B468A] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#153970] active:scale-[0.98]"
-            >
-              <AbritelLogo className="h-5 w-5 shrink-0" />
-              {t("ctaAbritel")}
             </a>
           )}
 

@@ -44,7 +44,7 @@ function formatPeriod(
   });
   const start = fmt.format(new Date(2001, parseInt(sm, 10) - 1, sd));
   const end = fmt.format(new Date(2001, parseInt(em, 10) - 1, ed));
-  return `${start} — ${end}`;
+  return `${start}, ${end}`;
 }
 
 const feeTypeKeys: Record<string, string> = {
@@ -121,17 +121,17 @@ export function PricingTable({
                   <TableCell className="text-right font-semibold">
                     {season.nightlyRate != null
                       ? `${season.nightlyRate}${symbol}`
-                      : "—"}
+                      : "·"}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
                     {season.weeklyRate != null
                       ? `${season.weeklyRate}${symbol}`
-                      : "—"}
+                      : "·"}
                   </TableCell>
                   <TableCell className="text-right text-muted-foreground">
                     {season.minimumStay != null
                       ? `${season.minimumStay} ${t("nights")}`
-                      : "—"}
+                      : "·"}
                   </TableCell>
                 </TableRow>
               ))}
@@ -172,7 +172,7 @@ export function PricingTable({
                     <p className="text-xl font-bold">
                       {season.nightlyRate != null
                         ? `${season.nightlyRate}${symbol}`
-                        : "—"}
+                        : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perNight")}
@@ -182,7 +182,7 @@ export function PricingTable({
                     <p className="text-xl font-bold">
                       {season.weeklyRate != null
                         ? `${season.weeklyRate}${symbol}`
-                        : "—"}
+                        : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perWeek")}
@@ -190,7 +190,7 @@ export function PricingTable({
                   </div>
                   <div>
                     <p className="text-xl font-bold">
-                      {season.minimumStay != null ? season.minimumStay : "—"}
+                      {season.minimumStay != null ? season.minimumStay : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("minStay")} {t("nights")}
@@ -233,7 +233,7 @@ export function PricingTable({
                       )}
                     </div>
                     <p className="font-semibold">
-                      {fee.amount != null ? `${fee.amount}${symbol}` : "—"}
+                      {fee.amount != null ? `${fee.amount}${symbol}` : "·"}
                     </p>
                   </CardContent>
                 </Card>

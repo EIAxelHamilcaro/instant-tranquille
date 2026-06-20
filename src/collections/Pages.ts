@@ -130,7 +130,7 @@ export const Pages: CollectionConfig = {
         {
           label: "Contenu",
           fields: [
-            // Hero (home, tarifs-reservation, contact — PAS le-gite)
+            // Hero (home, tarifs-reservation, contact, PAS le-gite)
             {
               type: "collapsible",
               label: "Hero",
@@ -490,7 +490,7 @@ export const Pages: CollectionConfig = {
         {
           label: "Médias",
           fields: [
-            // Mosaïque hero (home only) — 3 photos choisies par le client
+            // Mosaïque hero (home only), 3 photos choisies par le client
             {
               name: "heroImages",
               type: "array",

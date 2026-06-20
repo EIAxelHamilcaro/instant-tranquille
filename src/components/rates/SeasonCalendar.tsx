@@ -167,7 +167,7 @@ export function SeasonCalendar({
                         <div
                           key={day}
                           className={`flex h-[18px] items-center justify-center text-[10px] leading-none ${bg}`}
-                          title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? ` — ${entry.seasonName}` : ""}`}
+                          title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? `, ${entry.seasonName}` : ""}`}
                         >
                           <span className={fg}>{day}</span>
                         </div>

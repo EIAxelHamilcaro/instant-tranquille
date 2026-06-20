@@ -6,10 +6,9 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { HighlightsSection } from "@/components/home/HighlightsSection";
 import { IntroSection } from "@/components/home/IntroSection";
 import { StatsBand } from "@/components/home/StatsBand";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeafDivider } from "@/components/shared/LeafDivider";
-import type { CmsMedia, CmsTestimonial } from "@/lib/queries";
+import type { CmsMedia } from "@/lib/queries";
 
 type CmsHighlight = {
   icon?: string | null;
@@ -32,7 +31,6 @@ export type HomePageData = {
   testimonialsTitle?: string | null;
   ctaTitle?: string | null;
   ctaSubtitle?: string | null;
-  testimonials: CmsTestimonial[];
   bookingLinks?: {
     airbnb?: string | null;
     booking?: string | null;
@@ -87,11 +85,7 @@ export function HomePageClient({
         highlights={data.highlights}
         title={data.highlightsTitle}
       />
-      <TestimonialsSection
-        testimonials={data.testimonials}
-        title={data.testimonialsTitle}
-      />
-      <TestimonialForm />
+      <TestimonialsSection title={data.testimonialsTitle} />
       <CTASection
         bookingLinks={data.bookingLinks}
         ctaTitle={data.ctaTitle}

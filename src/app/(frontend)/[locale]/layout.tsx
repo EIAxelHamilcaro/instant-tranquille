@@ -38,8 +38,8 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      template: `%s — ${siteName}`,
-      default: `${siteName} — ${messages.metadata.title}`,
+      template: `%s, ${siteName}`,
+      default: `${siteName}, ${messages.metadata.title}`,
     },
     description: messages.metadata.description,
     category: "travel",

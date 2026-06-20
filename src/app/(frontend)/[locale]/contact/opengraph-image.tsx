@@ -1,7 +1,7 @@
 import { OG_SIZE, renderOGTemplate } from "@/lib/og";
 
 export const runtime = "edge";
-export const alt = "Contact — L'Instant Tranquille, gîte en Sologne";
+export const alt = "Contact, L'Instant Tranquille, gîte en Sologne";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

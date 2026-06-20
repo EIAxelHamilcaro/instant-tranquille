@@ -61,7 +61,7 @@ export function EquestrianSection({
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-sm text-primary-600">
                   <Navigation className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span>~17 km — 20 min</span>
+                  <span>~17 km, 20 min</span>
                 </div>
               </div>
             </div>

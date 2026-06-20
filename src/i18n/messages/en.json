@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Holiday Cottage in Sologne",
-    "description": "L'Instant Tranquille — 3-bedroom cottage, sleeps 6, 120 m² in Romorantin-Lanthenay, Sologne. Holiday rental between Loire Valley castles and forests."
+    "description": "L'Instant Tranquille, 3-bedroom cottage, sleeps 6, 120 m² in Romorantin-Lanthenay, Sologne. Holiday rental between Loire Valley castles and forests."
   },
   "nav": {
     "home": "Home",
@@ -58,8 +58,8 @@
     "testimonialsAriaLabel": "Our guests' testimonials",
     "testimonialSlide": "Testimonial {current} of {total}",
     "introImageAlt": "Cottage exterior view",
-    "introDistChambord": "12 km — Château de Chambord",
-    "introDistGrandParquet": "17 km — Grand Parquet de Lamotte-Beuvron (FFE)"
+    "introDistChambord": "12 km, Château de Chambord",
+    "introDistGrandParquet": "17 km, Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "The Cottage",
@@ -120,7 +120,7 @@
     "feeTypePerNight": "per night",
     "feeTypePerPerson": "per person",
     "calendarTitle": "Seasonal calendar",
-    "h1": "Holiday cottage rates in Sologne — rental in Romorantin-Lanthenay"
+    "h1": "Holiday cottage rates in Sologne, rental in Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
@@ -142,7 +142,7 @@
     "mapTitle": "Find us",
     "accessTitle": "How to get here",
     "interactiveMap": "Interactive map",
-    "h1": "Contact L'Instant Tranquille — holiday cottage in Sologne, Romorantin-Lanthenay"
+    "h1": "Contact L'Instant Tranquille, holiday cottage in Sologne, Romorantin-Lanthenay"
   },
   "booklet": {
     "title": "Welcome Booklet",
@@ -212,10 +212,10 @@
   "surroundings": {
     "title": "Surroundings",
     "description": "Explore the Sologne region from the cottage: châteaux, forests, lakes, restaurants and activities nearby.",
-    "h1": "Things to do in Sologne — activities and visits from Romorantin-Lanthenay",
+    "h1": "Things to do in Sologne, activities and visits from Romorantin-Lanthenay",
     "eyebrow": "Sologne · Romorantin-Lanthenay",
     "heroTitle": "The Surroundings",
-    "heroSubtitle": "Châteaux, nature, equestrian sport — the Sologne within easy reach",
+    "heroSubtitle": "Châteaux, nature, equestrian sport, the Sologne within easy reach",
     "introTitle": "A convenient base",
     "categoryTitle": "Nearby attractions",
     "mapTitle": "Area map",
@@ -237,11 +237,11 @@
     "eyebrow": "Equestrian Sologne",
     "intro": "The Sologne is a leading equestrian region. The cottage is a practical base for riders travelling to competitions or on a leisure stay.",
     "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
-    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year — one of the most important showjumping competitions on the national calendar. Approximately 17 km from the cottage (20 minutes by car).",
+    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year, one of the most important showjumping competitions on the national calendar. Approximately 17 km from the cottage (20 minutes by car).",
     "venuesTitle": "Nearby equestrian venues",
     "distanceLabel": "Distance",
     "websiteLabel": "Official website",
-    "faqTitle": "Frequently asked questions — riders",
+    "faqTitle": "Frequently asked questions, riders",
     "faq": {
       "q1": "Does the cottage accommodate horses?",
       "a1": "No, the cottage has no horse-boarding facilities. It is aimed at riders looking for comfortable accommodation close to equestrian venues, with their horses stabled at the local centres or yards nearby.",
@@ -252,7 +252,7 @@
       "q4": "Is the parking at the Grand Parquet suitable for horse trailers and lorries?",
       "a4": "The Grand Parquet has dedicated parking for vehicles with trailers during competitions. It is advisable to check parking instructions with the organiser before each event."
     },
-    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron — FFE equestrian venue",
+    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron, FFE equestrian venue",
     "placeholderLabel": "Grand Parquet photo (coming soon)"
   }
 }

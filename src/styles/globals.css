@@ -35,7 +35,7 @@
   --sand-700: #8c7d5c;
   --sand-800: #5f553e;
   --sand-900: #332d21;
-  /* Stone/taupe chaude — neutres brun-gris, jamais froids */
+  /* Stone/taupe chaude, neutres brun-gris, jamais froids */
   --stone-50: #faf9f7;
   --stone-100: #f2efea;
   --stone-200: #e5dfd6;
@@ -46,7 +46,7 @@
   --stone-700: #6b6055;
   --stone-800: #4a423a;
   --stone-900: #28231e;
-  /* Terracotta — accent brique harmonisé aux photos chambre */
+  /* Terracotta, accent brique harmonisé aux photos chambre */
   --terracotta-50: #fdf4ef;
   --terracotta-100: #fae5d6;
   --terracotta-200: #f5caad;
@@ -140,7 +140,7 @@
   --font-display: var(--font-sans);
 }
 
-/* Scoped to frontend only — Payload admin uses its own styles */
+/* Scoped to frontend only, Payload admin uses its own styles */
 .frontend-app {
   background: var(--background);
   color: var(--foreground);
@@ -158,7 +158,7 @@
   font-family: var(--font-heading);
 }
 
-/* Eyebrow label — Inter display bold, tracking serré */
+/* Eyebrow label, Inter display bold, tracking serré */
 .frontend-app .eyebrow {
   font-family: var(--font-display);
   font-weight: 700;
@@ -166,7 +166,7 @@
   text-transform: uppercase;
 }
 
-/* Sous-titre éditorial / citation — Playfair italic */
+/* Sous-titre éditorial / citation, Playfair italic */
 .frontend-app .subtitle-editorial,
 .frontend-app blockquote {
   font-family: var(--font-heading);
