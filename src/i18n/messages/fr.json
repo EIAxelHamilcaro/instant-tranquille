@@ -183,6 +183,15 @@
     "starRating": "{rating} sur 5 étoiles",
     "mobileNav": "Navigation mobile"
   },
+  "statsband": {
+    "ariaLabel": "Caractéristiques du gîte",
+    "guests": "voyageurs",
+    "bedrooms": "chambres",
+    "bathrooms": "salles de bain",
+    "surface": "surface",
+    "distChambord": "de Chambord",
+    "distGrandParquet": "du Grand Parquet"
+  },
   "footer": {
     "description": "Gîte en Sologne, 3 chambres, Romorantin-Lanthenay.",
     "rights": "Tous droits réservés.",

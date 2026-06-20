@@ -5,6 +5,7 @@ import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { HighlightsSection } from "@/components/home/HighlightsSection";
 import { IntroSection } from "@/components/home/IntroSection";
+import { StatsBand } from "@/components/home/StatsBand";
 import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeafDivider } from "@/components/shared/LeafDivider";
@@ -39,7 +40,21 @@ export type HomePageData = {
   };
 };
 
-export function HomePageClient({ initialData }: { initialData: HomePageData }) {
+interface HomePageClientProps {
+  initialData: HomePageData;
+  propertyDetails?: {
+    maxGuests?: number;
+    bedrooms?: number;
+    bathrooms?: number;
+    surface?: number;
+    petsAllowed?: boolean;
+  } | null;
+}
+
+export function HomePageClient({
+  initialData,
+  propertyDetails,
+}: HomePageClientProps) {
   const { data } = useLivePreview<HomePageData>({
     initialData,
     serverURL: process.env.NEXT_PUBLIC_SITE_URL || "",
@@ -53,6 +68,12 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
         heroTitle={data.heroTitle}
         heroSubtitle={data.heroSubtitle}
         bookingLinks={data.bookingLinks}
+      />
+      <StatsBand
+        maxGuests={propertyDetails?.maxGuests}
+        bedrooms={propertyDetails?.bedrooms}
+        bathrooms={propertyDetails?.bathrooms}
+        surface={propertyDetails?.surface}
       />
       <IntroSection
         introImage={data.introImage}

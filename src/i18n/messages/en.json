@@ -183,6 +183,15 @@
     "starRating": "{rating} out of 5 stars",
     "mobileNav": "Mobile navigation"
   },
+  "statsband": {
+    "ariaLabel": "Cottage features",
+    "guests": "guests",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "surface": "surface",
+    "distChambord": "from Chambord",
+    "distGrandParquet": "from Grand Parquet"
+  },
   "footer": {
     "description": "Holiday cottage in Sologne, 3 bedrooms, Romorantin-Lanthenay.",
     "rights": "All rights reserved.",

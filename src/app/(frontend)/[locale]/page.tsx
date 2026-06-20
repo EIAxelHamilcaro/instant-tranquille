@@ -4,6 +4,7 @@ import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { HighlightsSection } from "@/components/home/HighlightsSection";
 import { IntroSection } from "@/components/home/IntroSection";
+import { StatsBand } from "@/components/home/StatsBand";
 import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { HomePageClient } from "@/components/live-preview/HomePageClient";
@@ -85,7 +86,13 @@ export default async function HomePage({
     _heroMedia?.sizes?.hero?.url ?? _heroMedia?.url ?? undefined;
 
   const propertyDetails = settings.propertyDetails as
-    | { bedrooms?: number; maxGuests?: number; petsAllowed?: boolean }
+    | {
+        bedrooms?: number;
+        maxGuests?: number;
+        bathrooms?: number;
+        surface?: number;
+        petsAllowed?: boolean;
+      }
     | undefined;
 
   const jsonLd = generateLodgingBusinessJsonLd({
@@ -162,6 +169,7 @@ export default async function HomePage({
             testimonials,
             bookingLinks,
           }}
+          propertyDetails={propertyDetails}
         />
       </>
     );
@@ -184,6 +192,12 @@ export default async function HomePage({
         heroTitle={homePage?.heroTitle ?? null}
         heroSubtitle={homePage?.heroSubtitle ?? null}
         bookingLinks={bookingLinks}
+      />
+      <StatsBand
+        maxGuests={propertyDetails?.maxGuests}
+        bedrooms={propertyDetails?.bedrooms}
+        bathrooms={propertyDetails?.bathrooms}
+        surface={propertyDetails?.surface}
       />
       <IntroSection
         introImage={homePage?.introImage ?? null}
