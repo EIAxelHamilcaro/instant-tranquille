@@ -76,6 +76,23 @@ Direction retenue par le jury : **éditorial photo-first**, greffes champêtre r
 5. **Livret d'accueil** : fonctionnalité complète déjà codée (`/livret-accueil/[token]`,
    noindex). Inclure en v1 ou masquer ? Hors périmètre vitrine stricte.
 
+## Phase 0.2 — Zod 4 et radix-ui unifié (2026-06-20)
+
+**Zod 4** (`^4.3.6`) : **déjà installé et compatible**. Toutes les usages existants
+(`z.string().email()`, `.coerce`, `.safeParse`, `.regex`, `.optional`) passent sans
+modification en Zod 4. Seul changement observable : `issue.code` vaut désormais
+`invalid_format` (au lieu de `invalid_string`) pour les validations de format — sans
+impact car le code renvoie le code brut au client sans comparaison. Migration : **complète,
+aucune rupture, aucune correction nécessaire.**
+
+**radix-ui unifié** (`^1.4.3`) : **déjà migré**. Les 9 composants shadcn (`accordion`,
+`badge`, `button`, `dialog`, `label`, `navigation-menu`, `separator`, `sheet`, `tabs`)
+importent tous depuis `"radix-ui"` (package unifié), pas depuis les sous-packages
+`@radix-ui/*`. Migration : **complète, propre.**
+
+`tsc --noEmit` : vert (0 erreur). `biome check` : vert (0 erreur, 6 warnings/infos
+ignorables — unused imports et `parseInt` sans radix, non bloquants).
+
 ## Schéma DB (workflow push)
 
 Le projet pousse le schéma à l'init Payload en dev (pas de dossier `migrations/`). Après
