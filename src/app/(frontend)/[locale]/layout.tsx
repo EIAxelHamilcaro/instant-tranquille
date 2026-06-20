@@ -48,6 +48,15 @@ export async function generateMetadata({
       email: false,
       address: false,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
   };
 }
 

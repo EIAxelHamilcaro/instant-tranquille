@@ -5,6 +5,39 @@ import { getPageBySlug, getSiteSettings } from "./queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+const KEYWORDS_FR = [
+  "gîte Sologne",
+  "location vacances Romorantin-Lanthenay",
+  "gîte Loir-et-Cher",
+  "hébergement cavaliers Sologne",
+  "gîte proche Grand Parquet",
+  "gîte proche Grand Parquet Lamotte-Beuvron",
+  "location séjour concours équestre Sologne",
+  "gîte proche châteaux Loire",
+  "que faire en Sologne",
+  "location Chambord",
+  "gîte 6 personnes Sologne",
+];
+
+const KEYWORDS_EN = [
+  "holiday cottage Sologne",
+  "Romorantin-Lanthenay rental",
+  "Loir-et-Cher gite",
+  "equestrian accommodation Sologne",
+  "cottage near Grand Parquet",
+  "cottage near Grand Parquet Lamotte-Beuvron",
+  "Loire Valley chateau holiday rental",
+  "Sologne nature holiday",
+  "Chambord accommodation",
+  "Sologne 6 people cottage",
+];
+
+const GOOGLEBOT_DIRECTIVES = {
+  "max-image-preview": "large" as const,
+  "max-snippet": -1,
+  "max-video-preview": -1,
+};
+
 type PageSeoProps = {
   title: string;
   description: string;
@@ -13,6 +46,7 @@ type PageSeoProps = {
   ogImage?: string;
   noIndex?: boolean;
   absoluteTitle?: boolean;
+  extraKeywords?: string[];
 };
 
 export function generatePageMetadata({
@@ -23,6 +57,7 @@ export function generatePageMetadata({
   ogImage,
   noIndex,
   absoluteTitle,
+  extraKeywords,
 }: PageSeoProps): Metadata {
   const url = `${SITE_URL}${path}`;
   const frPath = getPathname({ href: path as any, locale: "fr" });
@@ -34,10 +69,29 @@ export function generatePageMetadata({
     ? title
     : `${title} — L'Instant Tranquille`;
 
+  const baseKeywords = locale === "fr" ? KEYWORDS_FR : KEYWORDS_EN;
+  const keywords = extraKeywords
+    ? [...baseKeywords, ...extraKeywords]
+    : baseKeywords;
+
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    ...(noIndex && { robots: { index: false, follow: false } }),
+    keywords,
+    ...(noIndex
+      ? {
+          robots: {
+            index: false,
+            follow: false,
+          },
+        }
+      : {
+          robots: {
+            index: true,
+            follow: true,
+            googleBot: GOOGLEBOT_DIRECTIVES,
+          },
+        }),
     alternates: {
       canonical: url,
       languages: {
