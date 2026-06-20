@@ -57,7 +57,9 @@
     "stars": "stars",
     "testimonialsAriaLabel": "Our guests' testimonials",
     "testimonialSlide": "Testimonial {current} of {total}",
-    "introImageAlt": "Cottage exterior view"
+    "introImageAlt": "Cottage exterior view",
+    "introDistChambord": "12 km — Château de Chambord",
+    "introDistGrandParquet": "17 km — Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "The Cottage",

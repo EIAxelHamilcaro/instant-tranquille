@@ -57,7 +57,9 @@
     "stars": "étoiles",
     "testimonialsAriaLabel": "Témoignages de nos hôtes",
     "testimonialSlide": "Témoignage {current} sur {total}",
-    "introImageAlt": "Vue extérieure du gîte"
+    "introImageAlt": "Vue extérieure du gîte",
+    "introDistChambord": "12 km — Château de Chambord",
+    "introDistGrandParquet": "17 km — Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "Le Gîte",

@@ -109,8 +109,8 @@ export function IntroSection({
               className="reveal mt-8 flex flex-col gap-2 text-sm text-muted-foreground border-l-2 border-primary-300 pl-4"
               style={{ "--stagger": "2" } as React.CSSProperties}
             >
-              <span>12 km — Château de Chambord</span>
-              <span>17 km — Grand Parquet de Lamotte-Beuvron (FFE)</span>
+              <span>{t("introDistChambord")}</span>
+              <span>{t("introDistGrandParquet")}</span>
             </div>
 
             <div

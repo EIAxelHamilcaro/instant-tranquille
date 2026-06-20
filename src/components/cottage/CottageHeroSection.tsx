@@ -31,12 +31,12 @@ export function CottageHeroSection({
             alt={t("heroImageAlt")}
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-950/75 via-primary-900/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/30 to-transparent" />
         </div>
       ) : (
         <div className="absolute inset-0">
           <ImagePlaceholder aspectRatio="16/9" className="h-full w-full" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-950/75 via-primary-900/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/30 to-transparent" />
         </div>
       )}
 

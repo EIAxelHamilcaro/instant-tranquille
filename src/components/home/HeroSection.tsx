@@ -15,8 +15,6 @@ interface HeroSectionProps {
     email?: string | null;
   } | null;
   overlayDirection?: "t" | "b" | "br" | "tr";
-  overlayStartOpacity?: number;
-  overlayEndOpacity?: number;
 }
 
 export function HeroSection({
@@ -25,8 +23,6 @@ export function HeroSection({
   heroSubtitle,
   bookingLinks,
   overlayDirection = "b",
-  overlayStartOpacity = 75,
-  overlayEndOpacity = 20,
 }: HeroSectionProps) {
   const t = useTranslations("home");
 
@@ -57,8 +53,8 @@ export function HeroSection({
           ? "bg-gradient-to-tr"
           : "bg-gradient-to-b";
 
-  const startClass = `from-primary-900/${overlayStartOpacity}`;
-  const endClass = `to-primary-900/${overlayEndOpacity}`;
+  const startClass = "from-primary-900/75";
+  const endClass = "to-primary-900/20";
 
   return (
     <section
