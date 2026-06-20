@@ -88,64 +88,76 @@ type CmsHighlight = {
   linkLabel?: string | null;
 };
 
-interface HighlightItemInnerProps {
+interface EditorialItemProps {
   icon: LucideIcon;
   title: string;
   description: string;
   index: number;
-  hasLink: boolean;
+  linkLabel?: string;
 }
 
-function HighlightItemInner({
+function EditorialItem({
   icon: Icon,
   title,
   description,
   index,
-  hasLink,
-}: HighlightItemInnerProps) {
+  linkLabel,
+}: EditorialItemProps) {
   const isEven = index % 2 === 0;
 
   return (
     <article
       className={cn(
-        "reveal group flex items-start gap-10 py-12 md:gap-16",
-        isEven ? "md:flex-row" : "md:flex-row-reverse",
+        "reveal grid grid-cols-1 gap-8 py-16 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-16",
+        "border-t border-sand-200 first:border-t-0",
       )}
       style={{ "--stagger": index } as React.CSSProperties}
     >
-      <div className="flex shrink-0 flex-col items-center gap-3">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary-200 bg-primary-50 transition-colors duration-300 group-hover:bg-primary-100">
-          <Icon className="h-7 w-7 text-primary-500" aria-hidden="true" />
+      <div className={cn("flex flex-col gap-5", !isEven && "md:order-3")}>
+        <div className="flex items-center gap-4">
+          <Icon
+            className="h-5 w-5 shrink-0 text-primary-500"
+            aria-hidden="true"
+          />
+          <span className="subtitle-editorial text-sm text-primary-600">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="h-px flex-1 bg-sand-300" aria-hidden="true" />
         </div>
-        <span
-          className="select-none text-xs font-bold tracking-widest text-stone-400 uppercase"
-          aria-hidden="true"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
-
-      <div className="flex-1 py-2">
-        <h3 className="mb-3 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+        <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {title}
         </h3>
-        <p className="max-w-lg leading-relaxed text-muted-foreground">
+        <p className="text-base leading-relaxed text-muted-foreground">
           {description}
         </p>
-        {hasLink && (
-          <span className="mt-4 inline-block text-sm font-medium text-primary-600 underline-offset-4 transition-all duration-200 group-hover:underline group-hover:text-primary-700">
-            En savoir plus →
+        {linkLabel && (
+          <span className="text-sm font-medium text-primary-600 underline-offset-4 hover:underline">
+            {linkLabel} →
           </span>
         )}
       </div>
 
       <div
+        className={cn("hidden md:block", !isEven && "md:order-2")}
+        aria-hidden="true"
+      >
+        <div className="h-24 w-px bg-gradient-to-b from-transparent via-sand-300 to-transparent mx-auto" />
+      </div>
+
+      <div
         className={cn(
-          "hidden h-px flex-1 self-center bg-sand-200 md:block",
-          isEven ? "order-last" : "order-first",
+          "hidden md:flex md:items-center md:justify-center",
+          isEven ? "md:order-3" : "md:order-1",
         )}
         aria-hidden="true"
-      />
+      >
+        <span
+          className="subtitle-editorial select-none text-[6rem] font-bold leading-none text-sand-200"
+          aria-hidden="true"
+        >
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
     </article>
   );
 }
@@ -165,23 +177,23 @@ export function HighlightsSection({
   const useCms = cmsHighlights && cmsHighlights.length > 0;
 
   return (
-    <section className="bg-stone-50 py-20" ref={ref}>
+    <section className="bg-background py-20 md:py-28" ref={ref}>
       <Container>
         <SectionHeading
           title={cmsTitle ?? t("highlightsTitle")}
           variant="left"
         />
-        <div className="divide-y divide-sand-200">
+        <div>
           {useCms
             ? cmsHighlights.map((highlight, i) => {
                 const key = highlight.title ?? String(i);
                 const inner = (
-                  <HighlightItemInner
+                  <EditorialItem
                     icon={getIcon(highlight.icon)}
                     title={highlight.title ?? ""}
                     description={highlight.description ?? ""}
                     index={i}
-                    hasLink={Boolean(highlight.linkUrl)}
+                    linkLabel={highlight.linkLabel ?? undefined}
                   />
                 );
                 if (highlight.linkUrl) {
@@ -189,7 +201,7 @@ export function HighlightsSection({
                     <a
                       key={key}
                       href={highlight.linkUrl}
-                      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                      className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                     >
                       {inner}
                     </a>
@@ -201,14 +213,13 @@ export function HighlightsSection({
                 <Link
                   key={titleKey}
                   href={href}
-                  className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                  className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
-                  <HighlightItemInner
+                  <EditorialItem
                     icon={icon}
                     title={t(titleKey)}
                     description={t(descKey)}
                     index={i}
-                    hasLink
                   />
                 </Link>
               ))}
