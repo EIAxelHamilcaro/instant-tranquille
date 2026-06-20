@@ -73,6 +73,10 @@
       "tech": "Technologie"
     },
     "openImage": "Ouvrir l'image",
+    "lightboxClose": "Fermer la galerie",
+    "lightboxPrev": "Image précédente",
+    "lightboxNext": "Image suivante",
+    "lightboxCounter": "{current} / {total}",
     "nearbyTitle": "Aux alentours",
     "guests": "voyageurs",
     "bedrooms": "chambres",
