@@ -1,6 +1,8 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import nextEnv from "@next/env";
+import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { loadEnvConfig } = nextEnv as unknown as {
@@ -220,7 +222,27 @@ async function seed() {
       },
     });
     mediaIds[img.filename] = created.id as number;
-    console.log(`  ✓ ${img.filename} → id ${created.id}`);
+
+    // Patch blurDataURL si le hook beforeChange n'a pas pu lire req.file (CLI)
+    if (!created.blurDataURL) {
+      try {
+        const buf = fs.readFileSync(filePath);
+        const lqip = await sharp(buf)
+          .resize(20, 20, { fit: "inside" })
+          .webp({ quality: 40 })
+          .toBuffer();
+        await payload.update({
+          collection: "media",
+          id: created.id as number,
+          data: { blurDataURL: `data:image/webp;base64,${lqip.toString("base64")}` },
+        });
+        console.log(`  ✓ ${img.filename} → id ${created.id} (blurDataURL patché)`);
+      } catch (err) {
+        console.warn(`  ⚠ blurDataURL manquant pour ${img.filename}:`, err);
+      }
+    } else {
+      console.log(`  ✓ ${img.filename} → id ${created.id}`);
+    }
   }
 
   // ── SiteSettings ───────────────────────────────────────────────────────────
@@ -1197,7 +1219,7 @@ async function seed() {
     },
     {
       name: "Grand Parquet de Lamotte-Beuvron",
-      category: "activities",
+      category: "equestrian",
       description:
         "Site national de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours équestres. Base idéale pour les cavaliers en séjour.",
       distanceFromGite: "~17 km",
