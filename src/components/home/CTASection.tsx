@@ -30,7 +30,7 @@ function AirbnbLogo({ className }: { className?: string }) {
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 6.628 5.373 12 12 12s12-5.372 12-12c0-6.627-5.373-12-12-12zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 3.5c-1.24 0-2.25 1.01-2.25 2.25S10.76 10 12 10s2.25-1.01 2.25-2.25S13.24 5.5 12 5.5zm0 1.5c.414 0 .75.336.75.75S12.414 8.5 12 8.5s-.75-.336-.75-.75S11.586 7 12 7zm-4.5 5c0-1.24.477-2.25 1.5-3.25.355-.34.74-.63 1.155-.866C9.647 8.16 9.5 8.583 9.5 9c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5c0-.417-.147-.84-.655-1.116.415.236.8.526 1.155.866 1.023 1 1.5 2.01 1.5 3.25 0 1.657-.895 2.75-2.25 3.5h-.25v2c0 .828-.672 1.5-1.5 1.5s-1.5-.672-1.5-1.5v-2H11C9.645 14.75 7.5 13.657 7.5 12zm2.25 1.5h.75v2c0 .276.224.5.5.5s.5-.224.5-.5v-2h.75c.97-.46 1.75-1.18 1.75-1.5 0-.77-.297-1.5-.96-2.19A3.99 3.99 0 0012 9.5a3.99 3.99 0 00-1.04.31C10.297 10.5 10 11.23 10 12c0 .32.78 1.04 1.75 1.5z" />
+      <path d="M12.003 0C5.376 0 0 5.372 0 12c0 6.627 5.376 12 12.003 12C18.63 24 24 18.627 24 12c0-6.628-5.37-12-11.997-12zm-.124 4.5c1.02 0 1.846.826 1.846 1.845 0 1.02-.826 1.847-1.846 1.847S10.033 7.365 10.033 6.345c0-1.019.826-1.845 1.846-1.845zM7.382 15.27c-.16-.427-.247-.888-.247-1.363 0-1.985 1.46-3.672 3.368-4.02a4.27 4.27 0 011.495 0c1.907.348 3.368 2.035 3.368 4.02 0 .475-.087.936-.247 1.363l-1.41 3.765c-.217.578-.77.955-1.384.955h-1.75c-.613 0-1.166-.377-1.383-.955L7.382 15.27zm3.25 3.565h.74l1.28-3.415c.103-.277.16-.573.16-.878 0-1.116-.793-2.055-1.862-2.268a2.47 2.47 0 00-.498-.05 2.47 2.47 0 00-.498.05c-1.069.213-1.863 1.152-1.863 2.268 0 .305.057.6.16.878l1.28 3.415z" />
     </svg>
   );
 }
@@ -58,7 +58,7 @@ function AbritelLogo({ className }: { className?: string }) {
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M12 2L2 7l1.5 1L12 4l8.5 4L22 7zm-9 6.5V20h6v-6h6v6h6V8.5L12 4z" />
+      <path d="M12 1.5L1.5 8.25V22.5h7.5v-7.5h6v7.5h7.5V8.25L12 1.5zm0 2.598L20.25 9.3V21H16.5v-7.5H7.5V21H3.75V9.3L12 4.098z" />
     </svg>
   );
 }
@@ -72,8 +72,11 @@ export function CTASection({
   const tCommon = useTranslations("common");
   const ref = useReveal();
 
+  const hasAnyPlatformLink =
+    bookingLinks?.airbnb || bookingLinks?.booking || bookingLinks?.abritel;
+
   return (
-    <section className="relative overflow-hidden py-24" ref={ref}>
+    <section className="relative overflow-hidden py-28 sm:py-36" ref={ref}>
       <div className="absolute inset-0">
         <Image
           src="/images/terrasse-salon-jardin.webp"
@@ -83,23 +86,43 @@ export function CTASection({
           sizes="100vw"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900/75 via-primary-900/65 to-primary-900/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-stone-950/55 to-stone-950/70" />
       </div>
 
       <Container className="relative z-10 text-center">
-        <h2 className="reveal text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl">
-          {cmsTitle || t("ctaTitle")}
-        </h2>
         <p
-          className="subtitle-editorial reveal mt-4 text-lg text-sand-200 drop-shadow-md sm:text-xl"
-          style={{ "--stagger": 1 } as React.CSSProperties}
+          className="reveal font-serif text-base italic tracking-wide text-sand-200/80"
+          style={{ "--stagger": 0 } as React.CSSProperties}
         >
-          {cmsSubtitle || t("ctaSubtitle")}
+          {t("ctaEyebrow")}
         </p>
 
-        <div
-          className="reveal mt-10 flex flex-wrap items-center justify-center gap-4"
+        <h2
+          className="reveal mt-3 text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl"
+          style={{ "--stagger": 1 } as React.CSSProperties}
+        >
+          {cmsTitle ?? t("ctaTitle")}
+        </h2>
+
+        <p
+          className="reveal mt-4 text-lg text-sand-200 drop-shadow-md sm:text-xl"
           style={{ "--stagger": 2 } as React.CSSProperties}
+        >
+          {cmsSubtitle ?? t("ctaSubtitle")}
+        </p>
+
+        {hasAnyPlatformLink && (
+          <p
+            className="reveal mt-8 text-xs font-medium uppercase tracking-widest text-sand-200/60"
+            style={{ "--stagger": 3 } as React.CSSProperties}
+          >
+            {t("ctaChoosePlatform")}
+          </p>
+        )}
+
+        <div
+          className="reveal mt-4 flex flex-wrap items-center justify-center gap-3"
+          style={{ "--stagger": 4 } as React.CSSProperties}
         >
           {bookingLinks?.airbnb && (
             <a
@@ -107,7 +130,7 @@ export function CTASection({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t("ctaAirbnb")} — ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-[#FF385C] px-6 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#E31C5F] active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#FF385C] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#E31C5F] active:scale-[0.98]"
             >
               <AirbnbLogo className="h-5 w-5 shrink-0" />
               {t("ctaAirbnb")}
@@ -120,7 +143,7 @@ export function CTASection({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t("ctaBooking")} — ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-[#003580] px-6 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#00224f] active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#003580] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#00224f] active:scale-[0.98]"
             >
               <BookingLogo className="h-5 w-5 shrink-0" />
               {t("ctaBooking")}
@@ -133,7 +156,7 @@ export function CTASection({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t("ctaAbritel")} — ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-[#1B468A] px-6 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#153970] active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#1B468A] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#153970] active:scale-[0.98]"
             >
               <AbritelLogo className="h-5 w-5 shrink-0" />
               {t("ctaAbritel")}
@@ -145,7 +168,7 @@ export function CTASection({
               asChild
               variant="outline"
               size="lg"
-              className="border-white/40 bg-white/10 font-sans text-white backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
+              className="border-white/30 bg-white/10 font-sans text-white backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
             >
               <a href={`mailto:${bookingLinks.email}`}>
                 <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -157,7 +180,7 @@ export function CTASection({
               asChild
               variant="outline"
               size="lg"
-              className="border-white/40 bg-white/10 font-sans text-white backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
+              className="border-white/30 bg-white/10 font-sans text-white backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
             >
               <Link href="/contact">
                 <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
