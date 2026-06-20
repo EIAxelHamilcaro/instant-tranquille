@@ -88,7 +88,7 @@ function Lightbox({
       if (e.key === "Tab" && overlayRef.current) {
         const focusable = Array.from(
           overlayRef.current.querySelectorAll<HTMLElement>(
-            "button:not([disabled])",
+            'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
           ),
         );
         if (focusable.length === 0) return;
@@ -230,6 +230,7 @@ interface PhotoGalleryProps {
 export function PhotoGallery({ gallery }: PhotoGalleryProps) {
   const t = useTranslations("cottage");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const triggerRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
   const items = resolveItems(gallery ?? []);
 
@@ -238,7 +239,14 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
   }, []);
 
   const closeLightbox = useCallback(() => {
-    setLightboxIndex(null);
+    setLightboxIndex((prev) => {
+      if (prev !== null) {
+        setTimeout(() => {
+          triggerRefs.current.get(prev)?.focus();
+        }, 0);
+      }
+      return null;
+    });
   }, []);
 
   const goNext = useCallback(() => {
@@ -272,6 +280,10 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
             {items.map((item, i) => (
               <button
                 key={item.key}
+                ref={(el) => {
+                  if (el) triggerRefs.current.set(i, el);
+                  else triggerRefs.current.delete(i);
+                }}
                 type="button"
                 aria-label={item.caption || t("openImage")}
                 onClick={() => openLightbox(i)}
@@ -281,7 +293,7 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
                   media={item.image}
                   size="card"
                   alt={item.caption || t("galleryTitle")}
-                  className="h-full w-full object-cover transition duration-300 hover:scale-[1.02]"
+                  className="h-full w-full object-cover motion-safe:transition motion-safe:duration-300 hover:scale-[1.02]"
                 />
               </button>
             ))}
@@ -294,6 +306,10 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
             {items.map((item, i) => (
               <button
                 key={item.key}
+                ref={(el) => {
+                  if (el) triggerRefs.current.set(i, el);
+                  else triggerRefs.current.delete(i);
+                }}
                 type="button"
                 aria-label={item.caption || t("openImage")}
                 onClick={() => openLightbox(i)}
@@ -303,7 +319,8 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
                   media={item.image}
                   size="card"
                   alt={item.caption || t("galleryTitle")}
-                  className="w-full object-cover transition duration-300 hover:scale-[1.02]"
+                  className="w-full motion-safe:transition motion-safe:duration-300 hover:scale-[1.02]"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </button>
             ))}

@@ -39,6 +39,7 @@ interface PayloadImageProps {
   className?: string;
   fill?: boolean;
   priority?: boolean;
+  sizes?: string;
 }
 
 export function PayloadImage({
@@ -48,6 +49,7 @@ export function PayloadImage({
   className,
   fill,
   priority,
+  sizes,
 }: PayloadImageProps) {
   if (!media || typeof media === "string" || typeof media === "number") {
     return <ImagePlaceholder aspectRatio="16/9" className={className} />;
@@ -66,6 +68,13 @@ export function PayloadImage({
     ? ({ placeholder: "blur", blurDataURL: media.blurDataURL } as const)
     : {};
 
+  const defaultSizes =
+    size === "hero"
+      ? "100vw"
+      : size === "card"
+        ? "(max-width: 768px) 100vw, 768px"
+        : "(max-width: 640px) 50vw, 400px";
+
   if (fill) {
     return (
       <Image
@@ -76,13 +85,7 @@ export function PayloadImage({
         priority={priority}
         quality={quality}
         {...blurProps}
-        sizes={
-          size === "hero"
-            ? "100vw"
-            : size === "card"
-              ? "(max-width: 768px) 100vw, 768px"
-              : "400px"
-        }
+        sizes={sizes ?? defaultSizes}
       />
     );
   }
@@ -97,13 +100,7 @@ export function PayloadImage({
       priority={priority}
       quality={quality}
       {...blurProps}
-      sizes={
-        size === "hero"
-          ? "100vw"
-          : size === "card"
-            ? "(max-width: 768px) 100vw, 768px"
-            : "(max-width: 640px) 50vw, 400px"
-      }
+      sizes={sizes ?? defaultSizes}
     />
   );
 }
