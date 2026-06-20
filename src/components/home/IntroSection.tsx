@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { PayloadImage } from "@/components/shared/PayloadImage";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
@@ -23,7 +22,6 @@ export function IntroSection({
 }: IntroSectionProps) {
   const t = useTranslations("home");
   const sectionRef = useReveal<HTMLElement>();
-  const textRef = useRef<HTMLDivElement>(null);
 
   const title = introTitle || t("introTitle");
   const hasRichText = introText && typeof introText === "object";
@@ -31,14 +29,20 @@ export function IntroSection({
   return (
     <section
       ref={sectionRef}
-      className="py-24 overflow-hidden"
+      className="relative overflow-hidden py-0"
       aria-label={title}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid items-center gap-0 lg:grid-cols-[3fr_2fr]">
-          {/* Image dominante — 60 % */}
+      {/* Fond crème décalé — occupe la moitié droite */}
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-2/5 bg-sand-100"
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid lg:grid-cols-[3fr_2fr] items-stretch">
+          {/* Image dominante — 60 % — déborde en haut et en bas */}
           <div className="reveal-scale relative order-first lg:order-none">
-            <div className="relative aspect-[4/3] lg:aspect-[5/4] overflow-hidden rounded-2xl">
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0 lg:-top-16 lg:-bottom-16 overflow-hidden">
               {introImage && typeof introImage === "object" ? (
                 <PayloadImage
                   media={
@@ -57,25 +61,33 @@ export function IntroSection({
                   className="h-full w-full"
                 />
               )}
+              {/* Bordure accent vert sur le bord droit de l'image */}
+              <div
+                className="absolute inset-y-0 right-0 w-1 bg-primary-500 hidden lg:block"
+                aria-hidden="true"
+              />
             </div>
-            {/* Accent décoratif décalé */}
+            {/* Espace réservé mobile (l'image est en absolute sur desktop) */}
             <div
-              className="absolute -bottom-6 -right-6 -z-10 h-48 w-48 rounded-full bg-primary-100 opacity-60 hidden lg:block"
+              className="hidden lg:block lg:min-h-[480px]"
               aria-hidden="true"
             />
           </div>
 
-          {/* Bloc texte — 40 %, décalé vers la droite */}
-          <div
-            ref={textRef}
-            className="reveal-left pl-0 lg:pl-14 xl:pl-20 pt-10 lg:pt-0"
-          >
-            <SectionHeading
-              title={title}
-              eyebrow={t("introEyebrow")}
-              variant="left"
-              centered={false}
-            />
+          {/* Bloc texte — 40 % — décalé verticalement */}
+          <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pl-16 xl:pl-20 lg:pr-8">
+            <div
+              className="reveal-left"
+              style={{ "--stagger": "0" } as React.CSSProperties}
+            >
+              <SectionHeading
+                title={title}
+                eyebrow={t("introEyebrow")}
+                variant="left"
+                centered={false}
+              />
+            </div>
+
             <div
               className="reveal space-y-4"
               style={{ "--stagger": "1" } as React.CSSProperties}
@@ -86,14 +98,24 @@ export function IntroSection({
                   className="text-base leading-relaxed text-foreground/75 prose prose-stone max-w-none"
                 />
               ) : (
-                <p className="text-base leading-relaxed text-foreground/75">
+                <p className="text-base leading-relaxed text-foreground/75 max-w-prose">
                   {t("introText")}
                 </p>
               )}
             </div>
+
+            {/* Bloc distances — sobre, factuel */}
+            <div
+              className="reveal mt-8 flex flex-col gap-2 text-sm text-muted-foreground border-l-2 border-primary-300 pl-4"
+              style={{ "--stagger": "2" } as React.CSSProperties}
+            >
+              <span>12 km — Château de Chambord</span>
+              <span>17 km — Grand Parquet de Lamotte-Beuvron (FFE)</span>
+            </div>
+
             <div
               className="reveal mt-8"
-              style={{ "--stagger": "2" } as React.CSSProperties}
+              style={{ "--stagger": "3" } as React.CSSProperties}
             >
               <Button
                 asChild
