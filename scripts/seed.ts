@@ -254,21 +254,24 @@ async function seed() {
       siteName: "L'Instant Tranquille",
       tagline: "Un gîte en Sologne, entre forêts et étangs",
       siteDescription:
-        "Gîte en Sologne à Romorantin-Lanthenay — 6 personnes, 3 chambres, 2 salles de bains, 120 m². Proche des châteaux de la Loire et du Grand Parquet de Lamotte-Beuvron.",
+        "Une maison familiale paisible à Romorantin-Lanthenay, au cœur de la Sologne. 3 chambres (6 couchages), terrasse avec barbecue, cuisine équipée, baby-foot et jeux de société, jardin clos. Wifi gratuit, parking privé. Idéal en famille (même avec ados) ou entre amis.",
       propertyDetails: {
         maxGuests: 6,
         bedrooms: 3,
-        bathrooms: 2,
-        surface: 120,
+        bathrooms: 1,
+        surface: 115,
+        petsAllowed: true,
       },
       contact: {
         email: "contact@linstant-tranquille.fr",
         phone: "+33 6 12 34 56 78",
-        address: "Romorantin-Lanthenay, 41200\nLoir-et-Cher\nFrance",
+        address: "23 Rue de Loreux",
+        city: "Romorantin-Lanthenay",
+        postalCode: "41200",
         coordinates: {
-          lat: 47.3608,
-          lng: 1.7492,
-          zoom: 12,
+          lat: 47.3553,
+          lng: 1.7472,
+          zoom: 13,
           markerLabel: "L'Instant Tranquille",
         },
       },
@@ -296,6 +299,12 @@ async function seed() {
         facebook: "https://www.facebook.com/linstanttranquille",
         instagram: "https://www.instagram.com/linstanttranquille",
       },
+      sameAs: [
+        { url: "https://www.airbnb.fr/rooms/1605140748799580144", label: "Airbnb" },
+        { url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html", label: "Booking.com" },
+        { url: "https://www.facebook.com/linstanttranquille", label: "Facebook" },
+        { url: "https://www.instagram.com/linstanttranquille", label: "Instagram" },
+      ],
       faqs: [
         {
           question: "Combien de personnes le gîte peut-il accueillir ?",
@@ -308,7 +317,7 @@ async function seed() {
                   children: [
                     {
                       type: "text",
-                      text: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (2 lits doubles, 2 lits simples).",
+                      text: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (1 lit double en chambre 1, 1 lit double en chambre 2, 2 lits simples en chambre 3).",
                     },
                   ],
                   direction: "ltr",
@@ -335,7 +344,34 @@ async function seed() {
                   children: [
                     {
                       type: "text",
-                      text: "Les animaux de compagnie sont acceptés sous conditions. Contactez-nous avant la réservation.",
+                      text: "Oui, les animaux de compagnie sont acceptés.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "À quelle heure puis-je arriver et partir ?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "L'arrivée est à partir de 17h00 (boîte à clé sécurisée — arrivée autonome). Le départ est avant 10h00.",
                     },
                   ],
                   direction: "ltr",
@@ -355,7 +391,7 @@ async function seed() {
       defaultSeo: {
         metaTitle: "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
         metaDescription:
-          "Gîte en Sologne à Romorantin-Lanthenay, 6 personnes, 3 chambres, 120 m². Proche Chambord, Cheverny et Grand Parquet de Lamotte-Beuvron.",
+          "Gîte en Sologne à Romorantin-Lanthenay (41200), 6 personnes, 3 chambres, 115 m². Proche Chambord, Cheverny et Grand Parquet de Lamotte-Beuvron.",
       },
     },
   });
@@ -365,7 +401,7 @@ async function seed() {
     data: {
       tagline: "A holiday cottage in Sologne, between forests and ponds",
       siteDescription:
-        "Holiday cottage in Sologne, Romorantin-Lanthenay — 6 guests, 3 bedrooms, 2 bathrooms, 120 m². Close to Loire Valley châteaux and the Grand Parquet equestrian centre.",
+        "A peaceful family home in Romorantin-Lanthenay, at the heart of Sologne. 3 bedrooms (6 guests), terrace with barbecue, fully equipped kitchen, foosball table and board games, enclosed garden. Free Wi-Fi, private parking. Ideal for families (including teenagers) or groups of friends.",
       accessRoutes: [
         {
           from: "Paris",
@@ -398,7 +434,7 @@ async function seed() {
                   children: [
                     {
                       type: "text",
-                      text: "The cottage accommodates up to 6 guests in 3 bedrooms (2 double beds, 2 single beds).",
+                      text: "The cottage sleeps up to 6 guests in 3 bedrooms (1 double bed in bedroom 1, 1 double bed in bedroom 2, 2 single beds in bedroom 3).",
                     },
                   ],
                   direction: "ltr",
@@ -425,7 +461,34 @@ async function seed() {
                   children: [
                     {
                       type: "text",
-                      text: "Pets are accepted under conditions. Please contact us before booking.",
+                      text: "Yes, pets are welcome.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "What are the check-in and check-out times?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "Check-in is from 5:00 PM (self check-in via a secure key box). Check-out is before 10:00 AM.",
                     },
                   ],
                   direction: "ltr",
@@ -445,7 +508,7 @@ async function seed() {
       defaultSeo: {
         metaTitle: "L'Instant Tranquille — Holiday Cottage in Sologne, France",
         metaDescription:
-          "Holiday cottage in Sologne, Romorantin-Lanthenay, 6 guests, 3 bedrooms, 120 m². Close to Chambord, Cheverny and Grand Parquet equestrian centre.",
+          "Holiday cottage in Sologne, Romorantin-Lanthenay (41200), 6 guests, 3 bedrooms, 115 m². Close to Chambord, Cheverny and Grand Parquet equestrian centre.",
       },
     },
   });
@@ -549,19 +612,19 @@ async function seed() {
           links: [
             {
               label: "Airbnb",
-              url: "https://www.airbnb.fr",
+              url: "https://www.airbnb.fr/rooms/1605140748799580144",
               isExternal: true,
             },
             {
-              label: "Booking",
-              url: "https://www.booking.com",
+              label: "Booking.com",
+              url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
               isExternal: true,
             },
           ],
         },
       ],
       legalText:
-        "L'Instant Tranquille — Gîte de vacances en Sologne. Tous droits réservés.",
+        "L'Instant Tranquille — Gîte en Sologne. Tous droits réservés.",
     },
   });
   await payload.updateGlobal({
@@ -586,12 +649,12 @@ async function seed() {
           links: [
             {
               label: "Airbnb",
-              url: "https://www.airbnb.fr",
+              url: "https://www.airbnb.fr/rooms/1605140748799580144",
               isExternal: true,
             },
             {
-              label: "Booking",
-              url: "https://www.booking.com",
+              label: "Booking.com",
+              url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
               isExternal: true,
             },
           ],
@@ -676,8 +739,8 @@ async function seed() {
         },
       ],
       bookingLinks: {
-        airbnb: "https://www.airbnb.fr",
-        booking: "https://www.booking.com",
+        airbnb: "https://www.airbnb.fr/rooms/1605140748799580144",
+        booking: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
         email: "contact@linstant-tranquille.fr",
       },
       policies: {
@@ -729,7 +792,7 @@ async function seed() {
             version: 1,
           },
         },
-        checkIn: "À partir de 16h00",
+        checkIn: "À partir de 17h00",
         checkOut: "Avant 10h00",
         additional: {
           root: {
@@ -785,7 +848,7 @@ async function seed() {
               children: [
                 {
                   type: "text",
-                  text: "À Romorantin-Lanthenay, en plein cœur de la Sologne, ce gîte de 120 m² accueille jusqu'à 6 personnes dans 3 chambres. Forêts, étangs, châteaux de la Loire — tout est à portée.",
+                  text: "Une maison familiale paisible à Romorantin-Lanthenay, au cœur de la Sologne. 3 chambres (6 couchages), terrasse avec barbecue, cuisine équipée, baby-foot et jeux de société, jardin clos. Wifi gratuit, parking privé.",
                 },
               ],
               direction: "ltr",
@@ -814,7 +877,7 @@ async function seed() {
           icon: "castle",
           title: "Châteaux de la Loire",
           description:
-            "Chambord à 30 min, Cheverny à 25 min, Blois à 40 min.",
+            "Chambord à ~35 min, Cheverny à ~30 min, Zoo de Beauval à ~30 min.",
           linkUrl: "/contact",
           linkLabel: "Nous trouver",
         },
@@ -827,7 +890,7 @@ async function seed() {
         {
           icon: "users",
           title: "6 personnes, 3 chambres",
-          description: "120 m², 2 salles de bains, cuisine équipée, cheminée.",
+          description: "115 m², cuisine équipée, cheminée, baby-foot, jardin clos. Animaux acceptés.",
           linkUrl: "/le-gite",
           linkLabel: "Voir le gîte",
         },
@@ -888,7 +951,7 @@ async function seed() {
           {
             icon: "castle",
             title: "Loire Valley châteaux",
-            description: "Chambord 30 min, Cheverny 25 min, Blois 40 min.",
+            description: "Chambord ~35 min, Cheverny ~30 min, Zoo de Beauval ~30 min.",
             linkUrl: "/contact",
             linkLabel: "Find us",
           },
@@ -902,7 +965,7 @@ async function seed() {
             icon: "users",
             title: "6 guests, 3 bedrooms",
             description:
-              "120 m², 2 bathrooms, fully equipped kitchen, fireplace.",
+              "115 m², kitchen, fireplace, foosball, enclosed garden. Pets welcome.",
             linkUrl: "/le-gite",
             linkLabel: "See the cottage",
           },
@@ -963,7 +1026,7 @@ async function seed() {
               children: [
                 {
                   type: "text",
-                  text: "Maison de 120 m² à Romorantin-Lanthenay — 3 chambres, 2 salles de bains, salon avec cheminée, cuisine équipée, baby-foot. Jardin et terrasse. Capacité 6 personnes.",
+                  text: "Maison de 115 m² à Romorantin-Lanthenay — 3 chambres (6 couchages), 1 salle de bain, salon avec cheminée, cuisine équipée, baby-foot, jeux de société. Terrasse avec barbecue, jardin clos. Parking privé gratuit. Animaux acceptés.",
                 },
               ],
               direction: "ltr",
@@ -1008,7 +1071,7 @@ async function seed() {
                 children: [
                   {
                     type: "text",
-                    text: "120 m² house in Romorantin-Lanthenay — 3 bedrooms, 2 bathrooms, lounge with fireplace, fully equipped kitchen, foosball table. Garden and terrace. Sleeps 6.",
+                    text: "115 m² house in Romorantin-Lanthenay — 3 bedrooms (6 guests), 1 bathroom, lounge with fireplace, fully equipped kitchen, foosball table, board games. Terrace with barbecue, enclosed garden. Free private parking. Pets welcome.",
                   },
                 ],
                 direction: "ltr",
@@ -1095,19 +1158,21 @@ async function seed() {
   // ── Amenities ──────────────────────────────────────────────────────────────
   console.log("Seeding Amenities...");
   const amenities = [
-    { name: "WiFi haut débit", icon: "wifi", category: "indoor" },
-    { name: "TV écran plat", icon: "tv", category: "indoor" },
-    { name: "Lave-linge", icon: "washing-machine", category: "indoor" },
-    { name: "Cheminée", icon: "flame", category: "indoor" },
-    { name: "Literie premium", icon: "bed-double", category: "indoor" },
-    { name: "Jardin", icon: "trees", category: "outdoor" },
-    { name: "Parking privé", icon: "car", category: "outdoor" },
-    { name: "Terrasse", icon: "sun", category: "outdoor" },
+    { name: "Wifi gratuit", icon: "wifi", category: "indoor" },
+    { name: "Télévision", icon: "tv", category: "indoor" },
     { name: "Cuisine équipée", icon: "utensils", category: "kitchen" },
-    { name: "Réfrigérateur", icon: "refrigerator", category: "kitchen" },
-    { name: "Machine à café", icon: "coffee", category: "kitchen" },
-    { name: "Chauffage central", icon: "heater", category: "comfort" },
-    { name: "Draps & serviettes", icon: "bath", category: "comfort" },
+    { name: "Lave-vaisselle", icon: "square-dashed", category: "kitchen" },
+    { name: "Cafetière Dolce Gusto", icon: "coffee", category: "kitchen" },
+    { name: "Cheminée", icon: "flame", category: "indoor" },
+    { name: "Baby-foot", icon: "gamepad-2", category: "indoor" },
+    { name: "Jeux de société", icon: "dices", category: "indoor" },
+    { name: "Terrasse avec barbecue", icon: "flame-kindling", category: "outdoor" },
+    { name: "Jardin privé clôturé", icon: "trees", category: "outdoor" },
+    { name: "Parking privé gratuit", icon: "car", category: "outdoor" },
+    { name: "Sèche-cheveux", icon: "wind", category: "comfort" },
+    { name: "Linge & serviettes fournis", icon: "bath", category: "comfort" },
+    { name: "Animaux acceptés", icon: "paw-print", category: "comfort" },
+    { name: "Non-fumeurs", icon: "cigarette-off", category: "comfort" },
   ];
   for (let i = 0; i < amenities.length; i++) {
     await payload.create({
@@ -1117,63 +1182,94 @@ async function seed() {
     });
   }
 
-  // ── Testimonials ───────────────────────────────────────────────────────────
+  // ── Testimonials (vrais avis Airbnb/Booking) ───────────────────────────────
   console.log("Seeding Testimonials...");
-  const testimonials = [
+  const testimonials: Array<{
+    guestName: string;
+    rating: number;
+    text: string;
+    source: string;
+    stayDate: string;
+    featured: boolean;
+  }> = [
     {
-      guestName: "Sophie & Marc",
-      guestOrigin: "Paris",
+      guestName: "Julien",
       rating: 5,
-      text: "Un séjour très agréable dans cette maison bien équipée. Le calme, la nature, tout était là.",
+      text: "Nous avons passé un excellent week-end de Pâques dans cette maison. Erick est un hôte accueillant, sympathique et très disponible. La maison est décorée avec goût et très fonctionnelle. Linge et literie de qualité. Cuisine très bien équipée. Nous reviendrons avec grand plaisir !",
       source: "airbnb",
-      stayDate: "2025-08-15",
+      stayDate: "2026-04-01",
+      featured: true,
     },
     {
-      guestName: "Emma Johnson",
-      guestOrigin: "London",
+      guestName: "Laura",
       rating: 5,
-      text: "Wonderful place! A well-maintained cottage with lovely surroundings.",
-      source: "booking",
-      stayDate: "2025-07-20",
-    },
-    {
-      guestName: "Pierre & Anne",
-      guestOrigin: "Lyon",
-      rating: 4,
-      text: "Très bon gîte, bien situé pour visiter les châteaux. Nous reviendrons.",
-      source: "direct",
-      stayDate: "2025-06-10",
-    },
-    {
-      guestName: "Hans & Greta",
-      guestOrigin: "Berlin",
-      rating: 5,
-      text: "Schönes Ferienhaus! Die Natur drumherum ist wirklich beeindruckend.",
+      text: "Très bon séjour, accueil chaleureux dès l'arrivée. Logement impeccable et très propre. Literie confortable. Le baby-foot et les jeux de société sont un vrai plus, très convivial. Pour un logement de 3 chambres, le rapport qualité-prix est très bon. Nous recommandons sans hésiter !",
       source: "airbnb",
-      stayDate: "2025-09-01",
+      stayDate: "2026-05-01",
+      featured: true,
     },
     {
-      guestName: "Famille Moreau",
-      guestOrigin: "Bordeaux",
+      guestName: "Hasan",
       rating: 5,
-      text: "Nos enfants ont adoré le jardin et le baby-foot. Un séjour réussi.",
-      source: "google",
-      stayDate: "2025-04-15",
+      text: "Logement bien refait, propre et fonctionnel. Séjour très bien passé. Communication et accueil très sympathiques. Je recommande vivement.",
+      source: "airbnb",
+      stayDate: "2026-04-01",
+      featured: true,
     },
     {
-      guestName: "Laura & David",
-      guestOrigin: "Bruxelles",
-      rating: 4,
-      text: "Cadre paisible, maison très confortable. La Sologne est magnifique à découvrir.",
+      guestName: "Stéphanie",
+      rating: 5,
+      text: "Merci pour la qualité de l'accueil. Une très belle maison agréable, décorée avec soin et chaleur. C'est avec plaisir que nous reviendrons.",
+      source: "airbnb",
+      stayDate: "2026-04-01",
+      featured: true,
+    },
+    {
+      guestName: "Nicolas",
+      rating: 5,
+      text: "Logement parfait, très bien aménagé et décoré avec goût. Idéal pour une famille avec ados. Hôte très réactif.",
+      source: "airbnb",
+      stayDate: "2026-04-01",
+      featured: false,
+    },
+    {
+      guestName: "Arbi",
+      rating: 5,
+      text: "Séjour très satisfaisant, conforme à la description, propre et bien équipé. Nous recommandons sans hésitation.",
+      source: "airbnb",
+      stayDate: "2026-04-01",
+      featured: false,
+    },
+    {
+      guestName: "Philippe",
+      rating: 5,
+      text: "Logement très agréable, très bien aménagé avec beaucoup de goût, très fonctionnel. Merci pour l'accueil et la bienveillance. Nous reviendrons.",
+      source: "airbnb",
+      stayDate: "2026-04-01",
+      featured: false,
+    },
+    {
+      guestName: "Anilia",
+      rating: 5,
+      text: "J'ai adoré la maison, très bien située. Je tiens surtout à souligner la disponibilité, la gentillesse et la qualité de l'hôte.",
       source: "booking",
-      stayDate: "2025-05-20",
+      stayDate: "2026-01-01",
+      featured: false,
+    },
+    {
+      guestName: "Stéphane",
+      rating: 5,
+      text: "Une charmante maison décorée avec goût, avec tout le confort nécessaire pour y séjourner.",
+      source: "booking",
+      stayDate: "2026-01-01",
+      featured: false,
     },
   ];
   for (const t of testimonials) {
     await payload.create({
       collection: "testimonials",
       locale: "fr",
-      data: { ...t, status: "approved", featured: true },
+      data: { ...t, status: "approved" },
     });
   }
 
@@ -1181,39 +1277,39 @@ async function seed() {
   console.log("Seeding LocalRecommendations...");
   const recommendations = [
     {
-      name: "Château de Chambord",
-      category: "castles",
+      name: "Centre-ville de Romorantin-Lanthenay",
+      category: "activities",
       description:
-        "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance.",
-      distanceFromGite: "30 min",
-      website: "https://www.chambord.org",
+        "Boulangeries, restaurants, bars — tout à 5-10 min à pied. Marché le mercredi et le samedi matin.",
+      distanceFromGite: "5-10 min à pied",
       featured: true,
       order: 0,
     },
     {
       name: "Château de Cheverny",
       category: "castles",
-      description: "Château meublé d'époque, inspirateur du château de Moulinsart.",
-      distanceFromGite: "25 min",
+      description: "Château meublé d'époque, inspirateur du château de Moulinsart (Tintin).",
+      distanceFromGite: "~30 min (29 km)",
       website: "https://www.chateau-cheverny.fr",
       featured: true,
       order: 1,
     },
     {
-      name: "Zoo de Beauval",
-      category: "activities",
-      description: "L'un des plus grands zoos d'Europe, avec pandas et koalas.",
-      distanceFromGite: "45 min",
-      website: "https://www.zoobeauval.com",
+      name: "Château de Chambord",
+      category: "castles",
+      description:
+        "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance. Forêt de 5 440 ha.",
+      distanceFromGite: "~35 min",
+      website: "https://www.chambord.org",
       featured: true,
       order: 2,
     },
     {
-      name: "Étangs de Sologne",
-      category: "nature",
-      description:
-        "Randonnées et balades autour des étangs typiques de la Sologne.",
-      distanceFromGite: "10 min",
+      name: "Zoo de Beauval",
+      category: "activities",
+      description: "L'un des plus grands zoos d'Europe, avec pandas géants, lions blancs et koalas.",
+      distanceFromGite: "~30 min",
+      website: "https://www.zoobeauval.com",
       featured: true,
       order: 3,
     },
@@ -1221,8 +1317,8 @@ async function seed() {
       name: "Grand Parquet de Lamotte-Beuvron",
       category: "equestrian",
       description:
-        "Site national de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours équestres. Base idéale pour les cavaliers en séjour.",
-      distanceFromGite: "~17 km",
+        "Site fédéral de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux. Base idéale pour les cavaliers en déplacement.",
+      distanceFromGite: "~17 km — 20 min",
       website: "https://www.ffe.com",
       featured: true,
       order: 4,

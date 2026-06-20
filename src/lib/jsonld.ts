@@ -71,6 +71,8 @@ const KNOWN_ABSENT_AMENITIES = [
   "Piscine",
   "Jacuzzi",
   "Ascenseur",
+  "Détecteur de monoxyde de carbone",
+  "Accès PMR",
 ];
 
 function buildAmenityFeature(
@@ -395,7 +397,7 @@ export function buildCottageFaqItems(locale: string): {
     return [
       {
         question: "How many guests can the cottage accommodate?",
-        answer: "The cottage sleeps up to 6 guests across 3 bedrooms (120 m²).",
+        answer: "The cottage sleeps up to 6 guests across 3 bedrooms (115 m²).",
       },
       {
         question: "Are pets allowed?",
@@ -417,7 +419,7 @@ export function buildCottageFaqItems(locale: string): {
   return [
     {
       question: "Combien de personnes le gîte peut-il accueillir ?",
-      answer: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (120 m²).",
+      answer: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (115 m²).",
     },
     {
       question: "Les animaux sont-ils acceptés ?",
@@ -457,7 +459,7 @@ export function buildRatesFaqItems(locale: string): {
       {
         question: "What are the check-in and check-out times?",
         answer:
-          "Check-in is from 4:00 PM and check-out is before 10:00 AM, unless otherwise agreed.",
+          "Check-in is from 5:00 PM (self check-in via a secure key box) and check-out is before 10:00 AM.",
       },
       {
         question:
@@ -481,7 +483,7 @@ export function buildRatesFaqItems(locale: string): {
     {
       question: "Quels sont les horaires d'arrivée et de départ ?",
       answer:
-        "L'arrivée est à partir de 16h00 et le départ avant 10h00, sauf accord préalable.",
+        "L'arrivée est à partir de 17h00 (boîte à clé sécurisée — arrivée autonome) et le départ avant 10h00.",
     },
     {
       question:
@@ -501,7 +503,7 @@ export function buildSurroundingsFaqItems(locale: string): {
       {
         question: "How far is Château de Chambord from the cottage?",
         answer:
-          "Château de Chambord is approximately 12 km from the cottage (about 15 minutes by car).",
+          "Château de Chambord is approximately 35 minutes by car from the cottage.",
       },
       {
         question: "What can you do in Sologne?",
@@ -525,7 +527,7 @@ export function buildSurroundingsFaqItems(locale: string): {
     {
       question: "À quelle distance se trouve le château de Chambord ?",
       answer:
-        "Le château de Chambord est à environ 12 km du gîte, soit environ 15 minutes en voiture.",
+        "Le château de Chambord est à environ 35 minutes en voiture du gîte.",
     },
     {
       question: "Que faire en Sologne depuis le gîte ?",
