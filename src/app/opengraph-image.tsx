@@ -105,7 +105,7 @@ export default function OGImage() {
         <span style={{ color: "#4a7c59" }}>•</span>
         <span>Nature préservée</span>
         <span style={{ color: "#4a7c59" }}>•</span>
-        <span>Calme absolu</span>
+        <span>Sologne, Loir-et-Cher</span>
       </div>
     </div>,
     { ...size },

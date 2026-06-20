@@ -553,18 +553,19 @@ export async function POST() {
       title: "Accueil",
       slug: "home",
       heroTitle: "L'Instant Tranquille",
-      heroSubtitle: "Votre parenthèse nature au cœur de la Sologne",
+      heroSubtitle: "Un gîte en Sologne, au calme",
       _status: "published" as const,
       ...(heroImageId ? { heroImage: heroImageId } : {}),
       content: richText(
-        "Bienvenue à L'Instant Tranquille, votre gîte de charme niché au cœur de la Sologne. Entre forêts majestueuses et châteaux de la Loire, notre maison vous offre un cadre idéal pour une escapade ressourçante.",
-        "Entièrement rénové avec soin, le gîte allie le charme de l'ancien au confort moderne. Profitez de 120m² d'espace de vie, d'un jardin arboré de 3000m² et d'un calme absolu pour vous reconnecter à l'essentiel.",
-        "Que vous soyez en couple, en famille ou entre amis, L'Instant Tranquille est le point de départ idéal pour découvrir les trésors de la région : Chambord, Cheverny, Beauval et bien d'autres merveilles vous attendent.",
+        "Bienvenue à L'Instant Tranquille, gîte situé en Sologne, à Romorantin-Lanthenay (Loir-et-Cher). Entre forêts et étangs, à 40 km des châteaux de la Loire, la maison est disponible en location complète.",
+        "Entièrement rénové, le gîte propose 120m² d'espace de vie sur deux niveaux, un jardin clos de 3 000m² et une connexion fibre. Accès direct à la nature, à pied depuis la propriété.",
+        "Situé à 3 km du centre de Romorantin-Lanthenay, à 40 km de Chambord et à 50 km de Beauval. Idéal pour explorer la région en couple, en famille ou entre amis.",
       ),
       seo: {
-        metaTitle: "L'Instant Tranquille — Gîte de charme en Sologne",
+        metaTitle:
+          "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
         metaDescription:
-          "Découvrez L'Instant Tranquille, gîte de charme au cœur de la Sologne. 120m², 3 chambres, jardin arboré. Idéal pour explorer les châteaux de la Loire.",
+          "Gîte en Sologne à Romorantin-Lanthenay (41) : 120m², 3 chambres, jardin de 3 000m², cheminée, fibre. À 40 km de Chambord. Location à la semaine ou au week-end.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -572,19 +573,19 @@ export async function POST() {
       title: "Le Gîte",
       slug: "le-gite",
       heroTitle: "Le Gîte",
-      heroSubtitle: "Un havre de paix au cœur de la nature",
+      heroSubtitle: "120m², jardin de 3 000m², en Sologne",
       _status: "published" as const,
       ...(heroImageId ? { heroImage: heroImageId } : {}),
       content: richText(
-        "Le gîte L'Instant Tranquille est une maison de caractère entièrement rénovée, offrant 120m² de surface habitable sur deux niveaux. Chaque détail a été pensé pour votre confort et votre bien-être.",
-        "Au rez-de-chaussée, un grand séjour lumineux avec cheminée s'ouvre sur une cuisine entièrement équipée. Une première chambre avec lit double et une salle d'eau complètent ce niveau.",
-        "À l'étage, deux chambres spacieuses (un lit double et deux lits simples) partagent une grande salle de bain avec baignoire. Un coin lecture sous les toits offre un espace de détente supplémentaire.",
-        "À l'extérieur, le jardin clos de 3000m² est un véritable havre de paix. Barbecue, salon de jardin, transats et jeux pour enfants sont à votre disposition pour profiter des beaux jours.",
+        "L'Instant Tranquille est une maison entièrement rénovée de 120m² habitables sur deux niveaux, à Romorantin-Lanthenay. Capacité : 6 personnes, 3 chambres, 2 salles d'eau.",
+        "Au rez-de-chaussée : séjour avec cheminée bois, cuisine équipée (lave-vaisselle, four, plaque induction), une chambre double et une salle d'eau. Connexion fibre incluse.",
+        "À l'étage : deux chambres (lit double + deux lits simples), grande salle de bain avec baignoire, coin lecture. Linge de lit disponible en option.",
+        "Jardin clos de 3 000m² : terrasse, barbecue, salon de jardin, transats, jeux pour enfants. Parking privatif sur place.",
       ),
       seo: {
-        metaTitle: "Le Gîte — L'Instant Tranquille en Sologne",
+        metaTitle: "Le Gîte — L'Instant Tranquille, Romorantin-Lanthenay",
         metaDescription:
-          "Découvrez notre gîte de charme en Sologne : 120m², 3 chambres, jardin de 3000m², cheminée. Entièrement rénové avec goût pour un séjour inoubliable.",
+          "Gîte 120m² à Romorantin-Lanthenay (Sologne, 41) : 3 chambres, cheminée, jardin clos 3 000m², fibre, parking. 6 personnes max. Entièrement rénové.",
         ...(heroImageId ? { ogImage: heroImageId } : {}),
       },
     },
@@ -643,9 +644,9 @@ export async function POST() {
       data: {
         _status: "published",
         siteName: "L'Instant Tranquille",
-        tagline: "Votre parenthèse nature au cœur de la Sologne",
+        tagline: "Gîte en Sologne, à Romorantin-Lanthenay",
         siteDescription:
-          "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire. Location de vacances idéale pour un séjour nature.",
+          "Gîte en Sologne à Romorantin-Lanthenay (Loir-et-Cher) : 120m², 3 chambres, jardin de 3 000m², cheminée. À 40 km des châteaux de la Loire.",
         ...(heroImageId ? { logo: heroImageId } : {}),
         contact: {
           email: "contact@linstant-tranquille.fr",
@@ -664,9 +665,10 @@ export async function POST() {
           surface: 120,
         },
         defaultSeo: {
-          metaTitle: "L'Instant Tranquille — Gîte de charme en Sologne",
+          metaTitle:
+            "L'Instant Tranquille — Gîte en Sologne, Romorantin-Lanthenay",
           metaDescription:
-            "Découvrez L'Instant Tranquille, gîte de charme au cœur de la Sologne. 3 chambres, 120m², jardin arboré. Entre forêts et châteaux de la Loire.",
+            "L'Instant Tranquille, gîte à Romorantin-Lanthenay (Sologne, 41) : 3 chambres, 120m², jardin 3 000m². À 40 km de Chambord et Cheverny.",
           ...(heroImageId ? { ogImage: heroImageId } : {}),
         },
       },
@@ -845,7 +847,7 @@ export async function POST() {
       data: {
         _status: "published",
         description:
-          "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
+          "Gîte en Sologne à Romorantin-Lanthenay (Loir-et-Cher), à 40 km des châteaux de la Loire.",
         navColumns: [
           {
             title: "Navigation",
