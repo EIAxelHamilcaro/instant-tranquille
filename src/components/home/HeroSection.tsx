@@ -14,8 +14,9 @@ interface HeroSectionProps {
     abritel?: string | null;
     email?: string | null;
   } | null;
-  overlayFrom?: string;
-  overlayTo?: string;
+  overlayDirection?: "t" | "b" | "br" | "tr";
+  overlayStartOpacity?: number;
+  overlayEndOpacity?: number;
 }
 
 export function HeroSection({
@@ -23,8 +24,9 @@ export function HeroSection({
   heroTitle,
   heroSubtitle,
   bookingLinks,
-  overlayFrom = "from-primary-900/70",
-  overlayTo = "to-primary-900/20",
+  overlayDirection = "b",
+  overlayStartOpacity = 75,
+  overlayEndOpacity = 20,
 }: HeroSectionProps) {
   const t = useTranslations("home");
 
@@ -43,8 +45,26 @@ export function HeroSection({
     (bookingLinks?.email ? `mailto:${bookingLinks.email}` : null) ||
     "/tarifs-reservation";
 
+  const isExternal =
+    reservationHref.startsWith("http") || reservationHref.startsWith("mailto");
+
+  const directionClass =
+    overlayDirection === "t"
+      ? "bg-gradient-to-t"
+      : overlayDirection === "br"
+        ? "bg-gradient-to-br"
+        : overlayDirection === "tr"
+          ? "bg-gradient-to-tr"
+          : "bg-gradient-to-b";
+
+  const startClass = `from-primary-900/${overlayStartOpacity}`;
+  const endClass = `to-primary-900/${overlayEndOpacity}`;
+
   return (
-    <section className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-primary-900">
+    <section
+      className="relative flex h-dvh items-center justify-center overflow-hidden bg-primary-900"
+      aria-label={t("heroEyebrow")}
+    >
       {hasImage ? (
         <div className="absolute inset-0">
           <PayloadImage
@@ -52,32 +72,32 @@ export function HeroSection({
             size="hero"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-center"
           />
           <div
-            className={`absolute inset-0 bg-gradient-to-t ${overlayFrom} via-primary-900/30 ${overlayTo}`}
+            className={`absolute inset-0 ${directionClass} ${startClass} via-primary-900/40 ${endClass}`}
           />
         </div>
       ) : (
         <div className="absolute inset-0">
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${overlayFrom} via-primary-800 ${overlayTo}`}
+            className={`absolute inset-0 ${directionClass} ${startClass} via-primary-800/80 ${endClass}`}
           />
-          <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2260%22%20height%3D%2260%22%3E%3Cpath%20d%3D%22M30%200L60%2030L30%2060L0%2030z%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E')]" />
+          <div className="absolute inset-0 opacity-[0.06] bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%3E%3Cpath%20d%3D%22M40%204L76%2040L40%2076L4%2040z%22%20fill%3D%22none%22%20stroke%3D%22%23d4c097%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E')]" />
         </div>
       )}
 
       <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
-        <p className="subtitle-editorial mb-4 text-lg text-sand-300 drop-shadow-sm sm:text-xl">
+        <p className="eyebrow hero-title mb-5 text-sm tracking-widest text-sand-300/90 drop-shadow-sm sm:text-base">
           {t("heroEyebrow")}
         </p>
-        <h1 className="text-5xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
+        <h1 className="hero-title font-display text-5xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
           {title}
         </h1>
-        <p className="subtitle-editorial mt-5 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
+        <p className="subtitle-editorial hero-subtitle mt-5 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
           {subtitle}
         </p>
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="hero-buttons mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Button
             asChild
             size="lg"
@@ -85,8 +105,7 @@ export function HeroSection({
           >
             <a
               href={reservationHref}
-              {...(reservationHref.startsWith("http") ||
-              reservationHref.startsWith("mailto")
+              {...(isExternal
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
             >
@@ -104,8 +123,11 @@ export function HeroSection({
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown className="h-8 w-8 text-white/60" aria-hidden="true" />
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce motion-reduce:animate-none"
+        aria-hidden="true"
+      >
+        <ChevronDown className="h-8 w-8 text-white/60" />
       </div>
     </section>
   );
