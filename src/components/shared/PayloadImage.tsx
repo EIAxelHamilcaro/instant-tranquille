@@ -6,6 +6,7 @@ type MediaObject = {
   alt?: string | null;
   width?: number | null;
   height?: number | null;
+  blurDataURL?: string | null;
   sizes?: {
     thumbnail?: {
       url?: string | null;
@@ -61,6 +62,9 @@ export function PayloadImage({
 
   const dimensions = sizeDimensions[size];
   const quality = priority ? 85 : 75;
+  const blurProps = media.blurDataURL
+    ? ({ placeholder: "blur", blurDataURL: media.blurDataURL } as const)
+    : {};
 
   if (fill) {
     return (
@@ -71,6 +75,7 @@ export function PayloadImage({
         className={className}
         priority={priority}
         quality={quality}
+        {...blurProps}
         sizes={
           size === "hero"
             ? "100vw"
@@ -91,6 +96,7 @@ export function PayloadImage({
       className={className}
       priority={priority}
       quality={quality}
+      {...blurProps}
       sizes={
         size === "hero"
           ? "100vw"
