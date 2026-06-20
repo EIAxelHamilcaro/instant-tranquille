@@ -18,7 +18,10 @@
 - **Design** : hybride typographique — titres sans-serif bold (Inter display heavy par défaut), accents Playfair italic, corps Lora. Vert `#4a7c59` signature + earth + neutres chauds (crème/taupe/pierre/terracotta). Jamais de blanc pur. Dark-mode OS neutralisé.
 - **Conventions code** : props composant = `interface` ; pas de barrel `index.ts` ; pas de `<div>` wrapper inutile (Fragment si possible) ; pas de commentaires superflus ; `void navigate(...)` dans les callbacks mutation ; pas de DDD (infra pragmatique).
 - **Bilingue FR/EN** : conserver `/en/*`. `src/i18n/proxy.ts` NE PAS supprimer. Toute clé i18n ajoutée doit exister dans `fr.json` ET `en.json` (symétrie stricte) + `pathnames` traduits dans `routing.ts`.
-- **Réservation** : CTA Airbnb/Booking/Abritel branchés sur `PricingConfig.platformLinks` (aucune URL en dur).
+- **Réservation** : CTA Airbnb/Booking/Abritel branchés sur `PricingConfig.platformLinks` (aucune URL en dur). Les CTA doivent être très accessibles (header, hero, section dédiée, page tarifs) mais sobres et intégrés au design.
+- **Base de prod — restart propre** : la DB de `.env` est la PROD ; son contenu existant n'a aucune valeur. On repart de zéro : OK de reset/clear les collections et de re-seeder un contenu propre, correct et on-brand. Le seed doit être **re-jouable** sans planter (clear → create ; `updateGlobal` idempotent ; admin en find-or-create).
+- **Resend / Turnstile — hors scope** : pas d'envoi d'email, pas de captcha. Le formulaire contact stocke seulement dans `ContactMessages` (dégrade proprement sans secret). La réservation passe par les CTA Booking/Airbnb.
+- **Capacité** : 6 personnes / 3 chambres / 2 sdb / 120 m². À lire depuis `SiteSettings.propertyDetails`, ne pas hardcoder.
 - **Vérification** : pas de suite de tests unitaires dans ce repo. Vérifier par typecheck + lint + build + Google Rich Results Test (JSON-LD) + Lighthouse (INP/LCP/CLS) + revue visuelle (screenshots).
 - **Photos** : 19 `.webp` dans `public/images/` (intérieur : entrée, 3 chambres, séjour, salon cheminée + baby-foot, cuisine verte, jardin/terrasse, détails déco). Manques connus : pas d'extérieur/façade, pas de paysage Sologne, pas de photo équestre → placeholders calibrés pour ces emplacements.
 
@@ -127,20 +130,20 @@
 
 ## Phase 2 — Photos dans Payload
 
-### Task 2.1: Seed des photos `public/images/*.webp` dans Payload Media
+### Task 2.1: Refonte du seed — contenu propre on-brand + photos dans Payload Media (restart prod)
 
 **Files:**
 - Modify: `scripts/seed.ts`
-- Possible: `scripts/seed-media.ts` (module dédié si seed.ts grossit trop)
 
 **Interfaces:**
-- Produces: documents Media (avec `alt`/`caption` FR+EN localisés et `blurDataURL`) référençables par les Pages/galeries. Mapping nom-fichier → légende.
+- Produces: seed re-jouable produisant un contenu propre (copy sobre, capacité 6/3/2/120) + 19 documents Media (`alt`/`caption` FR+EN + `blurDataURL`) câblés aux Pages.
 
-- [ ] **Step 1:** Écrire un mapping explicite `{ filename, altFr, altEn, captionFr, captionEn, category }` pour les 19 photos (ex. `chambre-1-lit-double-vert-sauge.webp` → « Chambre 1, lit double, tons vert sauge »). Catégories : entrée / chambre / séjour / salon / cuisine / jardin / détail.
-- [ ] **Step 2:** Dans le seed, créer les Media via `payload.create({ collection: 'media', filePath, data })` (upload depuis `public/images/`). Idempotent : skip si déjà présent (par `alt` ou un champ `sourceFilename`).
-- [ ] **Step 3:** Lancer `pnpm seed`, vérifier dans l'admin que les 19 Media existent avec leurs tailles + blurDataURL.
-- [ ] **Step 4:** Câbler les Pages seedées (home `heroImage`/`introImage`, le-gite `gallery`/`previewImages`) sur ces Media.
-- [ ] **Step 5:** Commit.
+- [ ] **Step 1:** Rendre le seed **re-jouable** : `payload.delete` (where vide) sur `pages`/`amenities`/`testimonials`/`local-recommendations`/`media` en début de seed ; `updateGlobal` (déjà idempotent) ; admin en find-or-create (try create, ignorer l'erreur d'unicité). La prod repart de zéro.
+- [ ] **Step 2:** **Purger la copy interdite** : retirer tout « gîte de charme » / « havre de paix » / « parenthèse nature » des globals/pages/testimonials → ton sobre et factuel. Garder la capacité réelle 6 pers / 3 ch / 2 sdb / 120 m².
+- [ ] **Step 3:** Mapping explicite `{ filename, altFr, altEn, captionFr, captionEn, category }` pour les 19 `.webp` de `public/images/` (ex. `chambre-1-lit-double-vert-sauge.webp` → « Chambre 1, lit double, tons vert sauge »). Catégories : entrée / chambre / séjour / salon / cuisine / jardin / détail.
+- [ ] **Step 4:** Créer les Media via `payload.create({ collection: 'media', filePath: 'public/images/<f>', data })`, et câbler home (`heroImage`/`introImage`) + le-gite (`gallery`/`previewImages`) dessus.
+- [ ] **Step 5:** Lancer le seed (script `seed` du `package.json`) **sur la prod**, vérifier dans l'admin : 19 Media + tailles + blurDataURL, pages correctes, zéro doublon.
+- [ ] **Step 6:** Commit.
 
 ---
 
