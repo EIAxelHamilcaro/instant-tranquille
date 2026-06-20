@@ -249,6 +249,35 @@ Apres: node_modules/.bin/tsc --noEmit + biome check verts, re-seed, verifier le 
       },
     ],
   },
+  8: {
+    title: "Finition (reservation, avis verbatim, anti-slop)",
+    tasks: [
+      {
+        id: "8.1",
+        label: "reservation + avis verbatim + purge slop/tiret",
+        db: true,
+        desc: `FINITION du site (apres Phase 7). Re-seed prod a la fin. 4 volets.
+
+A) RESERVATION — PAS de reservation en direct. La reservation se fait UNIQUEMENT via Airbnb + Booking (CTA qui redirigent vers les plateformes). RETIRER Abritel partout (aucune annonce reelle): CTASection, BookingLinks, PricingConfig.bookingLinks (garder airbnb + booking + email contact uniquement), i18n fr/en, seed. Wording CTA: "Reserver sur Airbnb" / "Reserver sur Booking". AUCUN calendrier ni formulaire de reservation/demande de disponibilite sur le site. Le formulaire de contact reste pour les QUESTIONS uniquement (pas de framing "reserver/disponibilite"); l'email = "Nous contacter", pas "reserver par email".
+
+B) AVIS VERBATIM — remplacer integralement les testimonials seedes par ces 9 avis copies-colles EXACTEMENT (texte tel quel, accents complets, ne PAS reformuler), tous note 5, status approved, featured les 4 premiers. guestOrigin "France" si inconnu:
+1. Julien (source airbnb, 2026-04): "Nous avons passe un excellent we de Paques dans cette maison. Erick est un hote accueillant, sympathique et tres disponible. La maison est decoree avec gout et est tres fonctionnelle. Linge de maison et literie de qualite. Cuisine tres bien equipee. Nous recommandons et nous reviendrons avec grand plaisir !"
+2. Laura (airbnb, 2026-05): "Nous avons passe un tres bon sejour. Eric a ete tres accueillant des notre arrivee, ce qui met tout de suite a l'aise. Le logement etait impeccable, tres propre et parfaitement entretenu. La literie est tres confortable, nous avons tres bien dormi. Le baby-foot et les jeux de societe sont un vrai plus pour passer une bonne soiree, c'est convivial. Pour un logement avec trois chambres, le rapport qualite-prix est vraiment tres bon. Nous recommandons sans hesiter !"
+3. Hasan (airbnb, 2026-04): "Logements bien refait et propre et fonctionnel, notre sejour est tres bien passe. La communication et l'accueil par Erick etait tres sympathique. Merci Erick. Donc je recommande vivement."
+4. Stephanie (airbnb, 2026-04): "Merci beaucoup a Erick pour la qualite de son accueil. Vous avez une tres belle maison tres agreable. Celle-ci est decoree avec soin et chaleur. C'est avec plaisir que nous reviendrons si l'occasion se presente. Stephanie et William"
+5. Nicolas (airbnb, 2026-04): "Logement parfait tres bien amenage et decore avec gout. Ideal pour une famille avec ados. Nous recommandons ce logement. Hote tres reactif"
+6. Arbi (airbnb, 2026-04): "Sejour tres satisfaisant dans cet appartement, conforme a la description, propre et bien equipe. Nous le recommandons sans hesitation."
+7. Philippe (airbnb, 2026-04): "Logement tres agreable, tres bien amenage avec beaucoup de gout. Il est tres fonctionnel. Merci a Eric pour son accueil et sa bienveillance. Nous reviendrons."
+8. Anilia (booking, 2026): "J'ai adore la maison, qui est d'ailleurs tres bien situe. Mais je tiens surtout a souligner la disponibilite, la gentillesse et la qualite de l'hote."
+9. Stephane (booking, 2026): "C'est une charmante maison decoree avec gout contenant tout le confort necessaire pour y sejourner."
+IMPORTANT: re-ecrire ces 9 textes avec les ACCENTS FRANCAIS COMPLETS (e accent aigu/grave, a accent, etc.) dans le seed, en gardant le texte verbatim.
+
+C) ANTI-SLOP + TIRET CADRATIN — passer en revue TOUT le contenu visible (src/i18n/messages/fr.json + en.json, scripts/seed.ts, src/components/**, src/app/(frontend)/**). Lancer grep -rn pour le caractere tiret cadratin (em-dash U+2014) et le supprimer de toute copy visible (remplacer par virgule, deux-points, parentheses ou point). Reecrire toute formule AI slop / generique / creuse / ton assistant en copy sobre, humaine, concrete et factuelle. Accents complets partout. NE PAS reintroduire "gite de charme"/"havre de paix"/"parenthese nature".
+
+D) Re-seed la prod, node_modules/.bin/tsc --noEmit + biome check verts, verifier dans l'admin (CTA sans Abritel, 9 avis verbatim). Commit (git add par nom).`,
+      },
+    ],
+  },
 };
 
 const LENSES = [
@@ -363,11 +392,7 @@ ${list}
 Corrige-les, verifie node_modules/.bin/tsc --noEmit + node_modules/.bin/biome check ., puis commit (git add par nom + message FR). Retourne un resume des corrections.`;
 }
 
-const requested = Array.isArray(args && args.phases)
-  ? args.phases
-  : args && typeof args.phase === "number"
-    ? [args.phase]
-    : [0, 1, 2, 3, 4, 5, 6];
+const requested = [7, 8];
 
 const results = [];
 for (const pid of requested) {

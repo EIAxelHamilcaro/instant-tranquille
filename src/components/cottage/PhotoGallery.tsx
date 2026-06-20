@@ -320,7 +320,6 @@ export function PhotoGallery({ gallery }: PhotoGalleryProps) {
                   size="card"
                   alt={item.caption || t("galleryTitle")}
                   className="w-full motion-safe:transition motion-safe:duration-300 hover:scale-[1.02]"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </button>
             ))}
