@@ -98,7 +98,7 @@ export function generateLodgingBusinessJsonLd(
     name: "L'Instant Tranquille",
     description:
       options?.description ||
-      "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
+      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m² — Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
     url: SITE_URL,
     ...(options?.telephone && { telephone: options.telephone }),
     ...(options?.email && { email: options.email }),
@@ -175,7 +175,7 @@ export function generateVacationRentalJsonLd(options?: {
     name: "L'Instant Tranquille",
     description:
       options?.description ||
-      "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
+      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m² — Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
     url: options?.url || `${SITE_URL}/le-gite`,
     ...(options?.heroImage && { image: options.heroImage }),
     address: buildPostalAddress(options),
