@@ -4,15 +4,28 @@ import { PayloadImage } from "@/components/shared/PayloadImage";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 
+interface HeroSectionProps {
+  heroImage?: Record<string, unknown> | string | number | null;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  bookingLinks?: {
+    airbnb?: string | null;
+    booking?: string | null;
+    abritel?: string | null;
+    email?: string | null;
+  } | null;
+  overlayFrom?: string;
+  overlayTo?: string;
+}
+
 export function HeroSection({
   heroImage,
   heroTitle,
   heroSubtitle,
-}: {
-  heroImage?: Record<string, unknown> | string | number | null;
-  heroTitle?: string | null;
-  heroSubtitle?: string | null;
-}) {
+  bookingLinks,
+  overlayFrom = "from-primary-900/70",
+  overlayTo = "to-primary-900/20",
+}: HeroSectionProps) {
   const t = useTranslations("home");
 
   const title = heroTitle || t("heroTitle");
@@ -23,43 +36,62 @@ export function HeroSection({
     typeof heroImage === "object" &&
     (heroImage as Record<string, unknown>).url;
 
+  const reservationHref =
+    bookingLinks?.airbnb ||
+    bookingLinks?.booking ||
+    bookingLinks?.abritel ||
+    (bookingLinks?.email ? `mailto:${bookingLinks.email}` : null) ||
+    "/tarifs-reservation";
+
   return (
-    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-primary-800">
+    <section className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-primary-900">
       {hasImage ? (
-        <>
-          <div className="absolute inset-0">
-            <PayloadImage
-              media={heroImage as Parameters<typeof PayloadImage>[0]["media"]}
-              size="hero"
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute inset-0 bg-primary-900/50" />
-        </>
+        <div className="absolute inset-0">
+          <PayloadImage
+            media={heroImage as Parameters<typeof PayloadImage>[0]["media"]}
+            size="hero"
+            fill
+            priority
+            className="object-cover"
+          />
+          <div
+            className={`absolute inset-0 bg-gradient-to-t ${overlayFrom} via-primary-900/30 ${overlayTo}`}
+          />
+        </div>
       ) : (
-        <>
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900" />
+        <div className="absolute inset-0">
+          <div
+            className={`absolute inset-0 bg-gradient-to-br ${overlayFrom} via-primary-800 ${overlayTo}`}
+          />
           <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2260%22%20height%3D%2260%22%3E%3Cpath%20d%3D%22M30%200L60%2030L30%2060L0%2030z%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E')]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/60 via-transparent to-primary-900/20" />
-        </>
+        </div>
       )}
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
-        <h1 className="hero-title text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
+      <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
+        <p className="subtitle-editorial mb-4 text-lg text-sand-300 drop-shadow-sm sm:text-xl">
+          {t("heroEyebrow")}
+        </p>
+        <h1 className="text-5xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
           {title}
         </h1>
-        <p className="hero-subtitle mt-6 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
+        <p className="subtitle-editorial mt-5 text-xl leading-relaxed text-sand-200 drop-shadow-md sm:text-2xl">
           {subtitle}
         </p>
-        <div className="hero-buttons mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Button
             asChild
             size="lg"
             className="bg-primary-500 px-8 font-sans text-lg text-white shadow-lg hover:bg-primary-600 active:scale-[0.98]"
           >
-            <Link href="/le-gite">{t("heroCta")}</Link>
+            <a
+              href={reservationHref}
+              {...(reservationHref.startsWith("http") ||
+              reservationHref.startsWith("mailto")
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+            >
+              {t("heroCta")}
+            </a>
           </Button>
           <Button
             asChild
@@ -67,7 +99,7 @@ export function HeroSection({
             size="lg"
             className="border-white/40 bg-white/10 px-8 font-sans text-lg text-white shadow-lg backdrop-blur-sm hover:bg-white/20 active:scale-[0.98]"
           >
-            <Link href="/tarifs-reservation">{t("heroCta2")}</Link>
+            <Link href="/le-gite">{t("heroCta2")}</Link>
           </Button>
         </div>
       </div>

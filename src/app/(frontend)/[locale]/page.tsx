@@ -183,6 +183,7 @@ export default async function HomePage({
         heroImage={heroImage}
         heroTitle={homePage?.heroTitle ?? null}
         heroSubtitle={homePage?.heroSubtitle ?? null}
+        bookingLinks={bookingLinks}
       />
       <IntroSection
         introImage={homePage?.introImage ?? null}

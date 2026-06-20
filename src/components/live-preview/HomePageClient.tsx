@@ -52,6 +52,7 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
         heroImage={data.heroImage}
         heroTitle={data.heroTitle}
         heroSubtitle={data.heroSubtitle}
+        bookingLinks={data.bookingLinks}
       />
       <IntroSection
         introImage={data.introImage}
