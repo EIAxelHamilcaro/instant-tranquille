@@ -7,7 +7,10 @@ import { IntroSection } from "@/components/home/IntroSection";
 import { StatsBand } from "@/components/home/StatsBand";
 import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { HomePageClient } from "@/components/live-preview/HomePageClient";
+import {
+  HomePageClient,
+  type HomePageData,
+} from "@/components/live-preview/HomePageClient";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import type { Locale } from "@/i18n/config";
 import {
@@ -147,6 +150,8 @@ export default async function HomePage({
     | undefined;
 
   const heroImage = homePage?.heroImage ?? null;
+  const heroImages =
+    (homePage?.heroImages as Array<{ image?: unknown }> | undefined) ?? null;
 
   if (isDraft) {
     return (
@@ -164,6 +169,7 @@ export default async function HomePage({
         <HomePageClient
           initialData={{
             heroImage,
+            heroImages: heroImages as HomePageData["heroImages"],
             heroTitle: homePage?.heroTitle ?? null,
             heroSubtitle: homePage?.heroSubtitle ?? null,
             introImage: homePage?.introImage ?? null,
@@ -197,6 +203,7 @@ export default async function HomePage({
       )}
       <HeroSection
         heroImage={heroImage}
+        heroImages={heroImages as HomePageData["heroImages"]}
         heroTitle={homePage?.heroTitle ?? null}
         heroSubtitle={homePage?.heroSubtitle ?? null}
         bookingLinks={bookingLinks}

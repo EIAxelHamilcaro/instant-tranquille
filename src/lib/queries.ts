@@ -71,6 +71,7 @@ export type CmsPage = {
   heroTitle?: string | null;
   heroSubtitle?: string | null;
   heroImage?: CmsMedia | string | number | null;
+  heroImages?: Array<{ image?: CmsMedia | string | number | null }> | null;
   introTitle?: string | null;
   introText?: unknown;
   introImage?: CmsMedia | string | number | null;

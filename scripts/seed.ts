@@ -825,9 +825,16 @@ async function seed() {
   // ── Pages ──────────────────────────────────────────────────────────────────
   console.log("Seeding Pages...");
 
-  // Page home — avec heroImage et introImage câblés
+  // Page home — avec heroImages (mosaïque 3 photos) et introImage câblés
   const heroImageId = mediaIds["salon-cheminee-canapes-tv.webp"];
   const introImageId = mediaIds["jardin-terrasse-vue-ensemble.webp"];
+
+  // Mosaïque : portrait chambre-forêt (la plus spectaculaire) + salon cheminée + cuisine
+  const heroImagesIds = [
+    mediaIds["chambre-1-vue-ensemble-papier-peint-foret.webp"],
+    mediaIds["salon-cheminee-canapes-tv.webp"],
+    mediaIds["cuisine-equipee-verte-poutres.webp"],
+  ].filter((id): id is number => id !== undefined);
 
   await payload.create({
     collection: "pages",
@@ -836,6 +843,7 @@ async function seed() {
       title: "Accueil",
       slug: "home",
       heroImage: heroImageId,
+      heroImages: heroImagesIds.map((id) => ({ image: id })),
       heroTitle: "L'Instant Tranquille",
       heroSubtitle: "Un gîte en Sologne, entre forêts et étangs",
       introTitle: "Bienvenue en Sologne",

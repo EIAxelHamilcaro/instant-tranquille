@@ -490,6 +490,29 @@ export const Pages: CollectionConfig = {
         {
           label: "Médias",
           fields: [
+            // Mosaïque hero (home only) — 3 photos choisies par le client
+            {
+              name: "heroImages",
+              type: "array",
+              label: "Mosaïque hero (3 photos)",
+              minRows: 1,
+              maxRows: 3,
+              admin: {
+                description:
+                  "1 à 3 photos pour la mosaïque du hero (portrait à gauche + 2 paysages empilés à droite). Si moins de 3 images, fallback image unique.",
+                condition: (data) => isHome(data),
+              },
+              fields: [
+                {
+                  name: "image",
+                  type: "upload",
+                  label: "Photo",
+                  relationTo: "media",
+                  required: true,
+                },
+              ],
+            },
+
             // Image d'introduction (home only)
             {
               name: "introImage",

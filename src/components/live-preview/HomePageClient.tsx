@@ -21,6 +21,7 @@ type CmsHighlight = {
 
 export type HomePageData = {
   heroImage: CmsMedia | string | number | null;
+  heroImages?: Array<{ image?: CmsMedia | string | number | null }> | null;
   heroTitle?: string | null;
   heroSubtitle?: string | null;
   introImage: CmsMedia | string | number | null;
@@ -65,6 +66,7 @@ export function HomePageClient({
     <>
       <HeroSection
         heroImage={data.heroImage}
+        heroImages={data.heroImages}
         heroTitle={data.heroTitle}
         heroSubtitle={data.heroSubtitle}
         bookingLinks={data.bookingLinks}
