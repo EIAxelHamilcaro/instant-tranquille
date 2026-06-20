@@ -77,6 +77,7 @@ export const LocalRecommendations: CollectionConfig = {
                 { label: "Nature & Randonnées", value: "nature" },
                 { label: "Marchés & Commerces", value: "markets" },
                 { label: "Activités & Loisirs", value: "activities" },
+                { label: "Équitation & Sports équestres", value: "equestrian" },
                 { label: "Services", value: "services" },
               ],
             },

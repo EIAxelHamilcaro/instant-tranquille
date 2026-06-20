@@ -41,6 +41,8 @@ const isHome = (data: Record<string, unknown> | undefined) =>
   data?.slug === "home";
 const isGite = (data: Record<string, unknown> | undefined) =>
   data?.slug === "le-gite";
+const isAlentours = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "les-alentours";
 const hasHero = (data: Record<string, unknown> | undefined) =>
   data?.slug !== "le-gite";
 const hasHeroOrContent = (data: Record<string, unknown> | undefined) =>
@@ -375,6 +377,109 @@ export const Pages: CollectionConfig = {
                       "Texte principal de la page. Utilisez la barre d'outils pour mettre en forme",
                     condition: (data) => hasHeroOrContent(data),
                   },
+                },
+              ],
+            },
+
+            // Les alentours (les-alentours only)
+            {
+              type: "collapsible",
+              label: "Introduction alentours",
+              admin: {
+                condition: (data) => isAlentours(data),
+              },
+              fields: [
+                {
+                  name: "alentoursIntro",
+                  type: "richText",
+                  label: "Introduction",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Texte d'introduction de la page Les alentours",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+              ],
+            },
+
+            // Section cavaliers (les-alentours only)
+            {
+              type: "collapsible",
+              label: "Section cavaliers",
+              admin: {
+                condition: (data) => isAlentours(data),
+              },
+              fields: [
+                {
+                  name: "equestrianTitle",
+                  type: "text",
+                  label: "Titre section équestre",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Titre de la section dédiée aux cavaliers (ex : Cavaliers & sports équestres)",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+                {
+                  name: "equestrianText",
+                  type: "richText",
+                  label: "Texte section équestre",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Texte sobre et factuel sur la proximité du Grand Parquet de Lamotte-Beuvron (FFE), concours, distances, conseils cavaliers",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+                {
+                  name: "equestrianVenues",
+                  type: "array",
+                  label: "Sites équestres à proximité",
+                  admin: {
+                    description:
+                      "Liste des sites / événements équestres (Grand Parquet, centres équestres, etc.)",
+                    condition: (data) => isAlentours(data),
+                  },
+                  fields: [
+                    {
+                      name: "name",
+                      type: "text",
+                      label: "Nom du site",
+                      required: true,
+                      localized: true,
+                    },
+                    {
+                      name: "description",
+                      type: "textarea",
+                      label: "Description courte",
+                      localized: true,
+                      admin: {
+                        description:
+                          "Quelques lignes factuelles sur ce site (concours, FFE, capacité d'accueil…)",
+                      },
+                    },
+                    {
+                      name: "distanceFromGite",
+                      type: "text",
+                      label: "Distance du gîte",
+                      admin: {
+                        description: "Ex : ~17 km, 20 min en voiture",
+                        placeholder: "~17 km",
+                      },
+                    },
+                    {
+                      name: "website",
+                      type: "text",
+                      label: "Site web",
+                      admin: {
+                        description:
+                          "URL officielle du site (commencez par https://)",
+                        placeholder: "https://www.legrandparquet.fr",
+                      },
+                    },
+                  ],
                 },
               ],
             },
