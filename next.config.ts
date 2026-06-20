@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
               // Connects : API Payload + Turnstile
               "connect-src 'self' https://challenges.cloudflare.com https://*.public.blob.vercel-storage.com",
               // Frames : Turnstile iframe
-              "frame-src https://challenges.cloudflare.com",
+              "frame-src 'self' https://challenges.cloudflare.com",
               // Workers : Next.js SW
               "worker-src 'self' blob:",
               // Media

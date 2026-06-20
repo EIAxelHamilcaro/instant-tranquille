@@ -11,7 +11,9 @@ import {
   generateBreadcrumbJsonLd,
   generateFAQJsonLd,
   generateGrandParquetJsonLd,
+  generateTouristAttractionJsonLd,
 } from "@/lib/jsonld";
+import type { CmsMedia } from "@/lib/queries";
 import {
   getAllRecommendations,
   getPageBySlug,
@@ -62,6 +64,14 @@ export default async function SurroundingsPage({
     buildSurroundingsFaqItems(locale),
   );
   const grandParquetJsonLd = generateGrandParquetJsonLd();
+  const touristAttractionsJsonLd = recommendations.map((rec) => {
+    const photo = rec.photo;
+    const imageUrl =
+      photo != null && typeof photo === "object" && "url" in photo
+        ? ((photo as CmsMedia).url ?? null)
+        : null;
+    return generateTouristAttractionJsonLd({ ...rec, image: imageUrl });
+  });
 
   const settings = siteSettings as Record<string, unknown>;
   const contact = settings.contact as Record<string, unknown> | undefined;
@@ -105,6 +115,13 @@ export default async function SurroundingsPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(grandParquetJsonLd) }}
       />
+      {touristAttractionsJsonLd.map((jsonLd, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      ))}
 
       <SurroundingsHero heroImage={page?.heroImage ?? null} />
 
