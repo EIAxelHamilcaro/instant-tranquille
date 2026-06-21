@@ -42,8 +42,7 @@ export const CheckInOutBlock: Block = {
       label: "Procédure de départ (check-out)",
       localized: true,
       admin: {
-        description:
-          "Ce qu'il faut faire avant de partir : clés, poubelles...",
+        description: "Ce qu'il faut faire avant de partir : clés, poubelles...",
       },
     },
   ],

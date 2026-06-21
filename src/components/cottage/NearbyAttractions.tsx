@@ -101,7 +101,7 @@ export function NearbyAttractions({
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-                  {/* Category pill — floating on image */}
+                  {/* Category pill, floating on image */}
                   <div className="absolute left-3 top-3">
                     <Badge
                       className={`${cat.bg} ${cat.color} gap-1.5 font-semibold shadow-sm backdrop-blur-sm`}
@@ -111,7 +111,7 @@ export function NearbyAttractions({
                     </Badge>
                   </div>
 
-                  {/* Distance — floating bottom-right */}
+                  {/* Distance, floating bottom-right */}
                   {rec.distanceFromGite && (
                     <div className="absolute bottom-3 right-3">
                       <Badge
@@ -140,7 +140,7 @@ export function NearbyAttractions({
                     </p>
                   )}
 
-                  {/* Meta row — phone, website, address */}
+                  {/* Meta row, phone, website, address */}
                   {(rec.phone || rec.website || rec.address) && (
                     <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-sand-100 pt-3">
                       {rec.address && (

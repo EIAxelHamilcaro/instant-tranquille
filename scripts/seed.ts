@@ -1,195 +1,1222 @@
-import { getPayload } from "payload";
-import config from "../src/payload.config";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import nextEnv from "@next/env";
+import sharp from "sharp";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const { loadEnvConfig } = nextEnv as unknown as {
+  loadEnvConfig: (dir: string) => void;
+};
+loadEnvConfig(path.resolve(__dirname, ".."));
+const IMAGES_DIR = path.resolve(__dirname, "../public/images");
+
+// Mapping explicite des 19 .webp → métadonnées
+const IMAGE_MAP = [
+  {
+    filename: "entree-commode-deco-briques.webp",
+    altFr: "Entrée du gîte, commode décorée et mur de briques",
+    altEn: "Gîte entrance, decorated dresser and brick wall",
+    captionFr: "L'entrée, brique et décoration artisanale",
+    captionEn: "Entrance, brick and handcrafted decor",
+    category: "entree",
+  },
+  {
+    filename: "entree-detail-lampe-vase-briques.webp",
+    altFr: "Détail entrée : lampe et vase devant les briques",
+    altEn: "Entrance detail: lamp and vase against brick wall",
+    captionFr: "Détail entrée, ambiance chaleureuse",
+    captionEn: "Entrance detail, warm atmosphere",
+    category: "entree",
+  },
+  {
+    filename: "entree-porte-manteau-papier-peint-herons.webp",
+    altFr: "Entrée avec porte-manteau et papier peint hérons",
+    altEn: "Entrance with coat rack and heron wallpaper",
+    captionFr: "Entrée, papier peint hérons",
+    captionEn: "Entrance, heron wallpaper",
+    category: "entree",
+  },
+  {
+    filename: "chambre-1-lit-double-vert-sauge.webp",
+    altFr: "Chambre 1, lit double, tons vert sauge",
+    altEn: "Bedroom 1, double bed, sage green tones",
+    captionFr: "Chambre 1, lit double vert sauge",
+    captionEn: "Bedroom 1, sage green double bed",
+    category: "chambre",
+  },
+  {
+    filename: "chambre-1-vue-ensemble-papier-peint-foret.webp",
+    altFr: "Chambre 1, vue d'ensemble, papier peint forêt",
+    altEn: "Bedroom 1, full view, forest wallpaper",
+    captionFr: "Chambre 1, vue d'ensemble",
+    captionEn: "Bedroom 1, full view",
+    category: "chambre",
+  },
+  {
+    filename: "chambre-2-lit-double-sous-pente-terracotta.webp",
+    altFr: "Chambre 2, lit double sous les combles, tons terracotta",
+    altEn: "Bedroom 2, double bed under the eaves, terracotta tones",
+    captionFr: "Chambre 2, sous pente terracotta",
+    captionEn: "Bedroom 2, terracotta sloped ceiling",
+    category: "chambre",
+  },
+  {
+    filename: "chambre-2-tete-de-lit-sous-pente.webp",
+    altFr: "Chambre 2, tête de lit sous les combles",
+    altEn: "Bedroom 2, headboard under the eaves",
+    captionFr: "Chambre 2, tête de lit",
+    captionEn: "Bedroom 2, headboard",
+    category: "chambre",
+  },
+  {
+    filename: "chambre-3-lits-simples-sous-pente.webp",
+    altFr: "Chambre 3, lits simples sous les combles",
+    altEn: "Bedroom 3, twin beds under the eaves",
+    captionFr: "Chambre 3, lits simples",
+    captionEn: "Bedroom 3, twin beds",
+    category: "chambre",
+  },
+  {
+    filename: "sejour-canape-buffet-escalier.webp",
+    altFr: "Séjour, canapé, buffet et escalier",
+    altEn: "Living room, sofa, sideboard and staircase",
+    captionFr: "Séjour, espace de vie",
+    captionEn: "Living room, living space",
+    category: "sejour",
+  },
+  {
+    filename: "sejour-canape-tv-escalier.webp",
+    altFr: "Séjour, canapé, télévision et escalier",
+    altEn: "Living room, sofa, TV and staircase",
+    captionFr: "Séjour, coin télévision",
+    captionEn: "Living room, TV area",
+    category: "sejour",
+  },
+  {
+    filename: "salon-cheminee-canapes-tv.webp",
+    altFr: "Salon avec cheminée, canapés et télévision",
+    altEn: "Lounge with fireplace, sofas and TV",
+    captionFr: "Salon, cheminée et confort",
+    captionEn: "Lounge, fireplace and comfort",
+    category: "salon",
+  },
+  {
+    filename: "salon-baby-foot-mur-briques.webp",
+    altFr: "Salon, baby-foot devant le mur de briques",
+    altEn: "Lounge, foosball table against brick wall",
+    captionFr: "Salon, baby-foot et briques",
+    captionEn: "Lounge, foosball and brick wall",
+    category: "salon",
+  },
+  {
+    filename: "cuisine-equipee-verte-poutres.webp",
+    altFr: "Cuisine équipée verte avec poutres apparentes",
+    altEn: "Fully equipped green kitchen with exposed beams",
+    captionFr: "Cuisine, verte et bien équipée",
+    captionEn: "Kitchen, green and fully equipped",
+    category: "cuisine",
+  },
+  {
+    filename: "detail-deco-coiffeuse-miroir-chambre-1.webp",
+    altFr: "Détail décoration, coiffeuse et miroir, chambre 1",
+    altEn: "Decor detail, dressing table and mirror, bedroom 1",
+    captionFr: "Chambre 1, coiffeuse",
+    captionEn: "Bedroom 1, dressing table",
+    category: "detail",
+  },
+  {
+    filename: "detail-deco-cuisine-cloche-bronze.webp",
+    altFr: "Détail décoration cuisine, cloche en bronze",
+    altEn: "Kitchen decor detail, bronze cloche",
+    captionFr: "Cuisine, cloche bronze",
+    captionEn: "Kitchen, bronze cloche",
+    category: "detail",
+  },
+  {
+    filename: "detail-deco-vase-visage-dore.webp",
+    altFr: "Détail décoration, vase visage doré",
+    altEn: "Decor detail, golden face vase",
+    captionFr: "Détail déco, vase doré",
+    captionEn: "Decor detail, golden vase",
+    category: "detail",
+  },
+  {
+    filename: "jardin-terrasse-vue-ensemble.webp",
+    altFr: "Vue d'ensemble du jardin et de la terrasse",
+    altEn: "Full view of the garden and terrace",
+    captionFr: "Jardin, vue d'ensemble",
+    captionEn: "Garden, full view",
+    category: "jardin",
+  },
+  {
+    filename: "jardin-souche-arbre-decorative.webp",
+    altFr: "Jardin, souche d'arbre décorative",
+    altEn: "Garden, decorative tree stump",
+    captionFr: "Jardin, détail naturel",
+    captionEn: "Garden, natural detail",
+    category: "jardin",
+  },
+  {
+    filename: "terrasse-salon-jardin.webp",
+    altFr: "Terrasse avec salon de jardin",
+    altEn: "Terrace with garden furniture",
+    captionFr: "Terrasse, salon extérieur",
+    captionEn: "Terrace, outdoor lounge",
+    category: "jardin",
+  },
+] as const;
 
 async function seed() {
+  const { getPayload } = await import("payload");
+  const { default: config } = await import("../src/payload.config");
   const payload = await getPayload({ config });
 
-  console.log("Creating admin user...");
-  await payload.create({
-    collection: "users",
-    data: {
-      email: "admin@instant-tranquille.com",
-      password: "RxSDUJO981NTzCvu",
-    },
+  // ── Purge des collections (seed re-jouable) ─────────────────────────────────
+  console.log("Purging collections...");
+  await payload.delete({ collection: "pages", where: {} });
+  await payload.delete({ collection: "amenities", where: {} });
+  await payload.delete({ collection: "testimonials", where: {} });
+  await payload.delete({
+    collection: "local-recommendations",
+    where: {},
   });
+  await payload.delete({ collection: "media", where: {} });
 
+  // ── Admin (find-or-create) ──────────────────────────────────────────────────
+  console.log("Creating admin user...");
+  try {
+    await payload.create({
+      collection: "users",
+      data: {
+        email: "admin@instant-tranquille.com",
+        password: "RxSDUJO981NTzCvu",
+      },
+    });
+  } catch {
+    console.log("Admin user already exists, skipping.");
+  }
+
+  // ── Media : 19 photos ──────────────────────────────────────────────────────
+  console.log("Creating media (19 images)...");
+  const mediaIds: Record<string, number> = {};
+  for (const img of IMAGE_MAP) {
+    const filePath = path.join(IMAGES_DIR, img.filename);
+    const created = await payload.create({
+      collection: "media",
+      filePath,
+      locale: "fr",
+      data: {
+        alt: img.altFr,
+        caption: img.captionFr,
+      },
+    });
+    // Save EN locale
+    await payload.update({
+      collection: "media",
+      id: created.id,
+      locale: "en",
+      data: {
+        alt: img.altEn,
+        caption: img.captionEn,
+      },
+    });
+    mediaIds[img.filename] = created.id as number;
+
+    // Patch blurDataURL si le hook beforeChange n'a pas pu lire req.file (CLI)
+    if (!created.blurDataURL) {
+      try {
+        const buf = fs.readFileSync(filePath);
+        const lqip = await sharp(buf)
+          .resize(20, 20, { fit: "inside" })
+          .webp({ quality: 40 })
+          .toBuffer();
+        await payload.update({
+          collection: "media",
+          id: created.id as number,
+          data: { blurDataURL: `data:image/webp;base64,${lqip.toString("base64")}` },
+        });
+        console.log(`  ✓ ${img.filename} → id ${created.id} (blurDataURL patché)`);
+      } catch (err) {
+        console.warn(`  ⚠ blurDataURL manquant pour ${img.filename}:`, err);
+      }
+    } else {
+      console.log(`  ✓ ${img.filename} → id ${created.id}`);
+    }
+  }
+
+  // ── SiteSettings ───────────────────────────────────────────────────────────
   console.log("Seeding SiteSettings...");
   await payload.updateGlobal({
     slug: "site-settings",
     locale: "fr",
     data: {
       siteName: "L'Instant Tranquille",
-      tagline: "Votre parenthèse nature au cœur de la Sologne",
-      siteDescription: "Découvrez L'Instant Tranquille, un gîte de charme au cœur de la Sologne.",
-      propertyDetails: { maxGuests: 6, bedrooms: 3, bathrooms: 2, surface: 120 },
+      tagline: "Un gîte en Sologne, entre forêts et étangs",
+      siteDescription:
+        "Une maison familiale paisible à Romorantin-Lanthenay, au cœur de la Sologne. 3 chambres (6 couchages), terrasse avec barbecue, cuisine équipée, baby-foot et jeux de société, jardin clos. Wifi gratuit, parking privé. Idéal en famille (même avec ados) ou entre amis.",
+      propertyDetails: {
+        maxGuests: 6,
+        bedrooms: 3,
+        bathrooms: 1,
+        surface: 115,
+        petsAllowed: true,
+      },
       contact: {
         email: "contact@linstant-tranquille.fr",
         phone: "+33 6 12 34 56 78",
-        address: "Sologne, 41000\nCentre-Val de Loire\nFrance",
-        coordinates: { lat: 47.4833, lng: 1.7667, zoom: 12, markerLabel: "L'Instant Tranquille" },
+        address: "23 Rue de Loreux",
+        city: "Romorantin-Lanthenay",
+        postalCode: "41200",
+        coordinates: {
+          lat: 47.360803,
+          lng: 1.7533421,
+          zoom: 13,
+          markerLabel: "L'Instant Tranquille",
+        },
       },
       accessRoutes: [
-        { from: "Paris", duration: "2h00", distance: "190 km", description: "A10 direction Orléans, puis sortie Blois / Sologne" },
-        { from: "Tours", duration: "1h00", distance: "80 km", description: "A85 puis D956 direction Romorantin" },
-        { from: "Orléans", duration: "1h15", distance: "90 km", description: "N20 puis D922 direction Sologne" },
+        {
+          from: "Paris",
+          duration: "2h00",
+          distance: "190 km",
+          description: "A10 direction Orléans, puis sortie Blois / Sologne",
+        },
+        {
+          from: "Tours",
+          duration: "1h00",
+          distance: "80 km",
+          description: "A85 puis D956 direction Romorantin",
+        },
+        {
+          from: "Orléans",
+          duration: "1h15",
+          distance: "90 km",
+          description: "N20 puis D922 direction Sologne",
+        },
       ],
-      socialLinks: { facebook: "https://www.facebook.com/linstanttranquille", instagram: "https://www.instagram.com/linstanttranquille" },
+      socialLinks: {
+        facebook: "https://www.facebook.com/linstanttranquille",
+        instagram: "https://www.instagram.com/linstanttranquille",
+      },
+      sameAs: [
+        { url: "https://www.airbnb.fr/rooms/1605140748799580144", label: "Airbnb" },
+        { url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html", label: "Booking.com" },
+        { url: "https://www.facebook.com/linstanttranquille", label: "Facebook" },
+        { url: "https://www.instagram.com/linstanttranquille", label: "Instagram" },
+      ],
       faqs: [
-        { question: "Combien de personnes le gîte peut-il accueillir ?", answer: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Le gîte peut accueillir jusqu'à 6 personnes dans 3 chambres." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } } },
-        { question: "Les animaux sont-ils acceptés ?", answer: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Les animaux de compagnie sont les bienvenus sous conditions. Contactez-nous." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } } },
+        {
+          question: "Combien de personnes le gîte peut-il accueillir ?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (1 lit double en chambre 1, 1 lit double en chambre 2, 2 lits simples en chambre 3).",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "Les animaux sont-ils acceptés ?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "Oui, les animaux de compagnie sont acceptés.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "À quelle heure puis-je arriver et partir ?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "L'arrivée est à partir de 17h00 (boîte à clé sécurisée, arrivée autonome). Le départ est avant 10h00.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
       ],
-      defaultSeo: { metaTitle: "L'Instant Tranquille — Gîte en Sologne", metaDescription: "Gîte de charme en Sologne, 6 personnes, 3 chambres, 120m²." },
+      defaultSeo: {
+        metaTitle: "L'Instant Tranquille, Gîte en Sologne, Romorantin-Lanthenay",
+        metaDescription:
+          "Gîte en Sologne à Romorantin-Lanthenay (41200), 6 personnes, 3 chambres, 115 m². Proche Chambord, Cheverny et Grand Parquet de Lamotte-Beuvron.",
+      },
     },
   });
   await payload.updateGlobal({
     slug: "site-settings",
     locale: "en",
     data: {
-      tagline: "Your nature retreat in the heart of Sologne",
-      siteDescription: "Discover L'Instant Tranquille, a charming cottage in the heart of Sologne.",
+      tagline: "A holiday cottage in Sologne, between forests and ponds",
+      siteDescription:
+        "A peaceful family home in Romorantin-Lanthenay, at the heart of Sologne. 3 bedrooms (6 guests), terrace with barbecue, fully equipped kitchen, foosball table and board games, enclosed garden. Free Wi-Fi, private parking. Ideal for families (including teenagers) or groups of friends.",
       accessRoutes: [
-        { from: "Paris", duration: "2h00", distance: "190 km", description: "A10 towards Orléans, then exit Blois / Sologne" },
-        { from: "Tours", duration: "1h00", distance: "80 km", description: "A85 then D956 towards Romorantin" },
-        { from: "Orléans", duration: "1h15", distance: "90 km", description: "N20 then D922 towards Sologne" },
+        {
+          from: "Paris",
+          duration: "2h00",
+          distance: "190 km",
+          description: "A10 towards Orléans, then exit Blois / Sologne",
+        },
+        {
+          from: "Tours",
+          duration: "1h00",
+          distance: "80 km",
+          description: "A85 then D956 towards Romorantin",
+        },
+        {
+          from: "Orléans",
+          duration: "1h15",
+          distance: "90 km",
+          description: "N20 then D922 towards Sologne",
+        },
       ],
       faqs: [
-        { question: "How many guests can the cottage accommodate?", answer: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "The cottage accommodates up to 6 guests in 3 bedrooms." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } } },
-        { question: "Are pets allowed?", answer: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Pets are welcome under conditions. Contact us." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } } },
+        {
+          question: "How many guests can the cottage accommodate?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "The cottage sleeps up to 6 guests in 3 bedrooms (1 double bed in bedroom 1, 1 double bed in bedroom 2, 2 single beds in bedroom 3).",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "Are pets allowed?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "Yes, pets are welcome.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
+        {
+          question: "What are the check-in and check-out times?",
+          answer: {
+            root: {
+              type: "root",
+              children: [
+                {
+                  type: "paragraph",
+                  children: [
+                    {
+                      type: "text",
+                      text: "Check-in is from 5:00 PM (self check-in via a secure key box). Check-out is before 10:00 AM.",
+                    },
+                  ],
+                  direction: "ltr",
+                  format: "",
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          },
+        },
       ],
-      defaultSeo: { metaTitle: "L'Instant Tranquille — Charming Cottage in Sologne", metaDescription: "Charming cottage in Sologne, 6 guests, 3 bedrooms, 120m²." },
+      defaultSeo: {
+        metaTitle: "L'Instant Tranquille, Holiday Cottage in Sologne, France",
+        metaDescription:
+          "Holiday cottage in Sologne, Romorantin-Lanthenay (41200), 6 guests, 3 bedrooms, 115 m². Close to Chambord, Cheverny and Grand Parquet equestrian centre.",
+      },
     },
   });
 
+  // ── Header ─────────────────────────────────────────────────────────────────
   console.log("Seeding Header...");
-  await payload.updateGlobal({ slug: "header", locale: "fr", data: {
-    navItems: [
-      { label: "Accueil", url: "/", isExternal: false, highlight: false },
-      { label: "Le Gîte", url: "/le-gite", isExternal: false, highlight: false },
-      { label: "Tarifs & Réservation", url: "/tarifs-reservation", isExternal: false, highlight: false },
-      { label: "Contact", url: "/contact", isExternal: false, highlight: false },
-    ],
-    ctaButton: { label: "Réserver", url: "/tarifs-reservation" },
-  }});
-  await payload.updateGlobal({ slug: "header", locale: "en", data: {
-    navItems: [
-      { label: "Home", url: "/", isExternal: false, highlight: false },
-      { label: "The Cottage", url: "/le-gite", isExternal: false, highlight: false },
-      { label: "Rates & Booking", url: "/tarifs-reservation", isExternal: false, highlight: false },
-      { label: "Contact", url: "/contact", isExternal: false, highlight: false },
-    ],
-    ctaButton: { label: "Book now", url: "/tarifs-reservation" },
-  }});
+  const headerNavFr = [
+    { label: "Accueil", url: "/", isExternal: false, highlight: false },
+    { label: "Le Gîte", url: "/le-gite", isExternal: false, highlight: false },
+    {
+      label: "Les Alentours",
+      url: "/les-alentours",
+      isExternal: false,
+      highlight: false,
+    },
+    {
+      label: "Tarifs & Réservation",
+      url: "/tarifs-reservation",
+      isExternal: false,
+      highlight: false,
+    },
+    { label: "Contact", url: "/contact", isExternal: false, highlight: false },
+  ];
+  const headerNavEn = [
+    "Home",
+    "The Cottage",
+    "Surroundings",
+    "Rates & Booking",
+    "Contact",
+  ];
+  const headerFr = (await payload.updateGlobal({
+    slug: "header",
+    locale: "fr",
+    data: {
+      navItems: headerNavFr,
+      ctaButton: { label: "Réserver", url: "/tarifs-reservation" },
+    },
+  })) as { navItems?: Array<{ id?: string }> };
+  const headerIds = (headerFr.navItems ?? []).map((r) => r.id);
+  await payload.updateGlobal({
+    slug: "header",
+    locale: "en",
+    data: {
+      navItems: headerNavFr.map((item, i) => ({
+        ...item,
+        id: headerIds[i],
+        label: headerNavEn[i],
+      })),
+      ctaButton: { label: "Book now", url: "/tarifs-reservation" },
+    },
+  });
 
+  // ── Footer ─────────────────────────────────────────────────────────────────
   console.log("Seeding Footer...");
-  await payload.updateGlobal({ slug: "footer", locale: "fr", data: {
-    description: "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
-    navColumns: [
-      { title: "Navigation", links: [
+  const footerColsFr = [
+    {
+      title: "Navigation",
+      links: [
         { label: "Accueil", url: "/", isExternal: false },
         { label: "Le Gîte", url: "/le-gite", isExternal: false },
+        { label: "Les Alentours", url: "/les-alentours", isExternal: false },
         { label: "Tarifs", url: "/tarifs-reservation", isExternal: false },
         { label: "Contact", url: "/contact", isExternal: false },
-      ]},
-      { title: "Ressources", links: [
-        { label: "Airbnb", url: "https://www.airbnb.fr", isExternal: true },
-        { label: "Booking", url: "https://www.booking.com", isExternal: true },
-      ]},
-    ],
-    legalText: "L'Instant Tranquille — Gîte de vacances en Sologne. Tous droits réservés.",
-  }});
-  await payload.updateGlobal({ slug: "footer", locale: "en", data: {
-    description: "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
-    navColumns: [
-      { title: "Navigation", links: [
-        { label: "Home", url: "/", isExternal: false },
-        { label: "The Cottage", url: "/le-gite", isExternal: false },
-        { label: "Rates", url: "/tarifs-reservation", isExternal: false },
-        { label: "Contact", url: "/contact", isExternal: false },
-      ]},
-      { title: "Resources", links: [
-        { label: "Airbnb", url: "https://www.airbnb.fr", isExternal: true },
-        { label: "Booking", url: "https://www.booking.com", isExternal: true },
-      ]},
-    ],
-    legalText: "L'Instant Tranquille — Holiday cottage in Sologne. All rights reserved.",
-  }});
-
-  console.log("Seeding PricingConfig...");
-  await payload.updateGlobal({ slug: "pricing-config", locale: "fr", data: {
-    currency: "EUR",
-    seasons: [
-      { name: "Basse saison", dateRange: { start: "1er novembre", end: "31 mars" }, nightlyRate: 90, weeklyRate: 540, minimumStay: 2, color: "green" },
-      { name: "Moyenne saison", dateRange: { start: "1er avril", end: "30 juin" }, nightlyRate: 120, weeklyRate: 720, minimumStay: 3, color: "orange" },
-      { name: "Haute saison", dateRange: { start: "1er juillet", end: "31 août" }, nightlyRate: 150, weeklyRate: 900, minimumStay: 7, color: "red" },
-      { name: "Très haute saison", dateRange: { start: "Fêtes", end: "et ponts" }, nightlyRate: 170, weeklyRate: 1020, minimumStay: 3, color: "purple" },
-    ],
-    additionalFees: [
-      { name: "Ménage de fin de séjour", amount: 60, type: "per_stay", description: "Obligatoire" },
-      { name: "Linge de lit", amount: 15, type: "per_person", description: "Optionnel, draps et serviettes" },
-      { name: "Taxe de séjour", amount: 1.1, type: "per_night", description: "Par personne et par nuit" },
-    ],
-    bookingLinks: { airbnb: "https://www.airbnb.fr", booking: "https://www.booking.com", email: "contact@linstant-tranquille.fr" },
-    policies: {
-      cancellation: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Annulation gratuite jusqu'à 30 jours avant l'arrivée. 50% entre 30 et 14 jours. Aucun remboursement dans les 14 derniers jours." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } },
-      deposit: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Caution de 300€ demandée à l'arrivée, restituée sous 7 jours après vérification." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } },
-      checkIn: "À partir de 16h00",
-      checkOut: "Avant 10h00",
-      additional: { root: { type: "root", children: [{ type: "paragraph", children: [{ type: "text", text: "Ménage obligatoire. Linge disponible en option. Animaux sur demande." }], direction: "ltr", format: "", indent: 0, version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 } },
+      ],
     },
-  }});
+    {
+      title: "Réservation",
+      links: [
+        {
+          label: "Airbnb",
+          url: "https://www.airbnb.fr/rooms/1605140748799580144",
+          isExternal: true,
+        },
+        {
+          label: "Booking.com",
+          url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
+          isExternal: true,
+        },
+      ],
+    },
+  ];
+  const footerEn = {
+    description:
+      "A holiday cottage in Sologne, Romorantin-Lanthenay, forests, ponds, Loire Valley châteaux.",
+    cols: [
+      {
+        title: "Navigation",
+        links: ["Home", "The Cottage", "Surroundings", "Rates", "Contact"],
+      },
+      { title: "Booking", links: ["Airbnb", "Booking.com"] },
+    ],
+    legalText:
+      "L'Instant Tranquille, Holiday cottage in Sologne. All rights reserved.",
+  };
+  const footerFr = (await payload.updateGlobal({
+    slug: "footer",
+    locale: "fr",
+    data: {
+      description:
+        "Un gîte en Sologne à Romorantin-Lanthenay, forêts, étangs, châteaux de la Loire.",
+      navColumns: footerColsFr,
+      legalText: "L'Instant Tranquille, Gîte en Sologne. Tous droits réservés.",
+    },
+  })) as {
+    navColumns?: Array<{ id?: string; links?: Array<{ id?: string }> }>;
+  };
+  const footerCols = footerFr.navColumns ?? [];
+  await payload.updateGlobal({
+    slug: "footer",
+    locale: "en",
+    data: {
+      description: footerEn.description,
+      navColumns: footerColsFr.map((col, i) => ({
+        title: footerEn.cols[i]?.title ?? col.title,
+        id: footerCols[i]?.id,
+        links: col.links.map((lk, j) => ({
+          ...lk,
+          id: footerCols[i]?.links?.[j]?.id,
+          label: footerEn.cols[i]?.links[j] ?? lk.label,
+        })),
+      })),
+      legalText: footerEn.legalText,
+    },
+  });
 
+  // ── PricingConfig ──────────────────────────────────────────────────────────
+  console.log("Seeding PricingConfig...");
+  await payload.updateGlobal({
+    slug: "pricing-config",
+    locale: "fr",
+    data: {
+      currency: "EUR",
+      seasons: [
+        {
+          name: "Basse saison",
+          startMonth: "11",
+          startDay: 1,
+          endMonth: "3",
+          endDay: 31,
+          nightlyRate: 90,
+          weeklyRate: 540,
+          minimumStay: 2,
+          color: "green",
+        },
+        {
+          name: "Moyenne saison",
+          startMonth: "4",
+          startDay: 1,
+          endMonth: "6",
+          endDay: 30,
+          nightlyRate: 120,
+          weeklyRate: 720,
+          minimumStay: 3,
+          color: "orange",
+        },
+        {
+          name: "Haute saison",
+          startMonth: "7",
+          startDay: 1,
+          endMonth: "8",
+          endDay: 31,
+          nightlyRate: 150,
+          weeklyRate: 900,
+          minimumStay: 7,
+          color: "red",
+        },
+        {
+          name: "Très haute saison",
+          startMonth: "12",
+          startDay: 20,
+          endMonth: "1",
+          endDay: 5,
+          nightlyRate: 170,
+          weeklyRate: 1020,
+          minimumStay: 3,
+          color: "purple",
+        },
+      ],
+      additionalFees: [
+        {
+          name: "Ménage de fin de séjour",
+          amount: 60,
+          type: "per_stay",
+          description: "Obligatoire",
+        },
+        {
+          name: "Linge de lit",
+          amount: 15,
+          type: "per_person",
+          description: "Optionnel, draps et serviettes",
+        },
+        {
+          name: "Taxe de séjour",
+          amount: 1.1,
+          type: "per_night",
+          description: "Par personne et par nuit",
+        },
+      ],
+      bookingLinks: {
+        airbnb: "https://www.airbnb.fr/rooms/1605140748799580144",
+        booking: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
+        email: "contact@linstant-tranquille.fr",
+      },
+      policies: {
+        cancellation: {
+          root: {
+            type: "root",
+            children: [
+              {
+                type: "paragraph",
+                children: [
+                  {
+                    type: "text",
+                    text: "Annulation gratuite jusqu'à 30 jours avant l'arrivée. 50 % entre 30 et 14 jours. Aucun remboursement dans les 14 derniers jours.",
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            version: 1,
+          },
+        },
+        deposit: {
+          root: {
+            type: "root",
+            children: [
+              {
+                type: "paragraph",
+                children: [
+                  {
+                    type: "text",
+                    text: "Caution de 300 € demandée à l'arrivée, restituée sous 7 jours après vérification.",
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            version: 1,
+          },
+        },
+        checkIn: "À partir de 17h00",
+        checkOut: "Avant 10h00",
+        additional: {
+          root: {
+            type: "root",
+            children: [
+              {
+                type: "paragraph",
+                children: [
+                  {
+                    type: "text",
+                    text: "Ménage obligatoire. Linge disponible en option. Animaux sur demande.",
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            version: 1,
+          },
+        },
+      },
+    },
+  });
+
+  // ── Pages ──────────────────────────────────────────────────────────────────
   console.log("Seeding Pages...");
-  await payload.create({ collection: "pages", locale: "fr", data: { title: "Accueil", slug: "home", heroTitle: "L'Instant Tranquille", heroSubtitle: "Votre parenthèse nature au cœur de la Sologne", introTitle: "Bienvenue en Sologne", _status: "published" } });
-  await payload.create({ collection: "pages", locale: "fr", data: { title: "Le Gîte", slug: "le-gite", descriptionTitle: "Une maison de caractère", _status: "published" } });
-  await payload.create({ collection: "pages", locale: "fr", data: { title: "Tarifs & Réservation", slug: "tarifs-reservation", _status: "published" } });
-  await payload.create({ collection: "pages", locale: "fr", data: { title: "Contact", slug: "contact", _status: "published" } });
 
+  // Page home, avec heroImages (mosaïque 3 photos) et introImage câblés
+  const heroImageId = mediaIds["salon-cheminee-canapes-tv.webp"];
+  const introImageId = mediaIds["sejour-canape-buffet-escalier.webp"];
+
+  // Mosaïque : chambre-forêt + chambre vert-sauge + entrée papier-peint hérons
+  const heroImagesIds = [
+    mediaIds["chambre-1-vue-ensemble-papier-peint-foret.webp"],
+    mediaIds["chambre-1-lit-double-vert-sauge.webp"],
+    mediaIds["entree-porte-manteau-papier-peint-herons.webp"],
+  ].filter((id): id is number => id !== undefined);
+
+  const homeFr = (await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: {
+      title: "Accueil",
+      slug: "home",
+      heroImage: heroImageId,
+      heroImages: heroImagesIds.map((id) => ({ image: id })),
+      heroTitle: "L'Instant Tranquille",
+      heroSubtitle: "Un gîte en Sologne, entre forêts et étangs",
+      introTitle: "Bienvenue en Sologne",
+      introText: {
+        root: {
+          type: "root",
+          children: [
+            {
+              type: "paragraph",
+              children: [
+                {
+                  type: "text",
+                  text: "Une maison familiale paisible à Romorantin-Lanthenay, au cœur de la Sologne. 3 chambres (6 couchages), terrasse avec barbecue, cuisine équipée, baby-foot et jeux de société, jardin clos. Wifi gratuit, parking privé.",
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          ],
+          direction: "ltr",
+          format: "",
+          indent: 0,
+          version: 1,
+        },
+      },
+      introImage: introImageId,
+      highlights: [
+        {
+          icon: "trees",
+          title: "Sologne nature",
+          description:
+            "Forêts, étangs et sentiers à deux pas. La faune sauvage au quotidien.",
+          linkUrl: "/le-gite",
+          linkLabel: "Découvrir",
+        },
+        {
+          icon: "castle",
+          title: "Châteaux de la Loire",
+          description:
+            "Chambord à ~35 min, Cheverny à ~30 min, Zoo de Beauval à ~30 min.",
+          linkUrl: "/contact",
+          linkLabel: "Nous trouver",
+        },
+        {
+          icon: "trophy",
+          title: "Cavaliers bienvenus",
+          description:
+            "Base idéale pour les concours au Grand Parquet de Lamotte-Beuvron (FFE), à ~39 km.",
+        },
+        {
+          icon: "users",
+          title: "6 personnes, 3 chambres",
+          description: "115 m², cuisine équipée, cheminée, baby-foot, jardin clos. Animaux acceptés.",
+          linkUrl: "/le-gite",
+          linkLabel: "Voir le gîte",
+        },
+      ],
+      _status: "published",
+    },
+  })) as { id: string; highlights?: Array<{ id?: string }> };
+  const homeHighlightIds = (homeFr.highlights ?? []).map((h) => h.id);
+  const homeHighlightsEn = [
+    {
+      icon: "trees",
+      title: "Sologne nature",
+      description: "Forests, ponds and trails nearby. Wildlife on your doorstep.",
+      linkUrl: "/le-gite",
+      linkLabel: "Discover",
+    },
+    {
+      icon: "castle",
+      title: "Loire Valley châteaux",
+      description: "Chambord ~35 min, Cheverny ~30 min, Zoo de Beauval ~30 min.",
+      linkUrl: "/contact",
+      linkLabel: "Find us",
+    },
+    {
+      icon: "trophy",
+      title: "Ideal for riders",
+      description:
+        "Perfect base for events at Grand Parquet de Lamotte-Beuvron (FFE), ~39 km away.",
+    },
+    {
+      icon: "users",
+      title: "6 guests, 3 bedrooms",
+      description:
+        "115 m², kitchen, fireplace, foosball, enclosed garden. Pets welcome.",
+      linkUrl: "/le-gite",
+      linkLabel: "See the cottage",
+    },
+  ];
+  {
+    await payload.update({
+      collection: "pages",
+      id: homeFr.id,
+      locale: "en",
+      data: {
+        title: "Home",
+        heroTitle: "L'Instant Tranquille",
+        heroSubtitle: "A holiday cottage in Sologne, between forests and ponds",
+        introTitle: "Welcome to Sologne",
+        introText: {
+          root: {
+            type: "root",
+            children: [
+              {
+                type: "paragraph",
+                children: [
+                  {
+                    type: "text",
+                    text: "In Romorantin-Lanthenay, at the heart of Sologne, this 120 m² cottage sleeps up to 6 guests in 3 bedrooms. Forests, ponds, Loire Valley châteaux, all within easy reach.",
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            version: 1,
+          },
+        },
+        highlights: homeHighlightsEn.map((h, i) => ({
+          ...h,
+          id: homeHighlightIds[i],
+        })),
+      },
+    });
+  }
+
+  // Page le-gite, galerie et previewImages câblées
+  const galleryImages = [
+    "salon-cheminee-canapes-tv.webp",
+    "chambre-1-lit-double-vert-sauge.webp",
+    "chambre-1-vue-ensemble-papier-peint-foret.webp",
+    "chambre-2-lit-double-sous-pente-terracotta.webp",
+    "chambre-2-tete-de-lit-sous-pente.webp",
+    "chambre-3-lits-simples-sous-pente.webp",
+    "cuisine-equipee-verte-poutres.webp",
+    "sejour-canape-buffet-escalier.webp",
+    "sejour-canape-tv-escalier.webp",
+    "salon-baby-foot-mur-briques.webp",
+    "entree-commode-deco-briques.webp",
+    "entree-porte-manteau-papier-peint-herons.webp",
+    "jardin-terrasse-vue-ensemble.webp",
+    "terrasse-salon-jardin.webp",
+    "detail-deco-coiffeuse-miroir-chambre-1.webp",
+    "detail-deco-cuisine-cloche-bronze.webp",
+    "detail-deco-vase-visage-dore.webp",
+  ];
+
+  const previewImageFiles = [
+    "salon-cheminee-canapes-tv.webp",
+    "chambre-1-lit-double-vert-sauge.webp",
+    "cuisine-equipee-verte-poutres.webp",
+    "jardin-terrasse-vue-ensemble.webp",
+  ];
+
+  const gallery = galleryImages
+    .filter((f) => mediaIds[f] !== undefined)
+    .map((f) => ({ image: mediaIds[f] as number }));
+
+  const previewImages = previewImageFiles
+    .filter((f) => mediaIds[f] !== undefined)
+    .map((f) => ({ image: mediaIds[f] as number }));
+
+  await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: {
+      title: "Le Gîte",
+      slug: "le-gite",
+      descriptionTitle: "Un gîte en Sologne",
+      descriptionText: {
+        root: {
+          type: "root",
+          children: [
+            {
+              type: "paragraph",
+              children: [
+                {
+                  type: "text",
+                  text: "Maison de 115 m² à Romorantin-Lanthenay, 3 chambres (6 couchages), 1 salle de bain, salon avec cheminée, cuisine équipée, baby-foot, jeux de société. Terrasse avec barbecue, jardin clos. Parking privé gratuit. Animaux acceptés.",
+                },
+              ],
+              direction: "ltr",
+              format: "",
+              indent: 0,
+              version: 1,
+            },
+          ],
+          direction: "ltr",
+          format: "",
+          indent: 0,
+          version: 1,
+        },
+      },
+      gallery,
+      previewImages,
+      _status: "published",
+    },
+  });
+
+  // le-gite EN locale
+  const gitePages = await payload.find({
+    collection: "pages",
+    where: { slug: { equals: "le-gite" } },
+    limit: 1,
+  });
+  const giteId = gitePages.docs[0]?.id;
+  if (giteId) {
+    await payload.update({
+      collection: "pages",
+      id: giteId,
+      locale: "en",
+      data: {
+        title: "The Cottage",
+        descriptionTitle: "A cottage in Sologne",
+        descriptionText: {
+          root: {
+            type: "root",
+            children: [
+              {
+                type: "paragraph",
+                children: [
+                  {
+                    type: "text",
+                    text: "115 m² house in Romorantin-Lanthenay, 3 bedrooms (6 guests), 1 bathroom, lounge with fireplace, fully equipped kitchen, foosball table, board games. Terrace with barbecue, enclosed garden. Free private parking. Pets welcome.",
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            version: 1,
+          },
+        },
+      },
+    });
+  }
+
+  const alentoursFr = (await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: {
+      title: "Les Alentours",
+      slug: "les-alentours",
+      heroImage: mediaIds["jardin-terrasse-vue-ensemble.webp"],
+      heroTitle: "Les Alentours",
+      heroSubtitle: "Châteaux, nature, équitation, la Sologne à portée de route",
+      equestrianTitle: "Cavaliers & sports équestres",
+      equestrianVenues: [
+        {
+          name: "Le Grand Parquet de Lamotte-Beuvron",
+          description:
+            "Site fédéral de la FFE, accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux.",
+          distanceFromGite: "~39 km, 40 min",
+          website: "https://www.ffe.com",
+        },
+      ],
+      _status: "published",
+    },
+  })) as { id: string; equestrianVenues?: Array<{ id?: string }> };
+  const alentoursVenueId = alentoursFr.equestrianVenues?.[0]?.id;
+  await payload.update({
+    collection: "pages",
+    id: alentoursFr.id,
+    locale: "en",
+    data: {
+      title: "Surroundings",
+      heroTitle: "The Surroundings",
+      heroSubtitle:
+        "Châteaux, nature, equestrian sports, Sologne at your doorstep",
+      equestrianTitle: "Riders & equestrian sports",
+      equestrianVenues: [
+        {
+          id: alentoursVenueId,
+          name: "Le Grand Parquet de Lamotte-Beuvron",
+          description:
+            "FFE national equestrian centre hosting the Generali Open de France and major showjumping events.",
+          distanceFromGite: "~39 km, 40 min",
+          website: "https://www.ffe.com",
+        },
+      ],
+    },
+  });
+
+  await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: {
+      title: "Tarifs & Réservation",
+      slug: "tarifs-reservation",
+      _status: "published",
+    },
+  });
+  await payload.create({
+    collection: "pages",
+    locale: "fr",
+    data: { title: "Contact", slug: "contact", _status: "published" },
+  });
+
+  // ── Amenities ──────────────────────────────────────────────────────────────
   console.log("Seeding Amenities...");
   const amenities = [
-    { name: "WiFi haut débit", icon: "wifi", category: "indoor" },
-    { name: "TV écran plat", icon: "tv", category: "indoor" },
-    { name: "Lave-linge", icon: "washing-machine", category: "indoor" },
-    { name: "Cheminée", icon: "flame", category: "indoor" },
-    { name: "Literie premium", icon: "bed-double", category: "indoor" },
-    { name: "Jardin 3 hectares", icon: "trees", category: "outdoor" },
-    { name: "Parking privé", icon: "car", category: "outdoor" },
-    { name: "Terrasse", icon: "sun", category: "outdoor" },
+    { name: "Wifi gratuit", icon: "wifi", category: "indoor" },
+    { name: "Télévision", icon: "tv", category: "indoor" },
     { name: "Cuisine équipée", icon: "utensils", category: "kitchen" },
-    { name: "Réfrigérateur", icon: "refrigerator", category: "kitchen" },
-    { name: "Machine à café", icon: "coffee", category: "kitchen" },
-    { name: "Chauffage central", icon: "heater", category: "comfort" },
-    { name: "Draps & serviettes", icon: "bath", category: "comfort" },
+    { name: "Lave-vaisselle", icon: "square-dashed", category: "kitchen" },
+    { name: "Cafetière Dolce Gusto", icon: "coffee", category: "kitchen" },
+    { name: "Cheminée", icon: "flame", category: "indoor" },
+    { name: "Baby-foot", icon: "gamepad-2", category: "indoor" },
+    { name: "Jeux de société", icon: "dices", category: "indoor" },
+    { name: "Terrasse avec barbecue", icon: "flame-kindling", category: "outdoor" },
+    { name: "Jardin privé clôturé", icon: "trees", category: "outdoor" },
+    { name: "Parking privé gratuit", icon: "car", category: "outdoor" },
+    { name: "Sèche-cheveux", icon: "wind", category: "comfort" },
+    { name: "Linge & serviettes fournis", icon: "bath", category: "comfort" },
+    { name: "Animaux acceptés", icon: "paw-print", category: "comfort" },
+    { name: "Non-fumeurs", icon: "cigarette-off", category: "comfort" },
   ];
   for (let i = 0; i < amenities.length; i++) {
-    await payload.create({ collection: "amenities", locale: "fr", data: { ...amenities[i], order: i, enabled: true } });
+    await payload.create({
+      collection: "amenities",
+      locale: "fr",
+      data: { ...amenities[i]!, order: i, enabled: true },
+    });
   }
 
-  console.log("Seeding Testimonials...");
-  const testimonials = [
-    { guestName: "Sophie & Marc", guestOrigin: "Paris", rating: 5, text: "Un séjour magique dans cette maison pleine de charme. Le calme, la nature, tout était parfait.", source: "airbnb", stayDate: "2025-08-15" },
-    { guestName: "Emma Johnson", guestOrigin: "London", rating: 5, text: "Absolutely wonderful place! Beautifully renovated cottage with breathtaking surroundings.", source: "booking", stayDate: "2025-07-20" },
-    { guestName: "Pierre & Anne", guestOrigin: "Lyon", rating: 4, text: "Très beau gîte, bien situé pour visiter les châteaux. Nous reviendrons !", source: "direct", stayDate: "2025-06-10" },
-    { guestName: "Hans & Greta", guestOrigin: "Berlin", rating: 5, text: "Wunderschönes Ferienhaus! Die Natur drumherum ist fantastisch.", source: "airbnb", stayDate: "2025-09-01" },
-    { guestName: "Famille Moreau", guestOrigin: "Bordeaux", rating: 5, text: "Nos enfants ont adoré le jardin. Un vrai havre de paix.", source: "google", stayDate: "2025-04-15" },
-    { guestName: "Laura & David", guestOrigin: "Bruxelles", rating: 4, text: "Cadre idyllique, maison très confortable. La Sologne est magnifique.", source: "booking", stayDate: "2025-05-20" },
-  ];
-  for (const t of testimonials) {
-    await payload.create({ collection: "testimonials", locale: "fr", data: { ...t, status: "approved", featured: true } });
-  }
 
+  // ── LocalRecommendations ───────────────────────────────────────────────────
   console.log("Seeding LocalRecommendations...");
   const recommendations = [
-    { name: "Château de Chambord", category: "castles", description: "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance.", distanceFromGite: "30 min", website: "https://www.chambord.org", featured: true, order: 0 },
-    { name: "Château de Cheverny", category: "castles", description: "Château meublé d'époque, inspirateur du château de Moulinsart.", distanceFromGite: "25 min", website: "https://www.chateau-cheverny.fr", featured: true, order: 1 },
-    { name: "Zoo de Beauval", category: "activities", description: "L'un des plus beaux zoos d'Europe, avec pandas et koalas.", distanceFromGite: "45 min", website: "https://www.zoobeauval.com", featured: true, order: 2 },
-    { name: "Étang de Sologne", category: "nature", description: "Randonnée paisible autour des étangs typiques de la Sologne.", distanceFromGite: "10 min à pied", featured: true, order: 3 },
+    {
+      name: "Centre-ville de Romorantin-Lanthenay",
+      category: "activities",
+      description:
+        "Boulangeries, restaurants, bars, tout à 5-10 min à pied. Marché le mercredi et le samedi matin.",
+      distanceFromGite: "5-10 min à pied",
+      featured: true,
+      order: 0,
+    },
+    {
+      name: "Château de Cheverny",
+      category: "castles",
+      description: "Château meublé d'époque, inspirateur du château de Moulinsart (Tintin).",
+      distanceFromGite: "~30 min (29 km)",
+      website: "https://www.chateau-cheverny.fr",
+      featured: true,
+      order: 1,
+    },
+    {
+      name: "Château de Chambord",
+      category: "castles",
+      description:
+        "Le plus grand château de la Loire, chef-d'œuvre de la Renaissance. Forêt de 5 440 ha.",
+      distanceFromGite: "~35 min",
+      website: "https://www.chambord.org",
+      featured: true,
+      order: 2,
+    },
+    {
+      name: "Zoo de Beauval",
+      category: "activities",
+      description: "L'un des plus grands zoos d'Europe, avec pandas géants, lions blancs et koalas.",
+      distanceFromGite: "~30 min",
+      website: "https://www.zoobeauval.com",
+      featured: true,
+      order: 3,
+    },
+    {
+      name: "Grand Parquet de Lamotte-Beuvron",
+      category: "equestrian",
+      description:
+        "Site fédéral de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux. Base idéale pour les cavaliers en déplacement.",
+      distanceFromGite: "~39 km, 40 min",
+      website: "https://www.ffe.com",
+      featured: true,
+      order: 4,
+    },
   ];
   for (const r of recommendations) {
-    await payload.create({ collection: "local-recommendations", locale: "fr", data: r });
+    await payload.create({
+      collection: "local-recommendations",
+      locale: "fr",
+      data: r,
+    });
   }
 
-  console.log("Seed complete!");
+  console.log("Seed complete! 19 images chargées.");
   process.exit(0);
 }
 
-seed().catch((e) => { console.error("Seed failed:", e); process.exit(1); });
+seed().catch((e) => {
+  console.error("Seed failed:", e);
+  process.exit(1);
+});

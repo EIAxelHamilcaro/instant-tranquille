@@ -168,7 +168,7 @@ export const SiteSettings: GlobalConfig = {
                   label: "Ville",
                   admin: {
                     description:
-                      "Commune du gîte — essentiel pour le référencement local Google",
+                      "Commune du gîte, essentiel pour le référencement local Google",
                     placeholder: "Romorantin-Lanthenay",
                     width: "50%",
                   },
@@ -387,6 +387,41 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: "Plateformes & entité",
+          fields: [
+            {
+              name: "sameAs",
+              type: "array",
+              label: "Profils officiels (sameAs)",
+              admin: {
+                description:
+                  "URLs de vos profils Airbnb, Booking, Abritel, Google Business, TripAdvisor… utilisés pour la consolidation d'entité dans les moteurs de recherche et les LLMs.",
+              },
+              fields: [
+                {
+                  name: "url",
+                  type: "text",
+                  label: "URL",
+                  required: true,
+                  validate: validateUrl,
+                  admin: {
+                    placeholder: "https://www.airbnb.fr/rooms/12345678",
+                  },
+                },
+                {
+                  name: "label",
+                  type: "text",
+                  label: "Libellé",
+                  admin: {
+                    placeholder: "Airbnb",
+                    width: "40%",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: "Référencement Google",
           fields: [
             {
@@ -407,7 +442,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description:
                       "Titre affiché dans Google si la page n'a pas de titre SEO (max. 60 caractères)",
-                    placeholder: "L'Instant Tranquille — Gîte en Sologne",
+                    placeholder: "L'Instant Tranquille, Gîte en Sologne",
                   },
                 },
                 {

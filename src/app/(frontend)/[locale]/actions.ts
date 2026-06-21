@@ -14,7 +14,9 @@ const testimonialSchema = z.object({
 export type TestimonialFormState = {
   success: boolean;
   error?: string;
-  fieldErrors?: Partial<Record<"guestName" | "text" | "stayDate" | "rating", string>>;
+  fieldErrors?: Partial<
+    Record<"guestName" | "text" | "stayDate" | "rating", string>
+  >;
   values?: {
     guestName?: string;
     guestOrigin?: string;

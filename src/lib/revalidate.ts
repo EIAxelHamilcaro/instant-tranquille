@@ -1,11 +1,15 @@
 import { revalidateTag } from "next/cache";
-import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from "payload";
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  GlobalAfterChangeHook,
+} from "payload";
 
 function safeRevalidateTag(tag: string) {
   try {
     revalidateTag(tag, "default");
   } catch {
-    // Outside Next.js request context (e.g. seed script) — ignore
+    // Outside Next.js request context (e.g. seed script), ignore
   }
 }
 

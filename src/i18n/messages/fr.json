@@ -1,22 +1,26 @@
 {
   "metadata": {
-    "title": "Gîte de charme en Sologne",
-    "description": "Découvrez L'Instant Tranquille, un gîte de charme au cœur de la Sologne. Location de vacances idéale pour un séjour nature, entre châteaux de la Loire et forêts."
+    "title": "Gîte en Sologne",
+    "description": "L'Instant Tranquille, gîte 3 chambres, 6 personnes, 120 m² à Romorantin-Lanthenay en Sologne. Location vacances nature entre forêts et châteaux de la Loire."
   },
   "nav": {
     "home": "Accueil",
     "cottage": "Le Gîte",
+    "surroundings": "Les Alentours",
     "rates": "Tarifs & Réservation",
     "contact": "Contact",
     "book": "Réserver"
   },
   "home": {
     "heroTitle": "L'Instant Tranquille",
-    "heroSubtitle": "Votre parenthèse nature au cœur de la Sologne",
-    "heroCta": "Découvrir le gîte",
-    "heroCta2": "Voir les tarifs",
+    "heroSubtitle": "Un gîte en Sologne, à Romorantin-Lanthenay",
+    "heroEyebrow": "Loir-et-Cher · Sologne",
+    "heroCta": "Réserver",
+    "heroCta2": "Découvrir le gîte",
+    "learnMoreShort": "En savoir plus",
     "introTitle": "Bienvenue en Sologne",
-    "introText": "Niché au cœur des forêts solognotes, L'Instant Tranquille vous offre un cadre idyllique pour une escapade ressourçante. À quelques pas des châteaux de la Loire, profitez du calme absolu de la campagne française.",
+    "introEyebrow": "Romorantin-Lanthenay · Loir-et-Cher",
+    "introText": "Une maison solognote de 120 m², 3 chambres, pour 6 personnes. Entourée de forêts et d'étangs, à 38 km de Chambord et à 39 km du Grand Parquet de Lamotte-Beuvron. Un point de départ pratique pour explorer la Sologne, les châteaux ou assister aux concours équestres.",
     "highlightsTitle": "Pourquoi nous choisir",
     "highlightNature": "Nature préservée",
     "highlightNatureDesc": "Au cœur de 3 hectares de nature, entre forêt et étangs, un cadre exceptionnel pour se ressourcer.",
@@ -27,12 +31,13 @@
     "highlightCalm": "Calme absolu",
     "highlightCalmDesc": "Loin de l'agitation urbaine, profitez du silence, du chant des oiseaux et des étoiles la nuit.",
     "testimonialsTitle": "Ce que disent nos hôtes",
-    "ctaTitle": "Prêt pour votre escapade en Sologne ?",
-    "ctaSubtitle": "Réservez votre séjour à L'Instant Tranquille",
+    "ctaEyebrow": "Réservation",
+    "ctaTitle": "Prêt pour votre séjour en Sologne ?",
+    "ctaSubtitle": "Réservez directement sur la plateforme de votre choix",
+    "ctaChoosePlatform": "Choisissez votre plateforme",
     "ctaAirbnb": "Réserver sur Airbnb",
     "ctaBooking": "Réserver sur Booking",
     "ctaContact": "Nous contacter",
-    "ctaAbritel": "Réserver sur Abritel",
     "ctaEmailDirect": "Réservation directe",
     "testimonialFormTitle": "Partagez votre expérience",
     "testimonialFormSubtitle": "Votre avis compte ! Aidez les futurs voyageurs à découvrir L'Instant Tranquille.",
@@ -52,7 +57,9 @@
     "stars": "étoiles",
     "testimonialsAriaLabel": "Témoignages de nos hôtes",
     "testimonialSlide": "Témoignage {current} sur {total}",
-    "introImageAlt": "Vue extérieure du gîte"
+    "introImageAlt": "Vue extérieure du gîte",
+    "introDistChambord": "38 km, Château de Chambord",
+    "introDistGrandParquet": "39 km, Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "Le Gîte",
@@ -71,6 +78,10 @@
       "tech": "Technologie"
     },
     "openImage": "Ouvrir l'image",
+    "lightboxClose": "Fermer la galerie",
+    "lightboxPrev": "Image précédente",
+    "lightboxNext": "Image suivante",
+    "lightboxCounter": "{current} / {total}",
     "nearbyTitle": "Aux alentours",
     "guests": "voyageurs",
     "bedrooms": "chambres",
@@ -79,7 +90,9 @@
     "cottageView": "Vue du gîte",
     "placeholderLiving": "Salon principal",
     "placeholderBedroom": "Chambre",
-    "placeholderGarden": "Jardin"
+    "placeholderGarden": "Jardin",
+    "heroEyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroImageAlt": "Intérieur du gîte L'Instant Tranquille en Sologne"
   },
   "rates": {
     "title": "Tarifs & Réservation",
@@ -107,11 +120,13 @@
     "feeTypePerNight": "par nuit",
     "feeTypePerPerson": "par personne",
     "calendarTitle": "Calendrier saisonnier",
-    "h1": "Tarifs du gîte en Sologne — location à Romorantin-Lanthenay"
+    "sourceNote": "Tarifs indicatifs à la nuitée. Les prix et la disponibilité en temps réel font foi sur",
+    "sourceAnd": "et",
+    "h1": "Tarifs du gîte en Sologne, location à Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
-    "description": "Une question ? Contactez-nous pour organiser votre séjour en Sologne.",
+    "description": "Réservez sur Airbnb ou Booking, ou écrivez-nous pour préparer votre séjour en Sologne.",
     "formTitle": "Envoyez-nous un message",
     "name": "Nom",
     "email": "Email",
@@ -129,7 +144,9 @@
     "mapTitle": "Nous trouver",
     "accessTitle": "Comment venir",
     "interactiveMap": "Carte interactive",
-    "h1": "Contacter L'Instant Tranquille — gîte en Sologne à Romorantin-Lanthenay"
+    "reachTitle": "Réserver le gîte",
+    "reachSubtitle": "La réservation et le paiement se font sur Airbnb ou Booking, avec avis vérifiés. Une question avant de réserver ou pendant le séjour ? Écrivez-nous ou appelez-nous, nous connaissons bien la région.",
+    "h1": "Contacter L'Instant Tranquille, gîte en Sologne à Romorantin-Lanthenay"
   },
   "booklet": {
     "title": "Livret d'accueil",
@@ -180,11 +197,67 @@
     "navMenu": "Menu de navigation",
     "languageSwitcher": "Langue",
     "starRating": "{rating} sur 5 étoiles",
-    "mobileNav": "Navigation mobile"
+    "mobileNav": "Navigation mobile",
+    "locator": "Sologne · Romorantin-Lanthenay"
+  },
+  "statsband": {
+    "ariaLabel": "Caractéristiques du gîte",
+    "guests": "voyageurs",
+    "bedrooms": "chambres",
+    "bathrooms": "salles de bain",
+    "surface": "surface",
+    "distChambord": "de Chambord",
+    "distGrandParquet": "du Grand Parquet"
   },
   "footer": {
-    "description": "Un gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",
+    "description": "Gîte en Sologne, 3 chambres, Romorantin-Lanthenay.",
     "rights": "Tous droits réservés.",
     "contact": "Contact"
+  },
+  "surroundings": {
+    "title": "Les Alentours",
+    "description": "Découvrez la Sologne depuis le gîte : châteaux, forêts, étangs, restaurants et activités à proximité.",
+    "h1": "Que faire en Sologne, activités et visites depuis Romorantin-Lanthenay",
+    "eyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroTitle": "Les Alentours",
+    "heroSubtitle": "Châteaux, nature, équitation, la Sologne à portée de route",
+    "introTitle": "Un point de départ commode",
+    "categoryTitle": "À découvrir aux alentours",
+    "mapTitle": "Carte des alentours",
+    "categories": {
+      "castles": "Châteaux & Monuments",
+      "restaurants": "Restaurants",
+      "nature": "Nature & Randonnées",
+      "activities": "Activités",
+      "markets": "Marchés",
+      "equestrian": "Équitation & Sports équestres",
+      "services": "Services"
+    },
+    "distance": "Distance",
+    "website": "Site web",
+    "noItems": "Aucune recommandation dans cette catégorie pour le moment."
+  },
+  "equestrian": {
+    "sectionTitle": "Cavaliers & sports équestres",
+    "eyebrow": "Sologne équestre",
+    "intro": "La Sologne est une région équestre de premier plan. Le gîte constitue une base pratique pour les cavaliers en déplacement pour des concours ou un séjour de loisir.",
+    "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
+    "grandParquetText": "Site fédéral de la FFE (Fédération Française d'Équitation), le Grand Parquet accueille chaque année le Generali Open de France, l'un des concours de saut d'obstacles les plus importants du calendrier national. À environ 39 km du gîte (40 minutes en voiture).",
+    "venuesTitle": "Sites équestres à proximité",
+    "distanceLabel": "Distance",
+    "websiteLabel": "Site officiel",
+    "faqTitle": "Questions fréquentes, cavaliers",
+    "faq": {
+      "q1": "Le gîte accepte-t-il les chevaux ?",
+      "a1": "Non, le gîte n'a pas de structures d'hébergement pour les chevaux. Il s'adresse aux cavaliers qui souhaitent un logement confortable à proximité des sites équestres, leurs montures étant hébergées sur place dans les centres ou écuries des environs.",
+      "q2": "Quelle est la distance jusqu'au Grand Parquet de Lamotte-Beuvron ?",
+      "a2": "Environ 39 km depuis le gîte, soit environ 40 minutes en voiture.",
+      "q3": "Y a-t-il des centres équestres proches pour les activités de loisir ?",
+      "a3": "Plusieurs centres équestres sont accessibles dans un rayon de 30 km autour de Romorantin-Lanthenay. Nous pouvons vous communiquer des adresses sur demande.",
+      "q4": "Le parking est-il adapté pour remorques et van à chevaux au Grand Parquet ?",
+      "a4": "Le Grand Parquet dispose d'un parking spécifique pour véhicules avec remorques lors des concours. Il est recommandé de vérifier les consignes de stationnement auprès de l'organisateur avant chaque événement."
+    },
+    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron, site équestre FFE",
+    "placeholderLabel": "Photo Grand Parquet (à venir)"
   }
 }

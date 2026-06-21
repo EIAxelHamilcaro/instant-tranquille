@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateGlobal } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateGlobal } from "@/lib/revalidate";
 
 export const Header: GlobalConfig = {
   slug: "header",
@@ -15,8 +15,7 @@ export const Header: GlobalConfig = {
   },
   admin: {
     group: "Mise en page",
-    description:
-      "Menu de navigation affiché en haut de toutes les pages",
+    description: "Menu de navigation affiché en haut de toutes les pages",
     livePreview: {
       url: ({ locale }) => previewUrl("/", { locale }),
     },
@@ -27,8 +26,7 @@ export const Header: GlobalConfig = {
       type: "array",
       label: "Menu de navigation",
       admin: {
-        description:
-          "Liens affichés dans le menu principal du site",
+        description: "Liens affichés dans le menu principal du site",
       },
       fields: [
         {
@@ -59,8 +57,7 @@ export const Header: GlobalConfig = {
           label: "Lien externe",
           defaultValue: false,
           admin: {
-            description:
-              "Cochez si le lien mène vers un autre site web",
+            description: "Cochez si le lien mène vers un autre site web",
           },
         },
         {

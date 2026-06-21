@@ -48,9 +48,9 @@ function buildDayColorMap(seasons: CmsSeason[]): Map<string, DayColor> {
     )
       continue;
 
-    const sm = parseInt(season.startMonth);
+    const sm = parseInt(season.startMonth, 10);
     const sd = season.startDay;
-    const em = parseInt(season.endMonth);
+    const em = parseInt(season.endMonth, 10);
     const ed = season.endDay;
     const isCrossYear = sm > em || (sm === em && sd > ed);
 
@@ -167,7 +167,7 @@ export function SeasonCalendar({
                         <div
                           key={day}
                           className={`flex h-[18px] items-center justify-center text-[10px] leading-none ${bg}`}
-                          title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? ` — ${entry.seasonName}` : ""}`}
+                          title={`${day} ${monthNamesFull[monthIdx]}${entry?.seasonName ? `, ${entry.seasonName}` : ""}`}
                         >
                           <span className={fg}>{day}</span>
                         </div>

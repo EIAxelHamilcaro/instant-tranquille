@@ -1,16 +1,16 @@
 "use client";
 
+import { Ban, Clock, Info, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Ban, Shield, Clock, Info } from "lucide-react";
 
 type Policies = {
   cancellation?: any;
@@ -44,7 +44,7 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
       title: t("checkInOut"),
       content:
         policies?.checkIn || policies?.checkOut
-          ? `${policies?.checkIn ? `${t("checkInLabel")}${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? " — " : ""}${policies?.checkOut ? `${t("checkOutLabel")}${policies.checkOut}` : ""}`
+          ? `${policies?.checkIn ? `${t("checkInLabel")}${policies.checkIn}` : ""}${policies?.checkIn && policies?.checkOut ? ", " : ""}${policies?.checkOut ? `${t("checkOutLabel")}${policies.checkOut}` : ""}`
           : null,
       isRichText: false,
     },
@@ -57,7 +57,7 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
     },
   ];
 
-  const hasAnyPolicy = policyItems.some(p => p.content);
+  const hasAnyPolicy = policyItems.some((p) => p.content);
   if (!hasAnyPolicy) return null;
 
   return (
@@ -76,7 +76,10 @@ export function PoliciesSection({ policies }: { policies?: Policies | null }) {
                   >
                     <AccordionTrigger className="font-sans text-base hover:text-primary-600 hover:no-underline">
                       <span className="flex items-center gap-3">
-                        <Icon className="h-5 w-5 text-primary-500" aria-hidden="true" />
+                        <Icon
+                          className="h-5 w-5 text-primary-500"
+                          aria-hidden="true"
+                        />
                         {title}
                       </span>
                     </AccordionTrigger>

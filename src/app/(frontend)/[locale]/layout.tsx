@@ -8,10 +8,13 @@ import {
 } from "next-intl/server";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { MainShell } from "@/components/layout/MainShell";
+import { StickyBookingBar } from "@/components/layout/StickyBookingBar";
 import type { Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
-import { inter, lora, playfairDisplay } from "@/lib/fonts";
-import { getSiteSettings } from "@/lib/queries";
+import { fraunces, hankenGrotesk, splineSansMono } from "@/lib/fonts";
+import { generateWebSiteJsonLd } from "@/lib/jsonld";
+import { getPricingConfig, getSiteSettings } from "@/lib/queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -29,15 +32,16 @@ export async function generateMetadata({
   if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
-  const settings = (await getSiteSettings(locale)) as Record<string, any>;
-  const siteName = settings.siteName || "L'Instant Tranquille";
+  const settings = (await getSiteSettings(locale)) as Record<string, unknown>;
+  const siteName =
+    (settings.siteName as string | undefined) || "L'Instant Tranquille";
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      template: `%s — ${siteName}`,
-      default: `${siteName} — ${messages.metadata.title}`,
+      template: `%s, ${siteName}`,
+      default: `${siteName}, ${messages.metadata.title}`,
     },
     description: messages.metadata.description,
     category: "travel",
@@ -45,6 +49,15 @@ export async function generateMetadata({
       telephone: false,
       email: false,
       address: false,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }
@@ -71,9 +84,23 @@ export default async function FrontendLayout({
   const t = await getTranslations({ locale, namespace: "common" });
   const skipText = t("skipToContent");
 
+  const pricingConfig = (await getPricingConfig(locale)) as Record<
+    string,
+    unknown
+  >;
+  const bookingLinks = pricingConfig?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null }
+    | undefined;
+
+  const webSiteJsonLd = generateWebSiteJsonLd();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+        />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" />
         <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
@@ -81,7 +108,7 @@ export default async function FrontendLayout({
         <meta name="geo.placename" content="Romorantin-Lanthenay, Sologne" />
       </head>
       <body
-        className={`${playfairDisplay.variable} ${lora.variable} ${inter.variable} antialiased`}
+        className={`${fraunces.variable} ${hankenGrotesk.variable} ${splineSansMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <div className="frontend-app flex min-h-screen flex-col">
@@ -92,10 +119,9 @@ export default async function FrontendLayout({
               {skipText}
             </a>
             <Header locale={locale} />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
+            <MainShell>{children}</MainShell>
             <Footer locale={locale} />
+            <StickyBookingBar bookingLinks={bookingLinks} />
           </div>
         </NextIntlClientProvider>
       </body>

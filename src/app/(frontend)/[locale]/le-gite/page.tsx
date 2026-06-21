@@ -1,16 +1,20 @@
 import { draftMode } from "next/headers";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AmenitiesList } from "@/components/cottage/AmenitiesList";
+import { CottageHeroSection } from "@/components/cottage/CottageHeroSection";
 import { DescriptionSection } from "@/components/cottage/DescriptionSection";
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
 import { AreaMap } from "@/components/shared/AreaMap";
+import { BookingCTA } from "@/components/shared/BookingCTA";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import type { Locale } from "@/i18n/config";
 import {
+  buildCottageFaqItems,
   generateBreadcrumbJsonLd,
+  generateFAQJsonLd,
   generateVacationRentalJsonLd,
 } from "@/lib/jsonld";
 import {
@@ -18,6 +22,7 @@ import {
   getAmenities,
   getFeaturedRecommendations,
   getPageBySlug,
+  getPricingConfig,
   getSiteSettings,
 } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
@@ -55,6 +60,7 @@ export default async function CottagePage({
     recommendations,
     cottagePage,
     testimonials,
+    pricingConfig,
     tNav,
   ] = await Promise.all([
     getSiteSettings(locale, isDraft),
@@ -62,16 +68,25 @@ export default async function CottagePage({
     getFeaturedRecommendations(locale, isDraft),
     getPageBySlug("le-gite", locale, isDraft),
     getAllApprovedTestimonials(locale, isDraft),
+    getPricingConfig(locale, isDraft),
     getTranslations({ locale, namespace: "nav" }),
   ]);
+
+  const bookingLinks = (pricingConfig as Record<string, unknown>)
+    ?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null; email?: string | null }
+    | undefined;
 
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: tNav("home"), url: "/" },
     { name: tNav("cottage"), url: "/le-gite" },
   ]);
 
-  const settings = siteSettings as Record<string, any>;
-  const contact = settings.contact as Record<string, any> | undefined;
+  const settings = siteSettings as Record<string, unknown>;
+  const contact = settings.contact as Record<string, unknown> | undefined;
+  const contactCoordinates = contact?.coordinates as
+    | Record<string, unknown>
+    | undefined;
 
   const propertyDetails = settings.propertyDetails as
     | {
@@ -83,16 +98,24 @@ export default async function CottagePage({
     | undefined;
 
   // Use first gallery image or first preview image for JSON-LD (no hero on this page)
+  type CmsMedia = {
+    url?: string | null;
+    sizes?: { hero?: { url?: string | null } };
+  };
+  const _galleryMedia = cottagePage?.gallery?.[0]?.image as
+    | CmsMedia
+    | undefined;
+  const _previewMedia = cottagePage?.previewImages?.[0]?.image as
+    | CmsMedia
+    | undefined;
   const firstImage =
-    (cottagePage?.gallery?.[0]?.image &&
-    typeof cottagePage.gallery[0].image === "object"
-      ? (cottagePage.gallery[0].image as Record<string, any>).sizes?.hero?.url
-      : null) ||
-    (cottagePage?.previewImages?.[0]?.image &&
-    typeof cottagePage.previewImages[0].image === "object"
-      ? (cottagePage.previewImages[0].image as Record<string, any>).sizes?.hero
-          ?.url
-      : null);
+    _galleryMedia?.sizes?.hero?.url ??
+    _galleryMedia?.url ??
+    _previewMedia?.sizes?.hero?.url ??
+    _previewMedia?.url ??
+    undefined;
+
+  const cottageFaqJsonLd = generateFAQJsonLd(buildCottageFaqItems(locale));
 
   const vacationRentalJsonLd = generateVacationRentalJsonLd({
     heroImage: firstImage || undefined,
@@ -100,11 +123,11 @@ export default async function CottagePage({
     bedrooms: propertyDetails?.bedrooms,
     bathrooms: propertyDetails?.bathrooms,
     surface: propertyDetails?.surface,
-    lat: contact?.coordinates?.lat,
-    lng: contact?.coordinates?.lng,
-    address: contact?.address,
-    city: contact?.city,
-    postalCode: contact?.postalCode,
+    lat: contactCoordinates?.lat as number | undefined,
+    lng: contactCoordinates?.lng as number | undefined,
+    address: contact?.address as string | undefined,
+    city: contact?.city as string | undefined,
+    postalCode: contact?.postalCode as string | undefined,
     amenities,
     testimonials,
   });
@@ -122,6 +145,14 @@ export default async function CottagePage({
             __html: JSON.stringify(vacationRentalJsonLd),
           }}
         />
+        {cottageFaqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(cottageFaqJsonLd),
+            }}
+          />
+        )}
         <CottagePageClient
           initialData={{
             propertyDetails,
@@ -149,6 +180,19 @@ export default async function CottagePage({
           __html: JSON.stringify(vacationRentalJsonLd),
         }}
       />
+      {cottageFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(cottageFaqJsonLd) }}
+        />
+      )}
+      <CottageHeroSection
+        heroImage={
+          cottagePage?.previewImages?.[0]?.image ??
+          cottagePage?.gallery?.[0]?.image ??
+          null
+        }
+      />
       <Breadcrumbs
         items={[{ label: tNav("home"), href: "/" }, { label: tNav("cottage") }]}
       />
@@ -157,15 +201,17 @@ export default async function CottagePage({
         descriptionTitle={cottagePage?.descriptionTitle ?? null}
         descriptionText={cottagePage?.descriptionText ?? null}
         previewImages={cottagePage?.previewImages ?? null}
+        titleAs="h2"
       />
       <PhotoGallery gallery={cottagePage?.gallery ?? []} />
       <LeafDivider />
       <AmenitiesList amenities={amenities} />
       <NearbyAttractions recommendations={recommendations} />
       <AreaMap
-        lat={contact?.coordinates?.lat}
-        lng={contact?.coordinates?.lng}
+        lat={contactCoordinates?.lat as number | undefined}
+        lng={contactCoordinates?.lng as number | undefined}
       />
+      <BookingCTA bookingLinks={bookingLinks} />
     </>
   );
 }

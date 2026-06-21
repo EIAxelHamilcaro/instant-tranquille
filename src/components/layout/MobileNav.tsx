@@ -1,14 +1,19 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { usePathname } from "@/i18n/navigation";
-import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { LocaleSwitcher } from "./LocaleSwitcher";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Link, usePathname } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 
 type NavItem = {
   label: string;
@@ -16,7 +21,13 @@ type NavItem = {
   isExternal?: boolean | null;
 };
 
-export function MobileNav({ navItems }: { navItems: NavItem[] }) {
+export function MobileNav({
+  navItems,
+  overlay = false,
+}: {
+  navItems: NavItem[];
+  overlay?: boolean;
+}) {
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -24,7 +35,16 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none">
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:hidden",
+            overlay
+              ? "text-white hover:bg-white/15"
+              : "text-foreground hover:bg-sand-100",
+          )}
+        >
           <Menu className="h-6 w-6" aria-hidden="true" />
           <span className="sr-only">{t("navMenu")}</span>
         </Button>
@@ -32,11 +52,11 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
       <SheetContent side="right" className="w-72 bg-background">
         <SheetTitle className="sr-only">{t("navMenu")}</SheetTitle>
         <nav aria-label={t("mobileNav")} className="mt-8 flex flex-col gap-4">
-          {navItems.map((item, index) => {
+          {navItems.map((item) => {
             const isActive = !item.isExternal && pathname === item.url;
             return item.isExternal ? (
               <a
-                key={`${item.url}-${index}`}
+                key={item.label}
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -47,7 +67,7 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
               </a>
             ) : (
               <Link
-                key={`${item.url}-${index}`}
+                key={item.label}
                 href={item.url as "/"}
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => setOpen(false)}

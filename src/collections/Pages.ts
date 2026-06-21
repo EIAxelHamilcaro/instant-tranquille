@@ -1,13 +1,20 @@
-import type { CollectionConfig, CollectionBeforeValidateHook, CollectionBeforeChangeHook } from "payload";
+import type {
+  CollectionBeforeChangeHook,
+  CollectionBeforeValidateHook,
+  CollectionConfig,
+} from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
-import { validateSlug, validateLucideIcon } from "@/lib/validators";
+import { revalidateCollection } from "@/lib/revalidate";
+import { validateLucideIcon, validateSlug } from "@/lib/validators";
 
 // Auto-generate slug from title if empty
 const autoSlug: CollectionBeforeValidateHook = ({ data, operation }) => {
   if (operation === "create" && data && !data.slug && data.title) {
-    const title = typeof data.title === "string" ? data.title : Object.values(data.title as Record<string, string>)[0] ?? "";
+    const title =
+      typeof data.title === "string"
+        ? data.title
+        : (Object.values(data.title as Record<string, string>)[0] ?? "");
     data.slug = title
       .toLowerCase()
       .normalize("NFD")
@@ -20,7 +27,7 @@ const autoSlug: CollectionBeforeValidateHook = ({ data, operation }) => {
 };
 
 // Auto-set publishedAt when status changes to published
-const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req }) => {
+const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req: _req }) => {
   if (data?._status === "published" && !data?.publishedAt) {
     data.publishedAt = new Date().toISOString();
   }
@@ -30,9 +37,14 @@ const autoPublishedAt: CollectionBeforeChangeHook = ({ data, req }) => {
 const revalidateHooks = revalidateCollection("pages");
 
 // Helper conditions
-const isHome = (data: Record<string, unknown> | undefined) => data?.slug === "home";
-const isGite = (data: Record<string, unknown> | undefined) => data?.slug === "le-gite";
-const hasHero = (data: Record<string, unknown> | undefined) => data?.slug !== "le-gite";
+const isHome = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "home";
+const isGite = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "le-gite";
+const isAlentours = (data: Record<string, unknown> | undefined) =>
+  data?.slug === "les-alentours";
+const hasHero = (data: Record<string, unknown> | undefined) =>
+  data?.slug !== "le-gite";
 const hasHeroOrContent = (data: Record<string, unknown> | undefined) =>
   data?.slug !== "home" && data?.slug !== "le-gite";
 
@@ -56,7 +68,9 @@ export const Pages: CollectionConfig = {
     defaultColumns: ["title", "slug", "_status", "updatedAt"],
     livePreview: {
       url: ({ data, locale }) => {
-        const slug = (data as Record<string, unknown>).slug as string | undefined;
+        const slug = (data as Record<string, unknown>).slug as
+          | string
+          | undefined;
         const path = !slug || slug === "home" ? "/" : `/${slug}`;
         return previewUrl(path, { locale });
       },
@@ -116,7 +130,7 @@ export const Pages: CollectionConfig = {
         {
           label: "Contenu",
           fields: [
-            // Hero (home, tarifs-reservation, contact — PAS le-gite)
+            // Hero (home, tarifs-reservation, contact, PAS le-gite)
             {
               type: "collapsible",
               label: "Hero",
@@ -172,7 +186,8 @@ export const Pages: CollectionConfig = {
                   label: "Titre d'introduction",
                   localized: true,
                   admin: {
-                    description: "Titre de la section d'introduction sous la bannière",
+                    description:
+                      "Titre de la section d'introduction sous la bannière",
                     condition: (data) => isHome(data),
                   },
                 },
@@ -237,7 +252,8 @@ export const Pages: CollectionConfig = {
                       label: "URL du lien",
                       localized: true,
                       admin: {
-                        description: "Lien vers lequel pointe la vignette (optionnel)",
+                        description:
+                          "Lien vers lequel pointe la vignette (optionnel)",
                         placeholder: "/le-gite",
                       },
                     },
@@ -364,6 +380,109 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            // Les alentours (les-alentours only)
+            {
+              type: "collapsible",
+              label: "Introduction alentours",
+              admin: {
+                condition: (data) => isAlentours(data),
+              },
+              fields: [
+                {
+                  name: "alentoursIntro",
+                  type: "richText",
+                  label: "Introduction",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Texte d'introduction de la page Les alentours",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+              ],
+            },
+
+            // Section cavaliers (les-alentours only)
+            {
+              type: "collapsible",
+              label: "Section cavaliers",
+              admin: {
+                condition: (data) => isAlentours(data),
+              },
+              fields: [
+                {
+                  name: "equestrianTitle",
+                  type: "text",
+                  label: "Titre section équestre",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Titre de la section dédiée aux cavaliers (ex : Cavaliers & sports équestres)",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+                {
+                  name: "equestrianText",
+                  type: "richText",
+                  label: "Texte section équestre",
+                  localized: true,
+                  admin: {
+                    description:
+                      "Texte sobre et factuel sur la proximité du Grand Parquet de Lamotte-Beuvron (FFE), concours, distances, conseils cavaliers",
+                    condition: (data) => isAlentours(data),
+                  },
+                },
+                {
+                  name: "equestrianVenues",
+                  type: "array",
+                  label: "Sites équestres à proximité",
+                  admin: {
+                    description:
+                      "Liste des sites / événements équestres (Grand Parquet, centres équestres, etc.)",
+                    condition: (data) => isAlentours(data),
+                  },
+                  fields: [
+                    {
+                      name: "name",
+                      type: "text",
+                      label: "Nom du site",
+                      required: true,
+                      localized: true,
+                    },
+                    {
+                      name: "description",
+                      type: "textarea",
+                      label: "Description courte",
+                      localized: true,
+                      admin: {
+                        description:
+                          "Quelques lignes factuelles sur ce site (concours, FFE, capacité d'accueil…)",
+                      },
+                    },
+                    {
+                      name: "distanceFromGite",
+                      type: "text",
+                      label: "Distance du gîte",
+                      admin: {
+                        description: "Ex : ~17 km, 20 min en voiture",
+                        placeholder: "~17 km",
+                      },
+                    },
+                    {
+                      name: "website",
+                      type: "text",
+                      label: "Site web",
+                      admin: {
+                        description:
+                          "URL officielle du site (commencez par https://)",
+                        placeholder: "https://www.legrandparquet.fr",
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
           ],
         },
 
@@ -371,6 +490,29 @@ export const Pages: CollectionConfig = {
         {
           label: "Médias",
           fields: [
+            // Mosaïque hero (home only), 3 photos choisies par le client
+            {
+              name: "heroImages",
+              type: "array",
+              label: "Mosaïque hero (3 photos)",
+              minRows: 1,
+              maxRows: 3,
+              admin: {
+                description:
+                  "1 à 3 photos pour la mosaïque du hero (portrait à gauche + 2 paysages empilés à droite). Si moins de 3 images, fallback image unique.",
+                condition: (data) => isHome(data),
+              },
+              fields: [
+                {
+                  name: "image",
+                  type: "upload",
+                  label: "Photo",
+                  relationTo: "media",
+                  required: true,
+                },
+              ],
+            },
+
             // Image d'introduction (home only)
             {
               name: "introImage",
@@ -414,7 +556,8 @@ export const Pages: CollectionConfig = {
                       label: "Légende",
                       localized: true,
                       admin: {
-                        description: "Légende affichée sous la photo (optionnelle)",
+                        description:
+                          "Légende affichée sous la photo (optionnelle)",
                       },
                     },
                   ],
@@ -453,7 +596,8 @@ export const Pages: CollectionConfig = {
                       label: "Libellé",
                       localized: true,
                       admin: {
-                        description: "Libellé affiché sur ou sous l'image (optionnel)",
+                        description:
+                          "Libellé affiché sur ou sous l'image (optionnel)",
                       },
                     },
                   ],
@@ -462,7 +606,6 @@ export const Pages: CollectionConfig = {
             },
           ],
         },
-
       ],
     },
   ],

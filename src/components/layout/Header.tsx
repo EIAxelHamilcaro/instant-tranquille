@@ -1,6 +1,4 @@
-import { Link } from "@/i18n/navigation";
 import { getHeaderData, getSiteSettings } from "@/lib/queries";
-import { Trees } from "lucide-react";
 import { HeaderClient } from "./HeaderClient";
 
 type NavItem = {
@@ -16,24 +14,43 @@ export async function Header({ locale }: { locale: string }) {
     getSiteSettings(locale),
   ]);
 
-  const header = headerData as Record<string, any>;
-  const settings = siteSettings as Record<string, any>;
+  const header = headerData as Record<string, unknown>;
+  const settings = siteSettings as Record<string, unknown>;
 
-  const navItems: NavItem[] = ((header.navItems || []) as NavItem[]).map((item) => ({
-    label: item.label,
-    url: item.url,
-    isExternal: item.isExternal,
-    highlight: item.highlight,
-  }));
+  const navItems: NavItem[] = ((header.navItems || []) as NavItem[]).map(
+    (item) => ({
+      label: item.label,
+      url: item.url,
+      isExternal: item.isExternal,
+      highlight: item.highlight,
+    }),
+  );
 
-  const ctaButton = header.ctaButton?.label
-    ? { label: header.ctaButton.label as string, url: (header.ctaButton.url as string) || "/" }
+  const ctaButtonRaw = header.ctaButton as Record<string, unknown> | undefined;
+  const ctaButton = ctaButtonRaw?.label
+    ? {
+        label: ctaButtonRaw.label as string,
+        url: (ctaButtonRaw.url as string) || "/",
+      }
     : null;
 
   const siteName = (settings.siteName as string) || "L'Instant Tranquille";
-  const logo = settings.logo as { url?: string | null; alt?: string | null; width?: number | null; height?: number | null } | null | undefined;
+  const logo = settings.logo as
+    | {
+        url?: string | null;
+        alt?: string | null;
+        width?: number | null;
+        height?: number | null;
+      }
+    | null
+    | undefined;
 
   return (
-    <HeaderClient navItems={navItems} ctaButton={ctaButton} siteName={siteName} logo={logo} />
+    <HeaderClient
+      navItems={navItems}
+      ctaButton={ctaButton}
+      siteName={siteName}
+      logo={logo}
+    />
   );
 }

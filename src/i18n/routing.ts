@@ -1,5 +1,5 @@
 import { defineRouting } from "next-intl/routing";
-import { locales, defaultLocale } from "./config";
+import { defaultLocale, locales } from "./config";
 
 export const routing = defineRouting({
   locales,
@@ -20,6 +20,10 @@ export const routing = defineRouting({
     "/livret-accueil/[accessToken]": {
       fr: "/livret-accueil/[accessToken]",
       en: "/welcome-booklet/[accessToken]",
+    },
+    "/les-alentours": {
+      fr: "/les-alentours",
+      en: "/surroundings",
     },
   },
 });

@@ -7,7 +7,7 @@ async function main() {
   console.log("Connected to database");
   await client.query("DROP SCHEMA public CASCADE");
   await client.query("CREATE SCHEMA public");
-  console.log("Database reset — all tables dropped");
+  console.log("Database reset, all tables dropped");
   await client.end();
 }
 

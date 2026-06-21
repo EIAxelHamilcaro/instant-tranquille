@@ -1,12 +1,12 @@
 "use client";
 
+import { AlertTriangle, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RefreshCw } from "lucide-react";
 
 export default function ErrorPage({
-  error,
+  error: _error,
   reset,
 }: {
   error: Error;

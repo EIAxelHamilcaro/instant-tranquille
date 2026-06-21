@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "L'Instant Tranquille — Gîte de charme en Sologne",
+    name: "L'Instant Tranquille, Gîte de charme en Sologne",
     short_name: "L'Instant Tranquille",
     description:
       "Gîte de charme au cœur de la Sologne, entre forêts et châteaux de la Loire.",

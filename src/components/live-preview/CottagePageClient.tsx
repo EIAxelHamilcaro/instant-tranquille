@@ -1,12 +1,12 @@
 "use client";
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
-import type { CmsAmenity, CmsRecommendation } from "@/lib/queries";
-import { DescriptionSection } from "@/components/cottage/DescriptionSection";
-import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { AmenitiesList } from "@/components/cottage/AmenitiesList";
+import { DescriptionSection } from "@/components/cottage/DescriptionSection";
 import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
+import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { CmsAmenity, CmsRecommendation } from "@/lib/queries";
 
 export type CottagePageData = {
   propertyDetails?: {

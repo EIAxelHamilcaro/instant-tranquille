@@ -1,0 +1,18 @@
+# L'Instant Tranquille — Gîte en Sologne
+
+> Gîte indépendant à Romorantin-Lanthenay (Loir-et-Cher), Sologne, France.
+> Capacité : 6 personnes / 3 chambres / 2 salles de bain / 120 m².
+
+## Pages principales
+
+- [Accueil](/): Présentation du gîte, aperçu, avis clients, CTA réservation.
+- [Le gîte](/le-gite): Description complète, équipements, galerie photos, FAQ.
+- [Les alentours](/les-alentours): Châteaux de la Loire, nature Sologne, restaurants, activités, section cavaliers et sports équestres.
+- [Tarifs et réservation](/tarifs-reservation): Tarifs par saison, conditions, liens de réservation (Airbnb, Booking, Abritel).
+- [Contact](/contact): Formulaire, accès, coordonnées.
+
+## Fichier complet
+
+Pour les agents et LLMs qui souhaitent une description détaillée (capacité, tarifs indicatifs, avis verbatim, FAQ, axe cavaliers) :
+
+- [/llms-full.txt](/llms-full.txt)

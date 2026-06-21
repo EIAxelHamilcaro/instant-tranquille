@@ -1,8 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
+import { GoogleMap } from "@/components/shared/GoogleMap";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
 export interface MapSectionProps {
@@ -12,22 +12,22 @@ export interface MapSectionProps {
   markerLabel?: string | null;
 }
 
-const MapClient = dynamic(() => import("./MapClient"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[400px] w-full animate-pulse rounded-xl bg-sand-200" />
-  ),
-});
-
-export function MapSection({ lat, lng, zoom, markerLabel }: MapSectionProps) {
+export function MapSection({ lat, lng, zoom }: MapSectionProps) {
   const t = useTranslations("contact");
+  const locale = useLocale();
 
   return (
     <section className="bg-sand-100 py-20">
       <Container>
         <SectionHeading title={t("mapTitle")} />
-        <div className="mx-auto max-w-4xl">
-          <MapClient lat={lat} lng={lng} zoom={zoom} markerLabel={markerLabel} />
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl shadow-sm">
+          <GoogleMap
+            lat={lat}
+            lng={lng}
+            zoom={zoom}
+            locale={locale}
+            title={t("mapTitle")}
+          />
         </div>
       </Container>
     </section>

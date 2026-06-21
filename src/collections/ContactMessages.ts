@@ -27,7 +27,8 @@ export const ContactMessages: CollectionConfig = {
       maxLength: 200,
       admin: {
         readOnly: true,
-        description: "Nom de l'expéditeur (rempli automatiquement depuis le formulaire)",
+        description:
+          "Nom de l'expéditeur (rempli automatiquement depuis le formulaire)",
       },
     },
     {

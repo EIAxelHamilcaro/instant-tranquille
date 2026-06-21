@@ -10,7 +10,12 @@ export function RichTextRenderer({
   if (!content) return null;
 
   return (
-    <div className={className ?? "prose prose-stone max-w-none prose-headings:font-heading prose-a:text-primary-600"}>
+    <div
+      className={
+        className ??
+        "prose prose-stone max-w-none prose-headings:font-heading prose-a:text-primary-600"
+      }
+    >
       <RichText data={content} />
     </div>
   );

@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateGlobal } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateGlobal } from "@/lib/revalidate";
 
 export const Footer: GlobalConfig = {
   slug: "footer",
@@ -15,8 +15,7 @@ export const Footer: GlobalConfig = {
   },
   admin: {
     group: "Mise en page",
-    description:
-      "Pied de page affiché en bas de toutes les pages",
+    description: "Pied de page affiché en bas de toutes les pages",
     livePreview: {
       url: ({ locale }) => previewUrl("/", { locale }),
     },
@@ -28,8 +27,7 @@ export const Footer: GlobalConfig = {
       label: "Texte de présentation",
       localized: true,
       admin: {
-        description:
-          "Courte description affichée dans le pied de page",
+        description: "Courte description affichée dans le pied de page",
       },
     },
     {
@@ -37,8 +35,7 @@ export const Footer: GlobalConfig = {
       type: "array",
       label: "Colonnes de liens",
       admin: {
-        description:
-          "Organisez les liens du pied de page en colonnes",
+        description: "Organisez les liens du pied de page en colonnes",
       },
       fields: [
         {
@@ -87,8 +84,7 @@ export const Footer: GlobalConfig = {
               label: "Lien externe",
               defaultValue: false,
               admin: {
-                description:
-                  "Cochez si le lien mène vers un autre site",
+                description: "Cochez si le lien mène vers un autre site",
               },
             },
           ],

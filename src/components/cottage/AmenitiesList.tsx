@@ -1,50 +1,50 @@
 "use client";
 
+import {
+  AirVent,
+  Armchair,
+  Baby,
+  Bath,
+  BedDouble,
+  Bike,
+  BookOpen,
+  Car,
+  Check,
+  Coffee,
+  CookingPot,
+  Dog,
+  Droplets,
+  Dumbbell,
+  Fan,
+  Fence,
+  Flame,
+  Flower,
+  Gamepad2,
+  Heater,
+  Home,
+  Lamp,
+  Lock,
+  type LucideIcon,
+  Microwave,
+  Music,
+  Plug,
+  Refrigerator,
+  ShieldCheck,
+  ShowerHead,
+  Snowflake,
+  Sun,
+  Trees,
+  Tv,
+  Utensils,
+  WashingMachine,
+  Waves,
+  Wifi,
+  Wind,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Check,
-  Wifi,
-  Car,
-  Trees,
-  Home,
-  Tv,
-  Flame,
-  Snowflake,
-  WashingMachine,
-  Wind,
-  Utensils,
-  CookingPot,
-  Microwave,
-  Coffee,
-  Refrigerator,
-  BedDouble,
-  Bath,
-  ShowerHead,
-  Armchair,
-  BookOpen,
-  Baby,
-  Dog,
-  Dumbbell,
-  Bike,
-  Waves,
-  Sun,
-  Flower,
-  Fence,
-  Gamepad2,
-  Music,
-  Lock,
-  ShieldCheck,
-  Droplets,
-  Plug,
-  AirVent,
-  Fan,
-  Heater,
-  Lamp,
-  type LucideIcon,
-} from "lucide-react";
 import type { CmsAmenity } from "@/lib/queries";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -88,7 +88,15 @@ const iconMap: Record<string, LucideIcon> = {
   lamp: Lamp,
 };
 
-const categoryOrder = ["indoor", "outdoor", "kitchen", "comfort", "bedroom", "bathroom", "tech"] as const;
+const categoryOrder = [
+  "indoor",
+  "outdoor",
+  "kitchen",
+  "comfort",
+  "bedroom",
+  "bathroom",
+  "tech",
+] as const;
 
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Check;
@@ -120,9 +128,7 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
           defaultValue={availableCategories[0]}
           className="mx-auto max-w-3xl"
         >
-          <TabsList
-            className="mb-8 flex h-auto w-full flex-wrap bg-sand-100"
-          >
+          <TabsList className="mb-8 flex h-auto w-full flex-wrap bg-sand-100">
             {availableCategories.map((key) => (
               <TabsTrigger
                 key={key}
@@ -145,7 +151,10 @@ export function AmenitiesList({ amenities }: { amenities: CmsAmenity[] }) {
                       className="flex items-center gap-3 rounded-lg border border-sand-200 bg-white p-4"
                     >
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-50">
-                        <Icon className="h-5 w-5 text-primary-500" aria-hidden="true" />
+                        <Icon
+                          className="h-5 w-5 text-primary-500"
+                          aria-hidden="true"
+                        />
                       </div>
                       <span className="font-sans text-sm font-medium">
                         {amenity.name}

@@ -1,11 +1,19 @@
 "use client";
 
+import { Book } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
 import { Card, CardContent } from "@/components/ui/card";
-import { Book } from "lucide-react";
 
-export function HouseRulesSection({ id, sectionTitle, content }: { id?: string; sectionTitle?: string | null; content: any }) {
+export function HouseRulesSection({
+  id,
+  sectionTitle,
+  content,
+}: {
+  id?: string;
+  sectionTitle?: string | null;
+  content: unknown;
+}) {
   const t = useTranslations("booklet");
 
   if (!content) return null;

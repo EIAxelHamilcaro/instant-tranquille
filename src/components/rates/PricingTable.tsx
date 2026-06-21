@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,8 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 import type { CmsSeason } from "@/lib/queries";
 
 type AdditionalFee = {
@@ -31,11 +31,20 @@ const colorMap: Record<string, string> = {
   purple: "bg-purple-100 text-purple-800",
 };
 
-function formatPeriod(sm: string, sd: number, em: string, ed: number, locale: string): string {
-  const fmt = new Intl.DateTimeFormat(locale, { month: "long", day: "numeric" });
-  const start = fmt.format(new Date(2001, parseInt(sm) - 1, sd));
-  const end = fmt.format(new Date(2001, parseInt(em) - 1, ed));
-  return `${start} — ${end}`;
+function formatPeriod(
+  sm: string,
+  sd: number,
+  em: string,
+  ed: number,
+  locale: string,
+): string {
+  const fmt = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    day: "numeric",
+  });
+  const start = fmt.format(new Date(2001, parseInt(sm, 10) - 1, sd));
+  const end = fmt.format(new Date(2001, parseInt(em, 10) - 1, ed));
+  return `${start}, ${end}`;
 }
 
 const feeTypeKeys: Record<string, string> = {
@@ -44,16 +53,24 @@ const feeTypeKeys: Record<string, string> = {
   per_person: "feeTypePerPerson",
 };
 
+type BookingLinksData = {
+  airbnb?: string | null;
+  booking?: string | null;
+};
+
 export function PricingTable({
   seasons,
   additionalFees,
   currency,
+  bookingLinks,
 }: {
   seasons: CmsSeason[];
   additionalFees: AdditionalFee[];
   currency: string;
+  bookingLinks?: BookingLinksData | null;
 }) {
   const t = useTranslations("rates");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const symbol = currency === "EUR" ? "\u20AC" : currency;
@@ -64,6 +81,38 @@ export function PricingTable({
     <section className="py-20">
       <Container>
         <SectionHeading title={t("tableTitle")} />
+
+        {(bookingLinks?.airbnb || bookingLinks?.booking) && (
+          <p className="mx-auto -mt-6 mb-10 max-w-2xl text-center text-sm text-muted-foreground">
+            {t("sourceNote")}{" "}
+            {bookingLinks?.airbnb && (
+              <a
+                href={bookingLinks.airbnb}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Airbnb, ${tCommon("opensNewTab")}`}
+                className="font-medium text-primary-600 underline decoration-primary-300 underline-offset-4 hover:text-primary-700"
+              >
+                Airbnb
+              </a>
+            )}
+            {bookingLinks?.airbnb && bookingLinks?.booking
+              ? ` ${t("sourceAnd")} `
+              : null}
+            {bookingLinks?.booking && (
+              <a
+                href={bookingLinks.booking}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Booking.com, ${tCommon("opensNewTab")}`}
+                className="font-medium text-primary-600 underline decoration-primary-300 underline-offset-4 hover:text-primary-700"
+              >
+                Booking.com
+              </a>
+            )}
+            .
+          </p>
+        )}
 
         {/* Desktop table */}
         <div className="mx-auto hidden max-w-4xl md:block">
@@ -96,18 +145,33 @@ export function PricingTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {season.startMonth && season.startDay && season.endMonth && season.endDay
-                      ? formatPeriod(season.startMonth, season.startDay, season.endMonth, season.endDay, locale)
+                    {season.startMonth &&
+                    season.startDay &&
+                    season.endMonth &&
+                    season.endDay
+                      ? formatPeriod(
+                          season.startMonth,
+                          season.startDay,
+                          season.endMonth,
+                          season.endDay,
+                          locale,
+                        )
                       : ""}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {season.nightlyRate != null ? `${season.nightlyRate}${symbol}` : "—"}
+                    {season.nightlyRate != null
+                      ? `${season.nightlyRate}${symbol}`
+                      : "·"}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {season.weeklyRate != null ? `${season.weeklyRate}${symbol}` : "—"}
+                    {season.weeklyRate != null
+                      ? `${season.weeklyRate}${symbol}`
+                      : "·"}
                   </TableCell>
                   <TableCell className="text-right text-muted-foreground">
-                    {season.minimumStay != null ? `${season.minimumStay} ${t("nights")}` : "—"}
+                    {season.minimumStay != null
+                      ? `${season.minimumStay} ${t("nights")}`
+                      : "·"}
                   </TableCell>
                 </TableRow>
               ))}
@@ -129,15 +193,26 @@ export function PricingTable({
                     {season.name}
                   </Badge>
                   <span className="text-sm text-muted-foreground">
-                    {season.startMonth && season.startDay && season.endMonth && season.endDay
-                      ? formatPeriod(season.startMonth, season.startDay, season.endMonth, season.endDay, locale)
+                    {season.startMonth &&
+                    season.startDay &&
+                    season.endMonth &&
+                    season.endDay
+                      ? formatPeriod(
+                          season.startMonth,
+                          season.startDay,
+                          season.endMonth,
+                          season.endDay,
+                          locale,
+                        )
                       : ""}
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-xl font-bold">
-                      {season.nightlyRate != null ? `${season.nightlyRate}${symbol}` : "—"}
+                      {season.nightlyRate != null
+                        ? `${season.nightlyRate}${symbol}`
+                        : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perNight")}
@@ -145,7 +220,9 @@ export function PricingTable({
                   </div>
                   <div>
                     <p className="text-xl font-bold">
-                      {season.weeklyRate != null ? `${season.weeklyRate}${symbol}` : "—"}
+                      {season.weeklyRate != null
+                        ? `${season.weeklyRate}${symbol}`
+                        : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("perWeek")}
@@ -153,7 +230,7 @@ export function PricingTable({
                   </div>
                   <div>
                     <p className="text-xl font-bold">
-                      {season.minimumStay != null ? season.minimumStay : "—"}
+                      {season.minimumStay != null ? season.minimumStay : "·"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t("minStay")} {t("nights")}
@@ -173,28 +250,32 @@ export function PricingTable({
             </h3>
             <div className="grid gap-3 sm:grid-cols-2">
               {additionalFees.map((fee, i) => (
-                <Card
-                  key={i}
-                  className="border-sand-200"
-                >
-                <CardContent className="flex items-center justify-between p-4">
-                  <div>
-                    <p className="font-sans text-sm font-medium">{fee.name}</p>
-                    {fee.type && feeTypeKeys[fee.type] && (
-                      <p className="text-xs text-muted-foreground">
-                        {t(feeTypeKeys[fee.type] as "feeTypePerStay" | "feeTypePerNight" | "feeTypePerPerson")}
+                <Card key={i} className="border-sand-200">
+                  <CardContent className="flex items-center justify-between p-4">
+                    <div>
+                      <p className="font-sans text-sm font-medium">
+                        {fee.name}
                       </p>
-                    )}
-                    {fee.description && (
-                      <p className="text-xs text-muted-foreground">
-                        {fee.description}
-                      </p>
-                    )}
-                  </div>
-                  <p className="font-semibold">
-                    {fee.amount != null ? `${fee.amount}${symbol}` : "—"}
-                  </p>
-                </CardContent>
+                      {fee.type && feeTypeKeys[fee.type] && (
+                        <p className="text-xs text-muted-foreground">
+                          {t(
+                            feeTypeKeys[fee.type] as
+                              | "feeTypePerStay"
+                              | "feeTypePerNight"
+                              | "feeTypePerPerson",
+                          )}
+                        </p>
+                      )}
+                      {fee.description && (
+                        <p className="text-xs text-muted-foreground">
+                          {fee.description}
+                        </p>
+                      )}
+                    </div>
+                    <p className="font-semibold">
+                      {fee.amount != null ? `${fee.amount}${symbol}` : "·"}
+                    </p>
+                  </CardContent>
                 </Card>
               ))}
             </div>
@@ -205,7 +286,10 @@ export function PricingTable({
           <p className="mb-4 text-sm text-muted-foreground">
             {t("contactCta")}
           </p>
-          <Button asChild className="bg-primary-500 text-white font-sans hover:bg-primary-600">
+          <Button
+            asChild
+            className="bg-primary-500 text-white font-sans hover:bg-primary-600"
+          >
             <Link href={"/contact" as "/"}>{t("contactButton")}</Link>
           </Button>
         </div>

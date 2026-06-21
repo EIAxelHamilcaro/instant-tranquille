@@ -11,73 +11,168 @@ OG, hreflang, plugin-seo). La branche `feature/cms-overhaul` (simplification) es
 fusionnée dans `main`**. La refonte est donc chirurgicale : combler les gaps SEO local,
 corriger des bugs de thème, simplifier l'UX d'édition, polir le design — pas réécrire.
 
-## Fait (branche `refonte/vitrine-seo`, build vert)
+## Fait — Phase QA finale (2026-06-20, build vert)
 
-**SEO local (priorité #1)**
-- `jsonld.ts` : `@id` stable (consolidation d'entité Google), `addressLocality`+`postalCode`
-  sur LodgingBusiness ET VacationRental, `amenityFeature`+avis/note sur VacationRental,
-  `petsAllowed`/`priceRange` câblés (home), nouveau `generatePricingJsonLd`
-  (Offer/PriceSpecification par saison) + `computePriceRange`.
-- Pages câblées : home (NAP complet + prix + animaux + avis), `/le-gite` (équipements + avis),
-  `/tarifs-reservation` (Offer + `h1` géolocalisé), `/contact` (LodgingBusiness NAP + `h1`).
-- `SiteSettings` : champs `Ville` + `Code postal` + `Animaux acceptés` (essentiels au SEO local).
-- `<head>` : preconnect/dns-prefetch tuiles carte, `geo.placename`.
+### Outils de vérification
 
-**Bug de thème actif corrigé**
-- `globals.css` : tokens manquants `--primary`/`--secondary`/`--popover` (Button/Badge les
-  utilisaient sans qu'ils soient définis → rendu cassé). Neutralisation du dark-mode OS
-  (`@custom-variant dark`) : Tailwind v4 activait les `dark:` des composants shadcn en
-  `prefers-color-scheme: dark` → thème incohérent.
+- `node_modules/.bin/tsc --noEmit` : **vert, 0 erreur**
+- `node_modules/.bin/biome check .` : **vert, 0 erreur** (159 fichiers vérifiés)
+- `node_modules/.bin/next build` : **vert** — 20 pages statiques générées (FR + EN pour
+  les 5 routes publiques), middleware proxy, admin Payload, routes API.
 
-**Cohérence visuelle (anti « template »)**
-- `NearbyAttractions` : badges hors-palette (amber/rose/emerald/violet) → earth/primary.
-- `SeasonCalendar` : couleurs saisons + cellules grises → palette de marque.
+### Revue sitemap.xml / robots.txt / llms.txt
 
-**Perf / CWV**
-- `PayloadImage` : attribut `sizes` sur le chemin non-fill (évite de sur-télécharger sur mobile).
+- **sitemap.xml** : 10 entrées (5 pages × 2 locales FR+EN), chaque URL avec `images[]`
+  (total 14 images déclarées), `alternates.languages` fr/en, `lastModified` depuis CMS ou
+  fallback. Entrée `/les-alentours` + `/en/surroundings` présente.
+- **robots.txt** : wildcard `*` + règles dédiées `GPTBot`, `ClaudeBot`, `PerplexityBot`,
+  `Google-Extended` (tous `allow: /`, disallow admin/api/livret). `host:` défini. `sitemap:`
+  pointé. Crawler IA-friendly conforme spec.
+- **llms.txt** : index minimal (5 pages, lien vers llms-full.txt). Conforme spec llms.txt.
+- **llms-full.txt** : identité, capacité (6 pers/3 ch/2 sdb/120 m²), distances (Chambord
+  ~12 km, Grand Parquet ~17 km), axe cavaliers, tarifs indicatifs, avis verbatim, FAQ
+  complète (animaux, chevaux, parking, Wi-Fi, réservation).
 
-**Nettoyage** : 5 SVG résidus `create-next-app` supprimés.
+### Revue visuelle des 5 pages
 
-> Note : `proxy.ts` est le middleware next-intl de Next 16 (à conserver). Le spec
-> `2026-03-15-cms-overhaul-design.md` est gardé comme trace.
+**Page d'accueil (`/`)**
+- Hero 100vh plein-bleed : image Payload (blur-up si blurDataURL disponible), overlay
+  dégradé paramétrable (`overlayFrom`/`overlayTo`), titre display extrabold, sous-titre
+  Playfair italic, CTA « Réserver » → lien plateforme (airbnb → booking → abritel → email
+  → /tarifs-reservation), CTA secondaire « Découvrir le gîte », chevron animé bas.
+- StatsBand : 6 stats sur fond sand (invités, chambres, salles de bain, surface, ~12 km
+  Chambord, ~17 km Grand Parquet) — données depuis SiteSettings.
+- IntroSection : layout décalé 60/40, reveal au scroll.
+- HighlightsSection : bande éditoriale (depuis CMS highlights[]).
+- TestimonialsSection + TestimonialForm.
+- CTASection : fond photo réelle (terrasse-salon-jardin.webp), overlay vert, boutons
+  Airbnb/Booking/Abritel SVG branchés sur PricingConfig.platformLinks.
+- JSON-LD : LodgingBusiness (sameAs, NAP, amenityFeature, reviews, priceRange, checkin/out)
+  + FAQPage.
 
-## Reste à faire — polish design (passe suivante, prête)
+**Page gîte (`/le-gite`)**
+- CottageHeroSection (hero court + eyebrow).
+- Fil d'Ariane.
+- DescriptionSection (capacité depuis SiteSettings, description CMS, images preview).
+- PhotoGallery masonry + lightbox prev/next (clavier ←/→/Esc, focus trap).
+- AmenitiesList (tabs par catégorie).
+- NearbyAttractions (badges palette de marque).
+- AreaMap (Leaflet dynamique, ssr:false).
+- JSON-LD : VacationRental (équipements, avis, géo) + FAQPage cottage + BreadcrumbList.
 
-Direction retenue par le jury : **éditorial photo-first**, greffes champêtre raffiné.
-À implémenter (la plupart bénéficient des vraies photos, cf. blocage) :
-- `SectionHeading` variants (default/left/minimal) + sous-titre → casser la cadence répétée.
-- Hero : overlay dégradé. `IntroSection` : layout décalé. `HighlightsSection` : bande
-  éditoriale sans cards. `TestimonialsSection` : fond sand. `CTASection` : fond photo.
-- `PhotoGallery` : masonry + lightbox prev/next (garde si < 3 photos).
-- Nouveau `CottageHeroSection` (hero court `/le-gite`).
-- `Footer` : icônes SVG Pinterest/YouTube/TikTok (au lieu de « P »/« YT »/« TT »).
+**Page alentours (`/les-alentours`)**
+- SurroundingsHero.
+- Fil d'Ariane + h1 géolocalisé sr-only.
+- CategoryGrid (recommandations par catégorie depuis LocalRecommendations).
+- EquestrianSection : Grand Parquet (placeholder calibré — photo équestre manquante),
+  venues CMS, FAQ équestre 4 Q/R (proximité, chevaux sur place, parking, concours).
+- SurroundingsMap (Leaflet, marqueurs recommandations + gîte).
+- JSON-LD : BreadcrumbList + FAQPage alentours + TouristAttraction Grand Parquet
+  (generateGrandParquetJsonLd) + TouristAttraction par recommandation.
 
-## Simplification CMS (passe suivante)
+**Page tarifs (`/tarifs-reservation`)**
+- h1 géolocalisé sr-only.
+- Fil d'Ariane.
+- PricingTable (saisons, frais supplémentaires, devise).
+- SeasonCalendar (palette de marque — corrigé).
+- BookingLinks (CTA plateformes depuis PricingConfig).
+- PoliciesSection.
+- JSON-LD : BreadcrumbList + Offer/PriceSpecification (generatePricingJsonLd) + FAQPage tarifs.
 
-- `Pages.ts` : scinder la collection conditionnelle-par-slug en pages dédiées (gros gain
-  UX non-tech) — **nécessite migration de données** (décision + script).
-- Champ `icon` texte libre → select borné (libellés FR) dans `Amenities`/`Pages`.
-- `OnboardingGuides` : afficher l'URL complète du livret + bouton Copier (composant admin).
+**Page contact (`/contact`)**
+- h1 géolocalisé sr-only.
+- Fil d'Ariane.
+- ContactForm (stocke dans ContactMessages, dégrade sans Resend/Turnstile).
+- MapSection (Leaflet).
+- AccessInstructions (depuis SiteSettings.accessRoutes).
+- JSON-LD : BreadcrumbList + LodgingBusiness (NAP complet).
+
+### Design system
+
+- **Typographie hybride** : Inter display heavy (titres), Playfair Display italic (accents,
+  eyebrows, sous-titres), Lora (corps). Variable `--font-display` définie.
+- **Palette** : `primary` vert `#4a7c59` + `earth` brun `#b8864f` + `sand` + neutres chauds.
+  Tokens `--primary`/`--secondary`/`--popover` définis (bug shadcn corrigé). Dark-mode OS
+  neutralisé (`@custom-variant dark`).
+- **SectionHeading** : 3 variants (default/left/minimal) + `eyebrow` Playfair italic +
+  `subtitle`.
+- **Footer** : vrais SVG Pinterest / YouTube / TikTok (conditionnés à la présence du lien).
+- **Security headers** : HSTS, X-Frame-Options SAMEORIGIN, X-Content-Type-Options, CSP
+  (Turnstile, Vercel Blob, OSM), Referrer-Policy, Permissions-Policy.
+
+### SEO / GEO (plan godlike)
+
+- **P0 — implémenté** : `sameAs` sur LodgingBusiness (depuis SiteSettings), `googleBot`
+  (`max-image-preview:large`, `max-snippet:-1`, `max-video-preview:-1`), FAQ JSON-LD sur
+  toutes les pages (cottage/tarifs/alentours/home), `WebSite` JSON-LD au layout,
+  `TouristAttraction` Grand Parquet + recommandations, keywords équestres dans seo.ts.
+- **P1 — implémenté** : OG image par page (`opengraph-image.tsx` ×4 + layout), keywords
+  meta (FR + EN), `images[]` dans sitemap, `amenityFeature` absences explicites
+  (`value:false` pour chevaux/piscine/jacuzzi/ascenseur), GPS 5 décimales, `checkinTime`/
+  `checkoutTime` ISO 8601, `contentReferenceTime` sur avis.
+- **P2 — implémenté** : `llms.txt` + `llms-full.txt`, robots IA-friendly, `host:` robots,
+  security headers CSP.
+
+## Phase 0 & 0.2 — Dépendances SOTA (2026-06-20)
+
+**Zod 4** (`^4.3.6`) : déjà installé et compatible. Aucune rupture.
+
+**radix-ui unifié** (`^1.4.3`) : déjà migré. 9 composants shadcn depuis `"radix-ui"`.
+
+`tsc --noEmit` : vert. `biome check` : vert. Build : vert.
+
+## Reporté — passe suivante
+
+### Polish design éditorial (attend vraies photos pour être optimal)
+
+- `IntroSection` : layout décalé 60/40 (actuellement fonctionnel mais non asymétrique
+  photo-first — à affiner quand photos extérieur disponibles).
+- `HighlightsSection` : bande éditoriale sans cards (en place, à enrichir avec photos).
+- `PhotoGallery` : masonry + lightbox implémentés ; galerie vide sans photos uploadées dans
+  le CMS → à re-seed une fois les photos fournies.
+- Placeholder équestre dans EquestrianSection → remplacer par photo réelle (bloquant client).
+
+### Simplification CMS
+
+- `Pages.ts` : scinder la collection conditionnelle-par-slug en pages dédiées — nécessite
+  migration de données (décision + script).
+- Champ `icon` texte libre → select borné (libellés FR) dans Amenities/Pages.
+- `OnboardingGuides` : afficher l'URL complète du livret + bouton Copier.
 - `Footer` : `RowLabel` sur les arrays imbriqués.
 
-## Bloquants — nécessitent une action côté client / décisions
+## Bloquants — actions requises côté client
 
-1. **Photos** (bloquant métier) : peu de photos variées. Liste de prises de vue à fournir :
-   extérieur jour, extérieur soir, salon, cuisine, chambres, salle de bain, jardin/terrasse,
-   étang. Min. 8 photos pour que la galerie et la direction photo-first fonctionnent.
-2. **Secrets / prod** : `RESEND_API_KEY` (notifications de contact — actuellement aucun
-   email n'est envoyé, message uniquement en console), `TURNSTILE_*` (anti-spam formulaire),
-   `DATABASE_URL`/`PAYLOAD_SECRET`/`BLOB_READ_WRITE_TOKEN` en prod, `NEXT_PUBLIC_SITE_URL`
-   = vrai domaine (sinon OG/metadataBase pointent localhost).
-3. **NAP réel** : adresse exacte, ville, code postal, téléphone à saisir dans le CMS, en
-   cohérence avec la fiche Google Business Profile.
-4. **Décision locale FR/EN** : garder le bilingue (double saisie) ou désactiver `en`
-   (CMS divisé par 2, mais URLs `/en/*` → 404). Site et clientèle 100 % FR local.
-5. **Livret d'accueil** : fonctionnalité complète déjà codée (`/livret-accueil/[token]`,
-   noindex). Inclure en v1 ou masquer ? Hors périmètre vitrine stricte.
+1. **Photos extérieur et équestres** (bloquant photo-first) : pas d'extérieur/façade, pas
+   de paysage Sologne, pas de photo équestre. EquestrianSection affiche un placeholder
+   calibré. La galerie `/le-gite` est vide sans upload CMS. Liste à fournir : extérieur
+   jour/soir, jardin/terrasse supplémentaires, paysage Sologne, éventuellement Grand Parquet
+   (depuis leur site officiel, avec autorisation).
+
+2. **NAP réel** (critique pour JSON-LD et SEO local) : adresse exacte, ville (`41200`),
+   code postal, téléphone, coordonnées GPS 5 décimales — à saisir dans SiteSettings du CMS.
+   Sans ces données, le JSON-LD `LodgingBusiness` n'a pas de `geo`, `streetAddress` ni
+   `telephone` → pénalité Knowledge Graph.
+
+3. **Liens plateformes** (CTA silencieux) : URLs Airbnb / Booking / Abritel / Google
+   Business — à saisir dans SiteSettings (`sameAs`) et PricingConfig (`platformLinks`). Sans
+   eux, les boutons CTA (hero, CTASection, BookingLinks) ne s'affichent pas ou pointent
+   vers `/tarifs-reservation`.
+
+4. **Secrets prod** :
+   - `NEXT_PUBLIC_SITE_URL` = vrai domaine (sinon OG/metadataBase pointent localhost)
+   - `RESEND_API_KEY` (sans : messages de contact en console uniquement, pas d'email)
+   - `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (sans : pas de captcha)
+   - `DATABASE_URL` / `PAYLOAD_SECRET` / `BLOB_READ_WRITE_TOKEN` (prod Neon + Vercel Blob)
+
+5. **Décision bilingue FR/EN** : conserver le bilingue (double saisie CMS, URLs `/en/*`)
+   ou désactiver `en` ? Clientèle 100 % FR local. Si désactivé : retirer les routes `/en/*`
+   du sitemap, routing.ts et proxy.ts (travail technique, 1-2h).
+
+6. **Livret d'accueil** (`/livret-accueil/[token]`, noindex) : fonctionnalité complète
+   codée. Inclure en v1 ou masquer ? Hors périmètre vitrine stricte.
 
 ## Schéma DB (workflow push)
 
-Le projet pousse le schéma à l'init Payload en dev (pas de dossier `migrations/`). Après
-tout ajout de champ : lancer `next dev` une fois (ou un script d'init) pour synchroniser
-les colonnes, sinon le build prod casse. Migrations formelles recommandées pour la prod.
+Pas de dossier `migrations/`. Payload synchronise le schéma à l'init en dev. Après tout
+ajout de champ : lancer `next dev` une fois AVANT `pnpm build`. Migrations formelles
+recommandées pour la prod.

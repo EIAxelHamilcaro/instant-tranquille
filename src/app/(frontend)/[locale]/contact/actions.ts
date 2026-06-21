@@ -14,7 +14,9 @@ const contactSchema = z.object({
 export type ContactFormState = {
   success: boolean;
   error?: string;
-  fieldErrors?: Partial<Record<"name" | "email" | "subject" | "message", string>>;
+  fieldErrors?: Partial<
+    Record<"name" | "email" | "subject" | "message", string>
+  >;
   values?: {
     name?: string;
     email?: string;

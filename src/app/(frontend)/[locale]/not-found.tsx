@@ -1,8 +1,8 @@
+import { ArrowLeft, Trees } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { Trees, ArrowLeft } from "lucide-react";
 
 export default async function NotFound() {
   const t = await getTranslations("common");

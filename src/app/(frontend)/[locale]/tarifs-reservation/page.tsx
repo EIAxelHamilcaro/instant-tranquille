@@ -1,13 +1,20 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
+import type { RatesPageData } from "@/components/live-preview/RatesPageClient";
 import { RatesPageClient } from "@/components/live-preview/RatesPageClient";
 import { BookingLinks } from "@/components/rates/BookingLinks";
 import { PoliciesSection } from "@/components/rates/PoliciesSection";
 import { PricingTable } from "@/components/rates/PricingTable";
 import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
 import type { Locale } from "@/i18n/config";
-import { generateBreadcrumbJsonLd, generatePricingJsonLd } from "@/lib/jsonld";
+import {
+  buildRatesFaqItems,
+  generateBreadcrumbJsonLd,
+  generateFAQJsonLd,
+  generatePricingJsonLd,
+} from "@/lib/jsonld";
 import { getPricingConfig } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
@@ -38,10 +45,10 @@ export default async function RatesPage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const pricingConfig = (await getPricingConfig(locale, isDraft)) as Record<
-    string,
-    any
-  >;
+  const pricingConfig = (await getPricingConfig(
+    locale,
+    isDraft,
+  )) as RatesPageData;
 
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
   const breadcrumbs = generateBreadcrumbJsonLd([
@@ -49,9 +56,12 @@ export default async function RatesPage({
     { name: messages.rates.title, url: "/tarifs-reservation" },
   ]);
 
-  const pricingJsonLd = generatePricingJsonLd(pricingConfig.seasons, {
-    currency: (pricingConfig.currency as string) || "EUR",
-  });
+  const seasons = pricingConfig.seasons ?? [];
+  const additionalFees = pricingConfig.additionalFees ?? [];
+  const currency = pricingConfig.currency || "EUR";
+
+  const pricingJsonLd = generatePricingJsonLd(seasons, { currency });
+  const ratesFaqJsonLd = generateFAQJsonLd(buildRatesFaqItems(locale));
 
   if (isDraft) {
     return (
@@ -66,12 +76,18 @@ export default async function RatesPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
           />
         )}
+        {ratesFaqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(ratesFaqJsonLd) }}
+          />
+        )}
         <h1 className="sr-only">{messages.rates.h1}</h1>
         <RatesPageClient
           initialData={{
-            seasons: pricingConfig.seasons || [],
-            additionalFees: pricingConfig.additionalFees || [],
-            currency: (pricingConfig.currency as string) || "EUR",
+            seasons,
+            additionalFees,
+            currency,
             bookingLinks: pricingConfig.bookingLinks,
             policies: pricingConfig.policies,
           }}
@@ -92,6 +108,12 @@ export default async function RatesPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
         />
       )}
+      {ratesFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ratesFaqJsonLd) }}
+        />
+      )}
       <Breadcrumbs
         items={[
           { label: messages.nav.home, href: "/" },
@@ -99,15 +121,18 @@ export default async function RatesPage({
         ]}
       />
       <h1 className="sr-only">{messages.rates.h1}</h1>
+      <PageHeader
+        eyebrow={messages.common.locator}
+        title={messages.rates.title}
+        subtitle={messages.rates.description}
+      />
       <PricingTable
-        seasons={pricingConfig.seasons || []}
-        additionalFees={pricingConfig.additionalFees || []}
-        currency={(pricingConfig.currency as string) || "EUR"}
+        seasons={seasons}
+        additionalFees={additionalFees}
+        currency={currency}
+        bookingLinks={pricingConfig.bookingLinks}
       />
-      <SeasonCalendar
-        seasons={pricingConfig.seasons || []}
-        currency={(pricingConfig.currency as string) || "EUR"}
-      />
+      <SeasonCalendar seasons={seasons} currency={currency} />
       <BookingLinks bookingLinks={pricingConfig.bookingLinks} />
       <PoliciesSection policies={pricingConfig.policies} />
     </>

@@ -1,14 +1,14 @@
 "use client";
 
 import { useLivePreview } from "@payloadcms/live-preview-react";
-import type { CmsMedia, CmsTestimonial } from "@/lib/queries";
-import { HeroSection } from "@/components/home/HeroSection";
-import { IntroSection } from "@/components/home/IntroSection";
-import { HighlightsSection } from "@/components/home/HighlightsSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
 import { CTASection } from "@/components/home/CTASection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { HighlightsSection } from "@/components/home/HighlightsSection";
+import { IntroSection } from "@/components/home/IntroSection";
+import { StatsBand } from "@/components/home/StatsBand";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { CmsMedia } from "@/lib/queries";
 
 type CmsHighlight = {
   icon?: string | null;
@@ -20,6 +20,7 @@ type CmsHighlight = {
 
 export type HomePageData = {
   heroImage: CmsMedia | string | number | null;
+  heroImages?: Array<{ image?: CmsMedia | string | number | null }> | null;
   heroTitle?: string | null;
   heroSubtitle?: string | null;
   introImage: CmsMedia | string | number | null;
@@ -30,7 +31,6 @@ export type HomePageData = {
   testimonialsTitle?: string | null;
   ctaTitle?: string | null;
   ctaSubtitle?: string | null;
-  testimonials: CmsTestimonial[];
   bookingLinks?: {
     airbnb?: string | null;
     booking?: string | null;
@@ -39,7 +39,21 @@ export type HomePageData = {
   };
 };
 
-export function HomePageClient({ initialData }: { initialData: HomePageData }) {
+interface HomePageClientProps {
+  initialData: HomePageData;
+  propertyDetails?: {
+    maxGuests?: number;
+    bedrooms?: number;
+    bathrooms?: number;
+    surface?: number;
+    petsAllowed?: boolean;
+  } | null;
+}
+
+export function HomePageClient({
+  initialData,
+  propertyDetails,
+}: HomePageClientProps) {
   const { data } = useLivePreview<HomePageData>({
     initialData,
     serverURL: process.env.NEXT_PUBLIC_SITE_URL || "",
@@ -50,8 +64,16 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
     <>
       <HeroSection
         heroImage={data.heroImage}
+        heroImages={data.heroImages}
         heroTitle={data.heroTitle}
         heroSubtitle={data.heroSubtitle}
+        bookingLinks={data.bookingLinks}
+      />
+      <StatsBand
+        maxGuests={propertyDetails?.maxGuests}
+        bedrooms={propertyDetails?.bedrooms}
+        bathrooms={propertyDetails?.bathrooms}
+        surface={propertyDetails?.surface}
       />
       <IntroSection
         introImage={data.introImage}
@@ -63,11 +85,7 @@ export function HomePageClient({ initialData }: { initialData: HomePageData }) {
         highlights={data.highlights}
         title={data.highlightsTitle}
       />
-      <TestimonialsSection
-        testimonials={data.testimonials}
-        title={data.testimonialsTitle}
-      />
-      <TestimonialForm />
+      <TestimonialsSection title={data.testimonialsTitle} />
       <CTASection
         bookingLinks={data.bookingLinks}
         ctaTitle={data.ctaTitle}

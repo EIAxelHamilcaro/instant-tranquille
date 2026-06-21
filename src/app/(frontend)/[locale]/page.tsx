@@ -4,9 +4,12 @@ import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { HighlightsSection } from "@/components/home/HighlightsSection";
 import { IntroSection } from "@/components/home/IntroSection";
-import { TestimonialForm } from "@/components/home/TestimonialForm";
+import { StatsBand } from "@/components/home/StatsBand";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { HomePageClient } from "@/components/live-preview/HomePageClient";
+import {
+  HomePageClient,
+  type HomePageData,
+} from "@/components/live-preview/HomePageClient";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import type { Locale } from "@/i18n/config";
 import {
@@ -16,13 +19,12 @@ import {
   generateLodgingBusinessJsonLd,
 } from "@/lib/jsonld";
 import {
-  getAllApprovedTestimonials,
   getAmenities,
-  getFeaturedTestimonials,
   getPageBySlug,
   getPricingConfig,
   getSiteSettings,
 } from "@/lib/queries";
+import { REVIEWS } from "@/lib/reviews";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -37,7 +39,7 @@ export async function generateMetadata({
     "home",
     locale as Locale,
     "/",
-    `L'Instant Tranquille — ${messages.metadata.title}`,
+    `L'Instant Tranquille, ${messages.metadata.title}`,
     messages.metadata.description,
     { absoluteTitle: true },
   );
@@ -53,51 +55,67 @@ export default async function HomePage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [
-    siteSettings,
-    testimonials,
-    allTestimonials,
-    pricingConfig,
-    homePage,
-    amenities,
-  ] = await Promise.all([
+  const [siteSettings, pricingConfig, homePage, amenities] = await Promise.all([
     getSiteSettings(locale, isDraft),
-    getFeaturedTestimonials(locale, isDraft),
-    getAllApprovedTestimonials(locale, isDraft),
     getPricingConfig(locale, isDraft),
     getPageBySlug("home", locale, isDraft),
     getAmenities(locale, isDraft),
   ]);
 
-  const settings = siteSettings as Record<string, any>;
-  const contact = settings.contact as Record<string, any> | undefined;
-  const pricing = pricingConfig as Record<string, any>;
+  const settings = siteSettings as Record<string, unknown>;
+  const contact = settings.contact as Record<string, unknown> | undefined;
+  const contactCoords = contact?.coordinates as
+    | Record<string, unknown>
+    | undefined;
+  const pricing = pricingConfig as Record<string, unknown>;
 
+  type CmsMedia = {
+    url?: string | null;
+    sizes?: { hero?: { url?: string | null } };
+  };
+  const _heroMedia = homePage?.heroImage as CmsMedia | undefined;
   const heroImageUrl =
-    homePage?.heroImage &&
-    typeof homePage.heroImage === "object" &&
-    (homePage.heroImage as Record<string, any>).sizes?.hero?.url;
+    _heroMedia?.sizes?.hero?.url ?? _heroMedia?.url ?? undefined;
 
   const propertyDetails = settings.propertyDetails as
-    | { bedrooms?: number; maxGuests?: number; petsAllowed?: boolean }
+    | {
+        bedrooms?: number;
+        maxGuests?: number;
+        bathrooms?: number;
+        surface?: number;
+        petsAllowed?: boolean;
+      }
     | undefined;
 
+  const rawSameAs = settings.sameAs as
+    | Array<{ url?: string | null }>
+    | undefined;
+  const sameAsUrls = (rawSameAs ?? [])
+    .map((item) => item.url)
+    .filter((url): url is string => typeof url === "string" && url.length > 0);
+
   const jsonLd = generateLodgingBusinessJsonLd({
-    telephone: contact?.phone,
-    email: contact?.email,
+    telephone: contact?.phone as string | undefined,
+    email: contact?.email as string | undefined,
     heroImage: heroImageUrl || undefined,
-    lat: contact?.coordinates?.lat,
-    lng: contact?.coordinates?.lng,
-    address: contact?.address,
-    city: contact?.city,
-    postalCode: contact?.postalCode,
-    priceRange: computePriceRange(pricing.seasons, pricing.currency),
+    lat: contactCoords?.lat as number | undefined,
+    lng: contactCoords?.lng as number | undefined,
+    address: contact?.address as string | undefined,
+    city: contact?.city as string | undefined,
+    postalCode: contact?.postalCode as string | undefined,
+    priceRange: computePriceRange(
+      pricing.seasons as Parameters<typeof computePriceRange>[0],
+      pricing.currency as string | undefined,
+    ),
     petsAllowed: propertyDetails?.petsAllowed,
-    checkInTime: pricing.policies?.checkIn,
-    checkOutTime: pricing.policies?.checkOut,
+    checkInTime: (pricing.policies as Record<string, unknown> | undefined)
+      ?.checkIn as string | undefined,
+    checkOutTime: (pricing.policies as Record<string, unknown> | undefined)
+      ?.checkOut as string | undefined,
     numberOfRooms: propertyDetails?.bedrooms,
     amenities,
-    testimonials: allTestimonials,
+    testimonials: REVIEWS,
+    sameAs: sameAsUrls,
   });
 
   const rawFaqs =
@@ -121,6 +139,8 @@ export default async function HomePage({
     | undefined;
 
   const heroImage = homePage?.heroImage ?? null;
+  const heroImages =
+    (homePage?.heroImages as Array<{ image?: unknown }> | undefined) ?? null;
 
   if (isDraft) {
     return (
@@ -138,6 +158,7 @@ export default async function HomePage({
         <HomePageClient
           initialData={{
             heroImage,
+            heroImages: heroImages as HomePageData["heroImages"],
             heroTitle: homePage?.heroTitle ?? null,
             heroSubtitle: homePage?.heroSubtitle ?? null,
             introImage: homePage?.introImage ?? null,
@@ -148,9 +169,9 @@ export default async function HomePage({
             testimonialsTitle: homePage?.testimonialsTitle ?? null,
             ctaTitle: homePage?.ctaTitle ?? null,
             ctaSubtitle: homePage?.ctaSubtitle ?? null,
-            testimonials,
             bookingLinks,
           }}
+          propertyDetails={propertyDetails}
         />
       </>
     );
@@ -170,8 +191,20 @@ export default async function HomePage({
       )}
       <HeroSection
         heroImage={heroImage}
+        heroImages={heroImages as HomePageData["heroImages"]}
         heroTitle={homePage?.heroTitle ?? null}
         heroSubtitle={homePage?.heroSubtitle ?? null}
+        coordinates={{
+          lat: contactCoords?.lat as number | undefined,
+          lng: contactCoords?.lng as number | undefined,
+        }}
+        bookingLinks={bookingLinks}
+      />
+      <StatsBand
+        maxGuests={propertyDetails?.maxGuests}
+        bedrooms={propertyDetails?.bedrooms}
+        bathrooms={propertyDetails?.bathrooms}
+        surface={propertyDetails?.surface}
       />
       <IntroSection
         introImage={homePage?.introImage ?? null}
@@ -183,11 +216,7 @@ export default async function HomePage({
         highlights={homePage?.highlights ?? null}
         title={homePage?.highlightsTitle ?? null}
       />
-      <TestimonialsSection
-        testimonials={testimonials}
-        title={homePage?.testimonialsTitle ?? null}
-      />
-      <TestimonialForm />
+      <TestimonialsSection title={homePage?.testimonialsTitle ?? null} />
       <CTASection
         bookingLinks={bookingLinks}
         ctaTitle={homePage?.ctaTitle ?? null}

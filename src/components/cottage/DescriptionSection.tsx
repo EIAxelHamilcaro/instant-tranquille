@@ -1,14 +1,14 @@
 "use client";
 
+import { Bath, BedDouble, Maximize, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { PayloadImage } from "@/components/shared/PayloadImage";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
-import { Link } from "@/i18n/navigation";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Button } from "@/components/ui/button";
-import { Users, BedDouble, Bath, Maximize } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
 type PropertyDetails = {
@@ -19,7 +19,7 @@ type PropertyDetails = {
 };
 
 type PreviewImage = {
-  image?: any;
+  image?: unknown;
   label?: string | null;
 };
 
@@ -28,11 +28,13 @@ export function DescriptionSection({
   descriptionTitle,
   descriptionText,
   previewImages,
+  titleAs = "h1",
 }: {
   propertyDetails?: PropertyDetails | null;
   descriptionTitle?: string | null;
   descriptionText?: unknown;
   previewImages?: PreviewImage[] | null;
+  titleAs?: "h1" | "h2" | "h3";
 }) {
   const t = useTranslations("cottage");
   const tRates = useTranslations("rates");
@@ -43,16 +45,32 @@ export function DescriptionSection({
 
   const stats = [
     propertyDetails?.maxGuests != null
-      ? { icon: Users, value: String(propertyDetails.maxGuests), label: t("guests") }
+      ? {
+          icon: Users,
+          value: String(propertyDetails.maxGuests),
+          label: t("guests"),
+        }
       : null,
     propertyDetails?.bedrooms != null
-      ? { icon: BedDouble, value: String(propertyDetails.bedrooms), label: t("bedrooms") }
+      ? {
+          icon: BedDouble,
+          value: String(propertyDetails.bedrooms),
+          label: t("bedrooms"),
+        }
       : null,
     propertyDetails?.bathrooms != null
-      ? { icon: Bath, value: String(propertyDetails.bathrooms), label: t("bathrooms") }
+      ? {
+          icon: Bath,
+          value: String(propertyDetails.bathrooms),
+          label: t("bathrooms"),
+        }
       : null,
     propertyDetails?.surface != null
-      ? { icon: Maximize, value: `${propertyDetails.surface}m²`, label: t("surface") }
+      ? {
+          icon: Maximize,
+          value: `${propertyDetails.surface}m²`,
+          label: t("surface"),
+        }
       : null,
   ].filter(Boolean) as { icon: typeof Users; value: string; label: string }[];
 
@@ -63,7 +81,7 @@ export function DescriptionSection({
       <Container>
         <div className="grid items-start gap-12 lg:grid-cols-2">
           <div className="reveal-left">
-            <SectionHeading title={title} centered={false} as="h1" />
+            <SectionHeading title={title} centered={false} as={titleAs} />
             {hasRichText ? (
               <RichTextRenderer
                 content={descriptionText}
@@ -87,7 +105,10 @@ export function DescriptionSection({
                     key={label}
                     className="rounded-lg bg-sand-100 p-4 text-center"
                   >
-                    <Icon className="mx-auto mb-2 h-6 w-6 text-primary-500" aria-hidden="true" />
+                    <Icon
+                      className="mx-auto mb-2 h-6 w-6 text-primary-500"
+                      aria-hidden="true"
+                    />
                     <p className="font-heading text-2xl font-bold text-foreground">
                       {value}
                     </p>
@@ -102,7 +123,11 @@ export function DescriptionSection({
               <>
                 {previewImages[0] && (
                   <PayloadImage
-                    media={previewImages[0].image}
+                    media={
+                      previewImages[0].image as Parameters<
+                        typeof PayloadImage
+                      >[0]["media"]
+                    }
                     size="card"
                     alt={previewImages[0].label || t("cottageView")}
                     className="rounded-xl w-full"
@@ -110,10 +135,14 @@ export function DescriptionSection({
                 )}
                 {previewImages.length > 1 && (
                   <div className="grid grid-cols-2 gap-4">
-                    {previewImages.slice(1).map((item, i) => (
+                    {previewImages.slice(1).map((item) => (
                       <PayloadImage
-                        key={i}
-                        media={item.image}
+                        key={item.label ?? String(previewImages.indexOf(item))}
+                        media={
+                          item.image as Parameters<
+                            typeof PayloadImage
+                          >[0]["media"]
+                        }
                         size="thumbnail"
                         alt={item.label || t("cottageView")}
                         className="rounded-lg w-full"

@@ -1,5 +1,5 @@
-import { Link } from "@/i18n/navigation";
 import { ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 type BreadcrumbItem = {
   label: string;
@@ -24,7 +24,10 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current="page" className="text-foreground font-medium">
+                <span
+                  aria-current="page"
+                  className="text-foreground font-medium"
+                >
                   {item.label}
                 </span>
               )}

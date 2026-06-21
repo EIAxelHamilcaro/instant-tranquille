@@ -1,19 +1,21 @@
-import { Playfair_Display, Lora, Inter } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Spline_Sans_Mono } from "next/font/google";
 
-export const playfairDisplay = Playfair_Display({
+export const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-heading",
+  style: ["normal", "italic"],
+  axes: ["opsz", "SOFT"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-export const lora = Lora({
+export const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-hanken",
   display: "swap",
 });
 
-export const inter = Inter({
+export const splineSansMono = Spline_Sans_Mono({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-spline-mono",
   display: "swap",
 });

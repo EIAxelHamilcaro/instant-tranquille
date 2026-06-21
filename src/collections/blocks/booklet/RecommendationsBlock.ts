@@ -16,8 +16,7 @@ export const RecommendationsBlock: Block = {
       relationTo: "local-recommendations",
       hasMany: true,
       admin: {
-        description:
-          "Choisissez les bonnes adresses à inclure dans ce livret",
+        description: "Choisissez les bonnes adresses à inclure dans ce livret",
       },
     },
   ],

@@ -1,42 +1,40 @@
-import path from "path";
-import { fileURLToPath } from "url";
-import { buildConfig } from "payload";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { seoPlugin } from "@payloadcms/plugin-seo";
 import {
-  lexicalEditor,
-  BoldFeature,
-  ItalicFeature,
-  UnderlineFeature,
-  StrikethroughFeature,
-  HeadingFeature,
-  ParagraphFeature,
-  LinkFeature,
-  OrderedListFeature,
-  UnorderedListFeature,
-  BlockquoteFeature,
-  HorizontalRuleFeature,
   AlignFeature,
+  BlockquoteFeature,
+  BoldFeature,
   FixedToolbarFeature,
+  HeadingFeature,
+  HorizontalRuleFeature,
   InlineToolbarFeature,
+  ItalicFeature,
+  LinkFeature,
+  lexicalEditor,
+  OrderedListFeature,
+  ParagraphFeature,
+  StrikethroughFeature,
+  UnderlineFeature,
+  UnorderedListFeature,
 } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
-import { seoPlugin } from "@payloadcms/plugin-seo";
 import { fr } from "@payloadcms/translations/languages/fr";
+import { buildConfig } from "payload";
 import sharp from "sharp";
-
-import { Users } from "@/collections/Users";
+import { Amenities } from "@/collections/Amenities";
+import { ContactMessages } from "@/collections/ContactMessages";
+import { LocalRecommendations } from "@/collections/LocalRecommendations";
 import { Media } from "@/collections/Media";
+import { OnboardingGuides } from "@/collections/OnboardingGuides";
 import { Pages } from "@/collections/Pages";
 import { Testimonials } from "@/collections/Testimonials";
-import { Amenities } from "@/collections/Amenities";
-import { LocalRecommendations } from "@/collections/LocalRecommendations";
-import { OnboardingGuides } from "@/collections/OnboardingGuides";
-import { ContactMessages } from "@/collections/ContactMessages";
-
-import { SiteSettings } from "@/globals/SiteSettings";
-import { Header } from "@/globals/Header";
+import { Users } from "@/collections/Users";
 import { Footer } from "@/globals/Footer";
+import { Header } from "@/globals/Header";
 import { PricingConfig } from "@/globals/PricingConfig";
+import { SiteSettings } from "@/globals/SiteSettings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -69,7 +67,7 @@ export default buildConfig({
       beforeDashboard: ["/components/payload/BeforeDashboard"],
     },
     meta: {
-      titleSuffix: " — L'Instant Tranquille",
+      titleSuffix: ", L'Instant Tranquille",
     },
     livePreview: {
       breakpoints: [
@@ -132,7 +130,9 @@ export default buildConfig({
       tabbedUI: true,
       generateTitle: ({ doc }) => {
         const title = typeof doc?.title === "string" ? doc.title : "";
-        return title ? `${title} — L'Instant Tranquille` : "L'Instant Tranquille";
+        return title
+          ? `${title}, L'Instant Tranquille`
+          : "L'Instant Tranquille";
       },
       generateDescription: ({ doc }) => {
         const meta = doc?.meta as Record<string, unknown> | undefined;

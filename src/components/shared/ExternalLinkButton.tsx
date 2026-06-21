@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function ExternalLinkButton({
   href,
@@ -15,12 +15,9 @@ export function ExternalLinkButton({
   "aria-label"?: string;
 }) {
   const variants = {
-    primary:
-      "bg-primary-500 text-white hover:bg-primary-600",
-    earth:
-      "bg-earth-700 text-white hover:bg-earth-800",
-    outline:
-      "border-2 border-primary-500 text-primary-600 hover:bg-primary-50",
+    primary: "bg-primary-500 text-white hover:bg-primary-600",
+    earth: "bg-earth-700 text-white hover:bg-earth-800",
+    outline: "border-2 border-primary-500 text-primary-600 hover:bg-primary-50",
   };
 
   return (

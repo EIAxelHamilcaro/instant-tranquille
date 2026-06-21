@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { revalidateCollection } from "@/lib/revalidate";
 import { previewUrl } from "@/lib/preview-url";
+import { revalidateCollection } from "@/lib/revalidate";
 import { validateLucideIcon } from "@/lib/validators";
 
 export const Amenities: CollectionConfig = {
@@ -50,8 +50,7 @@ export const Amenities: CollectionConfig = {
       label: "Icône",
       validate: validateLucideIcon,
       admin: {
-        description:
-          "Nom de l'icône Lucide (ex: wifi, bed-double, utensils)",
+        description: "Nom de l'icône Lucide (ex: wifi, bed-double, utensils)",
         placeholder: "wifi",
       },
     },
@@ -61,8 +60,7 @@ export const Amenities: CollectionConfig = {
       label: "Catégorie",
       required: true,
       admin: {
-        description:
-          "Regroupe les équipements par type sur le site",
+        description: "Regroupe les équipements par type sur le site",
       },
       options: [
         { label: "Intérieur", value: "indoor" },

@@ -1,22 +1,26 @@
 {
   "metadata": {
-    "title": "Charming Cottage in Sologne",
-    "description": "Discover L'Instant Tranquille, a charming cottage in the heart of Sologne. The perfect holiday rental for a nature getaway, between Loire Valley castles and forests."
+    "title": "Holiday Cottage in Sologne",
+    "description": "L'Instant Tranquille, 3-bedroom cottage, sleeps 6, 120 m² in Romorantin-Lanthenay, Sologne. Holiday rental between Loire Valley castles and forests."
   },
   "nav": {
     "home": "Home",
     "cottage": "The Cottage",
+    "surroundings": "Surroundings",
     "rates": "Rates & Booking",
     "contact": "Contact",
     "book": "Book now"
   },
   "home": {
     "heroTitle": "L'Instant Tranquille",
-    "heroSubtitle": "Your nature retreat in the heart of Sologne",
-    "heroCta": "Discover the cottage",
-    "heroCta2": "See rates",
+    "heroSubtitle": "A holiday cottage in Sologne, Romorantin-Lanthenay",
+    "heroEyebrow": "Loir-et-Cher · Sologne",
+    "heroCta": "Book now",
+    "heroCta2": "Discover the cottage",
+    "learnMoreShort": "Learn more",
     "introTitle": "Welcome to Sologne",
-    "introText": "Nestled in the heart of Sologne's forests, L'Instant Tranquille offers an idyllic setting for a rejuvenating getaway. Just a short drive from the Loire Valley castles, enjoy the absolute calm of the French countryside.",
+    "introEyebrow": "Romorantin-Lanthenay · Loir-et-Cher",
+    "introText": "A 120 m² Sologne house, 3 bedrooms, sleeping up to 6. Surrounded by forests and ponds, 38 km from Chambord and 39 km from the Grand Parquet de Lamotte-Beuvron equestrian centre. A practical base for exploring the region, visiting Loire châteaux, or attending equestrian events.",
     "highlightsTitle": "Why choose us",
     "highlightNature": "Preserved nature",
     "highlightNatureDesc": "In the heart of 3 hectares of nature, between forest and ponds, an exceptional setting to recharge.",
@@ -27,12 +31,13 @@
     "highlightCalm": "Absolute calm",
     "highlightCalmDesc": "Far from urban bustle, enjoy the silence, birdsong, and starry skies at night.",
     "testimonialsTitle": "What our guests say",
-    "ctaTitle": "Ready for your Sologne getaway?",
-    "ctaSubtitle": "Book your stay at L'Instant Tranquille",
+    "ctaEyebrow": "Booking",
+    "ctaTitle": "Ready for your stay in Sologne?",
+    "ctaSubtitle": "Book directly on your preferred platform",
+    "ctaChoosePlatform": "Choose your platform",
     "ctaAirbnb": "Book on Airbnb",
     "ctaBooking": "Book on Booking",
     "ctaContact": "Contact us",
-    "ctaAbritel": "Book on Abritel",
     "ctaEmailDirect": "Book directly",
     "testimonialFormTitle": "Share your experience",
     "testimonialFormSubtitle": "Your feedback matters! Help future travelers discover L'Instant Tranquille.",
@@ -52,7 +57,9 @@
     "stars": "stars",
     "testimonialsAriaLabel": "Our guests' testimonials",
     "testimonialSlide": "Testimonial {current} of {total}",
-    "introImageAlt": "Cottage exterior view"
+    "introImageAlt": "Cottage exterior view",
+    "introDistChambord": "38 km, Château de Chambord",
+    "introDistGrandParquet": "39 km, Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "The Cottage",
@@ -71,6 +78,10 @@
       "tech": "Technology"
     },
     "openImage": "Open image",
+    "lightboxClose": "Close gallery",
+    "lightboxPrev": "Previous image",
+    "lightboxNext": "Next image",
+    "lightboxCounter": "{current} / {total}",
     "nearbyTitle": "Nearby attractions",
     "guests": "guests",
     "bedrooms": "bedrooms",
@@ -79,7 +90,9 @@
     "cottageView": "Cottage view",
     "placeholderLiving": "Living room",
     "placeholderBedroom": "Bedroom",
-    "placeholderGarden": "Garden"
+    "placeholderGarden": "Garden",
+    "heroEyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroImageAlt": "Interior of L'Instant Tranquille cottage in Sologne"
   },
   "rates": {
     "title": "Rates & Booking",
@@ -107,11 +120,13 @@
     "feeTypePerNight": "per night",
     "feeTypePerPerson": "per person",
     "calendarTitle": "Seasonal calendar",
-    "h1": "Holiday cottage rates in Sologne — rental in Romorantin-Lanthenay"
+    "sourceNote": "Indicative nightly rates. Real-time prices and availability are confirmed on",
+    "sourceAnd": "and",
+    "h1": "Holiday cottage rates in Sologne, rental in Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
-    "description": "Have a question? Get in touch to plan your stay in Sologne.",
+    "description": "Book on Airbnb or Booking, or write to us to plan your stay in Sologne.",
     "formTitle": "Send us a message",
     "name": "Name",
     "email": "Email",
@@ -129,7 +144,9 @@
     "mapTitle": "Find us",
     "accessTitle": "How to get here",
     "interactiveMap": "Interactive map",
-    "h1": "Contact L'Instant Tranquille — holiday cottage in Sologne, Romorantin-Lanthenay"
+    "reachTitle": "Book the cottage",
+    "reachSubtitle": "Booking and payment go through Airbnb or Booking, with verified reviews. A question before you book or during your stay? Email or call us, we know the area well.",
+    "h1": "Contact L'Instant Tranquille, holiday cottage in Sologne, Romorantin-Lanthenay"
   },
   "booklet": {
     "title": "Welcome Booklet",
@@ -180,11 +197,67 @@
     "navMenu": "Navigation menu",
     "languageSwitcher": "Language",
     "starRating": "{rating} out of 5 stars",
-    "mobileNav": "Mobile navigation"
+    "mobileNav": "Mobile navigation",
+    "locator": "Sologne · Romorantin-Lanthenay"
+  },
+  "statsband": {
+    "ariaLabel": "Cottage features",
+    "guests": "guests",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "surface": "surface",
+    "distChambord": "from Chambord",
+    "distGrandParquet": "from Grand Parquet"
   },
   "footer": {
-    "description": "A charming cottage in the heart of Sologne, between forests and Loire Valley castles.",
+    "description": "Holiday cottage in Sologne, 3 bedrooms, Romorantin-Lanthenay.",
     "rights": "All rights reserved.",
     "contact": "Contact"
+  },
+  "surroundings": {
+    "title": "Surroundings",
+    "description": "Explore the Sologne region from the cottage: châteaux, forests, lakes, restaurants and activities nearby.",
+    "h1": "Things to do in Sologne, activities and visits from Romorantin-Lanthenay",
+    "eyebrow": "Sologne · Romorantin-Lanthenay",
+    "heroTitle": "The Surroundings",
+    "heroSubtitle": "Châteaux, nature, equestrian sport, the Sologne within easy reach",
+    "introTitle": "A convenient base",
+    "categoryTitle": "Nearby attractions",
+    "mapTitle": "Area map",
+    "categories": {
+      "castles": "Châteaux & Monuments",
+      "restaurants": "Restaurants",
+      "nature": "Nature & Walking",
+      "activities": "Activities",
+      "markets": "Markets",
+      "equestrian": "Equestrian & Horse Sports",
+      "services": "Services"
+    },
+    "distance": "Distance",
+    "website": "Website",
+    "noItems": "No recommendations in this category yet."
+  },
+  "equestrian": {
+    "sectionTitle": "Riders & equestrian sports",
+    "eyebrow": "Equestrian Sologne",
+    "intro": "The Sologne is a leading equestrian region. The cottage is a practical base for riders travelling to competitions or on a leisure stay.",
+    "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
+    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year, one of the most important showjumping competitions on the national calendar. Approximately 39 km from the cottage (40 minutes by car).",
+    "venuesTitle": "Nearby equestrian venues",
+    "distanceLabel": "Distance",
+    "websiteLabel": "Official website",
+    "faqTitle": "Frequently asked questions, riders",
+    "faq": {
+      "q1": "Does the cottage accommodate horses?",
+      "a1": "No, the cottage has no horse-boarding facilities. It is aimed at riders looking for comfortable accommodation close to equestrian venues, with their horses stabled at the local centres or yards nearby.",
+      "q2": "How far is the Grand Parquet de Lamotte-Beuvron?",
+      "a2": "Approximately 39 km from the cottage, around 40 minutes by car.",
+      "q3": "Are there any riding centres nearby for leisure activities?",
+      "a3": "Several equestrian centres are accessible within a 30 km radius of Romorantin-Lanthenay. We can provide contacts on request.",
+      "q4": "Is the parking at the Grand Parquet suitable for horse trailers and lorries?",
+      "a4": "The Grand Parquet has dedicated parking for vehicles with trailers during competitions. It is advisable to check parking instructions with the organiser before each event."
+    },
+    "placeholderAlt": "Grand Parquet de Lamotte-Beuvron, FFE equestrian venue",
+    "placeholderLabel": "Grand Parquet photo (coming soon)"
   }
 }

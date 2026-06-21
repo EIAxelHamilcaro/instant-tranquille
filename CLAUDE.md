@@ -22,10 +22,12 @@ pnpm lint         # biome check
 pnpm seed         # peuple la base (scripts/seed.ts)
 ```
 
-> **Gotcha pnpm v11** : un pré-check de build scripts (`ERR_PNPM_IGNORED_BUILDS`) peut faire
-> échouer `pnpm exec`/`pnpm build`. Contournement : lancer les binaires directement
-> (`node_modules/.bin/next build`, `node_modules/.bin/tsc --noEmit`, `node_modules/.bin/biome check`)
-> ou exécuter `pnpm approve-builds` une fois.
+> **Gotcha pnpm v11** : les dépendances à build natif sont approuvées via `allowBuilds`
+> (booléens par dépendance) dans `pnpm-workspace.yaml` — c'est le nouveau home pnpm 11.8+
+> (`pnpm.onlyBuiltDependencies` du `package.json` n'est plus lu). Si `ERR_PNPM_IGNORED_BUILDS`
+> réapparaît, vérifier que `allowBuilds` liste bien `sharp`, `esbuild`, `@swc/core`,
+> `@parcel/watcher`, `unrs-resolver` à `true`. Repli ponctuel : lancer les binaires directement
+> (`node_modules/.bin/next build`, `node_modules/.bin/tsc --noEmit`, `node_modules/.bin/biome check`).
 
 > **Schéma DB (workflow push)** : pas de dossier `migrations/`. Payload synchronise le schéma à
 > l'init **en dev** (`postgresAdapter` push). Après tout ajout/retrait de champ : lancer `pnpm dev`

@@ -10,7 +10,28 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
       },
+      {
+        userAgent: "GPTBot",
+        allow: "/",
+        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: "/",
+        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
+      },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

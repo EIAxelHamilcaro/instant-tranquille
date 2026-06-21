@@ -35,6 +35,28 @@
   --sand-700: #8c7d5c;
   --sand-800: #5f553e;
   --sand-900: #332d21;
+  /* Stone/taupe chaude, neutres brun-gris, jamais froids */
+  --stone-50: #faf9f7;
+  --stone-100: #f2efea;
+  --stone-200: #e5dfd6;
+  --stone-300: #d5cdc0;
+  --stone-400: #bfb5a6;
+  --stone-500: #a89d8d;
+  --stone-600: #8a7d6e;
+  --stone-700: #6b6055;
+  --stone-800: #4a423a;
+  --stone-900: #28231e;
+  /* Terracotta, accent brique harmonisé aux photos chambre */
+  --terracotta-50: #fdf4ef;
+  --terracotta-100: #fae5d6;
+  --terracotta-200: #f5caad;
+  --terracotta-300: #eeab80;
+  --terracotta-400: #e58c57;
+  --terracotta-500: #c8633a;
+  --terracotta-600: #a84e2d;
+  --terracotta-700: #833c22;
+  --terracotta-800: #5e2a17;
+  --terracotta-900: #38180c;
   --radius: 0.625rem;
 }
 
@@ -77,6 +99,26 @@
   --color-sand-700: var(--sand-700);
   --color-sand-800: var(--sand-800);
   --color-sand-900: var(--sand-900);
+  --color-stone-50: var(--stone-50);
+  --color-stone-100: var(--stone-100);
+  --color-stone-200: var(--stone-200);
+  --color-stone-300: var(--stone-300);
+  --color-stone-400: var(--stone-400);
+  --color-stone-500: var(--stone-500);
+  --color-stone-600: var(--stone-600);
+  --color-stone-700: var(--stone-700);
+  --color-stone-800: var(--stone-800);
+  --color-stone-900: var(--stone-900);
+  --color-terracotta-50: var(--terracotta-50);
+  --color-terracotta-100: var(--terracotta-100);
+  --color-terracotta-200: var(--terracotta-200);
+  --color-terracotta-300: var(--terracotta-300);
+  --color-terracotta-400: var(--terracotta-400);
+  --color-terracotta-500: var(--terracotta-500);
+  --color-terracotta-600: var(--terracotta-600);
+  --color-terracotta-700: var(--terracotta-700);
+  --color-terracotta-800: var(--terracotta-800);
+  --color-terracotta-900: var(--terracotta-900);
   --color-card: #ffffff;
   --color-card-foreground: var(--foreground);
   --color-border: var(--sand-200);
@@ -92,21 +134,71 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Lora", serif;
-  --font-sans: "Inter", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  --font-mono:
+    var(--font-spline-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
-/* Scoped to frontend only — Payload admin uses its own styles */
+/* Scoped to frontend only, Payload admin uses its own styles */
 .frontend-app {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body);
-  font-size-adjust: from-font;
+  font-family: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-.frontend-app :is(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--font-heading);
+.frontend-app h1,
+.frontend-app h2,
+.frontend-app h3,
+.frontend-app h4,
+.frontend-app h5,
+.frontend-app h6 {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+
+/* Eyebrow, sans humaniste, capitales tracées, rôle de localisateur */
+.frontend-app .eyebrow {
+  font-family: var(--font-hanken), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Données précises : coordonnées, distances. Mono = signature « lieu réel » */
+.frontend-app .data {
+  font-family: var(--font-spline-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.01em;
+}
+
+/* Sous-titre éditorial / citation, Fraunces italique */
+.frontend-app .subtitle-editorial,
+.frontend-app blockquote {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Échelle d'affichage fluide, sans media queries */
+.display-hero {
+  font-size: clamp(2.6rem, 5.5vw + 1rem, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.display-section {
+  font-size: clamp(1.95rem, 2.6vw + 0.6rem, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
 
 @layer base {
@@ -122,6 +214,16 @@
   outline-offset: 2px;
 }
 
+/* ─── Curseur pointeur sur tout élément actionnable ─── */
+.frontend-app button:not(:disabled),
+.frontend-app [role="button"]:not([aria-disabled="true"]),
+.frontend-app label[for],
+.frontend-app summary,
+.frontend-app select,
+.frontend-app a[href] {
+  cursor: pointer;
+}
+
 /* ─── Keyframes ─── */
 @keyframes fade-up {
   from {
@@ -135,8 +237,12 @@
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in-left {
@@ -173,8 +279,12 @@
 }
 
 @keyframes grow-width {
-  from { width: 0; }
-  to { width: 4rem; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 4rem;
+  }
 }
 
 @keyframes hero-fade-up {
@@ -185,6 +295,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -229,6 +350,16 @@
 }
 
 /* ─── Hero animations (immediate, no IO needed) ─── */
+.hero-reveal {
+  animation: hero-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--reveal-delay, 0) * 1ms);
+}
+
+.hero-stagger {
+  animation: hero-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--reveal-delay, 0) * 1ms);
+}
+
 .hero-title {
   animation: hero-fade-up 0.8s ease-out 0.1s both;
 }
@@ -246,19 +377,98 @@
   animation: grow-width 0.6s ease-out 0.3s both;
 }
 
-/* ─── Header scroll shadow ─── */
-header[data-scrolled] {
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+/* ─── Grade photographique (unifie les températures, rendu pro) ─── */
+.img-graded :is(img) {
+  filter: contrast(1.06) saturate(0.92) brightness(0.99);
+}
+
+/* ─── Intro loader (overlay décoratif, contenu SSR intact dessous) ─── */
+@keyframes intro-out {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes intro-brand {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-line {
+  from {
+    width: 0;
+  }
+  to {
+    width: 72px;
+  }
+}
+
+.intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #161d14;
+  animation: intro-out 1.3s ease-in-out 0.35s forwards;
+}
+
+.intro-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.intro-loader__mark {
+  height: 2.25rem;
+  width: 2.25rem;
+  color: var(--sand-500);
+  animation: intro-brand 0.8s ease-out both;
+}
+
+.intro-loader__brand {
+  font-weight: 600;
+  font-size: clamp(1.4rem, 4vw, 2.25rem);
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  animation: intro-brand 0.9s ease-out 0.1s both;
+}
+
+.intro-loader__line {
+  display: block;
+  height: 1px;
+  width: 0;
+  background: color-mix(in oklab, var(--sand-500) 70%, transparent);
+  animation: intro-line 1s ease-out 0.3s both;
 }
 
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
+  .intro-loader {
+    display: none;
+  }
+
   .reveal,
   .reveal-left,
   .reveal-right,
   .reveal-scale,
   .reveal-fade,
   .reveal-grow,
+  .hero-reveal,
+  .hero-stagger,
   .hero-title,
   .hero-subtitle,
   .hero-buttons,

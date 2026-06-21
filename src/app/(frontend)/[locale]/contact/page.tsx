@@ -1,15 +1,16 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 import { AccessInstructions } from "@/components/contact/AccessInstructions";
-import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactChannels } from "@/components/contact/ContactChannels";
 import { MapSection } from "@/components/contact/MapPlaceholder";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
 import type { Locale } from "@/i18n/config";
 import {
   generateBreadcrumbJsonLd,
   generateLodgingBusinessJsonLd,
 } from "@/lib/jsonld";
-import { getSiteSettings } from "@/lib/queries";
+import { getPricingConfig, getSiteSettings } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -38,12 +39,20 @@ export default async function ContactPage({
   setRequestLocale(locale);
 
   const { isEnabled: isDraft } = await draftMode();
-  const siteSettings = (await getSiteSettings(locale, isDraft)) as Record<
-    string,
-    any
-  >;
+  const [siteSettings, pricingConfig] = await Promise.all([
+    getSiteSettings(locale, isDraft) as Promise<Record<string, unknown>>,
+    getPricingConfig(locale, isDraft) as Promise<Record<string, unknown>>,
+  ]);
 
-  const coordinates = siteSettings?.contact?.coordinates;
+  const contactRaw = siteSettings?.contact as
+    | Record<string, unknown>
+    | undefined;
+  const coordinatesRaw = contactRaw?.coordinates as
+    | Record<string, unknown>
+    | undefined;
+  const bookingLinks = pricingConfig?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null }
+    | undefined;
   const siteName = siteSettings?.siteName as string | undefined;
   const accessRoutes = siteSettings?.accessRoutes as
     | {
@@ -60,15 +69,14 @@ export default async function ContactPage({
     { name: messages.contact.title, url: "/contact" },
   ]);
 
-  const contactInfo = siteSettings?.contact as Record<string, any> | undefined;
   const businessJsonLd = generateLodgingBusinessJsonLd({
-    telephone: contactInfo?.phone,
-    email: contactInfo?.email,
-    address: contactInfo?.address,
-    city: contactInfo?.city,
-    postalCode: contactInfo?.postalCode,
-    lat: coordinates?.lat,
-    lng: coordinates?.lng,
+    telephone: contactRaw?.phone as string | undefined,
+    email: contactRaw?.email as string | undefined,
+    address: contactRaw?.address as string | undefined,
+    city: contactRaw?.city as string | undefined,
+    postalCode: contactRaw?.postalCode as string | undefined,
+    lat: coordinatesRaw?.lat as number | undefined,
+    lng: coordinatesRaw?.lng as number | undefined,
   });
 
   return (
@@ -88,13 +96,22 @@ export default async function ContactPage({
           { label: messages.contact.title },
         ]}
       />
-      <ContactForm />
+      <PageHeader
+        eyebrow={messages.common.locator}
+        title={messages.contact.title}
+        subtitle={messages.contact.description}
+      />
+      <ContactChannels
+        email={contactRaw?.email as string | undefined}
+        phone={contactRaw?.phone as string | undefined}
+        bookingLinks={bookingLinks}
+      />
       <MapSection
-        lat={coordinates?.lat}
-        lng={coordinates?.lng}
-        zoom={coordinates?.zoom as number | undefined}
+        lat={coordinatesRaw?.lat as number | undefined}
+        lng={coordinatesRaw?.lng as number | undefined}
+        zoom={coordinatesRaw?.zoom as number | undefined}
         markerLabel={
-          (coordinates?.markerLabel as string | undefined) ?? siteName
+          (coordinatesRaw?.markerLabel as string | undefined) ?? siteName
         }
       />
       <AccessInstructions routes={accessRoutes} />

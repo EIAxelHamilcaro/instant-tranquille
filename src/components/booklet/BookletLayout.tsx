@@ -1,12 +1,12 @@
 "use client";
 
-import type { BookletSection } from "@/types/booklet";
+import { Trees } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/shared/Container";
 import { Separator } from "@/components/ui/separator";
-import { LivretTableOfContents } from "./LivretTableOfContents";
+import type { BookletSection } from "@/types/booklet";
 import { BookletSectionRenderer } from "./BookletSectionRenderer";
-import { Trees } from "lucide-react";
+import { LivretTableOfContents } from "./LivretTableOfContents";
 
 export function BookletLayout({
   title,

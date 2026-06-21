@@ -16,7 +16,7 @@ export function proxy(request: Request) {
     return;
   }
 
-  return intlMiddleware(request as any);
+  return intlMiddleware(request as Parameters<typeof intlMiddleware>[0]);
 }
 
 export const config = {
