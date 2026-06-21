@@ -76,21 +76,21 @@ export function CTASection({
 
       <Container className="relative z-10 text-center">
         <p
-          className="reveal font-serif text-base italic tracking-wide text-sand-200/80"
+          className="reveal eyebrow text-xs text-sand-200/80"
           style={{ "--stagger": 0 } as React.CSSProperties}
         >
           {t("ctaEyebrow")}
         </p>
 
         <h2
-          className="reveal mt-3 text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl"
+          className="reveal display-section mt-4 font-display font-semibold text-white drop-shadow-lg"
           style={{ "--stagger": 1 } as React.CSSProperties}
         >
           {cmsTitle ?? t("ctaTitle")}
         </h2>
 
         <p
-          className="reveal mt-4 text-lg text-sand-200 drop-shadow-md sm:text-xl"
+          className="reveal subtitle-editorial mx-auto mt-5 max-w-2xl text-lg text-sand-100 drop-shadow-md sm:text-xl"
           style={{ "--stagger": 2 } as React.CSSProperties}
         >
           {cmsSubtitle ?? t("ctaSubtitle")}
@@ -128,7 +128,7 @@ export function CTASection({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t("ctaBooking")}, ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-[#003580] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#00224f] active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 rounded-lg bg-[#006CE4] px-5 py-3 font-sans text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#0057b8] active:scale-[0.98]"
             >
               <BookingLogo className="h-5 w-5 shrink-0" />
               {t("ctaBooking")}

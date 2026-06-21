@@ -7,6 +7,7 @@ import { PoliciesSection } from "@/components/rates/PoliciesSection";
 import { PricingTable } from "@/components/rates/PricingTable";
 import { SeasonCalendar } from "@/components/rates/SeasonCalendar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
 import type { Locale } from "@/i18n/config";
 import {
   buildRatesFaqItems,
@@ -120,10 +121,16 @@ export default async function RatesPage({
         ]}
       />
       <h1 className="sr-only">{messages.rates.h1}</h1>
+      <PageHeader
+        eyebrow={messages.common.locator}
+        title={messages.rates.title}
+        subtitle={messages.rates.description}
+      />
       <PricingTable
         seasons={seasons}
         additionalFees={additionalFees}
         currency={currency}
+        bookingLinks={pricingConfig.bookingLinks}
       />
       <SeasonCalendar seasons={seasons} currency={currency} />
       <BookingLinks bookingLinks={pricingConfig.bookingLinks} />

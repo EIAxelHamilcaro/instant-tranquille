@@ -1,15 +1,16 @@
 import { draftMode } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 import { AccessInstructions } from "@/components/contact/AccessInstructions";
-import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactChannels } from "@/components/contact/ContactChannels";
 import { MapSection } from "@/components/contact/MapPlaceholder";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
 import type { Locale } from "@/i18n/config";
 import {
   generateBreadcrumbJsonLd,
   generateLodgingBusinessJsonLd,
 } from "@/lib/jsonld";
-import { getSiteSettings } from "@/lib/queries";
+import { getPricingConfig, getSiteSettings } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -38,10 +39,10 @@ export default async function ContactPage({
   setRequestLocale(locale);
 
   const { isEnabled: isDraft } = await draftMode();
-  const siteSettings = (await getSiteSettings(locale, isDraft)) as Record<
-    string,
-    unknown
-  >;
+  const [siteSettings, pricingConfig] = await Promise.all([
+    getSiteSettings(locale, isDraft) as Promise<Record<string, unknown>>,
+    getPricingConfig(locale, isDraft) as Promise<Record<string, unknown>>,
+  ]);
 
   const contactRaw = siteSettings?.contact as
     | Record<string, unknown>
@@ -49,7 +50,9 @@ export default async function ContactPage({
   const coordinatesRaw = contactRaw?.coordinates as
     | Record<string, unknown>
     | undefined;
-  const _coordinates = coordinatesRaw;
+  const bookingLinks = pricingConfig?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null }
+    | undefined;
   const siteName = siteSettings?.siteName as string | undefined;
   const accessRoutes = siteSettings?.accessRoutes as
     | {
@@ -93,7 +96,16 @@ export default async function ContactPage({
           { label: messages.contact.title },
         ]}
       />
-      <ContactForm />
+      <PageHeader
+        eyebrow={messages.common.locator}
+        title={messages.contact.title}
+        subtitle={messages.contact.description}
+      />
+      <ContactChannels
+        email={contactRaw?.email as string | undefined}
+        phone={contactRaw?.phone as string | undefined}
+        bookingLinks={bookingLinks}
+      />
       <MapSection
         lat={coordinatesRaw?.lat as number | undefined}
         lng={coordinatesRaw?.lng as number | undefined}

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher({ overlay = false }: { overlay?: boolean }) {
   const t = useTranslations("common");
   const locale = useLocale();
   const pathname = usePathname();
@@ -21,39 +21,38 @@ export function LocaleSwitcher() {
     );
   }
 
+  const locales = ["fr", "en"] as const;
+
   return (
     <nav
-      className="flex items-center gap-1 rounded-full border border-sand-300 p-0.5 font-sans text-sm"
+      className={cn(
+        "flex items-center gap-1 rounded-full border p-0.5 font-sans text-sm transition-colors duration-500",
+        overlay ? "border-white/40" : "border-sand-300",
+      )}
       aria-label={t("languageSwitcher")}
     >
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => switchLocale("fr")}
-        aria-current={locale === "fr" ? "true" : undefined}
-        className={cn(
-          "rounded-full px-3 py-2.5",
-          locale === "fr"
-            ? "bg-primary-500 text-white hover:bg-primary-600"
-            : "text-foreground hover:bg-sand-100",
-        )}
-      >
-        FR
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => switchLocale("en")}
-        aria-current={locale === "en" ? "true" : undefined}
-        className={cn(
-          "rounded-full px-3 py-2.5",
-          locale === "en"
-            ? "bg-primary-500 text-white hover:bg-primary-600"
-            : "text-foreground hover:bg-sand-100",
-        )}
-      >
-        EN
-      </Button>
+      {locales.map((code) => {
+        const active = locale === code;
+        return (
+          <Button
+            key={code}
+            variant="ghost"
+            size="sm"
+            onClick={() => switchLocale(code)}
+            aria-current={active ? "true" : undefined}
+            className={cn(
+              "rounded-full px-3 py-2.5",
+              active
+                ? "bg-primary-500 text-white hover:bg-primary-600"
+                : overlay
+                  ? "text-white hover:bg-white/15"
+                  : "text-foreground hover:bg-sand-100",
+            )}
+          >
+            {code.toUpperCase()}
+          </Button>
+        );
+      })}
     </nav>
   );
 }

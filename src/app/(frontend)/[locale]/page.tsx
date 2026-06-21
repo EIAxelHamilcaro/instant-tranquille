@@ -194,6 +194,10 @@ export default async function HomePage({
         heroImages={heroImages as HomePageData["heroImages"]}
         heroTitle={homePage?.heroTitle ?? null}
         heroSubtitle={homePage?.heroSubtitle ?? null}
+        coordinates={{
+          lat: contactCoords?.lat as number | undefined,
+          lng: contactCoords?.lng as number | undefined,
+        }}
         bookingLinks={bookingLinks}
       />
       <StatsBand

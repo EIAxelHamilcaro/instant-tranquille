@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Link, usePathname } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 
 type NavItem = {
@@ -20,7 +21,13 @@ type NavItem = {
   isExternal?: boolean | null;
 };
 
-export function MobileNav({ navItems }: { navItems: NavItem[] }) {
+export function MobileNav({
+  navItems,
+  overlay = false,
+}: {
+  navItems: NavItem[];
+  overlay?: boolean;
+}) {
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -31,7 +38,12 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          className={cn(
+            "transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:hidden",
+            overlay
+              ? "text-white hover:bg-white/15"
+              : "text-foreground hover:bg-sand-100",
+          )}
         >
           <Menu className="h-6 w-6" aria-hidden="true" />
           <span className="sr-only">{t("navMenu")}</span>

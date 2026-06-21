@@ -1,12 +1,9 @@
 "use client";
 
-import { Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { BookingButtons } from "@/components/shared/BookingButtons";
 import { Container } from "@/components/shared/Container";
-import { ExternalLinkButton } from "@/components/shared/ExternalLinkButton";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 import { useReveal } from "@/lib/useReveal";
 
 type BookingLinksData = {
@@ -22,8 +19,6 @@ export function BookingLinks({
   bookingLinks?: BookingLinksData | null;
 }) {
   const t = useTranslations("rates");
-  const tHome = useTranslations("home");
-  const tCommon = useTranslations("common");
   const ref = useReveal();
 
   return (
@@ -31,54 +26,10 @@ export function BookingLinks({
       <Container className="text-center">
         <SectionHeading title={t("bookTitle")} subtitle={t("bookSubtitle")} />
         <div
-          className="reveal flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          className="reveal flex justify-center"
           style={{ "--stagger": 1 } as React.CSSProperties}
         >
-          {bookingLinks?.airbnb && (
-            <ExternalLinkButton
-              href={bookingLinks.airbnb}
-              variant="earth"
-              className="min-w-[220px] justify-center"
-              aria-label={`${tHome("ctaAirbnb")}, ${tCommon("opensNewTab")}`}
-            >
-              {tHome("ctaAirbnb")}
-            </ExternalLinkButton>
-          )}
-          {bookingLinks?.booking && (
-            <ExternalLinkButton
-              href={bookingLinks.booking}
-              variant="primary"
-              className="min-w-[220px] justify-center"
-              aria-label={`${tHome("ctaBooking")}, ${tCommon("opensNewTab")}`}
-            >
-              {tHome("ctaBooking")}
-            </ExternalLinkButton>
-          )}
-          {bookingLinks?.email ? (
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="min-w-[220px] border-primary-500 font-sans text-primary-600 hover:bg-primary-50 active:scale-[0.98]"
-            >
-              <a href={`mailto:${bookingLinks.email}`}>
-                <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
-                {tHome("ctaEmailDirect")}
-              </a>
-            </Button>
-          ) : (
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="min-w-[220px] border-primary-500 font-sans text-primary-600 hover:bg-primary-50 active:scale-[0.98]"
-            >
-              <Link href="/contact">
-                <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
-                {tHome("ctaContact")}
-              </Link>
-            </Button>
-          )}
+          <BookingButtons bookingLinks={bookingLinks} size="lg" showContact />
         </div>
       </Container>
     </section>

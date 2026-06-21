@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 
 type MediaObject = {
@@ -51,6 +55,13 @@ export function PayloadImage({
   priority,
   sizes,
 }: PayloadImageProps) {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true);
+  }, []);
+
   if (!media || typeof media === "string" || typeof media === "number") {
     return <ImagePlaceholder aspectRatio="16/9" className={className} />;
   }
@@ -64,9 +75,7 @@ export function PayloadImage({
 
   const dimensions = sizeDimensions[size];
   const quality = priority ? 85 : 75;
-  const blurProps = media.blurDataURL
-    ? ({ placeholder: "blur", blurDataURL: media.blurDataURL } as const)
-    : {};
+  const blurUrl = media.blurDataURL;
 
   const defaultSizes =
     size === "hero"
@@ -75,20 +84,46 @@ export function PayloadImage({
         ? "(max-width: 768px) 100vw, 768px"
         : "(max-width: 640px) 50vw, 400px";
 
+  const imgClass = cn(
+    className,
+    "transition-opacity duration-700 ease-out motion-reduce:transition-none",
+    loaded ? "opacity-100" : "opacity-0",
+  );
+
+  const blurLayer = blurUrl ? (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-0 scale-[1.04] bg-cover bg-center transition-opacity duration-700 ease-out",
+        loaded ? "opacity-0" : "opacity-100",
+      )}
+      style={{ backgroundImage: `url(${blurUrl})` }}
+    />
+  ) : null;
+
   if (fill) {
     return (
-      <Image
-        src={src}
-        alt={media.alt || alt || ""}
-        fill
-        className={className}
-        priority={priority}
-        quality={quality}
-        {...blurProps}
-        sizes={sizes ?? defaultSizes}
-      />
+      <>
+        {blurLayer}
+        <Image
+          ref={imgRef}
+          src={src}
+          alt={media.alt || alt || ""}
+          fill
+          className={imgClass}
+          priority={priority}
+          quality={quality}
+          sizes={sizes ?? defaultSizes}
+          onLoad={() => setLoaded(true)}
+          onError={() => setLoaded(true)}
+        />
+      </>
     );
   }
+
+  const blurProps = blurUrl
+    ? ({ placeholder: "blur", blurDataURL: blurUrl } as const)
+    : {};
 
   return (
     <Image
@@ -99,8 +134,8 @@ export function PayloadImage({
       className={className}
       priority={priority}
       quality={quality}
-      {...blurProps}
       sizes={sizes ?? defaultSizes}
+      {...blurProps}
     />
   );
 }

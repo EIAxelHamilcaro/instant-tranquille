@@ -29,29 +29,27 @@ export function IntroSection({
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-0"
+      className="relative overflow-hidden"
       aria-label={title}
     >
-      {/* Fond crème décalé, occupe la moitié droite */}
-      <div
-        className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-2/5 bg-sand-100"
-        aria-hidden="true"
-      />
-
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid lg:grid-cols-[3fr_2fr] items-stretch">
-          {/* Image dominante, 60 %, déborde en haut et en bas */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 right-[calc(50%_-_50vw)] bg-sand-100 lg:left-[60%]"
+          aria-hidden="true"
+        />
+        <div className="grid items-stretch lg:grid-cols-[3fr_2fr]">
           <div className="reveal-scale relative order-first lg:order-none">
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0 lg:-top-16 lg:-bottom-16 overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden lg:absolute lg:inset-0 lg:-top-16 lg:-bottom-16 lg:aspect-auto">
               {introImage && typeof introImage === "object" ? (
                 <PayloadImage
                   media={
                     introImage as Parameters<typeof PayloadImage>[0]["media"]
                   }
-                  size="card"
+                  size="hero"
                   alt={t("introImageAlt")}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
                 />
               ) : (
                 <ImagePlaceholder
@@ -61,21 +59,18 @@ export function IntroSection({
                   className="h-full w-full"
                 />
               )}
-              {/* Bordure accent vert sur le bord droit de l'image */}
               <div
-                className="absolute inset-y-0 right-0 w-1 bg-primary-500 hidden lg:block"
+                className="absolute inset-y-0 right-0 hidden w-1 bg-primary-500 lg:block"
                 aria-hidden="true"
               />
             </div>
-            {/* Espace réservé mobile (l'image est en absolute sur desktop) */}
             <div
               className="hidden lg:block lg:min-h-[480px]"
               aria-hidden="true"
             />
           </div>
 
-          {/* Bloc texte, 40 %, décalé verticalement */}
-          <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pl-16 xl:pl-20 lg:pr-8">
+          <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pl-16 lg:pr-8 xl:pl-20">
             <div
               className="reveal-left"
               style={{ "--stagger": "0" } as React.CSSProperties}
@@ -95,18 +90,17 @@ export function IntroSection({
               {hasRichText ? (
                 <RichTextRenderer
                   content={introText}
-                  className="text-base leading-relaxed text-foreground/75 prose prose-stone max-w-none"
+                  className="prose prose-stone max-w-none text-base leading-relaxed text-foreground/75"
                 />
               ) : (
-                <p className="text-base leading-relaxed text-foreground/75 max-w-prose">
+                <p className="max-w-prose text-base leading-relaxed text-foreground/75">
                   {t("introText")}
                 </p>
               )}
             </div>
 
-            {/* Bloc distances, sobre, factuel */}
             <div
-              className="reveal mt-8 flex flex-col gap-2 text-sm text-muted-foreground border-l-2 border-primary-300 pl-4"
+              className="reveal mt-8 flex flex-col gap-2 border-l-2 border-primary-300 pl-4 text-sm text-muted-foreground"
               style={{ "--stagger": "2" } as React.CSSProperties}
             >
               <span>{t("introDistChambord")}</span>
@@ -120,7 +114,7 @@ export function IntroSection({
               <Button
                 asChild
                 variant="outline"
-                className="border-primary-500 text-primary-600 hover:bg-primary-50 hover:text-primary-700 active:scale-[0.98] font-sans font-semibold"
+                className="border-primary-500 font-sans font-semibold text-primary-600 hover:bg-primary-50 hover:text-primary-700 active:scale-[0.98]"
               >
                 <Link href="/le-gite">{t("heroCta2")}</Link>
               </Button>

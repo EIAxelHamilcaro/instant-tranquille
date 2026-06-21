@@ -269,8 +269,8 @@ async function seed() {
         city: "Romorantin-Lanthenay",
         postalCode: "41200",
         coordinates: {
-          lat: 47.3553,
-          lng: 1.7472,
+          lat: 47.360803,
+          lng: 1.7533421,
           zoom: 13,
           markerLabel: "L'Instant Tranquille",
         },
@@ -515,153 +515,122 @@ async function seed() {
 
   // ── Header ─────────────────────────────────────────────────────────────────
   console.log("Seeding Header...");
-  await payload.updateGlobal({
+  const headerNavFr = [
+    { label: "Accueil", url: "/", isExternal: false, highlight: false },
+    { label: "Le Gîte", url: "/le-gite", isExternal: false, highlight: false },
+    {
+      label: "Les Alentours",
+      url: "/les-alentours",
+      isExternal: false,
+      highlight: false,
+    },
+    {
+      label: "Tarifs & Réservation",
+      url: "/tarifs-reservation",
+      isExternal: false,
+      highlight: false,
+    },
+    { label: "Contact", url: "/contact", isExternal: false, highlight: false },
+  ];
+  const headerNavEn = [
+    "Home",
+    "The Cottage",
+    "Surroundings",
+    "Rates & Booking",
+    "Contact",
+  ];
+  const headerFr = (await payload.updateGlobal({
     slug: "header",
     locale: "fr",
     data: {
-      navItems: [
-        { label: "Accueil", url: "/", isExternal: false, highlight: false },
-        {
-          label: "Le Gîte",
-          url: "/le-gite",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Les Alentours",
-          url: "/les-alentours",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Tarifs & Réservation",
-          url: "/tarifs-reservation",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Contact",
-          url: "/contact",
-          isExternal: false,
-          highlight: false,
-        },
-      ],
+      navItems: headerNavFr,
       ctaButton: { label: "Réserver", url: "/tarifs-reservation" },
     },
-  });
+  })) as { navItems?: Array<{ id?: string }> };
+  const headerIds = (headerFr.navItems ?? []).map((r) => r.id);
   await payload.updateGlobal({
     slug: "header",
     locale: "en",
     data: {
-      navItems: [
-        { label: "Home", url: "/", isExternal: false, highlight: false },
-        {
-          label: "The Cottage",
-          url: "/le-gite",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Surroundings",
-          url: "/les-alentours",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Rates & Booking",
-          url: "/tarifs-reservation",
-          isExternal: false,
-          highlight: false,
-        },
-        {
-          label: "Contact",
-          url: "/contact",
-          isExternal: false,
-          highlight: false,
-        },
-      ],
+      navItems: headerNavFr.map((item, i) => ({
+        ...item,
+        id: headerIds[i],
+        label: headerNavEn[i],
+      })),
       ctaButton: { label: "Book now", url: "/tarifs-reservation" },
     },
   });
 
   // ── Footer ─────────────────────────────────────────────────────────────────
   console.log("Seeding Footer...");
-  await payload.updateGlobal({
+  const footerColsFr = [
+    {
+      title: "Navigation",
+      links: [
+        { label: "Accueil", url: "/", isExternal: false },
+        { label: "Le Gîte", url: "/le-gite", isExternal: false },
+        { label: "Les Alentours", url: "/les-alentours", isExternal: false },
+        { label: "Tarifs", url: "/tarifs-reservation", isExternal: false },
+        { label: "Contact", url: "/contact", isExternal: false },
+      ],
+    },
+    {
+      title: "Réservation",
+      links: [
+        {
+          label: "Airbnb",
+          url: "https://www.airbnb.fr/rooms/1605140748799580144",
+          isExternal: true,
+        },
+        {
+          label: "Booking.com",
+          url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
+          isExternal: true,
+        },
+      ],
+    },
+  ];
+  const footerEn = {
+    description:
+      "A holiday cottage in Sologne, Romorantin-Lanthenay, forests, ponds, Loire Valley châteaux.",
+    cols: [
+      {
+        title: "Navigation",
+        links: ["Home", "The Cottage", "Surroundings", "Rates", "Contact"],
+      },
+      { title: "Booking", links: ["Airbnb", "Booking.com"] },
+    ],
+    legalText:
+      "L'Instant Tranquille, Holiday cottage in Sologne. All rights reserved.",
+  };
+  const footerFr = (await payload.updateGlobal({
     slug: "footer",
     locale: "fr",
     data: {
       description:
         "Un gîte en Sologne à Romorantin-Lanthenay, forêts, étangs, châteaux de la Loire.",
-      navColumns: [
-        {
-          title: "Navigation",
-          links: [
-            { label: "Accueil", url: "/", isExternal: false },
-            { label: "Le Gîte", url: "/le-gite", isExternal: false },
-            { label: "Les Alentours", url: "/les-alentours", isExternal: false },
-            {
-              label: "Tarifs",
-              url: "/tarifs-reservation",
-              isExternal: false,
-            },
-            { label: "Contact", url: "/contact", isExternal: false },
-          ],
-        },
-        {
-          title: "Réservation",
-          links: [
-            {
-              label: "Airbnb",
-              url: "https://www.airbnb.fr/rooms/1605140748799580144",
-              isExternal: true,
-            },
-            {
-              label: "Booking.com",
-              url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
-              isExternal: true,
-            },
-          ],
-        },
-      ],
-      legalText:
-        "L'Instant Tranquille, Gîte en Sologne. Tous droits réservés.",
+      navColumns: footerColsFr,
+      legalText: "L'Instant Tranquille, Gîte en Sologne. Tous droits réservés.",
     },
-  });
+  })) as {
+    navColumns?: Array<{ id?: string; links?: Array<{ id?: string }> }>;
+  };
+  const footerCols = footerFr.navColumns ?? [];
   await payload.updateGlobal({
     slug: "footer",
     locale: "en",
     data: {
-      description:
-        "A holiday cottage in Sologne, Romorantin-Lanthenay, forests, ponds, Loire Valley châteaux.",
-      navColumns: [
-        {
-          title: "Navigation",
-          links: [
-            { label: "Home", url: "/", isExternal: false },
-            { label: "The Cottage", url: "/le-gite", isExternal: false },
-            { label: "Surroundings", url: "/les-alentours", isExternal: false },
-            { label: "Rates", url: "/tarifs-reservation", isExternal: false },
-            { label: "Contact", url: "/contact", isExternal: false },
-          ],
-        },
-        {
-          title: "Booking",
-          links: [
-            {
-              label: "Airbnb",
-              url: "https://www.airbnb.fr/rooms/1605140748799580144",
-              isExternal: true,
-            },
-            {
-              label: "Booking.com",
-              url: "https://www.booking.com/hotel/fr/linstant-tranquille.fr.html",
-              isExternal: true,
-            },
-          ],
-        },
-      ],
-      legalText:
-        "L'Instant Tranquille, Holiday cottage in Sologne. All rights reserved.",
+      description: footerEn.description,
+      navColumns: footerColsFr.map((col, i) => ({
+        title: footerEn.cols[i]?.title ?? col.title,
+        id: footerCols[i]?.id,
+        links: col.links.map((lk, j) => ({
+          ...lk,
+          id: footerCols[i]?.links?.[j]?.id,
+          label: footerEn.cols[i]?.links[j] ?? lk.label,
+        })),
+      })),
+      legalText: footerEn.legalText,
     },
   });
 
@@ -827,16 +796,16 @@ async function seed() {
 
   // Page home, avec heroImages (mosaïque 3 photos) et introImage câblés
   const heroImageId = mediaIds["salon-cheminee-canapes-tv.webp"];
-  const introImageId = mediaIds["jardin-terrasse-vue-ensemble.webp"];
+  const introImageId = mediaIds["sejour-canape-buffet-escalier.webp"];
 
-  // Mosaïque : portrait chambre-forêt (la plus spectaculaire) + salon cheminée + cuisine
+  // Mosaïque : chambre-forêt + chambre vert-sauge + entrée papier-peint hérons
   const heroImagesIds = [
     mediaIds["chambre-1-vue-ensemble-papier-peint-foret.webp"],
-    mediaIds["salon-cheminee-canapes-tv.webp"],
-    mediaIds["cuisine-equipee-verte-poutres.webp"],
+    mediaIds["chambre-1-lit-double-vert-sauge.webp"],
+    mediaIds["entree-porte-manteau-papier-peint-herons.webp"],
   ].filter((id): id is number => id !== undefined);
 
-  await payload.create({
+  const homeFr = (await payload.create({
     collection: "pages",
     locale: "fr",
     data: {
@@ -890,10 +859,10 @@ async function seed() {
           linkLabel: "Nous trouver",
         },
         {
-          icon: "horse",
+          icon: "trophy",
           title: "Cavaliers bienvenus",
           description:
-            "Base idéale pour les concours au Grand Parquet de Lamotte-Beuvron (FFE), à ~17 km.",
+            "Base idéale pour les concours au Grand Parquet de Lamotte-Beuvron (FFE), à ~39 km.",
         },
         {
           icon: "users",
@@ -905,18 +874,42 @@ async function seed() {
       ],
       _status: "published",
     },
-  });
-  // Page home EN locale
-  const homePages = await payload.find({
-    collection: "pages",
-    where: { slug: { equals: "home" } },
-    limit: 1,
-  });
-  const homeId = homePages.docs[0]?.id;
-  if (homeId) {
+  })) as { id: string; highlights?: Array<{ id?: string }> };
+  const homeHighlightIds = (homeFr.highlights ?? []).map((h) => h.id);
+  const homeHighlightsEn = [
+    {
+      icon: "trees",
+      title: "Sologne nature",
+      description: "Forests, ponds and trails nearby. Wildlife on your doorstep.",
+      linkUrl: "/le-gite",
+      linkLabel: "Discover",
+    },
+    {
+      icon: "castle",
+      title: "Loire Valley châteaux",
+      description: "Chambord ~35 min, Cheverny ~30 min, Zoo de Beauval ~30 min.",
+      linkUrl: "/contact",
+      linkLabel: "Find us",
+    },
+    {
+      icon: "trophy",
+      title: "Ideal for riders",
+      description:
+        "Perfect base for events at Grand Parquet de Lamotte-Beuvron (FFE), ~39 km away.",
+    },
+    {
+      icon: "users",
+      title: "6 guests, 3 bedrooms",
+      description:
+        "115 m², kitchen, fireplace, foosball, enclosed garden. Pets welcome.",
+      linkUrl: "/le-gite",
+      linkLabel: "See the cottage",
+    },
+  ];
+  {
     await payload.update({
       collection: "pages",
-      id: homeId,
+      id: homeFr.id,
       locale: "en",
       data: {
         title: "Home",
@@ -947,37 +940,10 @@ async function seed() {
             version: 1,
           },
         },
-        highlights: [
-          {
-            icon: "trees",
-            title: "Sologne nature",
-            description:
-              "Forests, ponds and trails nearby. Wildlife on your doorstep.",
-            linkUrl: "/le-gite",
-            linkLabel: "Discover",
-          },
-          {
-            icon: "castle",
-            title: "Loire Valley châteaux",
-            description: "Chambord ~35 min, Cheverny ~30 min, Zoo de Beauval ~30 min.",
-            linkUrl: "/contact",
-            linkLabel: "Find us",
-          },
-          {
-            icon: "horse",
-            title: "Ideal for riders",
-            description:
-              "Perfect base for events at Grand Parquet de Lamotte-Beuvron (FFE), ~17 km away.",
-          },
-          {
-            icon: "users",
-            title: "6 guests, 3 bedrooms",
-            description:
-              "115 m², kitchen, fireplace, foosball, enclosed garden. Pets welcome.",
-            linkUrl: "/le-gite",
-            linkLabel: "See the cottage",
-          },
-        ],
+        highlights: homeHighlightsEn.map((h, i) => ({
+          ...h,
+          id: homeHighlightIds[i],
+        })),
       },
     });
   }
@@ -1098,12 +1064,13 @@ async function seed() {
     });
   }
 
-  await payload.create({
+  const alentoursFr = (await payload.create({
     collection: "pages",
     locale: "fr",
     data: {
       title: "Les Alentours",
       slug: "les-alentours",
+      heroImage: mediaIds["jardin-terrasse-vue-ensemble.webp"],
       heroTitle: "Les Alentours",
       heroSubtitle: "Châteaux, nature, équitation, la Sologne à portée de route",
       equestrianTitle: "Cavaliers & sports équestres",
@@ -1112,41 +1079,36 @@ async function seed() {
           name: "Le Grand Parquet de Lamotte-Beuvron",
           description:
             "Site fédéral de la FFE, accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux.",
-          distanceFromGite: "~17 km, 20 min",
+          distanceFromGite: "~39 km, 40 min",
           website: "https://www.ffe.com",
         },
       ],
       _status: "published",
     },
-  });
-  const alentoursPages = await payload.find({
+  })) as { id: string; equestrianVenues?: Array<{ id?: string }> };
+  const alentoursVenueId = alentoursFr.equestrianVenues?.[0]?.id;
+  await payload.update({
     collection: "pages",
-    where: { slug: { equals: "les-alentours" } },
-    limit: 1,
+    id: alentoursFr.id,
+    locale: "en",
+    data: {
+      title: "Surroundings",
+      heroTitle: "The Surroundings",
+      heroSubtitle:
+        "Châteaux, nature, equestrian sports, Sologne at your doorstep",
+      equestrianTitle: "Riders & equestrian sports",
+      equestrianVenues: [
+        {
+          id: alentoursVenueId,
+          name: "Le Grand Parquet de Lamotte-Beuvron",
+          description:
+            "FFE national equestrian centre hosting the Generali Open de France and major showjumping events.",
+          distanceFromGite: "~39 km, 40 min",
+          website: "https://www.ffe.com",
+        },
+      ],
+    },
   });
-  const alentoursId = alentoursPages.docs[0]?.id;
-  if (alentoursId) {
-    await payload.update({
-      collection: "pages",
-      id: alentoursId,
-      locale: "en",
-      data: {
-        title: "Surroundings",
-        heroTitle: "The Surroundings",
-        heroSubtitle: "Châteaux, nature, equestrian sports, Sologne at your doorstep",
-        equestrianTitle: "Riders & equestrian sports",
-        equestrianVenues: [
-          {
-            name: "Le Grand Parquet de Lamotte-Beuvron",
-            description:
-              "FFE national equestrian centre hosting the Generali Open de France and major showjumping events.",
-            distanceFromGite: "~17 km, 20 min",
-            website: "https://www.ffe.com",
-          },
-        ],
-      },
-    });
-  }
 
   await payload.create({
     collection: "pages",
@@ -1236,7 +1198,7 @@ async function seed() {
       category: "equestrian",
       description:
         "Site fédéral de la Fédération Française d'Équitation. Accueille le Generali Open de France et de nombreux concours de saut d'obstacles nationaux. Base idéale pour les cavaliers en déplacement.",
-      distanceFromGite: "~17 km, 20 min",
+      distanceFromGite: "~39 km, 40 min",
       website: "https://www.ffe.com",
       featured: true,
       order: 4,

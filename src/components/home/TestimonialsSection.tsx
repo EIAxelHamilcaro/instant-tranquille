@@ -1,7 +1,6 @@
 "use client";
 
 import Autoplay from "embla-carousel-autoplay";
-import { Quote } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/shared/Container";
@@ -31,14 +30,16 @@ const platforms = [
     key: "airbnb" as const,
     label: "Airbnb",
     href: REVIEW_LINKS.airbnb,
-    note: `${REVIEW_AGGREGATE.airbnb.rating}/${REVIEW_AGGREGATE.airbnb.scale}`,
+    rating: REVIEW_AGGREGATE.airbnb.rating,
+    scale: REVIEW_AGGREGATE.airbnb.scale,
     count: REVIEW_AGGREGATE.airbnb.count,
   },
   {
     key: "booking" as const,
     label: "Booking",
     href: REVIEW_LINKS.booking,
-    note: `${REVIEW_AGGREGATE.booking.rating}/${REVIEW_AGGREGATE.booking.scale}`,
+    rating: REVIEW_AGGREGATE.booking.rating,
+    scale: REVIEW_AGGREGATE.booking.scale,
     count: REVIEW_AGGREGATE.booking.count,
   },
 ];
@@ -71,12 +72,12 @@ export function TestimonialsSection({
   }, [api, onSelect]);
 
   return (
-    <section className="bg-sand-100 py-20" ref={ref}>
+    <section className="bg-background py-20 md:py-28" ref={ref}>
       <Container>
         <SectionHeading title={cmsTitle || t("testimonialsTitle")} />
 
         <div
-          className="reveal mb-10 flex flex-wrap items-center justify-center gap-3"
+          className="reveal mb-12 flex flex-wrap items-stretch justify-center gap-4"
           style={{ "--stagger": 1 } as React.CSSProperties}
         >
           {platforms.map((p) => (
@@ -85,19 +86,21 @@ export function TestimonialsSection({
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${p.label}, ${tCommon("opensNewTab")}`}
-              className="inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-4 py-2 font-sans text-sm transition-colors hover:border-primary-300 hover:bg-white"
+              aria-label={`${p.label}, ${p.rating}/${p.scale}, ${p.count} avis, ${tCommon("opensNewTab")}`}
+              className="flex items-center gap-3 rounded-xl border border-sand-200 bg-sand-50 px-5 py-3 transition-colors hover:border-primary-300 hover:bg-white"
             >
-              <span className="font-semibold">{p.label}</span>
-              <span
-                className={cn(
-                  "rounded px-1.5 py-0.5 text-xs font-semibold",
-                  sourceColors[p.key],
-                )}
-              >
-                {p.note}
+              <span className="font-display text-base font-semibold text-foreground">
+                {p.label}
               </span>
-              <span className="text-xs text-muted-foreground">({p.count})</span>
+              <span className="data text-lg font-medium text-primary-700">
+                {p.rating}
+                <span className="text-sm text-muted-foreground">
+                  /{p.scale}
+                </span>
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {p.count} avis
+              </span>
             </a>
           ))}
         </div>
@@ -111,7 +114,7 @@ export function TestimonialsSection({
             opts={{ loop: true, align: "start" }}
             plugins={[
               Autoplay({
-                delay: 5000,
+                delay: 5500,
                 stopOnInteraction: true,
                 stopOnMouseEnter: true,
               }),
@@ -132,17 +135,19 @@ export function TestimonialsSection({
                     total: REVIEWS.length,
                   })}
                 >
-                  <div className="border-sand-200 flex h-full flex-col rounded-xl border bg-sand-50 p-6">
-                    <Quote
-                      className="mb-3 h-8 w-8 shrink-0 text-primary-200"
+                  <figure className="flex h-full flex-col rounded-2xl border border-sand-200 bg-sand-50 p-7 transition-shadow duration-300 hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)]">
+                    <span
+                      className="font-display text-5xl leading-none text-primary-300"
                       aria-hidden="true"
-                    />
-                    <p className="mb-4 flex-1 text-sm leading-relaxed italic text-foreground/80">
-                      &ldquo;{review.text}&rdquo;
-                    </p>
-                    <div className="flex items-center justify-between">
+                    >
+                      &ldquo;
+                    </span>
+                    <blockquote className="subtitle-editorial -mt-3 mb-5 flex-1 text-[1.05rem] leading-relaxed text-foreground/85">
+                      {review.text}
+                    </blockquote>
+                    <figcaption className="flex items-end justify-between">
                       <div>
-                        <p className="font-sans text-sm font-semibold">
+                        <p className="font-sans text-sm font-semibold text-foreground">
                           {review.guestName}
                         </p>
                         {review.guestOrigin && (
@@ -151,19 +156,22 @@ export function TestimonialsSection({
                           </p>
                         )}
                       </div>
-                      <div className="flex flex-col items-end gap-1">
+                      <div className="flex flex-col items-end gap-1.5">
                         <StarRating rating={review.rating} />
                         {review.source && (
                           <Badge
                             variant="secondary"
-                            className={sourceColors[review.source] || ""}
+                            className={cn(
+                              "font-normal capitalize",
+                              sourceColors[review.source] || "",
+                            )}
                           >
                             {review.source}
                           </Badge>
                         )}
                       </div>
-                    </div>
-                  </div>
+                    </figcaption>
+                  </figure>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -173,7 +181,7 @@ export function TestimonialsSection({
 
           {count > 1 && (
             <>
-              <div className="mt-6 flex justify-center gap-1" role="tablist">
+              <div className="mt-8 flex justify-center gap-1" role="tablist">
                 {Array.from({ length: count }).map((_, i) => (
                   <Button
                     key={`dot-${i}`}

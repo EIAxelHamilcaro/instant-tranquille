@@ -1,5 +1,6 @@
-import { Facebook, Instagram, Mail, MapPin, Phone, Trees } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Trees } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { ProtectedPhone } from "@/components/shared/ProtectedPhone";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@/i18n/navigation";
 import { getFooterData, getSiteSettings } from "@/lib/queries";
@@ -169,8 +170,8 @@ export async function Footer({ locale }: { locale: string }) {
               )}
           </div>
 
-          {navColumns.map((column) => (
-            <div key={column.title}>
+          {navColumns.map((column, ci) => (
+            <div key={column.title ?? `col-${ci}`}>
               <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-sand-400">
                 {column.title}
               </h3>
@@ -178,10 +179,10 @@ export async function Footer({ locale }: { locale: string }) {
                 className="mt-4 flex flex-col gap-1"
                 aria-label={column.title}
               >
-                {(column.links || []).map((link) =>
+                {(column.links || []).map((link, li) =>
                   link.isExternal ? (
                     <a
-                      key={link.label}
+                      key={link.label ?? `link-${li}`}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -191,7 +192,7 @@ export async function Footer({ locale }: { locale: string }) {
                     </a>
                   ) : (
                     <Link
-                      key={link.label}
+                      key={link.label ?? `link-${li}`}
                       href={link.url as "/"}
                       className="rounded-md py-1 text-sm text-sand-300 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
                     >
@@ -222,16 +223,13 @@ export async function Footer({ locale }: { locale: string }) {
                   </a>
                 )}
                 {contact.phone && (
-                  <a
-                    href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                    className="flex items-center gap-2 rounded-md py-1 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none"
-                  >
-                    <Phone
-                      className="h-4 w-4 text-primary-300"
-                      aria-hidden="true"
-                    />
-                    {contact.phone}
-                  </a>
+                  <ProtectedPhone
+                    encoded={Buffer.from(contact.phone, "utf8").toString(
+                      "base64",
+                    )}
+                    className="flex items-center gap-2 rounded-md py-1 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                    iconClassName="text-primary-300"
+                  />
                 )}
                 {contact.address && (
                   <div className="flex items-start gap-2 py-1">

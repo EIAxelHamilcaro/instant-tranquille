@@ -1,5 +1,6 @@
 import { draftMode } from "next/headers";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { BookingCTA } from "@/components/shared/BookingCTA";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { CategoryGrid } from "@/components/surroundings/CategoryGrid";
 import { EquestrianSection } from "@/components/surroundings/EquestrianSection";
@@ -17,6 +18,7 @@ import type { CmsMedia } from "@/lib/queries";
 import {
   getAllRecommendations,
   getPageBySlug,
+  getPricingConfig,
   getSiteSettings,
 } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
@@ -48,12 +50,19 @@ export default async function SurroundingsPage({
 
   const { isEnabled: isDraft } = await draftMode();
 
-  const [siteSettings, recommendations, page, tNav] = await Promise.all([
-    getSiteSettings(locale, isDraft),
-    getAllRecommendations(locale, isDraft),
-    getPageBySlug("les-alentours", locale, isDraft),
-    getTranslations({ locale, namespace: "nav" }),
-  ]);
+  const [siteSettings, recommendations, page, pricingConfig, tNav] =
+    await Promise.all([
+      getSiteSettings(locale, isDraft),
+      getAllRecommendations(locale, isDraft),
+      getPageBySlug("les-alentours", locale, isDraft),
+      getPricingConfig(locale, isDraft),
+      getTranslations({ locale, namespace: "nav" }),
+    ]);
+
+  const bookingLinks = (pricingConfig as Record<string, unknown>)
+    ?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null; email?: string | null }
+    | undefined;
 
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: tNav("home"), url: "/" },
@@ -145,6 +154,8 @@ export default async function SurroundingsPage({
         recommendations={recommendations}
         giteCoordinates={giteCoordinates}
       />
+
+      <BookingCTA bookingLinks={bookingLinks} />
     </>
   );
 }

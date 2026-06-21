@@ -8,11 +8,13 @@ import {
 } from "next-intl/server";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { MainShell } from "@/components/layout/MainShell";
+import { StickyBookingBar } from "@/components/layout/StickyBookingBar";
 import type { Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
-import { inter, lora, playfairDisplay } from "@/lib/fonts";
+import { fraunces, hankenGrotesk, splineSansMono } from "@/lib/fonts";
 import { generateWebSiteJsonLd } from "@/lib/jsonld";
-import { getSiteSettings } from "@/lib/queries";
+import { getPricingConfig, getSiteSettings } from "@/lib/queries";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -82,6 +84,14 @@ export default async function FrontendLayout({
   const t = await getTranslations({ locale, namespace: "common" });
   const skipText = t("skipToContent");
 
+  const pricingConfig = (await getPricingConfig(locale)) as Record<
+    string,
+    unknown
+  >;
+  const bookingLinks = pricingConfig?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null }
+    | undefined;
+
   const webSiteJsonLd = generateWebSiteJsonLd();
 
   return (
@@ -98,7 +108,7 @@ export default async function FrontendLayout({
         <meta name="geo.placename" content="Romorantin-Lanthenay, Sologne" />
       </head>
       <body
-        className={`${playfairDisplay.variable} ${lora.variable} ${inter.variable} antialiased`}
+        className={`${fraunces.variable} ${hankenGrotesk.variable} ${splineSansMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <div className="frontend-app flex min-h-screen flex-col">
@@ -109,10 +119,9 @@ export default async function FrontendLayout({
               {skipText}
             </a>
             <Header locale={locale} />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
+            <MainShell>{children}</MainShell>
             <Footer locale={locale} />
+            <StickyBookingBar bookingLinks={bookingLinks} />
           </div>
         </NextIntlClientProvider>
       </body>

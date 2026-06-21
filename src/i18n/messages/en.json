@@ -17,9 +17,10 @@
     "heroEyebrow": "Loir-et-Cher · Sologne",
     "heroCta": "Book now",
     "heroCta2": "Discover the cottage",
+    "learnMoreShort": "Learn more",
     "introTitle": "Welcome to Sologne",
     "introEyebrow": "Romorantin-Lanthenay · Loir-et-Cher",
-    "introText": "A 120 m² Sologne house, 3 bedrooms, sleeping up to 6. Surrounded by forests and ponds, 12 km from Chambord and 17 km from the Grand Parquet de Lamotte-Beuvron equestrian centre. A practical base for exploring the region, visiting Loire châteaux, or attending equestrian events.",
+    "introText": "A 120 m² Sologne house, 3 bedrooms, sleeping up to 6. Surrounded by forests and ponds, 38 km from Chambord and 39 km from the Grand Parquet de Lamotte-Beuvron equestrian centre. A practical base for exploring the region, visiting Loire châteaux, or attending equestrian events.",
     "highlightsTitle": "Why choose us",
     "highlightNature": "Preserved nature",
     "highlightNatureDesc": "In the heart of 3 hectares of nature, between forest and ponds, an exceptional setting to recharge.",
@@ -57,8 +58,8 @@
     "testimonialsAriaLabel": "Our guests' testimonials",
     "testimonialSlide": "Testimonial {current} of {total}",
     "introImageAlt": "Cottage exterior view",
-    "introDistChambord": "12 km, Château de Chambord",
-    "introDistGrandParquet": "17 km, Grand Parquet de Lamotte-Beuvron (FFE)"
+    "introDistChambord": "38 km, Château de Chambord",
+    "introDistGrandParquet": "39 km, Grand Parquet de Lamotte-Beuvron (FFE)"
   },
   "cottage": {
     "title": "The Cottage",
@@ -119,11 +120,13 @@
     "feeTypePerNight": "per night",
     "feeTypePerPerson": "per person",
     "calendarTitle": "Seasonal calendar",
+    "sourceNote": "Indicative nightly rates. Real-time prices and availability are confirmed on",
+    "sourceAnd": "and",
     "h1": "Holiday cottage rates in Sologne, rental in Romorantin-Lanthenay"
   },
   "contact": {
     "title": "Contact",
-    "description": "Have a question? Get in touch to plan your stay in Sologne.",
+    "description": "Book on Airbnb or Booking, or write to us to plan your stay in Sologne.",
     "formTitle": "Send us a message",
     "name": "Name",
     "email": "Email",
@@ -141,6 +144,8 @@
     "mapTitle": "Find us",
     "accessTitle": "How to get here",
     "interactiveMap": "Interactive map",
+    "reachTitle": "Book the cottage",
+    "reachSubtitle": "Booking and payment go through Airbnb or Booking, with verified reviews. A question before you book or during your stay? Email or call us, we know the area well.",
     "h1": "Contact L'Instant Tranquille, holiday cottage in Sologne, Romorantin-Lanthenay"
   },
   "booklet": {
@@ -192,7 +197,8 @@
     "navMenu": "Navigation menu",
     "languageSwitcher": "Language",
     "starRating": "{rating} out of 5 stars",
-    "mobileNav": "Mobile navigation"
+    "mobileNav": "Mobile navigation",
+    "locator": "Sologne · Romorantin-Lanthenay"
   },
   "statsband": {
     "ariaLabel": "Cottage features",
@@ -236,7 +242,7 @@
     "eyebrow": "Equestrian Sologne",
     "intro": "The Sologne is a leading equestrian region. The cottage is a practical base for riders travelling to competitions or on a leisure stay.",
     "grandParquetTitle": "Le Grand Parquet de Lamotte-Beuvron",
-    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year, one of the most important showjumping competitions on the national calendar. Approximately 17 km from the cottage (20 minutes by car).",
+    "grandParquetText": "A federal FFE (French Equestrian Federation) venue, the Grand Parquet hosts the Generali Open de France each year, one of the most important showjumping competitions on the national calendar. Approximately 39 km from the cottage (40 minutes by car).",
     "venuesTitle": "Nearby equestrian venues",
     "distanceLabel": "Distance",
     "websiteLabel": "Official website",
@@ -245,7 +251,7 @@
       "q1": "Does the cottage accommodate horses?",
       "a1": "No, the cottage has no horse-boarding facilities. It is aimed at riders looking for comfortable accommodation close to equestrian venues, with their horses stabled at the local centres or yards nearby.",
       "q2": "How far is the Grand Parquet de Lamotte-Beuvron?",
-      "a2": "Approximately 17 km from the cottage, around 20 minutes by car via the D724.",
+      "a2": "Approximately 39 km from the cottage, around 40 minutes by car.",
       "q3": "Are there any riding centres nearby for leisure activities?",
       "a3": "Several equestrian centres are accessible within a 30 km radius of Romorantin-Lanthenay. We can provide contacts on request.",
       "q4": "Is the parking at the Grand Parquet suitable for horse trailers and lorries?",

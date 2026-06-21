@@ -33,20 +33,20 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <p className="subtitle-editorial mb-3 text-sm tracking-wide text-primary-600">
-          {eyebrow}
-        </p>
+        <p className="eyebrow mb-4 text-xs text-primary-600">{eyebrow}</p>
       )}
-      <Tag className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+      <Tag className="display-section font-display font-semibold text-foreground">
         {title}
       </Tag>
       {subtitle && (
-        <p className="mt-3 text-lg text-muted-foreground">{subtitle}</p>
+        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+          {subtitle}
+        </p>
       )}
       {!isMinimal && (
         <div
           className={cn(
-            "heading-underline mt-4 h-1 w-16 rounded-full bg-primary-500",
+            "heading-underline mt-5 h-px w-16 bg-primary-400",
             isCentered && "mx-auto",
           )}
         />

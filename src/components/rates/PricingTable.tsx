@@ -53,16 +53,24 @@ const feeTypeKeys: Record<string, string> = {
   per_person: "feeTypePerPerson",
 };
 
+type BookingLinksData = {
+  airbnb?: string | null;
+  booking?: string | null;
+};
+
 export function PricingTable({
   seasons,
   additionalFees,
   currency,
+  bookingLinks,
 }: {
   seasons: CmsSeason[];
   additionalFees: AdditionalFee[];
   currency: string;
+  bookingLinks?: BookingLinksData | null;
 }) {
   const t = useTranslations("rates");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const symbol = currency === "EUR" ? "\u20AC" : currency;
@@ -73,6 +81,38 @@ export function PricingTable({
     <section className="py-20">
       <Container>
         <SectionHeading title={t("tableTitle")} />
+
+        {(bookingLinks?.airbnb || bookingLinks?.booking) && (
+          <p className="mx-auto -mt-6 mb-10 max-w-2xl text-center text-sm text-muted-foreground">
+            {t("sourceNote")}{" "}
+            {bookingLinks?.airbnb && (
+              <a
+                href={bookingLinks.airbnb}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Airbnb, ${tCommon("opensNewTab")}`}
+                className="font-medium text-primary-600 underline decoration-primary-300 underline-offset-4 hover:text-primary-700"
+              >
+                Airbnb
+              </a>
+            )}
+            {bookingLinks?.airbnb && bookingLinks?.booking
+              ? ` ${t("sourceAnd")} `
+              : null}
+            {bookingLinks?.booking && (
+              <a
+                href={bookingLinks.booking}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Booking.com, ${tCommon("opensNewTab")}`}
+                className="font-medium text-primary-600 underline decoration-primary-300 underline-offset-4 hover:text-primary-700"
+              >
+                Booking.com
+              </a>
+            )}
+            .
+          </p>
+        )}
 
         {/* Desktop table */}
         <div className="mx-auto hidden max-w-4xl md:block">

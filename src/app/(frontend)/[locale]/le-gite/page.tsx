@@ -7,6 +7,7 @@ import { NearbyAttractions } from "@/components/cottage/NearbyAttractions";
 import { PhotoGallery } from "@/components/cottage/PhotoGallery";
 import { CottagePageClient } from "@/components/live-preview/CottagePageClient";
 import { AreaMap } from "@/components/shared/AreaMap";
+import { BookingCTA } from "@/components/shared/BookingCTA";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { LeafDivider } from "@/components/shared/LeafDivider";
 import type { Locale } from "@/i18n/config";
@@ -21,6 +22,7 @@ import {
   getAmenities,
   getFeaturedRecommendations,
   getPageBySlug,
+  getPricingConfig,
   getSiteSettings,
 } from "@/lib/queries";
 import { generateCmsPageMetadata } from "@/lib/seo";
@@ -58,6 +60,7 @@ export default async function CottagePage({
     recommendations,
     cottagePage,
     testimonials,
+    pricingConfig,
     tNav,
   ] = await Promise.all([
     getSiteSettings(locale, isDraft),
@@ -65,8 +68,14 @@ export default async function CottagePage({
     getFeaturedRecommendations(locale, isDraft),
     getPageBySlug("le-gite", locale, isDraft),
     getAllApprovedTestimonials(locale, isDraft),
+    getPricingConfig(locale, isDraft),
     getTranslations({ locale, namespace: "nav" }),
   ]);
+
+  const bookingLinks = (pricingConfig as Record<string, unknown>)
+    ?.bookingLinks as
+    | { airbnb?: string | null; booking?: string | null; email?: string | null }
+    | undefined;
 
   const breadcrumbs = generateBreadcrumbJsonLd([
     { name: tNav("home"), url: "/" },
@@ -202,6 +211,7 @@ export default async function CottagePage({
         lat={contactCoordinates?.lat as number | undefined}
         lng={contactCoordinates?.lng as number | undefined}
       />
+      <BookingCTA bookingLinks={bookingLinks} />
     </>
   );
 }
