@@ -1,0 +1,28 @@
+{
+  "guides": {
+    "articleMetaTitle": "{title} | L'Instant Tranquille",
+    "placesTitle": "The places in this guide",
+    "roseCaption": "The places in this guide, shown at their driving time from the cottage. Each circle stands for a quarter of an hour.",
+    "faqTitle": "Frequently asked questions",
+    "stayText": "L'Instant Tranquille is an entire house with an enclosed garden in Romorantin-Lanthenay. It sleeps up to {count} guests.",
+    "moreTitle": "What to read next?",
+    "allGuides": "See all guides",
+    "themesNav": "Filter guides by theme",
+    "readTime": "{minutes} min read",
+    "updated": "Updated on <date></date>",
+    "tocLabel": "Guide contents",
+    "tocTitle": "In this guide",
+    "officialTitle": "Sources and official websites",
+    "officialText": "Opening hours and prices change every season: check them on each place's website or with the tourist office before you set off.",
+    "allPlaces": "See every place around the cottage",
+    "allThemes": "All themes",
+    "practicalTitle": "At a glance",
+    "plateCaption": "{place}, a <drive></drive> drive from the cottage",
+    "dayCaption": "{count} stops, from {start} to {end}, set along the arc of the day.",
+    "drivesTitle": "From the cottage",
+    "drivesSummary": "{count} places, {nearest} to {farthest} away by car.",
+    "drivesLegend": "Each mark is a quarter of an hour on the road.",
+    "checked": "Opening times, prices and addresses checked in {date} on the official websites.",
+    "officialChecked": "The information in this guide was checked in {date} against the pages listed here. Opening times and prices change every season: confirm them on the venue's website before you set off."
+  }
+}

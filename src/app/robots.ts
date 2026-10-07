@@ -1,37 +1,27 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
+
+const AI_CRAWLERS = [
+  "GPTBot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+];
+
+const PRIVATE_PATHS = ["/admin", "/api"];
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
-      },
-      {
-        userAgent: "GPTBot",
-        allow: "/",
-        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
-      },
-      {
-        userAgent: "ClaudeBot",
-        allow: "/",
-        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
-      },
-      {
-        userAgent: "PerplexityBot",
-        allow: "/",
-        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
-      },
-      {
-        userAgent: "Google-Extended",
-        allow: "/",
-        disallow: ["/admin", "/api", "/livret-accueil", "/en/welcome-booklet"],
-      },
-    ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    rules: {
+      userAgent: ["*", ...AI_CRAWLERS],
+      allow: ["/", "/api/media/"],
+      disallow: PRIVATE_PATHS,
+    },
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

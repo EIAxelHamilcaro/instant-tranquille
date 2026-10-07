@@ -1,178 +1,127 @@
-# Refonte vitrine — L'Instant Tranquille
+# Refonte Sologne : état au 7 octobre 2026
 
-Gîte en Sologne (Romorantin-Lanthenay). Objectif : vitrine simple, attractive, CMS
-gérable par une non-technicienne, référencement local fort.
+Branche `refactor/redesign-sologne`. Rien n'est commité : la prod vient de l'arbre de travail.
 
-## Constat de départ (audit 42 agents)
+## État : ce qui est en production
 
-Le repo **n'était pas surchargé**. C'est un Next.js 16 + Payload CMS 3 propre, SEO déjà
-avancé (JSON-LD LodgingBusiness/VacationRental/FAQPage/BreadcrumbList, sitemap, robots,
-OG, hreflang, plugin-seo). La branche `feature/cms-overhaul` (simplification) est **déjà
-fusionnée dans `main`**. La refonte est donc chirurgicale : combler les gaps SEO local,
-corriger des bugs de thème, simplifier l'UX d'édition, polir le design — pas réécrire.
+- Site : https://www.instant-tranquille.com (l'apex redirige en 308 vers `www`), projet Vercel
+  `instant-tranquille`, équipe `ei-axel-hamilcaro`, plan Hobby, région `fra1`.
+- Base : Neon `instant_tranquille_v2`. L'ancienne `neondb` est conservée en lecture seule.
+- Design repris de zéro : thème clair, palette Sologne, film en hero, rose des temps de route,
+  écran d'entrée (le héron), tableaux animés des sections sombres, cerf du guide du brame,
+  visionneuse de photos, habillage des guides.
+- CMS : une global par page, collections `Places` (116 lieux, temps OSRM) et `Guides` (23 guides,
+  FR et EN), plateformes et notes dans `SiteSettings`. Livret d'accueil supprimé.
+- SEO et GEO : un nœud JSON-LD complet du gîte (`#gite`), canonical, hreflang, sitemap,
+  `llms.txt`, `ai-catalog.json`, robots IA autorisés, IndexNow, FAQ dans le HTML.
+- Contact : formulaire Turnstile, messages lisibles dans l'admin.
+- Cloudflare (zone `instant-tranquille.com`) : DNS seul, DNSSEC actif, DMARC `p=quarantine`,
+  Email Routing `contact@instant-tranquille.com` vers l'adresse de Karine. L'adresse d'Erick est
+  créée mais pas vérifiée (deux destinataires demanderont un Email Worker).
+- Vérifié : responsive sur 20 pages x 23 formats de 320 à 2560 px (Playwright headless et iframes
+  de même origine, car Hyprland ne redimensionne pas la fenêtre), passe lean UI, Lighthouse sur
+  les 70 URL.
 
-## Fait — Phase QA finale (2026-06-20, build vert)
+## Décisions et pourquoi
 
-### Outils de vérification
+- **Polices Bricolage Grotesque et Newsreader conservées** malgré leur poids : identité du site.
+- **Pas de proxy Cloudflare devant Vercel** tant que les compteurs ne remontent pas.
+- **Aucune photo à la licence douteuse** : Galerie Capazza et Fondation du doute restent sans photo.
+- **Pas de scroll-snap sur tactile** : retiré, ne pas le remettre.
+- **Livret d'accueil supprimé** (décision du client).
+- **Images en AVIF seul, qualité 75, largeurs 384, 640, 828, 1200, 1920, 2400** : les quotas
+  Hobby (écritures de cache de l'optimiseur, comptées au poids, Fast Origin Transfer, Blob Data
+  Transfer) sont surveillés. Ne rien ajouter sans raison. `s-maxage` 1 an sur `/api/media/file`,
+  données en cache 1 jour, calendriers iCal 2 h.
+- **Pas de version d'image par query string** : ouvre l'optimiseur à des variantes infinies.
+- **Manifeste vidéo** : `src/lib/videos.ts` ne lit plus le disque à l'exécution.
+- **Schéma sans migrations** : Payload pousse le schéma seulement sur une base locale
+  (`push: isLocalDatabase`). La prod ne reçoit jamais de push automatique.
+- **Un seul nœud JSON-LD du gîte** (`#gite`) sur `/` et `/le-gite`, `@id` ailleurs : pas de doublon
+  d'entité. Note globale calculée par la même fonction que le JSON-LD.
+- **Rewrite `afterFiles`** : tout premier segment inconnu part vers la 404 localisée. Tout nouveau
+  segment racine s'ajoute à `ROUTED_SEGMENTS` dans `next.config.ts`.
+- **Titres à 60 caractères au plus** (posés en `absolute`), descriptions de 120 à 155.
+- **Cookie de langue next-intl désactivé** ; `X-Robots-Tag: noindex` sur `*.vercel.app`.
 
-- `node_modules/.bin/tsc --noEmit` : **vert, 0 erreur**
-- `node_modules/.bin/biome check .` : **vert, 0 erreur** (159 fichiers vérifiés)
-- `node_modules/.bin/next build` : **vert** — 20 pages statiques générées (FR + EN pour
-  les 5 routes publiques), middleware proxy, admin Payload, routes API.
+## Procédures
 
-### Revue sitemap.xml / robots.txt / llms.txt
+### Mettre à jour le contenu de prod
 
-- **sitemap.xml** : 10 entrées (5 pages × 2 locales FR+EN), chaque URL avec `images[]`
-  (total 14 images déclarées), `alternates.languages` fr/en, `lastModified` depuis CMS ou
-  fallback. Entrée `/les-alentours` + `/en/surroundings` présente.
-- **robots.txt** : wildcard `*` + règles dédiées `GPTBot`, `ClaudeBot`, `PerplexityBot`,
-  `Google-Extended` (tous `allow: /`, disallow admin/api/livret). `host:` défini. `sitemap:`
-  pointé. Crawler IA-friendly conforme spec.
-- **llms.txt** : index minimal (5 pages, lien vers llms-full.txt). Conforme spec llms.txt.
-- **llms-full.txt** : identité, capacité (6 pers/3 ch/2 sdb/120 m²), distances (Chambord
-  ~12 km, Grand Parquet ~17 km), axe cavaliers, tarifs indicatifs, avis verbatim, FAQ
-  complète (animaux, chevaux, parking, Wi-Fi, réservation).
+1. `.env.local` vers la base locale `lit_v2` pour les essais (`grep -c "127.0.0.1:5546" .env.local`
+   rend 1), tester le seed en local.
+2. Sur la base v2 de prod : `SEED_ALLOW_REMOTE=1 pnpm seed`, puis
+   `SEED_ALLOW_REMOTE=1 pnpm exec tsx scripts/seed/apply-corrections.ts` (le seed ne remplit les globals de
+   pages que si le champ est vide, `apply-corrections.ts` impose les textes).
+3. Déployer ensuite : le build lit le contenu. Un seed lancé hors de Vercel ne revalide pas le
+   cache du site.
+4. Après le déploiement : `node scripts/indexnow.mjs`.
 
-### Revue visuelle des 5 pages
+### Déployer
 
-**Page d'accueil (`/`)**
-- Hero 100vh plein-bleed : image Payload (blur-up si blurDataURL disponible), overlay
-  dégradé paramétrable (`overlayFrom`/`overlayTo`), titre display extrabold, sous-titre
-  Playfair italic, CTA « Réserver » → lien plateforme (airbnb → booking → abritel → email
-  → /tarifs-reservation), CTA secondaire « Découvrir le gîte », chevron animé bas.
-- StatsBand : 6 stats sur fond sand (invités, chambres, salles de bain, surface, ~12 km
-  Chambord, ~17 km Grand Parquet) — données depuis SiteSettings.
-- IntroSection : layout décalé 60/40, reveal au scroll.
-- HighlightsSection : bande éditoriale (depuis CMS highlights[]).
-- TestimonialsSection + TestimonialForm.
-- CTASection : fond photo réelle (terrasse-salon-jardin.webp), overlay vert, boutons
-  Airbnb/Booking/Abritel SVG branchés sur PricingConfig.platformLinks.
-- JSON-LD : LodgingBusiness (sameAs, NAP, amenityFeature, reviews, priceRange, checkin/out)
-  + FAQPage.
+1. `node_modules/.bin/tsc --noEmit && node_modules/.bin/biome check`, puis `bun test src`.
+2. Après tout ajout ou retrait dans `public/videos` : `pnpm generate:videos`.
+3. `vercel deploy --prod --yes --force` depuis l'arbre de travail. Build = `next build`, ni
+   migration ni seed.
+4. `.vercelignore` doit rester complet (`.env*`, `.claude`, `media`, `data`, `scripts/seed/assets`) :
+   il remplace `.gitignore` pour le CLI.
+5. `node scripts/indexnow.mjs`.
 
-**Page gîte (`/le-gite`)**
-- CottageHeroSection (hero court + eyebrow).
-- Fil d'Ariane.
-- DescriptionSection (capacité depuis SiteSettings, description CMS, images preview).
-- PhotoGallery masonry + lightbox prev/next (clavier ←/→/Esc, focus trap).
-- AmenitiesList (tabs par catégorie).
-- NearbyAttractions (badges palette de marque).
-- AreaMap (Leaflet dynamique, ssr:false).
-- JSON-LD : VacationRental (équipements, avis, géo) + FAQPage cottage + BreadcrumbList.
+### Retour arrière
 
-**Page alentours (`/les-alentours`)**
-- SurroundingsHero.
-- Fil d'Ariane + h1 géolocalisé sr-only.
-- CategoryGrid (recommandations par catégorie depuis LocalRecommendations).
-- EquestrianSection : Grand Parquet (placeholder calibré — photo équestre manquante),
-  venues CMS, FAQ équestre 4 Q/R (proximité, chevaux sur place, parking, concours).
-- SurroundingsMap (Leaflet, marqueurs recommandations + gîte).
-- JSON-LD : BreadcrumbList + FAQPage alentours + TouristAttraction Grand Parquet
-  (generateGrandParquetJsonLd) + TouristAttraction par recommandation.
+1. `vercel rollback` vers le déploiement précédent.
+2. Remettre `DATABASE_URL` sur `/neondb` (base conservée en lecture seule). Elle est gérée par
+   l'intégration Neon : une resynchronisation peut la remettre sur `neondb`, vérifier après coup.
+3. Ne pas pousser sur `main` entre-temps : `main` est en retard et redéploierait l'ancien code sur
+   la nouvelle base.
 
-**Page tarifs (`/tarifs-reservation`)**
-- h1 géolocalisé sr-only.
-- Fil d'Ariane.
-- PricingTable (saisons, frais supplémentaires, devise).
-- SeasonCalendar (palette de marque — corrigé).
-- BookingLinks (CTA plateformes depuis PricingConfig).
-- PoliciesSection.
-- JSON-LD : BreadcrumbList + Offer/PriceSpecification (generatePricingJsonLd) + FAQPage tarifs.
+### Photos
 
-**Page contact (`/contact`)**
-- h1 géolocalisé sr-only.
-- Fil d'Ariane.
-- ContactForm (stocke dans ContactMessages, dégrade sans Resend/Turnstile).
-- MapSection (Leaflet).
-- AccessInstructions (depuis SiteSettings.accessRoutes).
-- JSON-LD : BreadcrumbList + LodgingBusiness (NAP complet).
+- Recadrer une photo dans l'admin garde son nom de fichier : l'ancienne image reste en cache.
+  Redéposer la photo comme nouveau fichier.
+- Au-delà de 4,5 Mo, l'upload est refusé sur Vercel (voir `clientUploads` plus bas).
 
-### Design system
+## Reste à faire
 
-- **Typographie hybride** : Inter display heavy (titres), Playfair Display italic (accents,
-  eyebrows, sous-titres), Lora (corps). Variable `--font-display` définie.
-- **Palette** : `primary` vert `#4a7c59` + `earth` brun `#b8864f` + `sand` + neutres chauds.
-  Tokens `--primary`/`--secondary`/`--popover` définis (bug shadcn corrigé). Dark-mode OS
-  neutralisé (`@custom-variant dark`).
-- **SectionHeading** : 3 variants (default/left/minimal) + `eyebrow` Playfair italic +
-  `subtitle`.
-- **Footer** : vrais SVG Pinterest / YouTube / TikTok (conditionnés à la présence du lien).
-- **Security headers** : HSTS, X-Frame-Options SAMEORIGIN, X-Content-Type-Options, CSP
-  (Turnstile, Vercel Blob, OSM), Referrer-Policy, Permissions-Policy.
+### Priorité haute
 
-### SEO / GEO (plan godlike)
+- **Commit et PR vers `main`** : la prod tourne sur du code non versionné, `main` est en retard.
+- **Aucun envoi d'email** : pas d'adapter email Payload. Les messages de contact ne se voient que
+  dans l'admin, « mot de passe oublié » n'envoie rien. Choix du service à faire par Axel.
+- **Mentions légales et politique de confidentialité absentes**, alors que le formulaire de contact
+  collecte nom, email et téléphone. À rédiger avec les informations des hôtes (identité de
+  l'éditeur, contact, hébergeur, durée de conservation des messages), jamais inventées, puis à
+  lier depuis le pied de page et sous le formulaire.
+- **Plan Vercel à régulariser** (Hobby en prod, quotas surveillés).
+- **Réponses des hôtes** : 62 questions en attente pour Erick et Karine
+  (`docs/guides/QUESTIONS-PROPRIETAIRES.md`). Une FAQ pratique du gîte en dépend.
 
-- **P0 — implémenté** : `sameAs` sur LodgingBusiness (depuis SiteSettings), `googleBot`
-  (`max-image-preview:large`, `max-snippet:-1`, `max-video-preview:-1`), FAQ JSON-LD sur
-  toutes les pages (cottage/tarifs/alentours/home), `WebSite` JSON-LD au layout,
-  `TouristAttraction` Grand Parquet + recommandations, keywords équestres dans seo.ts.
-- **P1 — implémenté** : OG image par page (`opengraph-image.tsx` ×4 + layout), keywords
-  meta (FR + EN), `images[]` dans sitemap, `amenityFeature` absences explicites
-  (`value:false` pour chevaux/piscine/jacuzzi/ascenseur), GPS 5 décimales, `checkinTime`/
-  `checkoutTime` ISO 8601, `contentReferenceTime` sur avis.
-- **P2 — implémenté** : `llms.txt` + `llms-full.txt`, robots IA-friendly, `host:` robots,
-  security headers CSP.
+### Priorité moyenne
 
-## Phase 0 & 0.2 — Dépendances SOTA (2026-06-20)
+- **Son de l'écran d'entrée** : il ne démarre pas quand l'autoplay est bloqué (le premier geste
+  lance l'envol avant le son).
+- **Upload de plus de 4,5 Mo** : activer `clientUploads` sur le plugin Blob.
+- **Adresse d'Erick** : la vérifier, puis prévoir un Email Worker pour deux destinataires.
+- **Fiche Google Business** : absente.
+- **Guides qui se chevauchent** sur « dormir à Lamotte-Beuvron » : fusions prévues par la charte
+  (`docs/guides/CHARTE.md`).
+- **Temps de route** : quelques minutes d'écart entre le guide « venir » et les temps OSRM de
+  `src/lib/places.ts`.
 
-**Zod 4** (`^4.3.6`) : déjà installé et compatible. Aucune rupture.
+### Priorité basse
 
-**radix-ui unifié** (`^1.4.3`) : déjà migré. 9 composants shadcn depuis `"radix-ui"`.
+- **7 lieux sans photo** : 5 faute d'image libre (`site-de-baltan`, `ecurie-de-la-coliniere`, `sables-de-nancay`, `maison-de-reuilly`, `golf-de-la-carte`), 2 volontairement (Galerie Capazza, Fondation du doute).
+- **Slugs des guides anglais** encore en français.
+- **Vidéo** : le film est monté à partir des photos, de vrais plans filmés le remplaceraient.
+- **Cloudflare** : envisager le proxy si les compteurs Vercel remontent.
 
-`tsc --noEmit` : vert. `biome check` : vert. Build : vert.
+## Validations à faire sur vrai téléphone
 
-## Reporté — passe suivante
+Jamais testé sur appareil réel, ni sur Safari et Firefox :
 
-### Polish design éditorial (attend vraies photos pour être optimal)
-
-- `IntroSection` : layout décalé 60/40 (actuellement fonctionnel mais non asymétrique
-  photo-first — à affiner quand photos extérieur disponibles).
-- `HighlightsSection` : bande éditoriale sans cards (en place, à enrichir avec photos).
-- `PhotoGallery` : masonry + lightbox implémentés ; galerie vide sans photos uploadées dans
-  le CMS → à re-seed une fois les photos fournies.
-- Placeholder équestre dans EquestrianSection → remplacer par photo réelle (bloquant client).
-
-### Simplification CMS
-
-- `Pages.ts` : scinder la collection conditionnelle-par-slug en pages dédiées — nécessite
-  migration de données (décision + script).
-- Champ `icon` texte libre → select borné (libellés FR) dans Amenities/Pages.
-- `OnboardingGuides` : afficher l'URL complète du livret + bouton Copier.
-- `Footer` : `RowLabel` sur les arrays imbriqués.
-
-## Bloquants — actions requises côté client
-
-1. **Photos extérieur et équestres** (bloquant photo-first) : pas d'extérieur/façade, pas
-   de paysage Sologne, pas de photo équestre. EquestrianSection affiche un placeholder
-   calibré. La galerie `/le-gite` est vide sans upload CMS. Liste à fournir : extérieur
-   jour/soir, jardin/terrasse supplémentaires, paysage Sologne, éventuellement Grand Parquet
-   (depuis leur site officiel, avec autorisation).
-
-2. **NAP réel** (critique pour JSON-LD et SEO local) : adresse exacte, ville (`41200`),
-   code postal, téléphone, coordonnées GPS 5 décimales — à saisir dans SiteSettings du CMS.
-   Sans ces données, le JSON-LD `LodgingBusiness` n'a pas de `geo`, `streetAddress` ni
-   `telephone` → pénalité Knowledge Graph.
-
-3. **Liens plateformes** (CTA silencieux) : URLs Airbnb / Booking / Abritel / Google
-   Business — à saisir dans SiteSettings (`sameAs`) et PricingConfig (`platformLinks`). Sans
-   eux, les boutons CTA (hero, CTASection, BookingLinks) ne s'affichent pas ou pointent
-   vers `/tarifs-reservation`.
-
-4. **Secrets prod** :
-   - `NEXT_PUBLIC_SITE_URL` = vrai domaine (sinon OG/metadataBase pointent localhost)
-   - `RESEND_API_KEY` (sans : messages de contact en console uniquement, pas d'email)
-   - `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (sans : pas de captcha)
-   - `DATABASE_URL` / `PAYLOAD_SECRET` / `BLOB_READ_WRITE_TOKEN` (prod Neon + Vercel Blob)
-
-5. **Décision bilingue FR/EN** : conserver le bilingue (double saisie CMS, URLs `/en/*`)
-   ou désactiver `en` ? Clientèle 100 % FR local. Si désactivé : retirer les routes `/en/*`
-   du sitemap, routing.ts et proxy.ts (travail technique, 1-2h).
-
-6. **Livret d'accueil** (`/livret-accueil/[token]`, noindex) : fonctionnalité complète
-   codée. Inclure en v1 ou masquer ? Hors périmètre vitrine stricte.
-
-## Schéma DB (workflow push)
-
-Pas de dossier `migrations/`. Payload synchronise le schéma à l'init en dev. Après tout
-ajout de champ : lancer `next dev` une fois AVANT `pnpm build`. Migrations formelles
-recommandées pour la prod.
+- Écran d'entrée (animation, son, une fois par session).
+- Film : lecture, modale, volume, sous-titres.
+- Parallaxe des sections sombres.
+- Défilement vers les ancres sur iOS.
+- Turnstile au focus du formulaire de contact.
+- Responsive, téléphone couché compris.

@@ -1,0 +1,23 @@
+{
+  "share": {
+    "home": {
+      "proof": "{guests} personnes, {surface} m², jardin clos"
+    },
+    "cottage": {
+      "proof": "{bedrooms} chambres, {bathrooms, plural, one {# salle de bain} other {# salles de bain}}, jardin clos"
+    },
+    "surroundings": {
+      "proof": "{count} lieux, de {min} à {max} de route"
+    },
+    "guides": {
+      "proof": "{count} guides, temps de route inclus"
+    },
+    "contact": {
+      "proof": "À {city}, en Sologne"
+    },
+    "guide": {
+      "single": "À {drive} du gîte en voiture",
+      "range": "{count} lieux, de {min} à {max} du gîte"
+    }
+  }
+}

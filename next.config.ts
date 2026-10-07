@@ -4,36 +4,91 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const siteUrl = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+);
+
+const isLocalSite =
+  !process.env.VERCEL && ["localhost", "127.0.0.1"].includes(siteUrl.hostname);
+
+const ROUTED_SEGMENTS = ["fr", "en", "api", "admin", "og", "_next"];
+
+const MERGED_GUIDES = {
+  "hebergement-cavaliers-lamotte-beuvron": "tourisme-equestre-en-sologne",
+  "generali-open-de-france-ou-dormir": "tourisme-equestre-en-sologne",
+  "game-fair-lamotte-beuvron-hebergement": "tourisme-equestre-en-sologne",
+  "coucher-de-soleil-et-apero-sur-la-loire-en-bateau":
+    "balade-en-bateau-sur-la-loire-depuis-la-sologne",
+  "vouvray-et-montlouis-caves-a-visiter-depuis-romorantin":
+    "route-des-vins-cheverny-touraine-depuis-la-sologne",
+  "incontournables-centre-val-de-loire-depuis-romorantin":
+    "chateaux-de-la-loire-depuis-romorantin",
+};
+
+const STATIC_ASSET_CACHE =
+  "public, max-age=604800, stale-while-revalidate=2592000";
+
 const nextConfig: NextConfig = {
+  outputFileTracingExcludes: {
+    "/*": ["scripts/**/*", "media/**/*"],
+  },
   turbopack: {
     resolveAlias: {
       "@payload-config": "./src/payload.config.ts",
     },
   },
   images: {
-    formats: ["image/avif", "image/webp"],
-    qualities: [75, 85],
+    formats: ["image/avif"],
+    qualities: [75],
+    deviceSizes: [640, 828, 1200, 1920, 2400],
+    imageSizes: [384],
     minimumCacheTTL: 31536000,
-    dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
+    dangerouslyAllowLocalIP: isLocalSite,
     remotePatterns: [
       {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",
       },
-      ...(process.env.NODE_ENV === "development"
-        ? [
-            {
-              protocol: "http" as const,
-              hostname: "localhost",
-              port: "3000",
-              pathname: "/api/media/**",
-            },
-          ]
-        : []),
+      {
+        protocol: siteUrl.protocol === "https:" ? "https" : "http",
+        hostname: siteUrl.hostname,
+        port: siteUrl.port,
+        pathname: "/api/media/**",
+      },
     ],
+  },
+  async redirects() {
+    return Object.entries(MERGED_GUIDES).flatMap(([merged, target]) =>
+      ["", "/en"].map((prefix) => ({
+        source: `${prefix}/guides/${merged}`,
+        destination: `${prefix}/guides/${target}`,
+        permanent: true,
+      })),
+    );
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [
+        {
+          source: `/:segment((?!(?:${ROUTED_SEGMENTS.join("|")})(?:/|$))[^/]+)/:rest*`,
+          destination: "/fr/:segment/:rest*",
+        },
+      ],
+      fallback: [],
+    };
   },
   async headers() {
     return [
+      {
+        source: "/:folder(videos|sounds|images|icons)/:file*",
+        headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE }],
+      },
+      {
+        source: "/(.*)",
+        has: [{ type: "host", value: ".*\\.vercel\\.app" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
       {
         source: "/(.*)",
         headers: [

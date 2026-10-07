@@ -8,7 +8,10 @@ export const Users: CollectionConfig = {
   auth: true,
   admin: {
     useAsTitle: "email",
-    description: "Comptes administrateurs du site",
+    group: "Réglages",
+    description:
+      "Les personnes qui peuvent se connecter à cet espace. Pour changer votre mot de passe, ouvrez votre compte.",
+    defaultColumns: ["email", "name", "updatedAt"],
   },
   access: {
     create: isAuthenticated,
@@ -20,10 +23,11 @@ export const Users: CollectionConfig = {
     {
       name: "name",
       type: "text",
-      label: "Nom complet",
+      label: "Prénom",
+      maxLength: 60,
       admin: {
-        description: "Votre prénom et nom",
-        placeholder: "Marie Dupont",
+        description: "Affiché sur le tableau de bord pour vous saluer.",
+        placeholder: "Karine",
       },
     },
   ],

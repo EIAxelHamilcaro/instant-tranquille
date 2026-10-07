@@ -1,0 +1,23 @@
+{
+  "share": {
+    "home": {
+      "proof": "Sleeps {guests}, {surface} m², enclosed garden"
+    },
+    "cottage": {
+      "proof": "{bedrooms} bedrooms, {bathrooms, plural, one {# bathroom} other {# bathrooms}}, enclosed garden"
+    },
+    "surroundings": {
+      "proof": "{count} places, {min} to {max} by car"
+    },
+    "guides": {
+      "proof": "{count} guides with driving times"
+    },
+    "contact": {
+      "proof": "In {city}, Sologne"
+    },
+    "guide": {
+      "single": "{drive} by car from the cottage",
+      "range": "{count} places, {min} to {max} from the cottage"
+    }
+  }
+}

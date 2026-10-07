@@ -1,21 +1,16 @@
-import { Fraunces, Hanken_Grotesk, Spline_Sans_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Newsreader } from "next/font/google";
 
-export const fraunces = Fraunces({
+export const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  axes: ["opsz", "wdth"],
+  variable: "--font-bricolage",
+  display: "swap",
+});
+
+export const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  axes: ["opsz", "SOFT"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-export const hankenGrotesk = Hanken_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-hanken",
-  display: "swap",
-});
-
-export const splineSansMono = Spline_Sans_Mono({
-  subsets: ["latin"],
-  variable: "--font-spline-mono",
+  axes: ["opsz"],
+  variable: "--font-newsreader",
   display: "swap",
 });

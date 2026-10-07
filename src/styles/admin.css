@@ -1,0 +1,1121 @@
+:root {
+  --lit-nuit: #071917;
+  --lit-etang: #0e2b28;
+  --lit-etang-clair: #1c423d;
+  --lit-brume: #e9ede5;
+  --lit-bouleau: #f8f9f4;
+  --lit-lumiere: #f2c66d;
+  --lit-bruyere: #93467a;
+  --lit-fougere: #2c6a45;
+  --lit-roseau: #96701f;
+  --lit-alerte: #a8321f;
+  --lit-encre-douce: #4a5f59;
+  --lit-trait: color-mix(in oklab, var(--lit-etang) 16%, transparent);
+
+  --color-base-0: var(--lit-bouleau);
+  --color-base-50: color-mix(in oklab, var(--lit-etang) 5%, var(--lit-bouleau));
+  --color-base-100: color-mix(
+    in oklab,
+    var(--lit-etang) 10%,
+    var(--lit-bouleau)
+  );
+  --color-base-150: color-mix(
+    in oklab,
+    var(--lit-etang) 15%,
+    var(--lit-bouleau)
+  );
+  --color-base-200: color-mix(
+    in oklab,
+    var(--lit-etang) 21%,
+    var(--lit-bouleau)
+  );
+  --color-base-250: color-mix(
+    in oklab,
+    var(--lit-etang) 30%,
+    var(--lit-bouleau)
+  );
+  --color-base-300: color-mix(
+    in oklab,
+    var(--lit-etang) 38%,
+    var(--lit-bouleau)
+  );
+  --color-base-350: color-mix(
+    in oklab,
+    var(--lit-etang) 46%,
+    var(--lit-bouleau)
+  );
+  --color-base-400: color-mix(
+    in oklab,
+    var(--lit-etang) 54%,
+    var(--lit-bouleau)
+  );
+  --color-base-450: color-mix(
+    in oklab,
+    var(--lit-etang) 62%,
+    var(--lit-bouleau)
+  );
+  --color-base-500: color-mix(
+    in oklab,
+    var(--lit-etang) 68%,
+    var(--lit-bouleau)
+  );
+  --color-base-550: color-mix(
+    in oklab,
+    var(--lit-etang) 74%,
+    var(--lit-bouleau)
+  );
+  --color-base-600: color-mix(
+    in oklab,
+    var(--lit-etang) 79%,
+    var(--lit-bouleau)
+  );
+  --color-base-650: color-mix(
+    in oklab,
+    var(--lit-etang) 83%,
+    var(--lit-bouleau)
+  );
+  --color-base-700: color-mix(
+    in oklab,
+    var(--lit-etang) 87%,
+    var(--lit-bouleau)
+  );
+  --color-base-750: color-mix(
+    in oklab,
+    var(--lit-etang) 91%,
+    var(--lit-bouleau)
+  );
+  --color-base-800: color-mix(
+    in oklab,
+    var(--lit-etang) 95%,
+    var(--lit-bouleau)
+  );
+  --color-base-850: color-mix(
+    in oklab,
+    var(--lit-etang) 97%,
+    var(--lit-bouleau)
+  );
+  --color-base-900: var(--lit-etang);
+  --color-base-950: var(--lit-nuit);
+  --color-base-1000: var(--lit-nuit);
+
+  --color-success-50: color-mix(
+    in oklab,
+    var(--lit-fougere) 10%,
+    var(--lit-bouleau)
+  );
+  --color-success-100: color-mix(
+    in oklab,
+    var(--lit-fougere) 20%,
+    var(--lit-bouleau)
+  );
+  --color-success-150: color-mix(
+    in oklab,
+    var(--lit-fougere) 30%,
+    var(--lit-bouleau)
+  );
+  --color-success-200: color-mix(
+    in oklab,
+    var(--lit-fougere) 40%,
+    var(--lit-bouleau)
+  );
+  --color-success-250: color-mix(
+    in oklab,
+    var(--lit-fougere) 50%,
+    var(--lit-bouleau)
+  );
+  --color-success-300: color-mix(
+    in oklab,
+    var(--lit-fougere) 60%,
+    var(--lit-bouleau)
+  );
+  --color-success-350: color-mix(
+    in oklab,
+    var(--lit-fougere) 70%,
+    var(--lit-bouleau)
+  );
+  --color-success-400: color-mix(
+    in oklab,
+    var(--lit-fougere) 80%,
+    var(--lit-bouleau)
+  );
+  --color-success-450: color-mix(
+    in oklab,
+    var(--lit-fougere) 90%,
+    var(--lit-bouleau)
+  );
+  --color-success-500: var(--lit-fougere);
+  --color-success-550: color-mix(
+    in oklab,
+    var(--lit-nuit) 9%,
+    var(--lit-fougere)
+  );
+  --color-success-600: color-mix(
+    in oklab,
+    var(--lit-nuit) 18%,
+    var(--lit-fougere)
+  );
+  --color-success-650: color-mix(
+    in oklab,
+    var(--lit-nuit) 27%,
+    var(--lit-fougere)
+  );
+  --color-success-700: color-mix(
+    in oklab,
+    var(--lit-nuit) 36%,
+    var(--lit-fougere)
+  );
+  --color-success-750: color-mix(
+    in oklab,
+    var(--lit-nuit) 45%,
+    var(--lit-fougere)
+  );
+  --color-success-800: color-mix(
+    in oklab,
+    var(--lit-nuit) 54%,
+    var(--lit-fougere)
+  );
+  --color-success-850: color-mix(
+    in oklab,
+    var(--lit-nuit) 63%,
+    var(--lit-fougere)
+  );
+  --color-success-900: color-mix(
+    in oklab,
+    var(--lit-nuit) 72%,
+    var(--lit-fougere)
+  );
+  --color-success-950: color-mix(
+    in oklab,
+    var(--lit-nuit) 81%,
+    var(--lit-fougere)
+  );
+
+  --color-warning-50: color-mix(
+    in oklab,
+    var(--lit-roseau) 10%,
+    var(--lit-bouleau)
+  );
+  --color-warning-100: color-mix(
+    in oklab,
+    var(--lit-roseau) 20%,
+    var(--lit-bouleau)
+  );
+  --color-warning-150: color-mix(
+    in oklab,
+    var(--lit-roseau) 30%,
+    var(--lit-bouleau)
+  );
+  --color-warning-200: color-mix(
+    in oklab,
+    var(--lit-roseau) 40%,
+    var(--lit-bouleau)
+  );
+  --color-warning-250: color-mix(
+    in oklab,
+    var(--lit-roseau) 50%,
+    var(--lit-bouleau)
+  );
+  --color-warning-300: color-mix(
+    in oklab,
+    var(--lit-roseau) 60%,
+    var(--lit-bouleau)
+  );
+  --color-warning-350: color-mix(
+    in oklab,
+    var(--lit-roseau) 70%,
+    var(--lit-bouleau)
+  );
+  --color-warning-400: color-mix(
+    in oklab,
+    var(--lit-roseau) 80%,
+    var(--lit-bouleau)
+  );
+  --color-warning-450: color-mix(
+    in oklab,
+    var(--lit-roseau) 90%,
+    var(--lit-bouleau)
+  );
+  --color-warning-500: var(--lit-roseau);
+  --color-warning-550: color-mix(
+    in oklab,
+    var(--lit-nuit) 9%,
+    var(--lit-roseau)
+  );
+  --color-warning-600: color-mix(
+    in oklab,
+    var(--lit-nuit) 18%,
+    var(--lit-roseau)
+  );
+  --color-warning-650: color-mix(
+    in oklab,
+    var(--lit-nuit) 27%,
+    var(--lit-roseau)
+  );
+  --color-warning-700: color-mix(
+    in oklab,
+    var(--lit-nuit) 36%,
+    var(--lit-roseau)
+  );
+  --color-warning-750: color-mix(
+    in oklab,
+    var(--lit-nuit) 45%,
+    var(--lit-roseau)
+  );
+  --color-warning-800: color-mix(
+    in oklab,
+    var(--lit-nuit) 54%,
+    var(--lit-roseau)
+  );
+  --color-warning-850: color-mix(
+    in oklab,
+    var(--lit-nuit) 63%,
+    var(--lit-roseau)
+  );
+  --color-warning-900: color-mix(
+    in oklab,
+    var(--lit-nuit) 72%,
+    var(--lit-roseau)
+  );
+  --color-warning-950: color-mix(
+    in oklab,
+    var(--lit-nuit) 81%,
+    var(--lit-roseau)
+  );
+
+  --color-error-50: color-mix(
+    in oklab,
+    var(--lit-alerte) 10%,
+    var(--lit-bouleau)
+  );
+  --color-error-100: color-mix(
+    in oklab,
+    var(--lit-alerte) 20%,
+    var(--lit-bouleau)
+  );
+  --color-error-150: color-mix(
+    in oklab,
+    var(--lit-alerte) 30%,
+    var(--lit-bouleau)
+  );
+  --color-error-200: color-mix(
+    in oklab,
+    var(--lit-alerte) 40%,
+    var(--lit-bouleau)
+  );
+  --color-error-250: color-mix(
+    in oklab,
+    var(--lit-alerte) 50%,
+    var(--lit-bouleau)
+  );
+  --color-error-300: color-mix(
+    in oklab,
+    var(--lit-alerte) 60%,
+    var(--lit-bouleau)
+  );
+  --color-error-350: color-mix(
+    in oklab,
+    var(--lit-alerte) 70%,
+    var(--lit-bouleau)
+  );
+  --color-error-400: color-mix(
+    in oklab,
+    var(--lit-alerte) 80%,
+    var(--lit-bouleau)
+  );
+  --color-error-450: color-mix(
+    in oklab,
+    var(--lit-alerte) 90%,
+    var(--lit-bouleau)
+  );
+  --color-error-500: var(--lit-alerte);
+  --color-error-550: color-mix(in oklab, var(--lit-nuit) 9%, var(--lit-alerte));
+  --color-error-600: color-mix(
+    in oklab,
+    var(--lit-nuit) 18%,
+    var(--lit-alerte)
+  );
+  --color-error-650: color-mix(
+    in oklab,
+    var(--lit-nuit) 27%,
+    var(--lit-alerte)
+  );
+  --color-error-700: color-mix(
+    in oklab,
+    var(--lit-nuit) 36%,
+    var(--lit-alerte)
+  );
+  --color-error-750: color-mix(
+    in oklab,
+    var(--lit-nuit) 45%,
+    var(--lit-alerte)
+  );
+  --color-error-800: color-mix(
+    in oklab,
+    var(--lit-nuit) 54%,
+    var(--lit-alerte)
+  );
+  --color-error-850: color-mix(
+    in oklab,
+    var(--lit-nuit) 63%,
+    var(--lit-alerte)
+  );
+  --color-error-900: color-mix(
+    in oklab,
+    var(--lit-nuit) 72%,
+    var(--lit-alerte)
+  );
+  --color-error-950: color-mix(
+    in oklab,
+    var(--lit-nuit) 81%,
+    var(--lit-alerte)
+  );
+
+  --style-radius-s: 4px;
+  --style-radius-m: 6px;
+  --style-radius-l: 10px;
+  --accessibility-outline: 2px solid var(--lit-bruyere);
+  --accessibility-outline-offset: 2px;
+}
+
+html[data-theme="light"] {
+  --theme-bg: var(--lit-brume);
+  --theme-input-bg: var(--lit-bouleau);
+  --theme-text: var(--lit-etang);
+  --theme-overlay: color-mix(in oklab, var(--lit-nuit) 62%, transparent);
+}
+
+body {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-body);
+  font-variation-settings: "wdth" 80;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: var(--accessibility-outline);
+  outline-offset: var(--accessibility-outline-offset);
+}
+
+::selection {
+  background: var(--lit-lumiere);
+  color: var(--lit-nuit);
+}
+
+.lit-hors-ecran {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.lit-icone {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--lit-etang);
+}
+
+.nav {
+  --theme-text: var(--lit-brume);
+  --theme-elevation-100: color-mix(
+    in oklab,
+    var(--lit-brume) 14%,
+    var(--lit-etang)
+  );
+  --theme-elevation-400: color-mix(
+    in oklab,
+    var(--lit-brume) 72%,
+    var(--lit-etang)
+  );
+  --theme-elevation-1000: var(--lit-bouleau);
+  --accessibility-outline: 2px solid var(--lit-lumiere);
+  background: linear-gradient(175deg, var(--lit-etang) 30%, var(--lit-nuit));
+  color: var(--lit-brume);
+  border-right: 0;
+}
+
+.nav .nav-group__toggle {
+  margin-bottom: 0.35rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.nav .nav-group__toggle .stroke {
+  stroke: currentColor;
+}
+
+.nav .nav__link {
+  padding-block: 0.3rem;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--lit-brume);
+}
+
+.nav .nav__link:hover,
+.nav a.nav__link:focus-visible {
+  color: var(--lit-lumiere);
+  text-decoration: none;
+}
+
+.nav .nav__link.active,
+.nav .nav__link:has(.nav__link-indicator) {
+  color: var(--lit-lumiere);
+}
+
+.nav .nav__link-indicator {
+  width: 3px;
+  background: var(--lit-lumiere);
+}
+
+.lit-nav-enseigne {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: calc(var(--base) * 1.4);
+  color: var(--lit-bouleau);
+  text-decoration: none;
+}
+
+.lit-nav-enseigne svg {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--lit-lumiere);
+}
+
+.lit-nav-enseigne span {
+  display: grid;
+  font-size: 1.25rem;
+  font-weight: 650;
+  font-variation-settings: "wdth" 80;
+  line-height: 1.1;
+}
+
+.lit-nav-enseigne small {
+  margin-top: 0.2rem;
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: normal;
+  color: color-mix(in oklab, var(--lit-brume) 78%, var(--lit-etang));
+}
+
+.lit-nav-site {
+  align-self: stretch;
+  margin-top: calc(var(--base) * 1.2);
+  padding: 0.6rem 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--lit-brume) 38%, transparent);
+  border-radius: var(--style-radius-m);
+  color: var(--lit-bouleau);
+  font-weight: 550;
+  text-align: center;
+  text-decoration: none;
+}
+
+.lit-nav-site:hover,
+.lit-nav-site:focus-visible {
+  background: var(--lit-lumiere);
+  border-color: var(--lit-lumiere);
+  color: var(--lit-nuit);
+}
+
+.nav .nav__controls {
+  margin-top: calc(var(--base) * 0.8);
+}
+
+.nav .nav__log-out {
+  color: var(--lit-brume);
+}
+
+.nav .nav__log-out .stroke {
+  stroke: currentColor;
+}
+
+.nav--nav-open ~ .nav__header,
+.nav__header {
+  color: var(--lit-brume);
+}
+
+.nav__header .hamburger {
+  background: var(--lit-etang-clair);
+  border-color: transparent;
+  color: var(--lit-bouleau);
+}
+
+.nav__header .hamburger .stroke {
+  stroke: currentColor;
+}
+
+.app-header {
+  --app-header-bg: var(--lit-brume);
+}
+
+.step-nav {
+  font-size: 0.9375rem;
+}
+
+.step-nav a {
+  text-decoration-color: var(--lit-trait);
+  text-underline-offset: 0.2em;
+}
+
+.btn {
+  font-weight: 550;
+}
+
+.btn--style-primary {
+  --bg-color: var(--lit-etang);
+  --color: var(--lit-bouleau);
+  --hover-bg: var(--lit-etang-clair);
+  --hover-color: var(--lit-bouleau);
+}
+
+.btn--style-secondary {
+  --color: var(--lit-etang);
+  --btn-border: 1px solid color-mix(in oklab, var(--lit-etang) 55%, transparent);
+  --hover-color: var(--lit-etang);
+  --hover-btn-border: 1px solid var(--lit-etang);
+}
+
+.field-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--lit-etang);
+}
+
+.field-label .required {
+  color: var(--lit-alerte);
+}
+
+.field-description {
+  max-width: 44rem;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--lit-encre-douce);
+}
+
+.field-type input:not([type="checkbox"]):not([type="radio"]),
+.field-type textarea,
+.field-type .rs__control,
+.rich-text-lexical .editor-container {
+  border-color: color-mix(in oklab, var(--lit-etang) 30%, transparent);
+  background: var(--lit-bouleau);
+}
+
+.field-type input:not([type="checkbox"]):not([type="radio"]):focus,
+.field-type textarea:focus,
+.field-type .rs__control--is-focused {
+  border-color: var(--lit-bruyere);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--lit-bruyere) 28%, transparent);
+  outline: 0;
+}
+
+.field-type input::placeholder,
+.field-type textarea::placeholder {
+  color: color-mix(in oklab, var(--lit-encre-douce) 82%, var(--lit-bouleau));
+  font-style: italic;
+}
+
+.field-type.error input,
+.field-type.error textarea {
+  border-color: var(--lit-alerte);
+  background: color-mix(in oklab, var(--lit-alerte) 5%, var(--lit-bouleau));
+}
+
+.field-error.tooltip {
+  --tooltip-bg: var(--lit-alerte);
+  max-width: min(32rem, 80vw);
+  background: var(--lit-alerte);
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.field-error.tooltip::after {
+  border-top-color: var(--lit-alerte);
+  border-bottom-color: var(--lit-alerte);
+}
+
+.lit-compteur {
+  margin: 0.3rem 0 0;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lit-encre-douce);
+}
+
+.lit-compteur[data-etat="proche"] {
+  color: #6f5212;
+  font-weight: 600;
+}
+
+.lit-compteur[data-etat="depasse"] {
+  color: var(--lit-alerte);
+  font-weight: 600;
+}
+
+.lit-aide {
+  max-width: 44rem;
+  margin: 0.4rem 0 0;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--lit-encre-douce);
+}
+
+.lit-action {
+  margin-bottom: var(--base);
+}
+
+.lit-action .btn {
+  margin: 0;
+}
+
+.lit-note {
+  max-width: 44rem;
+  margin-bottom: var(--base);
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--lit-lumiere);
+  border-radius: 0 var(--style-radius-m) var(--style-radius-m) 0;
+  background: color-mix(in oklab, var(--lit-lumiere) 16%, var(--lit-bouleau));
+  color: var(--lit-etang);
+}
+
+.lit-note strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.lit-note p {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.tabs-field__tabs {
+  gap: 0.25rem;
+}
+
+.tabs-field__tab-button {
+  padding-inline: 0.2rem;
+  margin-inline-end: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--lit-encre-douce);
+  opacity: 1;
+}
+
+.tabs-field__tab-button:hover {
+  color: var(--lit-etang);
+}
+
+.tabs-field__tab-button--active {
+  color: var(--lit-etang);
+}
+
+.tabs-field__tab-button--active::after {
+  height: 3px;
+  background: var(--lit-bruyere);
+  opacity: 1;
+}
+
+.tabs-field__tab-button--has-error {
+  color: var(--lit-alerte);
+}
+
+.tabs-field__description {
+  font-family: var(--font-serif);
+  color: var(--lit-encre-douce);
+}
+
+.collapsible,
+.array-field__row,
+.blocks-field__row {
+  --theme-elevation-50: color-mix(
+    in oklab,
+    var(--lit-etang) 5%,
+    var(--lit-bouleau)
+  );
+}
+
+.collapsible__toggle-wrap {
+  background: color-mix(in oklab, var(--lit-etang) 7%, var(--lit-bouleau));
+}
+
+.collapsible__content {
+  background: var(--lit-bouleau);
+}
+
+.row-label {
+  font-weight: 600;
+}
+
+.table {
+  --theme-elevation-50: color-mix(
+    in oklab,
+    var(--lit-etang) 4%,
+    var(--lit-bouleau)
+  );
+}
+
+.table table {
+  background: var(--lit-bouleau);
+  border-radius: var(--style-radius-m);
+}
+
+.table th {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--lit-encre-douce);
+}
+
+.table td a {
+  color: var(--lit-etang);
+  font-weight: 600;
+  text-decoration-color: var(--lit-bruyere);
+  text-underline-offset: 0.2em;
+}
+
+.pill--style-success {
+  background: color-mix(in oklab, var(--lit-fougere) 18%, var(--lit-bouleau));
+  color: #1c4a2f;
+}
+
+.pill--style-warning {
+  background: color-mix(in oklab, var(--lit-lumiere) 45%, var(--lit-bouleau));
+  color: #4f3a0a;
+}
+
+.pill--style-error {
+  background: color-mix(in oklab, var(--lit-alerte) 16%, var(--lit-bouleau));
+  color: #7a2014;
+}
+
+.doc-controls {
+  background: var(--lit-brume);
+}
+
+.live-preview-window {
+  background: color-mix(in oklab, var(--lit-etang) 10%, var(--lit-brume));
+}
+
+.template-minimal {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    repeating-radial-gradient(
+      ellipse 120% 30% at 50% 78%,
+      transparent 0 3.2rem,
+      color-mix(in oklab, var(--lit-lumiere) 13%, transparent) 3.2rem
+        calc(3.2rem + 1px)
+    ),
+    linear-gradient(178deg, var(--lit-etang), var(--lit-nuit) 85%);
+}
+
+.template-minimal__wrap {
+  padding: clamp(1.5rem, 5vw, 2.75rem);
+  border-radius: var(--style-radius-l);
+  background: var(--lit-bouleau);
+  box-shadow: 0 1.5rem 4rem -1.5rem var(--lit-nuit);
+}
+
+.login__brand {
+  margin-bottom: 1.25rem;
+}
+
+.lit-enseigne {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  color: var(--lit-etang);
+}
+
+.lit-etang {
+  position: absolute;
+  inset: auto 0 2.6rem;
+  width: 100%;
+  height: 6rem;
+  fill: none;
+  stroke: var(--lit-etang);
+  stroke-width: 1;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+  mask-image: linear-gradient(90deg, transparent, #000 25% 75%, transparent);
+}
+
+.lit-heron {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+.lit-nom {
+  position: relative;
+  margin: 1.4rem 0 0;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  font-weight: 700;
+  font-variation-settings: "wdth" 76;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+.lit-accueil-connexion {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--lit-encre-douce);
+}
+
+.lit-bord {
+  max-width: 62rem;
+  padding-block: clamp(1.5rem, 4vw, 3rem) calc(var(--base) * 3);
+}
+
+.lit-bord-entete {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.5rem 2rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--lit-trait);
+}
+
+.lit-bord-entete h1 {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  font-variation-settings: "wdth" 76;
+  line-height: 1;
+}
+
+.lit-bord-entete p {
+  max-width: 34rem;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.45;
+  color: var(--lit-encre-douce);
+}
+
+.lit-bord-site {
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--style-radius-m);
+  background: var(--lit-etang);
+  color: var(--lit-bouleau);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lit-bord-site:hover,
+.lit-bord-site:focus-visible {
+  background: var(--lit-etang-clair);
+  color: var(--lit-lumiere);
+}
+
+.lit-gestes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lit-gestes > li {
+  border-bottom: 1px solid var(--lit-trait);
+}
+
+.lit-gestes > li > a,
+.lit-geste-pages {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) 1fr;
+  align-items: baseline;
+  gap: 0.25rem 2rem;
+  padding: 1.15rem 0.75rem;
+  margin-inline: -0.75rem;
+  border-radius: var(--style-radius-m);
+  color: var(--lit-etang);
+  text-decoration: none;
+}
+
+.lit-gestes > li > a:hover,
+.lit-gestes > li > a:focus-visible {
+  background: var(--lit-bouleau);
+}
+
+.lit-gestes strong {
+  font-size: 1.5rem;
+  font-weight: 650;
+  font-variation-settings: "wdth" 80;
+  line-height: 1.15;
+}
+
+.lit-gestes > li > a:hover strong {
+  text-decoration: underline;
+  text-decoration-color: var(--lit-bruyere);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.lit-gestes > li > a span {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  color: var(--lit-encre-douce);
+}
+
+.lit-gestes > li[data-urgent] > a span {
+  justify-self: start;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--lit-lumiere);
+  color: var(--lit-nuit);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.lit-geste-pages ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lit-geste-pages a {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--lit-etang) 40%, transparent);
+  border-radius: 999px;
+  color: var(--lit-etang);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.lit-geste-pages a:hover,
+.lit-geste-pages a:focus-visible {
+  background: var(--lit-etang);
+  border-color: var(--lit-etang);
+  color: var(--lit-bouleau);
+}
+
+.lit-bord-langues {
+  max-width: 44rem;
+  margin-top: 2.25rem;
+}
+
+.lit-bord-langues h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.3125rem;
+}
+
+.lit-bord-langues p {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: var(--lit-encre-douce);
+}
+
+.lit-bord-langues p[data-manque] {
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--lit-lumiere);
+  background: color-mix(in oklab, var(--lit-lumiere) 16%, var(--lit-bouleau));
+  color: var(--lit-etang);
+}
+
+.localizer-button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid color-mix(in oklab, var(--lit-etang) 35%, transparent);
+  border-radius: var(--style-radius-m);
+  background: var(--lit-bouleau);
+  font-size: 0.9375rem;
+}
+
+.localizer-button__label {
+  color: var(--lit-encre-douce);
+}
+
+.localizer-button__current {
+  font-weight: 650;
+  color: var(--lit-etang);
+}
+
+.field-label .localized,
+.field-label [class*="locale"] {
+  color: var(--lit-bruyere);
+  font-weight: 500;
+}
+
+.template-default--nav-open .template-default__nav-toggler .hamburger {
+  background: var(--lit-etang-clair);
+  border-color: transparent;
+  color: var(--lit-bouleau);
+}
+
+.lit-bord-faits {
+  max-width: 44rem;
+  margin: 2rem 0 0;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--lit-encre-douce);
+}
+
+.lit-bord-faits a {
+  color: var(--lit-etang);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-decoration-color: var(--lit-bruyere);
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 48rem) {
+  .lit-bord-entete {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .lit-gestes > li > a,
+  .lit-geste-pages {
+    grid-template-columns: 1fr;
+  }
+
+  .lit-gestes strong {
+    font-size: 1.3125rem;
+  }
+
+  .lit-geste-pages a {
+    padding-block: 0.6rem;
+  }
+
+  .template-minimal {
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

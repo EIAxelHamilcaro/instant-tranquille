@@ -1,63 +1,61 @@
 import type { Metadata, Viewport } from "next";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import {
-  getMessages,
-  getTranslations,
-  setRequestLocale,
-} from "next-intl/server";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { AnchorGuard } from "@/components/layout/AnchorGuard";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { MainShell } from "@/components/layout/MainShell";
-import { StickyBookingBar } from "@/components/layout/StickyBookingBar";
-import type { Locale } from "@/i18n/config";
+import { LivePreviewRefresh } from "@/components/layout/LivePreviewRefresh";
+import { Opening } from "@/components/layout/Opening";
+import { OpeningGuard } from "@/components/layout/OpeningGuard";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { BookingButtons } from "@/components/shared/BookingButtons";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { SoftImageReveal } from "@/components/shared/SoftImage";
 import { routing } from "@/i18n/routing";
-import { fraunces, hankenGrotesk, splineSansMono } from "@/lib/fonts";
-import { generateWebSiteJsonLd } from "@/lib/jsonld";
-import { getPricingConfig, getSiteSettings } from "@/lib/queries";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+import { bricolage, newsreader } from "@/lib/fonts";
+import { webSiteJsonLd } from "@/lib/jsonld";
+import { getGlobal } from "@/lib/queries";
+import { SITE_URL } from "@/lib/seo";
 
 export const viewport: Viewport = {
-  themeColor: "#4a7c59",
-  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e9ede5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e2b28" },
+  ],
 };
+
+interface LayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+}: LayoutProps): Promise<Metadata> {
   const { locale } = await params;
-  if (!routing.locales.includes(locale as Locale)) {
-    notFound();
-  }
-  const settings = (await getSiteSettings(locale)) as Record<string, unknown>;
-  const siteName =
-    (settings.siteName as string | undefined) || "L'Instant Tranquille";
-  const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
+  if (!hasLocale(routing.locales, locale)) notFound();
+
+  const t = await getTranslations({ locale, namespace: "common" });
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: {
-      template: `%s, ${siteName}`,
-      default: `${siteName}, ${messages.metadata.title}`,
+    title: { template: `%s | ${t("siteName")}`, default: t("siteName") },
+    applicationName: t("siteName"),
+    appleWebApp: { title: t("siteName"), statusBarStyle: "default" },
+    icons: {
+      icon: [{ url: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
     },
-    description: messages.metadata.description,
     category: "travel",
-    formatDetection: {
-      telephone: false,
-      email: false,
-      address: false,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        "max-image-preview": "large",
-        "max-snippet": -1,
-        "max-video-preview": -1,
-      },
+    formatDetection: { telephone: false, email: false, address: false },
+    other: {
+      "geo.region": "FR-41",
+      "geo.placename": "Romorantin-Lanthenay",
     },
   };
 }
@@ -69,60 +67,53 @@ export function generateStaticParams() {
 export default async function FrontendLayout({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-}) {
+}: LayoutProps) {
   const { locale } = await params;
-
-  if (!routing.locales.includes(locale as Locale)) {
-    notFound();
-  }
+  if (!hasLocale(routing.locales, locale)) notFound();
 
   setRequestLocale(locale);
-  const messages = await getMessages();
-  const t = await getTranslations({ locale, namespace: "common" });
-  const skipText = t("skipToContent");
-
-  const pricingConfig = (await getPricingConfig(locale)) as Record<
-    string,
-    unknown
-  >;
-  const bookingLinks = pricingConfig?.bookingLinks as
-    | { airbnb?: string | null; booking?: string | null }
-    | undefined;
-
-  const webSiteJsonLd = generateWebSiteJsonLd();
+  const t = await getTranslations("common");
+  const { isEnabled: preview } = await draftMode();
+  const settings = await getGlobal("site-settings", locale);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
-        />
-        <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
-        <link rel="preconnect" href="https://tile.openstreetmap.org" />
-        <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
-        <meta name="geo.region" content="FR-CVL" />
-        <meta name="geo.placename" content="Romorantin-Lanthenay, Sologne" />
-      </head>
-      <body
-        className={`${fraunces.variable} ${hankenGrotesk.variable} ${splineSansMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider messages={messages}>
-          <div className="frontend-app flex min-h-screen flex-col">
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary-500 focus:px-4 focus:py-2 focus:font-sans focus:text-sm focus:font-medium focus:text-white focus:shadow-lg"
-            >
-              {skipText}
-            </a>
-            <Header locale={locale} />
-            <MainShell>{children}</MainShell>
-            <Footer locale={locale} />
-            <StickyBookingBar bookingLinks={bookingLinks} />
-          </div>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${bricolage.variable} ${newsreader.variable}`}
+    >
+      <body className="frontend-app flex min-h-screen flex-col">
+        {!preview && <OpeningGuard />}
+        <SoftImageReveal />
+        <AnchorGuard />
+        <JsonLd data={webSiteJsonLd()} />
+        <SmoothScroll />
+        <NextIntlClientProvider>
+          <a
+            href="#contenu"
+            className="ui evitement sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+          >
+            {t("skipToContent")}
+          </a>
+          {!preview && (
+            <Opening
+              name={t("siteName")}
+              baseline={settings.tagline ?? ""}
+              skipLabel={t("opening.skip")}
+              soundLabel={t("opening.sound")}
+            />
+          )}
+          <Header />
+          <main id="contenu" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <BookingButtons
+            settings={settings}
+            compact
+            className="barre-reservation"
+          />
+          {preview && <LivePreviewRefresh />}
         </NextIntlClientProvider>
       </body>
     </html>

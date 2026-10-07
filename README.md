@@ -1,7 +1,7 @@
 # L'Instant Tranquille
 
 Site vitrine d'un gîte en Sologne (Romorantin-Lanthenay, Loir-et-Cher) : présentation du logement,
-galerie photos, tarifs, contact, et livret d'accueil privé pour les voyageurs. Pensé pour le
+galerie photos, tarifs et contact. Pensé pour le
 **référencement local** et une **gestion autonome** du contenu via le CMS.
 
 ## Stack
@@ -34,7 +34,7 @@ pnpm seed              # (optionnel) données d'exemple
 
 ```
 src/
-  app/(frontend)/[locale]/   pages publiques (home, le-gite, tarifs-reservation, contact, livret)
+  app/(frontend)/[locale]/   pages publiques (home, le-gite, les-alentours, guides, tarifs-reservation, contact)
   app/(payload)/admin/       back-office Payload
   collections/ globals/      modèle de contenu (CMS)
   components/                sections vitrine, layout, shared, ui (shadcn), live-preview

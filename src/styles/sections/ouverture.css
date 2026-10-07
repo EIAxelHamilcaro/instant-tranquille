@@ -1,0 +1,603 @@
+.ouverture {
+  display: none;
+}
+
+[data-ouverture] .ouverture {
+  --echelle: 4.4;
+  --grand: calc(1.75rem * var(--echelle));
+  --horizon: 44svh;
+  --pied-x: 48vw;
+  --pied-y: calc(var(--horizon) + 13svh);
+  --rive: max(100vw, 150svh);
+  --logo-x: max(
+    var(--gouttiere),
+    calc((100vw - var(--largeur-page)) / 2 + var(--gouttiere))
+  );
+  --logo-y: 0.85rem;
+  --dx: calc(var(--pied-x) + var(--grand) * 0.047 - var(--logo-x) - 0.875rem);
+  --dy: calc(var(--pied-y) - var(--grand) * 0.383 - var(--logo-y) - 0.875rem);
+  --aube: color-mix(in oklab, var(--lumiere) 46%, var(--bouleau));
+  --lointain: color-mix(in oklab, var(--etang-clair) 42%, var(--aube));
+  --proche: color-mix(in oklab, var(--etang) 76%, var(--aube));
+  --rivage: color-mix(in oklab, var(--nuit) 84%, #2c6a45);
+
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: clip;
+  background: none;
+  animation: ouverture-secours 1ms 9s forwards;
+}
+
+[data-ouverture]:not([data-ouverture=""]) .ouverture {
+  pointer-events: none;
+}
+
+[data-ouverture]:not([data-ouverture="pose"]) .entete .embleme {
+  opacity: 0;
+}
+
+.ouverture > .paysage,
+.ouverture-voile {
+  position: absolute;
+  inset: 0;
+}
+
+.ouverture > .paysage {
+  overflow: clip;
+  background: linear-gradient(
+    color-mix(in oklab, var(--etang-clair) 82%, var(--bouleau)),
+    color-mix(in oklab, var(--etang-clair) 38%, var(--aube))
+      calc(var(--horizon) * 0.62),
+    var(--aube) var(--horizon),
+    color-mix(in oklab, var(--aube) 80%, var(--etang-clair))
+      calc(var(--horizon) + 4svh),
+    color-mix(in oklab, var(--brume) 34%, var(--etang-clair))
+      calc(var(--horizon) + 24svh),
+    var(--etang)
+  );
+  transition: opacity 320ms ease-in;
+}
+
+.ouverture-voile {
+  background: var(--brume);
+  opacity: 0;
+}
+
+.paysage-soleil {
+  position: absolute;
+  left: 66%;
+  top: calc(var(--horizon) - 9svh);
+  width: 7svh;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bouleau);
+  box-shadow: 0 0 5svh 2svh var(--aube);
+}
+
+.paysage-oiseau {
+  position: absolute;
+  left: 22%;
+  top: calc(var(--horizon) * 0.42);
+  width: 1.1rem;
+  overflow: visible;
+  stroke: var(--nuit);
+  stroke-width: 1.6;
+  opacity: 0.5;
+}
+
+.paysage-rive {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--horizon) - var(--rive) * 0.1875);
+  width: var(--rive);
+  translate: -50% 0;
+}
+
+.paysage-lointain {
+  fill: var(--lointain);
+}
+
+.paysage-proche {
+  fill: var(--proche);
+}
+
+.paysage-roseliere {
+  fill: color-mix(in oklab, var(--roseau) 58%, var(--proche));
+}
+
+.paysage-bouleau {
+  fill: none;
+  stroke: var(--bouleau);
+  stroke-linecap: round;
+  opacity: 0.82;
+}
+
+.paysage-reflet {
+  transform: translate(0, 510px) scale(1, -0.7);
+  opacity: 0.3;
+}
+
+.paysage-eau {
+  position: absolute;
+  left: 0;
+  top: calc(var(--horizon) + 0.4svh);
+  width: 100%;
+  height: calc(100% - var(--horizon));
+}
+
+.paysage-ride,
+.paysage-eclat {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.5;
+}
+
+.paysage-ride {
+  stroke: var(--bouleau);
+  opacity: 0.3;
+}
+
+.paysage-ride + .paysage-ride {
+  stroke: var(--nuit);
+  opacity: 0.16;
+}
+
+.paysage-eclat {
+  stroke: var(--bouleau);
+  stroke-width: 2;
+  opacity: 0.75;
+}
+
+.paysage-brume {
+  position: absolute;
+  left: -12%;
+  top: calc(var(--horizon) - 4.5svh);
+  width: 64%;
+  height: 7svh;
+  border-radius: 62% 38% 55% 45% / 58% 44% 56% 42%;
+  background: var(--bouleau);
+  filter: blur(1.6rem);
+  opacity: 0.55;
+}
+
+.paysage-brume:nth-of-type(3) {
+  left: 44%;
+  top: calc(var(--horizon) - 2.5svh);
+  width: 74%;
+  height: 5.5svh;
+  border-radius: 40% 60% 48% 52% / 46% 60% 40% 54%;
+  opacity: 0.6;
+}
+
+.paysage-brume:nth-of-type(4) {
+  left: 18%;
+  top: calc(var(--horizon) + 1svh);
+  width: 58%;
+  height: 4svh;
+  opacity: 0.32;
+}
+
+.paysage-rond {
+  position: absolute;
+  left: 21%;
+  top: calc(var(--horizon) + 21svh);
+  width: 3.4rem;
+  aspect-ratio: 4;
+  border: 1px solid var(--bouleau);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.paysage-roseaux {
+  position: absolute;
+  bottom: -0.5rem;
+  left: -0.75rem;
+  width: min(clamp(11rem, 36vw, 21rem), 36svh);
+  overflow: visible;
+}
+
+.paysage-roseaux-droite {
+  left: auto;
+  right: -0.75rem;
+  width: min(clamp(8rem, 27vw, 15rem), 30svh);
+  scale: -1 1;
+}
+
+.paysage-touffe {
+  transform-box: fill-box;
+  transform-origin: 30% 100%;
+}
+
+.paysage-tige {
+  stroke: var(--rivage);
+  stroke-width: 3;
+}
+
+.paysage-feuille {
+  fill: var(--rivage);
+}
+
+.paysage-massette {
+  stroke: color-mix(in oklab, var(--nuit) 62%, #96701f);
+  stroke-width: 9;
+}
+
+.paysage-bruyere {
+  fill: var(--bruyere);
+  opacity: 0.85;
+}
+
+.paysage-grain {
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+.ouverture-sillage {
+  position: absolute;
+  left: var(--pied-x);
+  top: var(--pied-y);
+  width: calc(var(--grand) * 0.56);
+  aspect-ratio: 4;
+  translate: -50% -50%;
+  border: 1.5px solid var(--bouleau);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.ouverture-trajet,
+.ouverture-vol {
+  position: absolute;
+  width: 1.75rem;
+  aspect-ratio: 1;
+}
+
+.ouverture-trajet {
+  left: 0;
+  top: 0;
+  translate: calc(var(--logo-x) + var(--dx)) var(--logo-y);
+  color: var(--etang);
+  transition: opacity 300ms ease-in;
+}
+
+.ouverture-vol {
+  inset: 0;
+  translate: 0 var(--dy);
+  scale: var(--echelle);
+}
+
+.ouverture-heron,
+.ouverture-reflet {
+  position: absolute;
+  inset: 0;
+}
+
+.ouverture-reflet {
+  translate: 0 81.5%;
+  scale: 1 -1;
+  opacity: 0.2;
+  filter: blur(0.35px);
+  transition: opacity 200ms ease-in;
+}
+
+.ouverture-reflet :is(.heron-onde, .heron-rides, .heron-eclats, .heron-plume) {
+  display: none;
+}
+
+.ouverture-titre {
+  position: absolute;
+  inset-inline: var(--gouttiere);
+  top: calc(var(--pied-y) + 2.6rem);
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  color: var(--bouleau);
+  text-align: center;
+  transition: opacity 260ms ease-in;
+}
+
+.ouverture-nom {
+  font-family: var(--sans);
+  font-size: clamp(2.2rem, 5vw + 1rem, 4.5rem);
+  font-variation-settings: "wdth" 76;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.ouverture-mot {
+  display: inline-block;
+  overflow: clip;
+  padding-bottom: 0.12em;
+  vertical-align: bottom;
+}
+
+.ouverture-mot > span {
+  display: inline-block;
+}
+
+.ouverture-baseline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--corps);
+  opacity: 0.85;
+}
+
+.ouverture-commandes {
+  position: absolute;
+  right: var(--gouttiere);
+  top: calc(var(--gouttiere) * 0.6 + env(safe-area-inset-top));
+  display: flex;
+  gap: 0.5rem;
+  transition: opacity 200ms ease-in;
+}
+
+[data-ouverture]:not([data-ouverture=""])
+  :is(
+    .ouverture > .paysage,
+    .ouverture-titre,
+    .ouverture-commandes,
+    .ouverture-reflet
+  ) {
+  opacity: 0;
+}
+
+@keyframes ouverture-secours {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes ouverture-voile {
+  30% {
+    opacity: 0.94;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ouverture-trajet {
+  to {
+    translate: var(--logo-x) var(--logo-y);
+  }
+}
+
+@keyframes ouverture-vol {
+  to {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes ouverture-sillage {
+  0% {
+    opacity: 0.8;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 2.6;
+  }
+}
+
+@keyframes ouverture-mot {
+  from {
+    translate: 0 118%;
+  }
+}
+
+@keyframes ouverture-apparait {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes paysage-derive {
+  from {
+    translate: var(--derive, -1.2%) 0;
+  }
+  to {
+    translate: calc(var(--derive, -1.2%) * -1) 0;
+  }
+}
+
+@keyframes paysage-rive {
+  from {
+    translate: calc(-50% - 0.5rem) 0;
+  }
+  to {
+    translate: calc(-50% + 0.5rem) 0;
+  }
+}
+
+@keyframes paysage-lever {
+  from {
+    translate: 0 2.2svh;
+    opacity: 0.7;
+  }
+}
+
+@keyframes paysage-scintille {
+  50% {
+    opacity: 0.12;
+  }
+}
+
+@keyframes paysage-roseau {
+  0%,
+  100% {
+    rotate: -0.9deg;
+  }
+  14% {
+    rotate: 1.4deg;
+  }
+  24% {
+    rotate: 4.2deg;
+  }
+  36% {
+    rotate: -2.4deg;
+  }
+  50% {
+    rotate: 1.6deg;
+  }
+  72% {
+    rotate: -1.2deg;
+  }
+  86% {
+    rotate: 1deg;
+  }
+}
+
+@keyframes paysage-rafale {
+  30% {
+    rotate: 5.5deg;
+  }
+  62% {
+    rotate: -2.6deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+@keyframes paysage-rond {
+  0% {
+    opacity: 0.7;
+    scale: 0.2;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.6;
+  }
+}
+
+@keyframes paysage-oiseau {
+  from {
+    translate: -4rem 1rem;
+  }
+  to {
+    translate: 9rem -1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .paysage-soleil {
+    animation: paysage-lever 4400ms cubic-bezier(0.2, 0.6, 0.3, 1) both;
+  }
+
+  .paysage-oiseau {
+    animation: paysage-oiseau 5200ms linear both;
+  }
+
+  .paysage-rive {
+    animation: paysage-rive 5000ms linear both;
+  }
+
+  .paysage-brume {
+    animation: paysage-derive 5000ms linear both;
+  }
+
+  .paysage-brume:nth-of-type(3) {
+    --derive: 2%;
+  }
+
+  .paysage-brume:nth-of-type(4) {
+    --derive: -3%;
+  }
+
+  .paysage-ride {
+    animation: paysage-scintille 2600ms ease-in-out infinite;
+  }
+
+  .paysage-ride + .paysage-ride {
+    animation-delay: -1300ms;
+  }
+
+  .paysage-eclat {
+    animation: paysage-scintille 1700ms -400ms ease-in-out infinite;
+  }
+
+  .paysage-rond {
+    animation: paysage-rond 1500ms 2500ms cubic-bezier(0.15, 0.75, 0.25, 1) both;
+  }
+
+  .paysage-roseaux {
+    animation: paysage-derive 5000ms linear both;
+  }
+
+  .paysage-roseaux-gauche {
+    --derive: 0.9%;
+  }
+
+  .paysage-roseaux-droite {
+    --derive: 1.4%;
+  }
+
+  .paysage-touffe {
+    animation: paysage-roseau 4200ms ease-in-out both;
+  }
+
+  .paysage-touffe:nth-child(2) {
+    animation-delay: 110ms;
+    animation-duration: 4600ms;
+  }
+
+  .paysage-touffe:nth-child(3) {
+    animation-delay: 220ms;
+    animation-duration: 3900ms;
+  }
+
+  .ouverture-mot > span {
+    animation: ouverture-mot 900ms 1150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .ouverture-mot + .ouverture-mot > span {
+    animation-delay: 1270ms;
+  }
+
+  .ouverture-baseline {
+    animation: ouverture-apparait 700ms 1650ms ease-out both;
+  }
+
+  .ouverture-commandes {
+    animation: ouverture-apparait 400ms 300ms ease-out both;
+  }
+
+  [data-ouverture]:not([data-ouverture=""]) .ouverture-voile {
+    animation: ouverture-voile 950ms ease-out both;
+  }
+
+  [data-ouverture]:not([data-ouverture=""]) .ouverture-sillage {
+    animation: ouverture-sillage 800ms 180ms cubic-bezier(0.15, 0.75, 0.25, 1)
+      both;
+  }
+
+  [data-ouverture]:not([data-ouverture=""]) .paysage-touffe {
+    animation: paysage-rafale 900ms 150ms ease-out both;
+  }
+
+  [data-ouverture]:not([data-ouverture=""]) .ouverture-trajet {
+    animation: ouverture-trajet 820ms 190ms cubic-bezier(0.25, 0.6, 0.2, 1)
+      forwards;
+  }
+
+  [data-ouverture]:not([data-ouverture=""]) .ouverture-vol {
+    animation: ouverture-vol 820ms 190ms cubic-bezier(0.62, 0, 0.3, 1) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ouverture]:not([data-ouverture=""]) .ouverture-trajet {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 48rem) and (min-height: 40rem) {
+  [data-ouverture] .ouverture {
+    --echelle: 6;
+  }
+}

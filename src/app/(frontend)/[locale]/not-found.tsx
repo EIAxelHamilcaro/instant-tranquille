@@ -1,31 +1,19 @@
-import { ArrowLeft, Trees } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Container } from "@/components/shared/Container";
+import { Emblem } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 
 export default async function NotFound() {
-  const t = await getTranslations("common");
+  const t = await getTranslations("common.notFound");
 
   return (
-    <Container className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
-      <Trees className="mb-6 h-16 w-16 text-primary-300" />
-      <h1 className="font-heading text-5xl font-bold text-foreground">404</h1>
-      <h2 className="mt-2 font-heading text-2xl font-semibold">
-        {t("pageNotFound")}
-      </h2>
-      <p className="mt-3 max-w-md text-muted-foreground">
-        {t("pageNotFoundDesc")}
-      </p>
-      <Button
-        asChild
-        className="mt-8 bg-primary-500 font-sans hover:bg-primary-600"
-      >
-        <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          {t("backHome")}
-        </Link>
+    <section className="page section grid justify-items-start gap-6">
+      <Emblem className="heron-vif heron-etat" scene="search" />
+      <h1 className="affiche">{t("title")}</h1>
+      <p className="chapeau">{t("text")}</p>
+      <Button asChild size="lg">
+        <Link href="/">{t("back")}</Link>
       </Button>
-    </Container>
+    </section>
   );
 }

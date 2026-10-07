@@ -1,0 +1,44 @@
+{
+  "contact": {
+    "detailsTitle": "Contact details",
+    "formTitle": "Write to the cottage",
+    "accessTitle": "Getting to the cottage",
+    "mapLabel": "Map: location of the cottage in Romorantin-Lanthenay",
+    "directionsLink": "Open directions in Google Maps",
+    "routeFrom": "From {from}",
+    "accessGuideLink": "Train, car, plane: the guide to getting to Romorantin-Lanthenay",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "dates": "Preferred dates (optional)",
+      "message": "Message",
+      "submit": "Send the message",
+      "sending": "Sending…",
+      "successTitle": "Message sent",
+      "successText": "We will reply to the email address you gave.",
+      "errors": {
+        "nameRequired": "Enter your name.",
+        "nameTooLong": "Shorten the name to 200 characters at most.",
+        "emailRequired": "Enter your email address so we can reply.",
+        "emailInvalid": "Check the email address, for example name@example.com.",
+        "phoneInvalid": "Check the phone number, for example +44 7700 900123.",
+        "datesTooLong": "Shorten the dates to 80 characters at most.",
+        "messageRequired": "Write your message.",
+        "messageTooLong": "Shorten the message to 5,000 characters at most.",
+        "captcha": "The anti-spam check failed. Wait for it to finish, then send the message again.",
+        "server": "The message was not sent. Send it again, or write to the email address shown on this page."
+      },
+      "requiredNote": "Name, email and message are required.",
+      "honeypot": "Leave this field empty",
+      "privacyNote": "Your details are used only to answer your message. See the <privacy>privacy policy</privacy>.",
+      "datesHint": "For example: 12 to 15 July, 4 guests."
+    },
+    "hostsTitle": "{hosts}, your hosts",
+    "reviewLabel": "about the welcome",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "addressLabel": "Address",
+    "ratesLink": "See prices"
+  }
+}

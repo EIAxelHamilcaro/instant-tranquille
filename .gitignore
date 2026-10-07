@@ -47,4 +47,8 @@ next-env.d.ts
 # payload
 /data/
 /media/
-src/payload-types.ts
+
+.env*
+
+# agents
+.claude/

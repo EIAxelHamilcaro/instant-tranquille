@@ -1,0 +1,868 @@
+.cerf {
+  --ici: 0px;
+  --la: 84px;
+  --face: 1;
+  --dos: -1;
+}
+
+.cerf[data-place="1"] {
+  --ici: 84px;
+  --la: 0px;
+  --face: -1;
+  --dos: 1;
+}
+
+.cerf[data-absent] {
+  opacity: 0;
+}
+
+.cerf-allure {
+  translate: var(--ici) 0;
+}
+
+.cerf-sens {
+  transform-origin: 53px 70px;
+  scale: var(--face) 1;
+}
+
+.cerf-corps {
+  transform-origin: 53px 71px;
+}
+
+.cerf-loin {
+  opacity: 0.8;
+}
+
+.cerf-arriere {
+  transform-origin: 32px 60px;
+}
+
+.cerf-arriere .cerf-bas {
+  transform-origin: 27px 82px;
+}
+
+.cerf-avant {
+  transform-origin: 71px 60px;
+}
+
+.cerf-avant .cerf-bas {
+  transform-origin: 69px 84px;
+}
+
+.cerf-encolure {
+  transform-origin: 74px 52px;
+}
+
+.cerf-tete {
+  transform-origin: 85px 22px;
+}
+
+.cerf-oreille {
+  transform-origin: 83px 18px;
+}
+
+.cerf-queue {
+  transform-origin: 25px 48px;
+}
+
+.cerf-bois {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cerf-bois-loin {
+  opacity: 0.6;
+}
+
+.cerf-oeil {
+  fill: var(--lumiere);
+}
+
+.cerf-buee {
+  fill: var(--bouleau);
+  opacity: 0;
+  transform-origin: 108px 28px;
+}
+
+@keyframes cerf-horloge {
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes cerf-souffle {
+  to {
+    scale: 1.012 1.035;
+  }
+}
+
+@keyframes cerf-oreille-repos {
+  0%,
+  62%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  64%,
+  67% {
+    rotate: -30deg;
+  }
+  68.5% {
+    rotate: 9deg;
+  }
+}
+
+@keyframes cerf-queue-repos {
+  0%,
+  80%,
+  89%,
+  100% {
+    rotate: 0deg;
+  }
+  82%,
+  86% {
+    rotate: 36deg;
+  }
+  84%,
+  87.5% {
+    rotate: -12deg;
+  }
+}
+
+@keyframes cerf-cligne {
+  0%,
+  93%,
+  100% {
+    opacity: 1;
+  }
+  95%,
+  97% {
+    opacity: 0;
+  }
+}
+
+@keyframes cerf-broute-encolure {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  11%,
+  34%,
+  58% {
+    rotate: 88deg;
+    translate: 4px 10px;
+  }
+  22%,
+  46% {
+    rotate: 84deg;
+    translate: 4px 9px;
+  }
+  70% {
+    rotate: 87deg;
+    translate: 4px 10px;
+  }
+  72.5%,
+  90% {
+    rotate: -6deg;
+    translate: 0 0;
+  }
+}
+
+@keyframes cerf-broute-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  11%,
+  19%,
+  27%,
+  37%,
+  45%,
+  55%,
+  63%,
+  70% {
+    rotate: -42deg;
+  }
+  15%,
+  23%,
+  41%,
+  50%,
+  59%,
+  67% {
+    rotate: -36deg;
+  }
+  72.5%,
+  90% {
+    rotate: 5deg;
+  }
+}
+
+@keyframes cerf-broute-oreille {
+  0%,
+  72%,
+  81%,
+  92%,
+  100% {
+    rotate: 0deg;
+  }
+  75%,
+  86% {
+    rotate: -32deg;
+  }
+  78% {
+    rotate: 8deg;
+  }
+}
+
+@keyframes cerf-ecoute-encolure {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12%,
+  82% {
+    rotate: -8deg;
+  }
+}
+
+@keyframes cerf-ecoute-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12%,
+  34% {
+    rotate: -4deg;
+  }
+  44%,
+  82% {
+    rotate: -10deg;
+  }
+}
+
+@keyframes cerf-ecoute-oreille {
+  0%,
+  88%,
+  100% {
+    rotate: 0deg;
+  }
+  16%,
+  26%,
+  48%,
+  66% {
+    rotate: -34deg;
+  }
+  34% {
+    rotate: 12deg;
+  }
+}
+
+@keyframes cerf-ecoute-oreille-loin {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  22% {
+    rotate: 12deg;
+  }
+  38%,
+  58%,
+  74% {
+    rotate: -30deg;
+  }
+  50% {
+    rotate: 6deg;
+  }
+}
+
+@keyframes cerf-brame-encolure {
+  0%,
+  94%,
+  100% {
+    rotate: 0deg;
+  }
+  12% {
+    rotate: -7deg;
+  }
+  24%,
+  46%,
+  78% {
+    rotate: 24deg;
+  }
+  36%,
+  62% {
+    rotate: 21deg;
+  }
+}
+
+@keyframes cerf-brame-tete {
+  0%,
+  94%,
+  100% {
+    rotate: 0deg;
+  }
+  12% {
+    rotate: 5deg;
+  }
+  24%,
+  78% {
+    rotate: -57deg;
+  }
+  50% {
+    rotate: -52deg;
+  }
+}
+
+@keyframes cerf-brame-flancs {
+  0%,
+  92%,
+  100% {
+    scale: 1 1;
+  }
+  12% {
+    scale: 1.015 1.06;
+  }
+  28%,
+  44%,
+  60%,
+  76% {
+    scale: 1 0.95;
+  }
+  36%,
+  52%,
+  68% {
+    scale: 1 0.985;
+  }
+}
+
+@keyframes cerf-brame-oreille {
+  0%,
+  92%,
+  100% {
+    rotate: 0deg;
+  }
+  24%,
+  80% {
+    rotate: -40deg;
+  }
+}
+
+@keyframes cerf-brame-buee {
+  0%,
+  25%,
+  47%,
+  51%,
+  78%,
+  100% {
+    opacity: 0;
+    scale: 0.4;
+    translate: 0 0;
+  }
+  29%,
+  55% {
+    opacity: 0.6;
+    scale: 1;
+    translate: 2px -2px;
+  }
+  46.9%,
+  77.9% {
+    opacity: 0;
+    scale: 2.8;
+    translate: 14px -13px;
+  }
+}
+
+@keyframes cerf-marche-allure {
+  0%,
+  8% {
+    translate: var(--ici) 0;
+  }
+  82%,
+  100% {
+    translate: var(--la) 0;
+  }
+}
+
+@keyframes cerf-marche-sens {
+  0%,
+  86% {
+    scale: var(--face) 1;
+  }
+  97%,
+  100% {
+    scale: var(--dos) 1;
+  }
+}
+
+@keyframes cerf-marche-masse {
+  0%,
+  8%,
+  26.5%,
+  45%,
+  63.5%,
+  82%,
+  100% {
+    translate: 0 0;
+  }
+  17%,
+  36%,
+  54%,
+  73% {
+    translate: 0 -1.2px;
+  }
+}
+
+@keyframes cerf-marche-leve {
+  0%,
+  8%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  26.5%,
+  63.5% {
+    rotate: -13deg;
+  }
+  45% {
+    rotate: 13deg;
+  }
+}
+
+@keyframes cerf-marche-pose {
+  0%,
+  8%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  26.5%,
+  63.5% {
+    rotate: 13deg;
+  }
+  45% {
+    rotate: -13deg;
+  }
+}
+
+@keyframes cerf-marche-plie-leve {
+  0%,
+  8%,
+  26.5%,
+  45%,
+  63.5%,
+  100% {
+    rotate: 0deg;
+  }
+  17%,
+  54% {
+    rotate: 28deg;
+  }
+}
+
+@keyframes cerf-marche-plie-pose {
+  0%,
+  26.5%,
+  45%,
+  63.5%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  36%,
+  73% {
+    rotate: 28deg;
+  }
+}
+
+@keyframes cerf-marche-encolure {
+  0%,
+  8%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  17%,
+  54% {
+    rotate: 5deg;
+  }
+  36%,
+  73% {
+    rotate: 1deg;
+  }
+}
+
+@keyframes cerf-gratte-encolure {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  84% {
+    rotate: 42deg;
+  }
+}
+
+@keyframes cerf-gratte-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  84% {
+    rotate: -12deg;
+  }
+}
+
+@keyframes cerf-gratte-patte {
+  0%,
+  88%,
+  100% {
+    rotate: 0deg;
+  }
+  15%,
+  35%,
+  55%,
+  75% {
+    rotate: -25deg;
+  }
+  25%,
+  45%,
+  65% {
+    rotate: -3deg;
+  }
+}
+
+@keyframes cerf-gratte-sabot {
+  0%,
+  15%,
+  25%,
+  35%,
+  45%,
+  55%,
+  65%,
+  75%,
+  100% {
+    rotate: 0deg;
+  }
+  30%,
+  50%,
+  70% {
+    rotate: 42deg;
+  }
+}
+
+@keyframes cerf-depart-encolure {
+  0% {
+    rotate: 0deg;
+  }
+  14%,
+  34% {
+    rotate: -10deg;
+  }
+  44%,
+  100% {
+    rotate: 16deg;
+  }
+}
+
+@keyframes cerf-depart-oreille {
+  0% {
+    rotate: 0deg;
+  }
+  12%,
+  100% {
+    rotate: -36deg;
+  }
+}
+
+@keyframes cerf-depart-masse {
+  0%,
+  26%,
+  100% {
+    translate: 0 0;
+  }
+  38% {
+    translate: -2px 4px;
+  }
+  52%,
+  76% {
+    translate: 0 -9px;
+  }
+  64%,
+  88% {
+    translate: 0 0;
+  }
+}
+
+@keyframes cerf-depart-allure {
+  0%,
+  40% {
+    translate: var(--ici) 0;
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    translate: calc(var(--ici) + 230px * var(--face)) 0;
+    opacity: 0;
+  }
+}
+
+@keyframes cerf-depart-arriere {
+  0%,
+  26% {
+    rotate: 0deg;
+  }
+  38% {
+    rotate: -16deg;
+  }
+  52%,
+  76%,
+  100% {
+    rotate: 34deg;
+  }
+  64%,
+  88% {
+    rotate: -24deg;
+  }
+}
+
+@keyframes cerf-depart-avant {
+  0%,
+  26% {
+    rotate: 0deg;
+  }
+  38% {
+    rotate: 10deg;
+  }
+  52%,
+  76%,
+  100% {
+    rotate: -40deg;
+  }
+  64%,
+  88% {
+    rotate: 22deg;
+  }
+}
+
+@keyframes cerf-depart-plie {
+  0%,
+  26%,
+  64%,
+  88% {
+    rotate: 0deg;
+  }
+  38% {
+    rotate: 30deg;
+  }
+  52%,
+  76%,
+  100% {
+    rotate: 46deg;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cerf-corps {
+    animation: cerf-souffle 4.3s ease-in-out infinite alternate;
+  }
+
+  .cerf-oreille-loin {
+    animation: cerf-oreille-repos 13s ease-in-out infinite;
+  }
+
+  .cerf-queue {
+    animation: cerf-queue-repos 17s ease-in-out infinite;
+  }
+
+  .cerf-oeil {
+    animation: cerf-cligne 7.9s linear infinite;
+  }
+
+  .cerf[data-sequence] {
+    animation: cerf-horloge var(--duree) linear;
+  }
+
+  .cerf[data-sequence]
+    :is(
+      .cerf-allure,
+      .cerf-sens,
+      .cerf-masse,
+      .cerf-patte,
+      .cerf-bas,
+      .cerf-encolure,
+      .cerf-tete,
+      .cerf-buee
+    ) {
+    animation-duration: var(--duree);
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+  }
+
+  .cerf[data-sequence="broute"] {
+    --duree: 15s;
+  }
+
+  .cerf[data-sequence="broute"] .cerf-encolure {
+    animation-name: cerf-broute-encolure;
+  }
+
+  .cerf[data-sequence="broute"] .cerf-tete {
+    animation-name: cerf-broute-tete;
+  }
+
+  .cerf[data-sequence="broute"] .cerf-oreille {
+    animation: cerf-broute-oreille var(--duree) ease-in-out both;
+  }
+
+  .cerf[data-sequence="ecoute"] {
+    --duree: 9s;
+  }
+
+  .cerf[data-sequence="ecoute"] .cerf-encolure {
+    animation-name: cerf-ecoute-encolure;
+  }
+
+  .cerf[data-sequence="ecoute"] .cerf-tete {
+    animation-name: cerf-ecoute-tete;
+  }
+
+  .cerf[data-sequence="ecoute"] .cerf-oreille {
+    animation: cerf-ecoute-oreille var(--duree) ease-in-out both;
+  }
+
+  .cerf[data-sequence="ecoute"] .cerf-oreille-loin {
+    animation-name: cerf-ecoute-oreille-loin;
+  }
+
+  .cerf[data-sequence="brame"] {
+    --duree: 8.5s;
+  }
+
+  .cerf[data-sequence="brame"] .cerf-encolure {
+    animation-name: cerf-brame-encolure;
+  }
+
+  .cerf[data-sequence="brame"] .cerf-tete {
+    animation-name: cerf-brame-tete;
+  }
+
+  .cerf[data-sequence="brame"] .cerf-corps {
+    animation: cerf-brame-flancs var(--duree) ease-in-out both;
+  }
+
+  .cerf[data-sequence="brame"] .cerf-oreille {
+    animation: cerf-brame-oreille var(--duree) ease-in-out both;
+  }
+
+  .cerf[data-sequence="brame"] .cerf-buee {
+    animation-name: cerf-brame-buee;
+    animation-timing-function: ease-out;
+  }
+
+  .cerf[data-sequence="marche"] {
+    --duree: 9s;
+  }
+
+  .cerf[data-sequence="marche"]
+    :is(.cerf-allure, .cerf-patte, .cerf-bas, .cerf-masse) {
+    animation-timing-function: linear;
+  }
+
+  .cerf[data-sequence="marche"] .cerf-allure {
+    animation-name: cerf-marche-allure;
+  }
+
+  .cerf[data-sequence="marche"] .cerf-sens {
+    animation-name: cerf-marche-sens;
+  }
+
+  .cerf[data-sequence="marche"] .cerf-masse {
+    animation-name: cerf-marche-masse;
+  }
+
+  .cerf[data-sequence="marche"] .cerf-encolure {
+    animation-name: cerf-marche-encolure;
+  }
+
+  .cerf[data-sequence="marche"]
+    :is(.cerf-avant.cerf-pres, .cerf-arriere.cerf-loin) {
+    animation-name: cerf-marche-leve;
+  }
+
+  .cerf[data-sequence="marche"]
+    :is(.cerf-avant.cerf-loin, .cerf-arriere.cerf-pres) {
+    animation-name: cerf-marche-pose;
+  }
+
+  .cerf[data-sequence="marche"]
+    :is(.cerf-avant.cerf-pres, .cerf-arriere.cerf-loin)
+    .cerf-bas {
+    animation-name: cerf-marche-plie-leve;
+  }
+
+  .cerf[data-sequence="marche"]
+    :is(.cerf-avant.cerf-loin, .cerf-arriere.cerf-pres)
+    .cerf-bas {
+    animation-name: cerf-marche-plie-pose;
+  }
+
+  .cerf[data-sequence="gratte"] {
+    --duree: 7s;
+  }
+
+  .cerf[data-sequence="gratte"] .cerf-encolure {
+    animation-name: cerf-gratte-encolure;
+  }
+
+  .cerf[data-sequence="gratte"] .cerf-tete {
+    animation-name: cerf-gratte-tete;
+  }
+
+  .cerf[data-sequence="gratte"] .cerf-avant.cerf-pres {
+    animation-name: cerf-gratte-patte;
+  }
+
+  .cerf[data-sequence="gratte"] .cerf-avant.cerf-pres .cerf-bas {
+    animation-name: cerf-gratte-sabot;
+  }
+
+  .cerf[data-sequence="depart"] {
+    --duree: 4.4s;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-allure {
+    animation-name: cerf-depart-allure;
+    animation-timing-function: ease-in;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-masse {
+    animation-name: cerf-depart-masse;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-encolure {
+    animation-name: cerf-depart-encolure;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-oreille {
+    animation: cerf-depart-oreille var(--duree) ease-in-out both;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-arriere {
+    animation-name: cerf-depart-arriere;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-avant {
+    animation-name: cerf-depart-avant;
+  }
+
+  .cerf[data-sequence="depart"] .cerf-bas {
+    animation-name: cerf-depart-plie;
+  }
+}

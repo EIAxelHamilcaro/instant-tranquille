@@ -1,43 +1,35 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
-import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
-import type { CmsRecommendation } from "@/lib/queries";
+import { useRef } from "react";
+import { useNearViewport } from "@/components/shared/useNearViewport";
+import type { SurroundingsMapClientProps } from "./SurroundingsMapClient";
 
-const MapWithMarkers = dynamic(() => import("./SurroundingsMapClient"), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="h-[300px] w-full animate-pulse rounded-xl bg-sand-100 sm:h-[400px] md:h-[480px]"
-      aria-hidden="true"
-    />
-  ),
-});
-
-interface SurroundingsMapProps {
-  recommendations: CmsRecommendation[];
-  giteCoordinates?: { lat?: number | null; lng?: number | null } | null;
+interface SurroundingsMapProps extends SurroundingsMapClientProps {
+  label: string;
+  className?: string;
 }
 
+function MapPlaceholder() {
+  return <div className="plan" />;
+}
+
+const SurroundingsMapClient = dynamic(() => import("./SurroundingsMapClient"), {
+  ssr: false,
+  loading: MapPlaceholder,
+});
+
 export function SurroundingsMap({
-  recommendations,
-  giteCoordinates,
+  label,
+  className,
+  ...map
 }: SurroundingsMapProps) {
-  const t = useTranslations("surroundings");
+  const frame = useRef<HTMLElement>(null);
+  const isNear = useNearViewport(frame);
 
   return (
-    <section className="py-20">
-      <Container>
-        <SectionHeading title={t("mapTitle")} />
-        <div className="overflow-hidden rounded-2xl shadow-sm">
-          <MapWithMarkers
-            recommendations={recommendations}
-            giteCoordinates={giteCoordinates}
-          />
-        </div>
-      </Container>
+    <section ref={frame} aria-label={label} className={className}>
+      {isNear ? <SurroundingsMapClient {...map} /> : <MapPlaceholder />}
     </section>
   );
 }

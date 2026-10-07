@@ -1,104 +1,129 @@
 import type { CollectionConfig } from "payload";
-import { isAuthenticated, isPublic } from "@/lib/access";
+import { isAuthenticated } from "@/lib/access";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
+import { REVIEW_TOPIC_OPTIONS } from "@/lib/review-topics";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
   lockDocuments: false,
-  labels: { singular: "Témoignage", plural: "Témoignages" },
+  labels: { singular: "Avis", plural: "Avis des voyageurs" },
+  hooks: revalidateCollection("testimonials"),
+  defaultSort: "-createdAt",
   admin: {
     useAsTitle: "guestName",
-    group: "Contenu",
-    description: "Avis et témoignages des voyageurs",
-    defaultColumns: ["guestName", "rating", "status", "featured", "stayDate"],
+    group: "Avis et réservations",
+    description:
+      "Les avis affichés sur le site. Recopiez ici un avis reçu sur Airbnb ou Booking, puis passez-le en « Approuvé » pour qu'il apparaisse.",
+    defaultColumns: ["guestName", "source", "status", "featured", "topics"],
+    listSearchableFields: ["guestName", "text"],
     livePreview: {
       url: ({ locale }) => previewUrl("/", { locale }),
     },
   },
   access: {
-    create: isPublic,
+    create: isAuthenticated,
     read: ({ req: { user } }) =>
       user ? true : { status: { equals: "approved" } },
     update: isAuthenticated,
     delete: isAuthenticated,
   },
-  hooks: revalidateCollection("testimonials"),
   fields: [
     {
-      name: "guestName",
-      type: "text",
-      label: "Nom du voyageur",
-      required: true,
-      minLength: 2,
-      maxLength: 200,
-      admin: {
-        description: "Prénom et nom de la personne",
-        placeholder: "Sophie et Marc Dupont",
-      },
-    },
-    {
-      name: "guestOrigin",
-      type: "text",
-      label: "Provenance",
-      localized: true,
-      maxLength: 200,
-      admin: {
-        description: "Ville ou pays d'origine",
-        placeholder: "Paris, France",
-      },
-    },
-    {
-      name: "rating",
-      type: "number",
-      label: "Note",
-      required: true,
-      min: 1,
-      max: 5,
-      validate: (value: number | null | undefined) => {
-        if (value != null && !Number.isInteger(value))
-          return "La note doit être un nombre entier";
-        return true;
-      },
-      admin: {
-        description: "Note de 1 à 5 étoiles",
-      },
+      type: "row",
+      fields: [
+        {
+          name: "guestName",
+          type: "text",
+          label: "Prénom du voyageur",
+          required: true,
+          minLength: 2,
+          maxLength: 60,
+          admin: {
+            description: "Tel qu'il apparaît sur la plateforme.",
+            placeholder: "Sophie",
+            width: "50%",
+          },
+        },
+        {
+          name: "source",
+          type: "select",
+          label: "Plateforme d'origine",
+          options: [
+            { label: "Airbnb", value: "airbnb" },
+            { label: "Booking.com", value: "booking" },
+            { label: "Google", value: "google" },
+            { label: "Reçu en direct", value: "direct" },
+          ],
+          admin: {
+            description: "Affichée sous l'avis.",
+            width: "50%",
+          },
+        },
+      ],
     },
     {
       name: "text",
       type: "textarea",
-      label: "Texte du témoignage",
+      label: "Texte de l'avis",
       required: true,
       localized: true,
       minLength: 10,
       maxLength: 2000,
       admin: {
-        description: "L'avis complet du voyageur",
+        description:
+          "Recopiez l'avis tel quel, dans sa langue d'origine, sans le corriger.",
+        rows: 6,
       },
     },
     {
-      name: "stayDate",
-      type: "date",
-      label: "Date du séjour",
-      admin: {
-        description: "Quand ce voyageur a séjourné au gîte",
-        date: {
-          displayFormat: "dd/MM/yyyy",
+      type: "row",
+      fields: [
+        {
+          name: "rating",
+          type: "number",
+          label: "Note sur 5",
+          required: true,
+          min: 1,
+          max: 5,
+          defaultValue: 5,
+          validate: (value: number | null | undefined) =>
+            value == null || Number.isInteger(value)
+              ? true
+              : "Donnez une note entière, de 1 à 5.",
+          admin: {
+            description: "Pour Booking, divisez la note par deux.",
+            width: "33%",
+          },
         },
-      },
-    },
-    {
-      name: "source",
-      type: "select",
-      label: "Plateforme d'origine",
-      admin: {
-        description: "D'où vient cet avis",
-      },
-      options: [
-        { label: "Airbnb", value: "airbnb" },
-        { label: "Booking.com", value: "booking" },
-        { label: "Google", value: "google" },
-        { label: "Direct", value: "direct" },
+        {
+          name: "language",
+          type: "select",
+          label: "Langue de l'avis",
+          defaultValue: "fr",
+          options: [
+            { label: "Français", value: "fr" },
+            { label: "Anglais", value: "en" },
+            { label: "Néerlandais", value: "nl" },
+            { label: "Allemand", value: "de" },
+            { label: "Espagnol", value: "es" },
+          ],
+          admin: {
+            description:
+              "Sert aux lecteurs d'écran pour prononcer l'avis correctement.",
+            width: "33%",
+          },
+        },
+        {
+          name: "stayDate",
+          type: "date",
+          label: "Date du séjour",
+          admin: {
+            description: "Transmise à Google avec l'avis.",
+            date: { pickerAppearance: "monthOnly", displayFormat: "MMMM yyyy" },
+            width: "33%",
+          },
+        },
       ],
     },
     {
@@ -107,34 +132,37 @@ export const Testimonials: CollectionConfig = {
       label: "Statut",
       required: true,
       defaultValue: "pending",
-      access: {
-        create: ({ req: { user } }) => Boolean(user),
-        update: ({ req: { user } }) => Boolean(user),
-      },
       admin: {
         position: "sidebar",
-        description:
-          "« En attente » = à valider, « Approuvé » = visible sur le site, « Rejeté » = masqué",
+        description: "Seuls les avis « Approuvé » sont visibles sur le site.",
       },
       options: [
         { label: "En attente", value: "pending" },
         { label: "Approuvé", value: "approved" },
-        { label: "Rejeté", value: "rejected" },
+        { label: "Masqué", value: "rejected" },
       ],
     },
     {
       name: "featured",
       type: "checkbox",
-      label: "Mettre en avant",
+      label: "Afficher en premier",
       defaultValue: false,
-      access: {
-        create: ({ req: { user } }) => Boolean(user),
-        update: ({ req: { user } }) => Boolean(user),
-      },
       admin: {
         position: "sidebar",
         description:
-          "Cochez pour afficher cet avis en priorité sur la page d'accueil",
+          "Les avis cochés passent devant les autres, sur toutes les pages.",
+      },
+    },
+    {
+      name: "topics",
+      type: "select",
+      label: "De quoi parle cet avis",
+      hasMany: true,
+      options: REVIEW_TOPIC_OPTIONS,
+      admin: {
+        position: "sidebar",
+        description:
+          "La maison : repris sur la page « Le gîte ». L'accueil : repris sur la page contact. Le prix : passe en tête sur la page tarifs.",
       },
     },
   ],

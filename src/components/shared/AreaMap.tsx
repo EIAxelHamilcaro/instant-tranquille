@@ -1,43 +1,67 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
-import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
-import { Card } from "@/components/ui/card";
+import { useEffect, useRef } from "react";
+import { useNearViewport } from "@/components/shared/useNearViewport";
+import "leaflet/dist/leaflet.css";
 
 interface AreaMapProps {
-  lat?: number | null;
-  lng?: number | null;
+  lat: number;
+  lng: number;
   zoom?: number;
-  title?: string;
+  label: string;
+  markerLabel: string;
 }
 
-export function AreaMap({ lat, lng, zoom = 12, title }: AreaMapProps) {
-  const t = useTranslations("cottage");
-  const locale = useLocale();
+const TILES_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const TILES_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+const MARKER_SIZE = 22;
 
-  const latitude = lat ?? 47.4833;
-  const longitude = lng ?? 1.7667;
+export function AreaMap({
+  lat,
+  lng,
+  zoom = 13,
+  label,
+  markerLabel,
+}: AreaMapProps) {
+  const container = useRef<HTMLDivElement>(null);
+  const isNear = useNearViewport(container);
 
-  const src = `https://maps.google.com/maps?q=${latitude},${longitude}&z=${zoom}&output=embed&hl=${locale}`;
+  useEffect(() => {
+    const node = container.current;
+    if (!node || !isNear) return;
+
+    let disposed = false;
+    let remove = () => {};
+
+    void import("leaflet").then(({ default: L }) => {
+      if (disposed) return;
+
+      const map = L.map(node, { scrollWheelZoom: false }).setView(
+        [lat, lng],
+        zoom,
+      );
+
+      L.tileLayer(TILES_URL, { attribution: TILES_ATTRIBUTION }).addTo(map);
+      L.marker([lat, lng], {
+        alt: markerLabel,
+        title: markerLabel,
+        icon: L.divIcon({
+          className: "repere-gite",
+          iconSize: [MARKER_SIZE, MARKER_SIZE],
+        }),
+      }).addTo(map);
+
+      remove = () => map.remove();
+    });
+
+    return () => {
+      disposed = true;
+      remove();
+    };
+  }, [isNear, lat, lng, zoom, markerLabel]);
 
   return (
-    <section className="bg-sand-100 py-20">
-      <Container>
-        <SectionHeading title={title || t("nearbyTitle")} />
-        <Card className="mx-auto max-w-5xl overflow-hidden rounded-2xl shadow-sm">
-          <iframe
-            src={src}
-            width="100%"
-            className="h-[250px] sm:h-[350px] md:h-[450px]"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title={title || t("nearbyTitle")}
-          />
-        </Card>
-      </Container>
-    </section>
+    <div ref={container} role="region" aria-label={label} className="plan" />
   );
 }

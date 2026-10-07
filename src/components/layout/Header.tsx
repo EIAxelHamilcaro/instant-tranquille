@@ -1,56 +1,37 @@
-import { getHeaderData, getSiteSettings } from "@/lib/queries";
-import { HeaderClient } from "./HeaderClient";
+import { getLocale, getTranslations } from "next-intl/server";
+import { BookingButtons } from "@/components/shared/BookingButtons";
+import { Logo } from "@/components/shared/Logo";
+import type { Locale } from "@/i18n/config";
+import { Link } from "@/i18n/navigation";
+import { getGlobal } from "@/lib/queries";
+import { LocaleSwitcher } from "./LocaleSwitcher";
+import { MainNav } from "./MainNav";
+import { MobileMenu } from "./MobileMenu";
 
-type NavItem = {
-  label: string;
-  url: string;
-  isExternal?: boolean | null;
-  highlight?: boolean | null;
-};
-
-export async function Header({ locale }: { locale: string }) {
-  const [headerData, siteSettings] = await Promise.all([
-    getHeaderData(locale),
-    getSiteSettings(locale),
-  ]);
-
-  const header = headerData as Record<string, unknown>;
-  const settings = siteSettings as Record<string, unknown>;
-
-  const navItems: NavItem[] = ((header.navItems || []) as NavItem[]).map(
-    (item) => ({
-      label: item.label,
-      url: item.url,
-      isExternal: item.isExternal,
-      highlight: item.highlight,
-    }),
+export async function Header() {
+  const t = await getTranslations("common");
+  const settings = await getGlobal(
+    "site-settings",
+    (await getLocale()) as Locale,
   );
 
-  const ctaButtonRaw = header.ctaButton as Record<string, unknown> | undefined;
-  const ctaButton = ctaButtonRaw?.label
-    ? {
-        label: ctaButtonRaw.label as string,
-        url: (ctaButtonRaw.url as string) || "/",
-      }
-    : null;
-
-  const siteName = (settings.siteName as string) || "L'Instant Tranquille";
-  const logo = settings.logo as
-    | {
-        url?: string | null;
-        alt?: string | null;
-        width?: number | null;
-        height?: number | null;
-      }
-    | null
-    | undefined;
-
   return (
-    <HeaderClient
-      navItems={navItems}
-      ctaButton={ctaButton}
-      siteName={siteName}
-      logo={logo}
-    />
+    <header className="entete">
+      <div className="page flex items-center justify-between gap-4">
+        <Link href="/" className="enseigne" aria-label={t("siteName")}>
+          <Logo name={t("siteName")} entrance="load" />
+        </Link>
+        <MainNav className="hidden gap-4 lg:flex xl:gap-7" />
+        <div className="flex items-center gap-4">
+          <LocaleSwitcher className="hidden lg:flex" />
+          <BookingButtons
+            settings={settings}
+            compact
+            className="hidden sm:flex"
+          />
+          <MobileMenu />
+        </div>
+      </div>
+    </header>
   );
 }

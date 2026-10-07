@@ -1,0 +1,17 @@
+{
+  "home": {
+    "heroImageAlt": "The living room of L'Instant Tranquille cottage in Romorantin-Lanthenay",
+    "roseCaption": "Each ring is a quarter of an hour's drive.",
+    "factsTitle": "The cottage at a glance",
+    "houseLink": "Tour the house room by room",
+    "surroundingsLink": "See every place and its driving time",
+    "faqTitle": "Frequently asked questions",
+    "guidesLink": "See all guides",
+    "ratesLink": "See all prices and conditions",
+    "filmButton": "See the house on video",
+    "filmTitle": "L'Instant Tranquille, the house on video",
+    "tickerLabel": "Driving times from the cottage",
+    "tickerPause": "Pause the scrolling list",
+    "tickerPlay": "Resume the scrolling list"
+  }
+}

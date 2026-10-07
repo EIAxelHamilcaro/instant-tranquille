@@ -1,0 +1,38 @@
+{
+  "cottage": {
+    "factsTitle": "Le gîte en bref",
+    "amenitiesTitle": "Les équipements de la maison",
+    "galleryTitle": "D'autres vues de la maison",
+    "reviewsTitle": "Ce que les voyageurs disent de la maison",
+    "bookingTitle": "Réserver la maison",
+    "bookingLink": "Voir les tarifs et réserver",
+    "categories": {
+      "indoor": "Intérieur",
+      "kitchen": "Cuisine",
+      "bedroom": "Chambres",
+      "bathroom": "Salle de bain",
+      "comfort": "Confort",
+      "tech": "Connexion et écrans",
+      "outdoor": "Extérieur"
+    },
+    "filmButton": "Voir la maison en vidéo",
+    "filmTitle": "L'Instant Tranquille, la maison en vidéo",
+    "visitTitle": "La visite",
+    "roomCount": "{count, plural, one {# pièce} other {# pièces}}",
+    "levels": {
+      "ground": "Au rez-de-chaussée",
+      "upstairs": "À l'étage",
+      "outdoors": "Dehors"
+    },
+    "facts": {
+      "surface": "m²",
+      "guests": "{count, plural, one {voyageur} other {voyageurs}}",
+      "bedrooms": "{count, plural, one {chambre} other {chambres}}",
+      "bathrooms": "{count, plural, one {salle de bain} other {salles de bain}}",
+      "garden": "Jardin clos et terrasse",
+      "petsYes": "Animaux acceptés",
+      "petsNo": "Animaux non admis"
+    },
+    "bookingText": ", pour {count} personnes au plus. La maison se loue en entier."
+  }
+}

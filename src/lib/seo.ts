@@ -1,160 +1,120 @@
 import type { Metadata } from "next";
-import type { Locale } from "@/i18n/config";
+import { type Locale, locales } from "@/i18n/config";
 import { getPathname } from "@/i18n/navigation";
-import { getPageBySlug, getSiteSettings } from "./queries";
+import {
+  SHARE_IMAGE_SIZE,
+  SHARE_IMAGE_TYPE,
+  type ShareImage,
+} from "@/lib/share-image/spec";
+import type { Media } from "@/payload-types";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+).replace(/\/$/, "");
 
-const KEYWORDS_FR = [
-  "gîte Sologne",
-  "location vacances Romorantin-Lanthenay",
-  "gîte Loir-et-Cher",
-  "hébergement cavaliers Sologne",
-  "gîte proche Grand Parquet",
-  "gîte proche Grand Parquet Lamotte-Beuvron",
-  "location séjour concours équestre Sologne",
-  "gîte proche châteaux Loire",
-  "que faire en Sologne",
-  "location Chambord",
-  "gîte 6 personnes Sologne",
-];
+export type Href = Parameters<typeof getPathname>[0]["href"];
 
-const KEYWORDS_EN = [
-  "holiday cottage Sologne",
-  "Romorantin-Lanthenay rental",
-  "Loir-et-Cher gite",
-  "equestrian accommodation Sologne",
-  "cottage near Grand Parquet",
-  "cottage near Grand Parquet Lamotte-Beuvron",
-  "Loire Valley chateau holiday rental",
-  "Sologne nature holiday",
-  "Chambord accommodation",
-  "Sologne 6 people cottage",
-];
+const OG_LOCALES: Record<Locale, string> = { fr: "fr_FR", en: "en_GB" };
+export const SITE_NAME = "L'Instant Tranquille";
 
-const GOOGLEBOT_DIRECTIVES = {
-  "max-image-preview": "large" as const,
-  "max-snippet": -1,
-  "max-video-preview": -1,
-};
+export function absoluteUrl(href: Href, locale: Locale) {
+  const pathname = getPathname({ href, locale });
 
-type PageSeoProps = {
+  return `${SITE_URL}${pathname === "/" ? "" : pathname}`;
+}
+
+export function mediaUrl(media: number | Media | null | undefined) {
+  if (typeof media !== "object" || !media?.url) return undefined;
+
+  const url = media.sizes?.share?.url ?? media.url;
+
+  return url.startsWith("http") ? url : `${SITE_URL}${url}`;
+}
+
+interface PluginMeta {
+  title?: string | null;
+  description?: string | null;
+}
+
+interface PageMetadataBase {
+  locale: Locale;
+  href: Href;
   title: string;
   description: string;
-  locale: Locale;
-  path: string;
-  ogImage?: string;
-  noIndex?: boolean;
-  absoluteTitle?: boolean;
-  extraKeywords?: string[];
-};
+  meta?: PluginMeta | null;
+  share: ShareImage;
+  availableLocales?: readonly Locale[];
+}
 
-export function generatePageMetadata({
-  title,
-  description,
-  locale,
-  path,
-  ogImage,
-  noIndex,
-  absoluteTitle,
-  extraKeywords,
-}: PageSeoProps): Metadata {
-  const url = `${SITE_URL}${path}`;
-  const frPath = getPathname({ href: path as any, locale: "fr" });
-  const enPath = getPathname({ href: path as any, locale: "en" });
-  const alternateFr = `${SITE_URL}${frPath}`;
-  const alternateEn = `${SITE_URL}/en${enPath === "/" ? "" : enPath}`;
+interface WebsiteMetadataOptions extends PageMetadataBase {
+  type?: "website";
+}
 
-  const ogTitle = title.includes("L'Instant Tranquille")
-    ? title
-    : `${title}, L'Instant Tranquille`;
+interface ArticleMetadataOptions extends PageMetadataBase {
+  type: "article";
+  publishedTime: string;
+  modifiedTime: string;
+}
 
-  const baseKeywords = locale === "fr" ? KEYWORDS_FR : KEYWORDS_EN;
-  const keywords = extraKeywords
-    ? [...baseKeywords, ...extraKeywords]
-    : baseKeywords;
+type PageMetadataOptions = WebsiteMetadataOptions | ArticleMetadataOptions;
+
+const PREVIEW_LIMITS = {
+  "max-image-preview": "large",
+  "max-snippet": -1,
+  "max-video-preview": -1,
+} as const;
+
+export function pageMetadata(options: PageMetadataOptions): Metadata {
+  const { locale, href, meta, share, availableLocales = locales } = options;
+  const title = meta?.title || options.title;
+  const description = meta?.description || options.description;
+  const url = absoluteUrl(href, locale);
+  const image = { url: share.url, alt: share.alt, ...SHARE_IMAGE_SIZE };
+  const openGraph = {
+    title,
+    description,
+    url,
+    siteName: SITE_NAME,
+    locale: OG_LOCALES[locale],
+    alternateLocale: availableLocales
+      .filter((code) => code !== locale)
+      .map((code) => OG_LOCALES[code]),
+    images: [{ ...image, secureUrl: share.url, type: SHARE_IMAGE_TYPE }],
+  };
 
   return {
-    title: absoluteTitle ? { absolute: title } : title,
+    title: { absolute: title },
     description,
-    keywords,
-    ...(noIndex
-      ? {
-          robots: {
-            index: false,
-            follow: false,
-          },
-        }
-      : {
-          robots: {
-            index: true,
-            follow: true,
-            googleBot: GOOGLEBOT_DIRECTIVES,
-          },
-        }),
+    robots: {
+      index: true,
+      follow: true,
+      ...PREVIEW_LIMITS,
+      googleBot: PREVIEW_LIMITS,
+    },
     alternates: {
       canonical: url,
       languages: {
-        fr: alternateFr,
-        en: alternateEn,
-        "x-default": alternateFr,
+        ...Object.fromEntries(
+          availableLocales.map((code) => [code, absoluteUrl(href, code)]),
+        ),
+        "x-default": absoluteUrl(href, "fr"),
       },
     },
-    openGraph: {
-      title: ogTitle,
-      description,
-      url,
-      siteName: "L'Instant Tranquille",
-      locale: locale === "fr" ? "fr_FR" : "en_GB",
-      alternateLocale: locale === "fr" ? "en_GB" : "fr_FR",
-      type: "website",
-      ...(ogImage && {
-        images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
-      }),
-    },
+    openGraph:
+      options.type === "article"
+        ? {
+            ...openGraph,
+            type: "article",
+            publishedTime: options.publishedTime,
+            modifiedTime: options.modifiedTime,
+            authors: [SITE_NAME],
+          }
+        : { ...openGraph, type: "website" },
     twitter: {
       card: "summary_large_image",
-      title: ogTitle,
+      title,
       description,
-      ...(ogImage && { images: [ogImage] }),
+      images: [image],
     },
   };
-}
-
-function getMediaUrl(media: any): string | undefined {
-  if (!media || typeof media === "string" || typeof media === "number")
-    return undefined;
-  return media.sizes?.hero?.url || media.url || undefined;
-}
-
-export async function generateCmsPageMetadata(
-  slug: string,
-  locale: Locale,
-  path: string,
-  fallbackTitle: string,
-  fallbackDescription: string,
-  options?: { absoluteTitle?: boolean },
-): Promise<Metadata> {
-  const [page, siteSettings] = await Promise.all([
-    getPageBySlug(slug, locale),
-    getSiteSettings(locale),
-  ]);
-
-  const seo = page?.seo as Record<string, any> | undefined;
-  const defaultSeo = (siteSettings as Record<string, any>).defaultSeo as
-    | Record<string, any>
-    | undefined;
-
-  const title = seo?.metaTitle || fallbackTitle;
-  const description = seo?.metaDescription || fallbackDescription;
-  const ogImage = getMediaUrl(seo?.ogImage) || getMediaUrl(defaultSeo?.ogImage);
-
-  return generatePageMetadata({
-    title,
-    description,
-    locale,
-    path,
-    ogImage,
-    absoluteTitle: options?.absoluteTitle,
-  });
 }

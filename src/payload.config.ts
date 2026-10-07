@@ -20,26 +20,39 @@ import {
   UnorderedListFeature,
 } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { en } from "@payloadcms/translations/languages/en";
 import { fr } from "@payloadcms/translations/languages/fr";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Amenities } from "@/collections/Amenities";
 import { ContactMessages } from "@/collections/ContactMessages";
-import { LocalRecommendations } from "@/collections/LocalRecommendations";
+import { Guides } from "@/collections/Guides";
 import { Media } from "@/collections/Media";
-import { OnboardingGuides } from "@/collections/OnboardingGuides";
-import { Pages } from "@/collections/Pages";
+import { OfficialSites } from "@/collections/OfficialSites";
+import { Places } from "@/collections/Places";
 import { Testimonials } from "@/collections/Testimonials";
 import { Users } from "@/collections/Users";
-import { Footer } from "@/globals/Footer";
-import { Header } from "@/globals/Header";
 import { PricingConfig } from "@/globals/PricingConfig";
+import { ContactPage } from "@/globals/pages/ContactPage";
+import { CottagePage } from "@/globals/pages/CottagePage";
+import { GuidesPage } from "@/globals/pages/GuidesPage";
+import { HomePage } from "@/globals/pages/HomePage";
+import { PAGE_GLOBAL_SLUGS } from "@/globals/pages/page-global";
+import { RatesPage } from "@/globals/pages/RatesPage";
+import { SurroundingsPage } from "@/globals/pages/SurroundingsPage";
 import { SiteSettings } from "@/globals/SiteSettings";
+import { defaultLocale, locales } from "@/i18n/config";
+import { adminTranslations } from "@/lib/admin-translations";
+import { readEmailConfig } from "@/lib/email/email-config";
+import { workerEmailAdapter } from "@/lib/email/payload-email-adapter";
+import { frenchSeoTab, seoFields } from "@/lib/seo-fields";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+const emailConfig = readEmailConfig();
 const allowedOrigins = [siteUrl];
 try {
   const u = new URL(siteUrl);
@@ -49,13 +62,24 @@ try {
   allowedOrigins.push(wwwVariant);
 } catch {}
 
+const LOCAL_DATABASE_HOSTS = ["localhost", "127.0.0.1", "::1", "[::1]"];
+const isLocalDatabase = LOCAL_DATABASE_HOSTS.includes(
+  new URL(process.env.DATABASE_URL!).hostname,
+);
+
+const CONTENT_LANGUAGES = { fr: "Français", en: "Anglais" };
+
 export default buildConfig({
   i18n: {
-    supportedLanguages: { fr },
+    supportedLanguages: { fr, en },
     fallbackLanguage: "fr",
+    translations: adminTranslations,
   },
   admin: {
     user: Users.slug,
+    theme: "light",
+    avatar: "default",
+    dateFormat: "d MMMM yyyy",
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -64,38 +88,51 @@ export default buildConfig({
         Logo: "/components/payload/Logo",
         Icon: "/components/payload/Icon",
       },
-      beforeDashboard: ["/components/payload/BeforeDashboard"],
+      Nav: "/components/payload/Nav",
+      beforeLogin: ["/components/payload/BeforeLogin"],
+      providers: ["/components/payload/AdminFonts"],
+      views: {
+        dashboard: { Component: "/components/payload/Dashboard" },
+      },
     },
     meta: {
-      titleSuffix: ", L'Instant Tranquille",
+      titleSuffix: " | L'Instant Tranquille",
+      description: "L'espace de gestion du site du gîte L'Instant Tranquille.",
+      icons: [
+        { rel: "icon", type: "image/svg+xml", url: "/icon.svg" },
+        { rel: "apple-touch-icon", url: "/apple-touch-icon.png" },
+      ],
     },
     livePreview: {
       breakpoints: [
-        { label: "Mobile", name: "mobile", width: 375, height: 667 },
+        { label: "Téléphone", name: "mobile", width: 390, height: 844 },
         { label: "Tablette", name: "tablet", width: 768, height: 1024 },
-        { label: "Desktop", name: "desktop", width: 1440, height: 900 },
+        { label: "Ordinateur", name: "desktop", width: 1440, height: 900 },
       ],
-      collections: [
-        "pages",
-        "testimonials",
-        "amenities",
-        "local-recommendations",
-        "onboarding-guides",
-      ],
-      globals: ["site-settings", "header", "footer", "pricing-config"],
+      collections: ["guides", "places", "testimonials", "amenities"],
+      globals: [...PAGE_GLOBAL_SLUGS, "site-settings", "pricing-config"],
     },
   },
   collections: [
-    Users,
-    Media,
-    Pages,
-    Testimonials,
+    Places,
+    Guides,
+    OfficialSites,
     Amenities,
-    LocalRecommendations,
-    OnboardingGuides,
+    Testimonials,
     ContactMessages,
+    Media,
+    Users,
   ],
-  globals: [SiteSettings, Header, Footer, PricingConfig],
+  globals: [
+    HomePage,
+    CottagePage,
+    SurroundingsPage,
+    GuidesPage,
+    RatesPage,
+    ContactPage,
+    SiteSettings,
+    PricingConfig,
+  ],
   editor: lexicalEditor({
     features: () => [
       BoldFeature(),
@@ -118,42 +155,46 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   secret: process.env.PAYLOAD_SECRET!,
+  email: emailConfig ? workerEmailAdapter(emailConfig) : undefined,
   db: postgresAdapter({
+    push: isLocalDatabase,
     pool: {
       connectionString: process.env.DATABASE_URL!,
     },
   }),
   plugins: [
     seoPlugin({
-      collections: ["pages"],
+      collections: ["guides"],
+      globals: [...PAGE_GLOBAL_SLUGS],
       uploadsCollection: "media",
       tabbedUI: true,
-      generateTitle: ({ doc }) => {
-        const title = typeof doc?.title === "string" ? doc.title : "";
-        return title
-          ? `${title}, L'Instant Tranquille`
-          : "L'Instant Tranquille";
-      },
-      generateDescription: ({ doc }) => {
-        const meta = doc?.meta as Record<string, unknown> | undefined;
-        return typeof meta?.description === "string" ? meta.description : "";
-      },
+      fields: seoFields,
+      generateTitle: ({ doc }) =>
+        typeof doc?.title === "string" ? doc.title : "L'Instant Tranquille",
+      generateDescription: ({ doc }) =>
+        [doc?.lede, doc?.excerpt].find((text) => typeof text === "string") ??
+        "",
     }),
-    vercelBlobStorage({
-      collections: { media: true },
-      token: process.env.BLOB_READ_WRITE_TOKEN!,
-    }),
+    frenchSeoTab,
+    ...(blobToken
+      ? [
+          vercelBlobStorage({
+            collections: { media: true },
+            token: blobToken,
+          }),
+        ]
+      : []),
   ],
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   localization: {
-    locales: [
-      { label: "Français", code: "fr" },
-      { label: "English", code: "en" },
-    ],
-    defaultLocale: "fr",
+    locales: locales.map((code) => ({
+      code,
+      label: CONTENT_LANGUAGES[code],
+    })),
+    defaultLocale,
     fallback: true,
   },
 });

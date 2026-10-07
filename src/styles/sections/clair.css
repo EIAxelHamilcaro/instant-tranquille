@@ -1,0 +1,134 @@
+.esquisse {
+  --lointain: color-mix(in oklab, var(--etang) 5%, transparent);
+  --proche: color-mix(in oklab, var(--etang) 9%, transparent);
+  --rivage: var(--proche);
+
+  position: relative;
+  height: var(--esquisse);
+  margin-top: calc(var(--esquisse) * -1);
+  overflow: clip;
+  pointer-events: none;
+}
+
+.esquisse-haut {
+  margin-top: 0;
+  margin-bottom: calc(var(--esquisse) * -1);
+}
+
+.esquisse > svg {
+  position: absolute;
+  bottom: 0;
+  max-width: none;
+}
+
+.esquisse-rive {
+  --rive: max(108vw, 64rem);
+  --esquisse: calc(var(--rive) * 0.0407);
+
+  border-bottom: 1px solid var(--lointain);
+}
+
+.esquisse-rive > svg {
+  left: 50%;
+  width: var(--rive);
+  translate: -50% 0;
+}
+
+.esquisse .paysage-bouleau {
+  opacity: 0.6;
+}
+
+.esquisse-vol {
+  --esquisse: 4.5rem;
+}
+
+.esquisse-vol > svg {
+  right: max(var(--gouttiere), 14%);
+  bottom: 1.2rem;
+  width: clamp(7rem, 13vw, 12rem);
+  overflow: visible;
+  stroke: color-mix(in oklab, var(--etang) 30%, transparent);
+  stroke-width: 1.5;
+}
+
+.esquisse-brin {
+  --esquisse: min(var(--rythme-section) * 1.4, 10rem);
+}
+
+.esquisse-brin,
+.esquisse-vol:not(.esquisse-haut) {
+  display: none;
+}
+
+.esquisse-brin > svg {
+  left: -0.5rem;
+  bottom: -0.4rem;
+  height: 100%;
+  overflow: visible;
+}
+
+.esquisse-gauche.esquisse-vol > svg {
+  right: auto;
+  left: max(var(--gouttiere), 14%);
+}
+
+.esquisse-droite.esquisse-brin > svg {
+  left: auto;
+  right: -0.5rem;
+  scale: -1 1;
+}
+
+.esquisse .paysage-massette {
+  stroke: color-mix(in oklab, var(--roseau) 26%, transparent);
+}
+
+.esquisse .paysage-bruyere {
+  opacity: 0.28;
+}
+
+.esquisse .paysage-touffe {
+  animation: none;
+}
+
+@media (min-width: 64rem) {
+  .esquisse-brin,
+  .esquisse-vol:not(.esquisse-haut) {
+    display: block;
+  }
+}
+
+@media (min-width: 48rem) {
+  #contenu > .section.section-sombre:is(.crepuscule, .lisiere) {
+    min-height: 0;
+  }
+
+  #contenu > .section:not(.section-sombre):not(.section-courte, .appel) {
+    min-height: min(80svh, 48rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .esquisse .paysage-touffe:nth-child(2) {
+    animation: berge-vent 7.3s ease-in-out infinite alternate;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .esquisse {
+      view-timeline: --esquisse block;
+    }
+
+    .esquisse-rive .paysage-lointain {
+      --glisse: 18px;
+
+      animation: berge-glisse linear both;
+      animation-timeline: --esquisse;
+    }
+
+    .esquisse-vol path {
+      animation: berge-passage linear both;
+      animation-timeline: --esquisse;
+    }
+  }
+}

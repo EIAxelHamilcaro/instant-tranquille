@@ -1,0 +1,134 @@
+{
+  "common": {
+    "siteName": "L'Instant Tranquille",
+    "skipToContent": "Skip to content",
+    "opening": {
+      "skip": "Skip",
+      "sound": "Turn sound on",
+      "replay": "Replay the opening"
+    },
+    "viewer": {
+      "enlarge": "Enlarge the photo",
+      "enlargeNamed": "Enlarge the photo: {alt}",
+      "untitled": "Photo",
+      "close": "Close",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "position": "Photo {current} of {total}"
+    },
+    "mainNav": "Main navigation",
+    "openMenu": "Open menu",
+    "languageSwitcher": "Language",
+    "opensNewTab": "opens in a new tab",
+    "breadcrumb": "Breadcrumb",
+    "nav": {
+      "home": "Home",
+      "cottage": "The cottage",
+      "surroundings": "Surroundings",
+      "guides": "Guides",
+      "rates": "Rates",
+      "contact": "Contact"
+    },
+    "booking": {
+      "check": "Check availability",
+      "direct": "Request a booking",
+      "on": "Book on {platform}",
+      "from": "From {price} per night",
+      "call": "Call the cottage",
+      "write": "Email the cottage"
+    },
+    "facts": {
+      "guests": "Guests",
+      "guestsValue": "{count} guests",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "bathroomsValue": "{count}",
+      "surface": "Size",
+      "surfaceValue": "{count} m²",
+      "garden": "Outside",
+      "gardenValue": "Enclosed garden and terrace",
+      "pets": "Pets",
+      "petsYes": "Welcome",
+      "petsNo": "Not allowed",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out"
+    },
+    "drive": {
+      "byCar": "by car",
+      "fromCottage": "from the cottage",
+      "km": "{km} km"
+    },
+    "categories": {
+      "chateaux": "Loire châteaux",
+      "equestre": "Horses",
+      "famille": "Family days out",
+      "nature": "Nature and ponds",
+      "villages": "Towns and villages",
+      "terroir": "Wine and local produce",
+      "loire": "On the Loire and the Cher",
+      "romorantin": "In Romorantin",
+      "pratique": "Practical"
+    },
+    "rose": {
+      "title": "Driving times from the cottage in Romorantin-Lanthenay",
+      "home": "The cottage",
+      "north": "North",
+      "all": "All",
+      "ring": "{minutes} min",
+      "hint": "Hover or tap a place to see its driving time from the cottage.",
+      "directions": {
+        "north": "north of the cottage",
+        "northEast": "north-east of the cottage",
+        "east": "east of the cottage",
+        "southEast": "south-east of the cottage",
+        "south": "south of the cottage",
+        "southWest": "south-west of the cottage",
+        "west": "west of the cottage",
+        "northWest": "north-west of the cottage"
+      }
+    },
+    "reviews": {
+      "on": "on {platform}",
+      "count": "{count} reviews",
+      "rating": "{rating} out of {scale}",
+      "overall": "on average across {count} reviews, all platforms combined",
+      "stay": "Stayed in {date}",
+      "readAll": "Read all reviews on {platform}"
+    },
+    "footer": {
+      "facts": "An entire {surface} m² house with an enclosed garden, for {guests} guests, {bedrooms} bedrooms.",
+      "seeMap": "See how to get here",
+      "directions": "Google Maps directions",
+      "write": "Write to the owners",
+      "writeTo": "Write to {hosts}",
+      "explore": "The site",
+      "guides": "Travel guides",
+      "guideCount": "{count, plural, one {# guide} other {# guides}}",
+      "allGuides": "See all {count} guides",
+      "tourism": "Official sources",
+      "rights": "© {year}. Holiday cottage in Sologne, Romorantin-Lanthenay, Loir-et-Cher, France.",
+      "legalNotice": "Legal notice",
+      "privacy": "Privacy",
+      "top": "Back to top"
+    },
+    "notFound": {
+      "title": "This page does not exist",
+      "text": "The address may have changed. The cottage is still in the same place.",
+      "back": "Back to the home page"
+    },
+    "error": {
+      "title": "The page could not be displayed",
+      "text": "Reload the page. If the problem continues, email us directly.",
+      "retry": "Reload the page"
+    },
+    "rates": {
+      "perNight": "{price} per night",
+      "guests": "{count, plural, one {# guest} other {# guests}}",
+      "nights": "{count, plural, one {# night} other {# nights}}",
+      "stayFrom": "from {price} for {nights} nights",
+      "on": "{price} on {platform}",
+      "quoted": "Prices recorded on {date}, taxes and fees included.",
+      "exact": "The exact price for your dates is shown on the platform."
+    }
+  }
+}

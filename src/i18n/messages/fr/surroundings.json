@@ -1,0 +1,40 @@
+{
+  "surroundings": {
+    "roseTitle": "Où aller, et en combien de temps ?",
+    "roseText": "Le gîte est au centre. Chaque lieu est placé dans sa vraie direction, à la distance de son temps de route en voiture. Filtrez par envie pour préparer vos journées.",
+    "roseCaption": "Chaque cercle représente un quart d'heure de route depuis le gîte.",
+    "eventsLabel": "Grands rendez-vous, {place}",
+    "officialSite": "Site officiel",
+    "mapTitle": "Tous les lieux sur la carte",
+    "mapText": "Les couleurs sont celles des catégories. Touchez un repère pour lire le nom du lieu et son temps de route.",
+    "mapLabel": "Carte des lieux à visiter autour du gîte",
+    "guidesTitle": "Quel guide lire avant de partir ?",
+    "guidesLink": "Voir les {count} guides de séjour",
+    "categoriesNav": "Aller à une catégorie de lieux",
+    "placesUnit": "{count, plural, one { lieu} other { lieux}}",
+    "categoryRange": "{count, plural, one {# lieu, à {min} du gîte en voiture} other {# lieux, de {min} à {max} du gîte en voiture}}",
+    "tickerLabel": "Temps de route en voiture depuis le gîte",
+    "tickerPause": "Mettre le défilement en pause",
+    "tickerPlay": "Relancer le défilement",
+    "riderGuides": "Guides pour les cavaliers",
+    "calendarTitle": "Les grands rendez-vous de l'année",
+    "calendarAt": "{place}, à {drive} du gîte",
+    "officialTitle": "Sites officiels pour préparer vos visites",
+    "officialText": "Horaires, billetterie et agendas changent chaque saison. Avant de partir, vérifiez-les à la source : offices de tourisme, sites institutionnels et mairies font référence pour la Sologne, le Val de Loire et le Berry.",
+    "stay": {
+      "title": "Vous dormez ici, vous visitez là",
+      "text": "L'Instant Tranquille est une maison entière avec jardin clos à Romorantin-Lanthenay, pour {count} personnes. Le lieu le plus éloigné de cette page est à {max} de route.",
+      "rates": "Voir les prix",
+      "house": "Visiter la maison pièce par pièce"
+    },
+    "officialGroups": {
+      "venir": "Romorantin et accès",
+      "sologne": "Sologne et Loir-et-Cher",
+      "chateaux": "Châteaux et Val de Loire",
+      "berry": "Berry et Loiret",
+      "velo": "À vélo",
+      "terroir": "Vins et terroir",
+      "mairies": "Mairies des villes et villages"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+.calendrier-nuits {
+  gap: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 4rem);
+}
+
+.mois {
+  width: 100%;
+  max-width: 24rem;
+  border-collapse: separate;
+  border-spacing: 3px;
+  table-layout: fixed;
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.mois caption {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--trait);
+  margin-bottom: 0.5rem;
+  font-size: var(--sous-titre);
+  font-variation-settings: "wdth" 80;
+  font-weight: 650;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.mois caption::first-letter {
+  text-transform: uppercase;
+}
+
+.mois th {
+  padding-block: 0.5rem 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--encre-douce);
+  text-transform: uppercase;
+}
+
+.mois td {
+  height: 2.5rem;
+  border-radius: var(--radius-photo);
+  font-size: var(--petit);
+  font-weight: 550;
+  text-align: center;
+}
+
+.mois td[data-etat="free"] {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--trait);
+  color: var(--encre);
+}
+
+.mois td[data-etat="taken"] {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--etang) 15%, var(--fond)) 0 4px,
+    color-mix(in oklab, var(--etang) 7%, var(--fond)) 4px 8px
+  );
+  color: var(--encre-douce);
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.mois td[data-etat="past"] {
+  color: color-mix(in oklab, var(--encre-douce) 62%, var(--fond));
+  font-weight: 400;
+}
+
+.mois td[aria-current="date"] {
+  outline: 2px solid var(--bruyere);
+  outline-offset: 1px;
+}
+
+.legende-nuits li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legende-nuits li::before {
+  content: "";
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-photo);
+}
+
+.legende-nuits li[data-etat="free"]::before {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--trait);
+}
+
+.legende-nuits li[data-etat="taken"]::before {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--etang) 15%, var(--fond)) 0 4px,
+    color-mix(in oklab, var(--etang) 7%, var(--fond)) 4px 8px
+  );
+}

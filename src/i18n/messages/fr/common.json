@@ -1,0 +1,134 @@
+{
+  "common": {
+    "siteName": "L'Instant Tranquille",
+    "skipToContent": "Aller au contenu",
+    "opening": {
+      "skip": "Passer",
+      "sound": "Activer le son",
+      "replay": "Revoir l'ouverture"
+    },
+    "viewer": {
+      "enlarge": "Agrandir la photo",
+      "enlargeNamed": "Agrandir la photo : {alt}",
+      "untitled": "Photo",
+      "close": "Fermer",
+      "previous": "Photo précédente",
+      "next": "Photo suivante",
+      "position": "Photo {current} sur {total}"
+    },
+    "mainNav": "Navigation principale",
+    "openMenu": "Ouvrir le menu",
+    "languageSwitcher": "Langue",
+    "opensNewTab": "ouvre un nouvel onglet",
+    "breadcrumb": "Fil d'Ariane",
+    "nav": {
+      "home": "Accueil",
+      "cottage": "Le gîte",
+      "surroundings": "Les alentours",
+      "guides": "Guides",
+      "rates": "Tarifs",
+      "contact": "Contact"
+    },
+    "booking": {
+      "check": "Voir les disponibilités",
+      "direct": "Demander une réservation",
+      "on": "Réserver sur {platform}",
+      "from": "À partir de {price} la nuit",
+      "call": "Appeler le gîte",
+      "write": "Écrire au gîte"
+    },
+    "facts": {
+      "guests": "Voyageurs",
+      "guestsValue": "{count} personnes",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "bathroomsValue": "{count}",
+      "surface": "Surface",
+      "surfaceValue": "{count} m²",
+      "garden": "Extérieur",
+      "gardenValue": "Jardin clos et terrasse",
+      "pets": "Animaux",
+      "petsYes": "Acceptés",
+      "petsNo": "Non admis",
+      "checkIn": "Arrivée",
+      "checkOut": "Départ"
+    },
+    "drive": {
+      "byCar": "en voiture",
+      "fromCottage": "depuis le gîte",
+      "km": "{km} km"
+    },
+    "categories": {
+      "chateaux": "Châteaux de la Loire",
+      "equestre": "Cheval",
+      "famille": "En famille",
+      "nature": "Nature et étangs",
+      "villages": "Villes et villages",
+      "terroir": "Vins et terroir",
+      "loire": "Sur la Loire et le Cher",
+      "romorantin": "À Romorantin",
+      "pratique": "Pratique"
+    },
+    "rose": {
+      "title": "Temps de route depuis le gîte, à Romorantin-Lanthenay",
+      "home": "Le gîte",
+      "north": "Nord",
+      "all": "Tout",
+      "ring": "{minutes} min",
+      "hint": "Survolez ou touchez un lieu pour voir son temps de route depuis le gîte.",
+      "directions": {
+        "north": "au nord du gîte",
+        "northEast": "au nord-est du gîte",
+        "east": "à l'est du gîte",
+        "southEast": "au sud-est du gîte",
+        "south": "au sud du gîte",
+        "southWest": "au sud-ouest du gîte",
+        "west": "à l'ouest du gîte",
+        "northWest": "au nord-ouest du gîte"
+      }
+    },
+    "reviews": {
+      "on": "sur {platform}",
+      "count": "{count} avis",
+      "rating": "{rating} sur {scale}",
+      "overall": "en moyenne sur {count} avis, toutes plateformes confondues",
+      "stay": "Séjour en {date}",
+      "readAll": "Lire tous les avis sur {platform}"
+    },
+    "footer": {
+      "facts": "Maison entière de {surface} m² avec jardin clos, pour {guests} personnes, {bedrooms} chambres.",
+      "seeMap": "Voir le plan d'accès",
+      "directions": "Itinéraire Google Maps",
+      "write": "Écrire aux propriétaires",
+      "writeTo": "Écrire à {hosts}",
+      "explore": "Le site",
+      "guides": "Guides de séjour",
+      "guideCount": "{count, plural, one {# guide} other {# guides}}",
+      "allGuides": "Voir les {count} guides",
+      "tourism": "Sources officielles",
+      "rights": "© {year}. Gîte en Sologne à Romorantin-Lanthenay, Loir-et-Cher.",
+      "legalNotice": "Mentions légales",
+      "privacy": "Confidentialité",
+      "top": "Haut de page"
+    },
+    "notFound": {
+      "title": "Cette page n'existe pas",
+      "text": "L'adresse a peut-être changé. Le gîte, lui, est toujours au même endroit.",
+      "back": "Revenir à l'accueil"
+    },
+    "error": {
+      "title": "La page n'a pas pu s'afficher",
+      "text": "Rechargez la page. Si le problème continue, écrivez-nous directement.",
+      "retry": "Recharger la page"
+    },
+    "rates": {
+      "perNight": "{price} la nuit",
+      "guests": "{count, plural, one {# voyageur} other {# voyageurs}}",
+      "nights": "{count, plural, one {# nuit} other {# nuits}}",
+      "stayFrom": "dès {price} les {nights} nuits",
+      "on": "{price} sur {platform}",
+      "quoted": "Prix relevés le {date}, taxes et frais inclus.",
+      "exact": "Le prix exact pour vos dates s'affiche sur la plateforme."
+    }
+  }
+}

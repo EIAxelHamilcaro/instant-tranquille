@@ -1,553 +1,445 @@
+import { type Locale, locales } from "@/i18n/config";
+import { nightlyRange, pricedStays, ratedPlatforms } from "@/lib/platforms";
+import {
+  absoluteUrl,
+  type Href,
+  mediaUrl,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
+import {
+  FILM_PUBLISHED_ON,
+  FILM_SPOKEN_LOCALE,
+  type FilmSources,
+} from "@/lib/videos";
 import type {
-  CmsAmenity,
-  CmsRecommendation,
-  CmsSeason,
-  CmsTestimonial,
-} from "./queries";
+  Amenity,
+  CottagePage,
+  Guide,
+  Place,
+  PricingConfig,
+  SiteSetting,
+  Testimonial,
+} from "@/payload-types";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-const BUSINESS_ID = `${SITE_URL}/#business`;
+const COTTAGE_ID = `${SITE_URL}/#gite`;
+const WEBSITE_ID = `${SITE_URL}/#site`;
 
-export function extractPlainText(node: unknown): string {
-  if (!node || typeof node !== "object") return "";
-  const n = node as Record<string, unknown>;
-  if (typeof n.text === "string") return n.text;
-  if (Array.isArray(n.children)) {
-    return n.children.map(extractPlainText).join(" ");
-  }
-  if (n.root && typeof n.root === "object") {
-    return extractPlainText(n.root);
-  }
-  return "";
-}
+const LOGO_URL = `${SITE_URL}/icons/icon-512.png`;
+const LOGO_SIZE = 512;
 
-function buildReviewFields(
-  testimonials?: CmsTestimonial[],
-): Record<string, unknown> {
-  if (!testimonials || testimonials.length === 0) return {};
-  return {
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: Number(
-        (
-          testimonials.reduce((sum, t) => sum + t.rating, 0) /
-          testimonials.length
-        ).toFixed(1),
-      ),
-      reviewCount: testimonials.length,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: testimonials.slice(0, 5).map((t) => ({
-      "@type": "Review",
-      author: { "@type": "Person", name: t.guestName },
-      reviewRating: { "@type": "Rating", ratingValue: t.rating, bestRating: 5 },
-      reviewBody: t.text,
-      ...(t.stayDate && {
-        datePublished: t.stayDate,
-        contentReferenceTime: t.stayDate,
-      }),
-    })),
-  };
-}
+export const cottageReference = { "@id": COTTAGE_ID };
 
-function buildPostalAddress(options?: {
-  address?: string | null;
-  city?: string | null;
-  postalCode?: string | null;
-}) {
-  return {
-    "@type": "PostalAddress",
-    ...(options?.address && { streetAddress: options.address }),
-    ...(options?.city && { addressLocality: options.city }),
-    ...(options?.postalCode && { postalCode: options.postalCode }),
-    addressRegion: "Centre-Val de Loire",
-    addressCountry: "FR",
-  };
-}
-
-const KNOWN_ABSENT_AMENITIES = [
-  "Hébergement chevaux",
-  "Piscine",
-  "Jacuzzi",
-  "Ascenseur",
-  "Détecteur de monoxyde de carbone",
-  "Accès PMR",
-];
-
-function buildAmenityFeature(
-  amenities?: CmsAmenity[],
-): Record<string, unknown> {
-  const present = (amenities ?? []).map((a) => ({
-    "@type": "LocationFeatureSpecification",
-    name: a.name,
-    value: true,
-  }));
-  const absent = KNOWN_ABSENT_AMENITIES.map((name) => ({
-    "@type": "LocationFeatureSpecification",
-    name,
-    value: false,
-  }));
-  const all = [...present, ...absent];
-  return all.length > 0 ? { amenityFeature: all } : {};
-}
-
-type LodgingBusinessOptions = {
-  description?: string | null;
-  telephone?: string | null;
-  email?: string | null;
-  heroImage?: string | null;
-  lat?: number | null;
-  lng?: number | null;
-  address?: string | null;
-  city?: string | null;
-  postalCode?: string | null;
-  priceRange?: string | null;
-  checkInTime?: string | null;
-  checkOutTime?: string | null;
-  numberOfRooms?: number | null;
-  petsAllowed?: boolean | null;
-  amenities?: CmsAmenity[];
-  testimonials?: CmsTestimonial[];
-  sameAs?: string[] | null;
+const cottageLogo = {
+  "@type": "ImageObject",
+  url: LOGO_URL,
+  width: LOGO_SIZE,
+  height: LOGO_SIZE,
 };
 
-export function generateLodgingBusinessJsonLd(
-  options?: LodgingBusinessOptions,
-) {
-  const sameAsUrls = (options?.sameAs ?? []).filter(Boolean);
+const namedCottage = { ...cottageReference, name: SITE_NAME };
+
+const isEmpty = (value: unknown): boolean => {
+  if (value === null || value === undefined || value === "") return true;
+  if (Array.isArray(value)) return value.length === 0;
+  if (typeof value !== "object") return false;
+
+  return Object.keys(value).every((key) => key === "@type");
+};
+
+export function withoutEmpty<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map(withoutEmpty).filter((item) => !isEmpty(item)) as T;
+  }
+  if (value === null || typeof value !== "object") return value;
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .map(([key, item]) => [key, withoutEmpty(item)])
+      .filter(([, item]) => !isEmpty(item)),
+  ) as T;
+}
+
+export function lexicalToText(node: unknown): string {
+  if (!node || typeof node !== "object") return "";
+
+  const { text, children, root } = node as {
+    text?: unknown;
+    children?: unknown[];
+    root?: unknown;
+  };
+
+  if (typeof text === "string") return text;
+  if (root) return lexicalToText(root);
+  if (!Array.isArray(children)) return "";
+
+  return children.map(lexicalToText).filter(Boolean).join(" ").trim();
+}
+
+function toSchemaTime(value: string | null | undefined) {
+  const match = value?.match(/(\d{1,2})\s*[h:]\s*(\d{2})?/i);
+  if (!match?.[1]) return undefined;
+
+  return `${match[1].padStart(2, "0")}:${match[2] ?? "00"}:00`;
+}
+
+function priceRange(pricing: PricingConfig, locale: Locale) {
+  const range = nightlyRange(pricedStays(pricing));
+  if (!range) return undefined;
+
+  const format = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: pricing.currency || "EUR",
+    maximumFractionDigits: 0,
+  });
+
+  return `${format.format(range.min)} - ${format.format(range.max)}`;
+}
+
+export function overallRating(settings: SiteSetting) {
+  const platforms = ratedPlatforms(settings);
+  const reviewCount = platforms.reduce(
+    (total, platform) => total + (platform.reviewCount ?? 0),
+    0,
+  );
+  if (reviewCount === 0) return null;
+
+  const weighted = platforms.reduce(
+    (total, platform) =>
+      total +
+      ((platform.rating ?? 0) / (platform.ratingScale || 5)) *
+        5 *
+        (platform.reviewCount ?? 0),
+    0,
+  );
 
   return {
-    "@context": "https://schema.org",
-    "@type": "LodgingBusiness",
-    "@id": BUSINESS_ID,
-    name: "L'Instant Tranquille",
-    description:
-      options?.description ||
-      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m², Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
-    url: SITE_URL,
-    ...(sameAsUrls.length > 0 && { sameAs: sameAsUrls }),
-    ...(options?.telephone && { telephone: options.telephone }),
-    ...(options?.email && { email: options.email }),
-    ...(options?.heroImage && { image: options.heroImage }),
-    address: buildPostalAddress(options),
-    ...(options?.lat != null &&
-      options?.lng != null && {
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: Number(options.lat.toFixed(5)),
-          longitude: Number(options.lng.toFixed(5)),
-        },
-      }),
-    ...buildAmenityFeature(options?.amenities),
-    ...(options?.numberOfRooms != null && {
-      numberOfRooms: options.numberOfRooms,
-    }),
-    ...(options?.petsAllowed != null && { petsAllowed: options.petsAllowed }),
-    ...(options?.priceRange && { priceRange: options.priceRange }),
-    ...(() => {
-      const toIsoTime = (v?: string | null) => {
-        if (!v) return undefined;
-        const m = v.match(/(\d{1,2})\s*[h:]\s*(\d{2})?/);
-        return m
-          ? `T${(m[1] ?? "0").padStart(2, "0")}:${m[2] ?? "00"}`
-          : undefined;
-      };
-      const ci = toIsoTime(options?.checkInTime);
-      const co = toIsoTime(options?.checkOutTime);
-      return {
-        ...(ci && { checkinTime: ci }),
-        ...(co && { checkoutTime: co }),
-      };
-    })(),
-    ...buildReviewFields(options?.testimonials),
+    ratingValue: Number((weighted / reviewCount).toFixed(1)),
+    bestRating: 5,
+    worstRating: 1,
+    reviewCount,
   };
 }
 
-export function generateFAQJsonLd(
-  faqs: { question: string; answer: string }[],
-) {
-  if (!faqs.length) return null;
+function aggregateRating(settings: SiteSetting) {
+  const rating = overallRating(settings);
+
+  return rating ? { "@type": "AggregateRating", ...rating } : undefined;
+}
+
+export function cottageImages(cottage: CottagePage) {
+  const photos = [
+    ...(cottage.rooms ?? []).flatMap((room) =>
+      (room.photos ?? []).map((photo) => photo.image),
+    ),
+    ...(cottage.gallery ?? []).map((item) => item.image),
+  ];
+
+  return [...new Set(photos.map(mediaUrl).filter(Boolean))];
+}
+
+export function webSiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": WEBSITE_ID,
+    url: SITE_URL,
+    name: SITE_NAME,
+    inLanguage: [...locales],
+    publisher: cottageReference,
+  };
+}
+
+interface CottageJsonLdOptions {
+  locale: Locale;
+  settings: SiteSetting;
+  pricing: PricingConfig;
+  amenities: Amenity[];
+  reviews: Testimonial[];
+  cottage: CottagePage;
+}
+
+export function cottageJsonLd({
+  locale,
+  settings,
+  pricing,
+  amenities,
+  reviews,
+  cottage,
+}: CottageJsonLdOptions) {
+  const { contact, propertyDetails: property, socialLinks } = settings;
+  const sameAs = [
+    ...new Set(
+      [
+        ...(settings.platforms ?? []).map((platform) => platform.url),
+        ...Object.values(socialLinks ?? {}),
+      ].filter(
+        (url): url is string => typeof url === "string" && url.length > 0,
+      ),
+    ),
+  ];
+
+  return withoutEmpty({
+    "@context": "https://schema.org",
+    "@type": ["VacationRental", "LodgingBusiness"],
+    "@id": COTTAGE_ID,
+    additionalType: "House",
+    identifier: "linstant-tranquille-romorantin",
+    name: SITE_NAME,
+    description: settings.siteDescription,
+    url: SITE_URL,
+    logo: cottageLogo,
+    image: cottageImages(cottage),
+    telephone: contact?.phone,
+    email: contact?.email,
+    priceRange: priceRange(pricing, locale),
+    currenciesAccepted: pricing.currency || "EUR",
+    checkinTime: toSchemaTime(pricing.policies?.checkIn),
+    checkoutTime: toSchemaTime(pricing.policies?.checkOut),
+    petsAllowed: property?.petsAllowed ?? undefined,
+    numberOfRooms: property?.bedrooms,
+    knowsLanguage: ["fr", "en"],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: contact?.address,
+      postalCode: contact?.postalCode,
+      addressLocality: contact?.city,
+      addressRegion: "Centre-Val de Loire",
+      addressCountry: "FR",
+    },
+    geo: contact?.coordinates?.lat
+      ? {
+          "@type": "GeoCoordinates",
+          latitude: contact.coordinates.lat,
+          longitude: contact.coordinates.lng,
+        }
+      : undefined,
+    latitude: contact?.coordinates?.lat,
+    longitude: contact?.coordinates?.lng,
+    containedInPlace: {
+      "@type": "AdministrativeArea",
+      name: "Sologne",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Loir-et-Cher",
+      },
+    },
+    containsPlace: {
+      "@type": "Accommodation",
+      additionalType: "EntirePlace",
+      occupancy: {
+        "@type": "QuantitativeValue",
+        value: property?.maxGuests,
+      },
+      numberOfBedrooms: property?.bedrooms,
+      numberOfBathroomsTotal: property?.bathrooms,
+      floorSize: property?.surface
+        ? {
+            "@type": "QuantitativeValue",
+            value: property.surface,
+            unitCode: "MTK",
+          }
+        : undefined,
+      amenityFeature: amenities.map((amenity) => ({
+        "@type": "LocationFeatureSpecification",
+        name: amenity.name,
+        value: true,
+      })),
+    },
+    aggregateRating: aggregateRating(settings),
+    review: reviews.slice(0, 10).map((review) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: review.guestName },
+      reviewBody: review.text,
+      datePublished: review.stayDate ?? undefined,
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: review.rating,
+        bestRating: 5,
+      },
+    })),
+    sameAs,
+  });
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export function faqJsonLd(items: FaqItem[]) {
+  if (items.length === 0) return null;
 
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: items.map(({ question, answer }) => ({
       "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
     })),
   };
 }
 
-export function generateVacationRentalJsonLd(options?: {
-  description?: string | null;
-  url?: string | null;
-  heroImage?: string | null;
-  maxGuests?: number | null;
-  bedrooms?: number | null;
-  bathrooms?: number | null;
-  surface?: number | null;
-  lat?: number | null;
-  lng?: number | null;
-  address?: string | null;
-  city?: string | null;
-  postalCode?: string | null;
-  amenities?: CmsAmenity[];
-  testimonials?: CmsTestimonial[];
-}) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "VacationRental",
-    "@id": `${SITE_URL}/le-gite#rental`,
-    containedInPlace: { "@id": BUSINESS_ID },
-    name: "L'Instant Tranquille",
-    description:
-      options?.description ||
-      "Gîte en Sologne, 3 chambres, 6 personnes, 120 m², Romorantin-Lanthenay, entre forêts et châteaux de la Loire.",
-    url: options?.url || `${SITE_URL}/le-gite`,
-    ...(options?.heroImage && { image: options.heroImage }),
-    address: buildPostalAddress(options),
-    ...(options?.lat != null &&
-      options?.lng != null && {
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: Number(options.lat.toFixed(5)),
-          longitude: Number(options.lng.toFixed(5)),
-        },
-      }),
-    ...(options?.maxGuests && {
-      occupancy: { "@type": "QuantitativeValue", value: options.maxGuests },
-    }),
-    ...(options?.bedrooms && { numberOfBedrooms: options.bedrooms }),
-    ...(options?.bathrooms && { numberOfBathroomsTotal: options.bathrooms }),
-    ...(options?.surface && {
-      floorSize: {
-        "@type": "QuantitativeValue",
-        value: options.surface,
-        unitCode: "MTK",
-      },
-    }),
-    ...buildAmenityFeature(options?.amenities),
-    ...buildReviewFields(options?.testimonials),
-  };
-}
-
-export function generateWebSiteJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
-    name: "L'Instant Tranquille",
-    url: SITE_URL,
-    inLanguage: ["fr-FR", "en"],
-    publisher: { "@id": BUSINESS_ID },
-  };
-}
-
-export function generateTouristAttractionJsonLd(
-  rec: Pick<
-    CmsRecommendation,
-    | "name"
-    | "description"
-    | "address"
-    | "website"
-    | "coordinates"
-    | "distanceFromGite"
-  > & { image?: string | null },
-) {
-  const descriptionText =
-    typeof rec.description === "string"
-      ? rec.description
-      : extractPlainText(rec.description);
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "TouristAttraction",
-    name: rec.name,
-    ...(descriptionText && { description: descriptionText }),
-    ...(rec.address && {
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: rec.address,
-        addressCountry: "FR",
-      },
-    }),
-    ...(rec.coordinates?.lat != null &&
-      rec.coordinates?.lng != null && {
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: Number(rec.coordinates.lat.toFixed(5)),
-          longitude: Number(rec.coordinates.lng.toFixed(5)),
-        },
-      }),
-    ...(rec.website && { url: rec.website }),
-    ...(rec.image && { image: rec.image }),
-    touristType: {
-      "@type": "Audience",
-      audienceType: "Touristes en Sologne",
-    },
-  };
-}
-
-export function generateGrandParquetJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "TouristAttraction",
-    "@id": "https://www.grandparquet.com/#venue",
-    name: "Le Grand Parquet de Lamotte-Beuvron",
-    description:
-      "Site fédéral de la FFE (Fédération Française d'Équitation), accueille le Generali Open de France, concours de saut d'obstacles du calendrier national. À environ 17 km du gîte L'Instant Tranquille.",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Lamotte-Beuvron",
-      postalCode: "41600",
-      addressCountry: "FR",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 47.60028,
-      longitude: 2.02806,
-    },
-    url: "https://www.grandparquet.com",
-    touristType: {
-      "@type": "Audience",
-      audienceType: "Cavaliers et amateurs de sports équestres",
-    },
-    isAccessibleForFree: false,
-  };
-}
-
-export function generateBreadcrumbJsonLd(
-  items: { name: string; url: string }[],
+export function breadcrumbJsonLd(
+  locale: Locale,
+  items: { name: string; href: Href }[],
 ) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
+    itemListElement: [{ name: SITE_NAME, href: "/" as Href }]
+      .concat(items)
+      .map(({ name, href }, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name,
+        item: absoluteUrl(href, locale),
+      })),
+  };
+}
+
+export function placeNode(place: Place) {
+  return {
+    "@type":
+      place.category === "chateaux"
+        ? "LandmarksOrHistoricalBuildings"
+        : "TouristAttraction",
+    name: place.name,
+    description: place.summary ?? undefined,
+    sameAs: place.website ?? undefined,
+    address: place.commune
+      ? {
+          "@type": "PostalAddress",
+          addressLocality: place.commune,
+          addressCountry: "FR",
+        }
+      : undefined,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: place.lat,
+      longitude: place.lng,
+    },
+  };
+}
+
+export function placesJsonLd(name: string, places: Place[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: places.length,
+    itemListElement: places.map((place, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: item.name,
-      item: `${SITE_URL}${item.url}`,
+      item: placeNode(place),
     })),
   };
 }
 
-export function computePriceRange(
-  seasons?: CmsSeason[] | null,
-  currency = "EUR",
-): string | undefined {
-  const rates = (seasons || [])
-    .map((s) => s?.nightlyRate)
-    .filter((r): r is number => typeof r === "number" && r > 0);
-  if (rates.length === 0) return undefined;
-  const min = Math.min(...rates);
-  const max = Math.max(...rates);
-  const symbol = currency === "EUR" ? "€" : currency;
-  return min === max
-    ? `${min} ${symbol}`
-    : `${min} ${symbol} – ${max} ${symbol}`;
-}
-
-function seasonToOffer(season: CmsSeason, currency: string) {
-  return {
-    "@type": "Offer",
-    name: season.name,
-    availability: "https://schema.org/InStock",
-    ...(season.nightlyRate != null && {
-      priceSpecification: {
-        "@type": "UnitPriceSpecification",
-        price: season.nightlyRate,
-        priceCurrency: currency,
-        unitCode: "DAY",
-        unitText: "par nuit",
-      },
-    }),
-    ...(season.minimumStay && {
-      eligibleQuantity: {
-        "@type": "QuantitativeValue",
-        minValue: season.minimumStay,
-        unitCode: "DAY",
-      },
-    }),
-  };
-}
-
-export function generatePricingJsonLd(
-  seasons?: CmsSeason[] | null,
-  options?: { currency?: string | null },
+export function guideTripJsonLd(
+  guide: Guide,
+  steps: { time: string; title: string; details?: string | null }[],
+  locale: Locale,
 ) {
-  const currency = options?.currency || "EUR";
-  const offers = (seasons || [])
-    .filter((s) => s?.nightlyRate != null)
-    .map((s) => seasonToOffer(s, currency));
-  if (offers.length === 0) return null;
-  const priceRange = computePriceRange(seasons, currency);
+  if (steps.length === 0) return null;
 
   return {
     "@context": "https://schema.org",
-    "@type": "LodgingBusiness",
-    "@id": BUSINESS_ID,
-    name: "L'Instant Tranquille",
-    ...(priceRange && { priceRange }),
-    makesOffer: offers,
+    "@type": "TouristTrip",
+    name: guide.title,
+    description: guide.excerpt,
+    inLanguage: locale,
+    url: absoluteUrl(
+      { pathname: "/guides/[slug]", params: { slug: guide.slug } },
+      locale,
+    ),
+    provider: cottageReference,
+    itinerary: {
+      "@type": "ItemList",
+      numberOfItems: steps.length,
+      itemListElement: steps.map((step, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${step.time} ${step.title}`,
+        description: step.details ?? undefined,
+      })),
+    },
   };
 }
 
-export function buildCottageFaqItems(locale: string): {
-  question: string;
-  answer: string;
-}[] {
-  if (locale === "en") {
-    return [
-      {
-        question: "How many guests can the cottage accommodate?",
-        answer: "The cottage sleeps up to 6 guests across 3 bedrooms (115 m²).",
-      },
-      {
-        question: "Are pets allowed?",
-        answer:
-          "Pets may be accepted upon prior request. Please contact us before booking.",
-      },
-      {
-        question: "Does the cottage have a kitchen?",
-        answer:
-          "Yes, the cottage has a fully equipped kitchen with fridge, oven, microwave and dishwasher.",
-      },
-      {
-        question: "Is the cottage suitable for riders and equestrian stays?",
-        answer:
-          "Yes. The cottage is located approximately 17 km from the Grand Parquet de Lamotte-Beuvron (FFE equestrian venue). It provides comfortable accommodation for riders attending competitions or on a leisure trip, while their horses are stabled at local centres.",
-      },
-    ];
-  }
-  return [
-    {
-      question: "Combien de personnes le gîte peut-il accueillir ?",
-      answer: "Le gîte accueille jusqu'à 6 personnes dans 3 chambres (115 m²).",
-    },
-    {
-      question: "Les animaux sont-ils acceptés ?",
-      answer:
-        "Les animaux peuvent être acceptés sur demande préalable. Contactez-nous avant de réserver.",
-    },
-    {
-      question: "Y a-t-il une cuisine équipée ?",
-      answer:
-        "Oui, le gîte dispose d'une cuisine entièrement équipée (réfrigérateur, four, micro-ondes, lave-vaisselle).",
-    },
-    {
-      question:
-        "Le gîte est-il adapté aux séjours de cavaliers et aux concours équestres ?",
-      answer:
-        "Oui. Le gîte est situé à environ 17 km du Grand Parquet de Lamotte-Beuvron (site FFE). Il offre un hébergement confortable aux cavaliers en déplacement pour des concours ou un séjour de loisir, leurs montures étant hébergées dans les écuries ou centres équestres des environs.",
-    },
-  ];
+export function guideJsonLd(
+  guide: Guide,
+  places: Place[],
+  locale: Locale,
+  wordCount: number,
+) {
+  const sources = (guide.sources ?? []).map(({ name, url }) => ({
+    "@type": "WebPage",
+    name,
+    url,
+  }));
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.excerpt,
+    inLanguage: locale,
+    image: mediaUrl(guide.image),
+    datePublished: guide.createdAt,
+    dateModified: guide.updatedAt,
+    wordCount,
+    mainEntityOfPage: absoluteUrl(
+      { pathname: "/guides/[slug]", params: { slug: guide.slug } },
+      locale,
+    ),
+    author: namedCottage,
+    publisher: { ...namedCottage, logo: cottageLogo },
+    about: places.map(placeNode),
+    citation: sources.length > 0 ? sources : undefined,
+  };
 }
 
-export function buildRatesFaqItems(locale: string): {
-  question: string;
-  answer: string;
-}[] {
-  if (locale === "en") {
-    return [
-      {
-        question: "What is the minimum stay?",
-        answer:
-          "The minimum stay varies by season, typically 2 nights in low season and 7 nights in high season (July–August). Check the seasonal calendar for details.",
-      },
-      {
-        question: "Is a deposit required?",
-        answer:
-          "A security deposit is required and will be returned after your stay if no damage is found.",
-      },
-      {
-        question: "What are the check-in and check-out times?",
-        answer:
-          "Check-in is from 5:00 PM (self check-in via a secure key box) and check-out is before 10:00 AM.",
-      },
-      {
-        question:
-          "Can I book directly without going through Airbnb or Booking?",
-        answer:
-          "Yes, direct booking is possible. Contact us by email or phone and we will send you a direct rental agreement.",
-      },
-    ];
-  }
-  return [
-    {
-      question: "Quelle est la durée minimale de séjour ?",
-      answer:
-        "La durée minimale varie selon la saison, généralement 2 nuits en basse saison et 7 nuits en haute saison (juillet–août). Consultez le calendrier saisonnier pour les détails.",
-    },
-    {
-      question: "Une caution est-elle demandée ?",
-      answer:
-        "Oui, une caution est demandée et restituée après votre séjour en l'absence de dégâts.",
-    },
-    {
-      question: "Quels sont les horaires d'arrivée et de départ ?",
-      answer:
-        "L'arrivée est à partir de 17h00 (boîte à clé sécurisée, arrivée autonome) et le départ avant 10h00.",
-    },
-    {
-      question:
-        "Peut-on réserver en direct sans passer par Airbnb ou Booking ?",
-      answer:
-        "Oui, la réservation directe est possible. Contactez-nous par email ou téléphone et nous vous transmettrons un contrat de location direct.",
-    },
-  ];
+export function guideListJsonLd(name: string, guides: Guide[], locale: Locale) {
+  if (guides.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: guides.length,
+    itemListElement: guides.map((guide, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: guide.title,
+      url: absoluteUrl(
+        { pathname: "/guides/[slug]", params: { slug: guide.slug } },
+        locale,
+      ),
+    })),
+  };
 }
 
-export function buildSurroundingsFaqItems(locale: string): {
-  question: string;
-  answer: string;
-}[] {
-  if (locale === "en") {
-    return [
-      {
-        question: "How far is Château de Chambord from the cottage?",
-        answer:
-          "Château de Chambord is approximately 35 minutes by car from the cottage.",
-      },
-      {
-        question: "What can you do in Sologne?",
-        answer:
-          "The Sologne offers forests, ponds, cycling trails, hunting and fishing activities, Loire Valley châteaux (Chambord, Cheverny, Blois), local restaurants and weekly markets.",
-      },
-      {
-        question:
-          "Is the cottage close to the Grand Parquet de Lamotte-Beuvron?",
-        answer:
-          "Yes, the Grand Parquet de Lamotte-Beuvron (FFE federal equestrian venue, host of the Generali Open de France) is approximately 17 km from the cottage, about 20 minutes by car via the D724.",
-      },
-      {
-        question: "Are there cycling or hiking trails near the cottage?",
-        answer:
-          "Yes, numerous marked trails and cycling routes cross the Sologne forests and pass near Romorantin-Lanthenay.",
-      },
-    ];
-  }
-  return [
-    {
-      question: "À quelle distance se trouve le château de Chambord ?",
-      answer:
-        "Le château de Chambord est à environ 35 minutes en voiture du gîte.",
-    },
-    {
-      question: "Que faire en Sologne depuis le gîte ?",
-      answer:
-        "La Sologne offre forêts, étangs, pistes cyclables, chasse, pêche, châteaux de la Loire (Chambord, Cheverny, Blois), restaurants locaux et marchés hebdomadaires.",
-    },
-    {
-      question: "Le gîte est-il proche du Grand Parquet de Lamotte-Beuvron ?",
-      answer:
-        "Oui, le Grand Parquet de Lamotte-Beuvron (site fédéral FFE, qui accueille le Generali Open de France) est à environ 17 km du gîte, soit 20 minutes en voiture par la D724.",
-    },
-    {
-      question: "Y a-t-il des sentiers cyclables ou de randonnée à proximité ?",
-      answer:
-        "Oui, de nombreux sentiers balisés et pistes cyclables parcourent les forêts de Sologne et passent à proximité de Romorantin-Lanthenay.",
-    },
-  ];
+interface FilmJsonLdOptions {
+  film: FilmSources;
+  name: string;
+  description: string;
+}
+
+export function filmJsonLd({ film, name, description }: FilmJsonLdOptions) {
+  const { src, poster } = film.wide ?? film.master;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    description,
+    thumbnailUrl: poster ? `${SITE_URL}${poster}` : undefined,
+    uploadDate: FILM_PUBLISHED_ON,
+    duration: film.duration ? `PT${Math.round(film.duration)}S` : undefined,
+    contentUrl: `${SITE_URL}${src}`,
+    inLanguage: FILM_SPOKEN_LOCALE,
+    about: cottageReference,
+  };
 }

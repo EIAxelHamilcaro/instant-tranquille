@@ -1,120 +1,106 @@
 import type { MetadataRoute } from "next";
-import { getPayload } from "@/lib/payload";
+import { defaultLocale, type Locale, locales } from "@/i18n/config";
+import type { StaticPathname } from "@/i18n/routing";
+import { LEGAL_UPDATED_AT } from "@/lib/legal";
+import { getGlobal, getGuides, getPlaces } from "@/lib/queries";
+import { absoluteUrl, type Href, mediaUrl } from "@/lib/seo";
+import type { Media } from "@/payload-types";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+type Photo = number | Media | null | undefined;
 
-const pages = [
-  {
-    slug: "home",
-    path: "/",
-    priority: 1.0,
-    changeFrequency: "weekly" as const,
-    images: [
-      `${siteUrl}/images/salon-cheminee-canapes-tv.webp`,
-      `${siteUrl}/images/jardin-terrasse-vue-ensemble.webp`,
-      `${siteUrl}/images/sejour-canape-buffet-escalier.webp`,
-    ],
-  },
-  {
-    slug: "le-gite",
-    path: "/le-gite",
-    priority: 0.9,
-    changeFrequency: "monthly" as const,
-    images: [
-      `${siteUrl}/images/chambre-1-lit-double-vert-sauge.webp`,
-      `${siteUrl}/images/chambre-1-vue-ensemble-papier-peint-foret.webp`,
-      `${siteUrl}/images/chambre-2-lit-double-sous-pente-terracotta.webp`,
-      `${siteUrl}/images/chambre-2-tete-de-lit-sous-pente.webp`,
-      `${siteUrl}/images/chambre-3-lits-simples-sous-pente.webp`,
-      `${siteUrl}/images/cuisine-equipee-verte-poutres.webp`,
-      `${siteUrl}/images/salon-baby-foot-mur-briques.webp`,
-      `${siteUrl}/images/sejour-canape-tv-escalier.webp`,
-      `${siteUrl}/images/entree-commode-deco-briques.webp`,
-    ],
-  },
-  {
-    slug: "les-alentours",
-    path: "/les-alentours",
-    priority: 0.8,
-    changeFrequency: "monthly" as const,
-    images: [
-      `${siteUrl}/images/jardin-terrasse-vue-ensemble.webp`,
-      `${siteUrl}/images/terrasse-salon-jardin.webp`,
-    ],
-  },
-  {
-    slug: "tarifs-reservation",
-    path: "/tarifs-reservation",
-    priority: 0.8,
-    changeFrequency: "weekly" as const,
-    images: [`${siteUrl}/images/sejour-canape-buffet-escalier.webp`],
-  },
-  {
-    slug: "contact",
-    path: "/contact",
-    priority: 0.7,
-    changeFrequency: "monthly" as const,
-    images: [`${siteUrl}/images/entree-porte-manteau-papier-peint-herons.webp`],
-  },
-];
+interface PageEntry {
+  href: Href;
+  updatedAt: (string | null | undefined)[];
+  images: Photo[];
+}
 
-const enPaths: Record<string, string> = {
-  "/": "/en",
-  "/le-gite": "/en/the-cottage",
-  "/les-alentours": "/en/surroundings",
-  "/tarifs-reservation": "/en/rates-booking",
-  "/contact": "/en/contact",
-};
+function latest(dates: (string | null | undefined)[]) {
+  const times = dates
+    .filter((date): date is string => Boolean(date))
+    .map((date) => new Date(date).getTime());
+
+  return times.length > 0 ? new Date(Math.max(...times)) : undefined;
+}
+
+function localized({ href, updatedAt, images }: PageEntry) {
+  const languages = {
+    ...Object.fromEntries(
+      locales.map((locale) => [locale, absoluteUrl(href, locale)]),
+    ),
+    "x-default": absoluteUrl(href, defaultLocale),
+  };
+  const imageUrls = [
+    ...new Set(images.map(mediaUrl).filter((url) => url !== undefined)),
+  ];
+
+  return locales.map((locale: Locale) => ({
+    url: absoluteUrl(href, locale),
+    lastModified: latest(updatedAt),
+    alternates: { languages },
+    images: imageUrls.length > 0 ? imageUrls : undefined,
+  }));
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pageUpdates: Record<string, Date> = {};
-  try {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "pages",
-      limit: 10,
-      select: { slug: true, updatedAt: true },
-    });
-    for (const doc of result.docs) {
-      const d = doc as Record<string, unknown>;
-      if (d.slug && d.updatedAt) {
-        pageUpdates[d.slug as string] = new Date(d.updatedAt as string);
-      }
-    }
-  } catch {
-    // Fallback to current date if Payload is unavailable
-  }
+  const [home, cottage, surroundings, rates, contact, places, guides] =
+    await Promise.all([
+      getGlobal("home-page", defaultLocale),
+      getGlobal("cottage-page", defaultLocale),
+      getGlobal("surroundings-page", defaultLocale),
+      getGlobal("rates-page", defaultLocale),
+      getGlobal("contact-page", defaultLocale),
+      getPlaces(defaultLocale),
+      getGuides(defaultLocale),
+    ]);
 
-  return pages.flatMap(({ slug, path, priority, changeFrequency, images }) => {
-    const lastModified = pageUpdates[slug] || new Date();
-    const enPath = enPaths[path] ?? `${path}`;
-    return [
-      {
-        url: `${siteUrl}${path}`,
-        lastModified,
-        changeFrequency,
-        priority,
-        alternates: {
-          languages: {
-            fr: `${siteUrl}${path}`,
-            en: `${siteUrl}${enPath}`,
-          },
-        },
-        images,
-      },
-      {
-        url: `${siteUrl}${enPath}`,
-        lastModified,
-        changeFrequency,
-        priority,
-        alternates: {
-          languages: {
-            fr: `${siteUrl}${path}`,
-            en: `${siteUrl}${enPath}`,
-          },
-        },
-        images,
-      },
-    ];
-  });
+  const guideDates = guides.map((guide) => guide.updatedAt);
+  const pages: Record<StaticPathname, Omit<PageEntry, "href">> = {
+    "/": {
+      updatedAt: [home.updatedAt],
+      images: [home.image, home.meta?.image],
+    },
+    "/le-gite": {
+      updatedAt: [cottage.updatedAt],
+      images: [
+        ...(cottage.rooms ?? []).flatMap((room) =>
+          (room.photos ?? []).map((photo) => photo.image),
+        ),
+        ...(cottage.gallery ?? []).map((photo) => photo.image),
+      ],
+    },
+    "/les-alentours": {
+      updatedAt: [
+        surroundings.updatedAt,
+        ...places.map((place) => place.updatedAt),
+      ],
+      images: [surroundings.meta?.image],
+    },
+    "/guides": {
+      updatedAt: guideDates,
+      images: guides.map((guide) => guide.image),
+    },
+    "/tarifs-reservation": {
+      updatedAt: [rates.updatedAt],
+      images: [rates.meta?.image],
+    },
+    "/contact": {
+      updatedAt: [contact.updatedAt],
+      images: [contact.meta?.image],
+    },
+    "/mentions-legales": { updatedAt: [LEGAL_UPDATED_AT], images: [] },
+    "/confidentialite": { updatedAt: [LEGAL_UPDATED_AT], images: [] },
+  };
+
+  return [
+    ...Object.entries(pages).flatMap(([href, page]) =>
+      localized({ href: href as StaticPathname, ...page }),
+    ),
+    ...guides.flatMap((guide) =>
+      localized({
+        href: { pathname: "/guides/[slug]", params: { slug: guide.slug } },
+        updatedAt: [guide.updatedAt],
+        images: [guide.image],
+      }),
+    ),
+  ];
 }

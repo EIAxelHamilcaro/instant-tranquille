@@ -1,99 +1,86 @@
 "use client";
 
-import L from "leaflet";
-import { useEffect, useRef } from "react";
+import { divIcon, type LatLngTuple } from "leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import type { CmsRecommendation } from "@/lib/queries";
+import type { GeoPoint, PlaceCategory } from "@/lib/places";
 
-const DEFAULT_LAT = 47.4833;
-const DEFAULT_LNG = 1.7667;
 const DEFAULT_ZOOM = 11;
+const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
-const CATEGORY_COLORS: Record<string, string> = {
-  castles: "#b8864f",
-  restaurants: "#c8633a",
-  nature: "#4a7c59",
-  activities: "#3b6347",
-  markets: "#6e5030",
-  equestrian: "#2d4a35",
-  services: "#6b6055",
-};
-
-interface SurroundingsMapClientProps {
-  recommendations: CmsRecommendation[];
-  giteCoordinates?: { lat?: number | null; lng?: number | null } | null;
+export interface MapPlace extends GeoPoint {
+  id: string;
+  name: string;
+  category: PlaceCategory;
+  drive: string;
 }
 
+export interface SurroundingsMapClientProps {
+  origin: GeoPoint;
+  originLabel: string;
+  places: MapPlace[];
+}
+
+const originIcon = divIcon({
+  className: "repere repere-gite",
+  iconSize: [28, 28],
+});
+
+const placeIcon = (category: PlaceCategory) =>
+  divIcon({
+    className: `repere categorie-${category}`,
+    iconSize: [24, 24],
+  });
+
 export default function SurroundingsMapClient({
-  recommendations,
-  giteCoordinates,
+  origin,
+  originLabel,
+  places,
 }: SurroundingsMapClientProps) {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-
-  const giteLat = giteCoordinates?.lat ?? DEFAULT_LAT;
-  const giteLng = giteCoordinates?.lng ?? DEFAULT_LNG;
-
-  useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) return;
-
-    const map = L.map(mapRef.current).setView([giteLat, giteLng], DEFAULT_ZOOM);
-    mapInstanceRef.current = map;
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-
-    const giteIcon = L.icon({
-      iconUrl: "/images/marker-icon.png",
-      iconRetinaUrl: "/images/marker-icon-2x.png",
-      shadowUrl: "/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-    });
-
-    L.marker([giteLat, giteLng], { icon: giteIcon })
-      .addTo(map)
-      .bindPopup("L'Instant Tranquille")
-      .openPopup();
-
-    for (const rec of recommendations) {
-      const lat = rec.coordinates?.lat;
-      const lng = rec.coordinates?.lng;
-      if (!lat || !lng) continue;
-
-      const color = CATEGORY_COLORS[rec.category] ?? "#6b6055";
-
-      const svgIcon = L.divIcon({
-        html: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" fill="${color}" stroke="#fff" stroke-width="2"/></svg>`,
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
-        className: "",
-      });
-
-      const popupContent = rec.distanceFromGite
-        ? `<strong>${rec.name}</strong><br/>${rec.distanceFromGite}`
-        : `<strong>${rec.name}</strong>`;
-
-      L.marker([lat, lng], { icon: svgIcon })
-        .addTo(map)
-        .bindPopup(popupContent);
-    }
-
-    return () => {
-      map.remove();
-      mapInstanceRef.current = null;
-    };
-  }, [giteLat, giteLng, recommendations]);
+  const center: LatLngTuple = [origin.lat, origin.lng];
+  const points = places.map<LatLngTuple>((place) => [place.lat, place.lng]);
 
   return (
-    <div
-      ref={mapRef}
-      role="application"
-      aria-label="Carte des alentours du gîte"
-      className="h-[300px] w-full rounded-xl sm:h-[400px] md:h-[480px]"
-    />
+    <MapContainer
+      className="plan"
+      scrollWheelZoom={false}
+      {...(points.length > 0
+        ? {
+            bounds: [center, ...points],
+            boundsOptions: { padding: [24, 24] },
+          }
+        : { center, zoom: DEFAULT_ZOOM })}
+    >
+      <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
+
+      <Marker
+        position={center}
+        icon={originIcon}
+        title={originLabel}
+        alt={originLabel}
+        zIndexOffset={1000}
+      >
+        <Popup>
+          <strong>{originLabel}</strong>
+        </Popup>
+      </Marker>
+
+      {places.map((place) => (
+        <Marker
+          key={place.id}
+          position={[place.lat, place.lng]}
+          icon={placeIcon(place.category)}
+          title={`${place.name}, ${place.drive}`}
+          alt={`${place.name}, ${place.drive}`}
+        >
+          <Popup>
+            <strong>{place.name}</strong>
+            <span className="trajet">{place.drive}</span>
+          </Popup>
+        </Marker>
+      ))}
+    </MapContainer>
   );
 }

@@ -1,66 +1,75 @@
 import type { CollectionConfig } from "payload";
-import { isAuthenticated, isPublic } from "@/lib/access";
-import { validatePhone } from "@/lib/validators";
+import { isAuthenticated } from "@/lib/access";
 
 export const ContactMessages: CollectionConfig = {
   slug: "contact-messages",
   lockDocuments: false,
-  labels: { singular: "Message", plural: "Messages" },
+  labels: { singular: "Message reçu", plural: "Messages reçus" },
+  defaultSort: "-createdAt",
   admin: {
-    group: "Contenu",
+    group: "Avis et réservations",
     useAsTitle: "subject",
-    description: "Messages reçus via le formulaire de contact",
-    defaultColumns: ["name", "email", "subject", "createdAt", "readStatus"],
+    description:
+      "Les messages envoyés depuis le formulaire de la page contact. Répondez depuis votre boîte e-mail, puis cochez « Message lu ».",
+    defaultColumns: ["subject", "name", "dates", "createdAt", "readStatus"],
+    listSearchableFields: ["name", "email", "subject", "message"],
   },
   access: {
-    create: isPublic,
+    create: () => false,
     read: isAuthenticated,
     update: isAuthenticated,
     delete: isAuthenticated,
   },
   fields: [
     {
-      name: "name",
-      type: "text",
-      label: "Nom",
-      required: true,
-      maxLength: 200,
-      admin: {
-        readOnly: true,
-        description:
-          "Nom de l'expéditeur (rempli automatiquement depuis le formulaire)",
-      },
-    },
-    {
-      name: "email",
-      type: "email",
-      label: "Email",
-      required: true,
-      admin: {
-        readOnly: true,
-        description: "Adresse email de l'expéditeur",
-      },
-    },
-    {
-      name: "phone",
-      type: "text",
-      label: "Téléphone",
-      validate: validatePhone,
-      admin: {
-        readOnly: true,
-        description: "Numéro de téléphone de l'expéditeur (optionnel)",
-      },
-    },
-    {
       name: "subject",
       type: "text",
-      label: "Sujet",
+      label: "Objet",
       required: true,
       maxLength: 300,
-      admin: {
-        readOnly: true,
-        description: "Objet du message",
-      },
+      admin: { readOnly: true },
+    },
+    {
+      type: "row",
+      fields: [
+        {
+          name: "name",
+          type: "text",
+          label: "Nom",
+          required: true,
+          maxLength: 200,
+          admin: { readOnly: true, width: "50%" },
+        },
+        {
+          name: "dates",
+          type: "text",
+          label: "Dates souhaitées",
+          maxLength: 80,
+          admin: { readOnly: true, width: "50%" },
+        },
+      ],
+    },
+    {
+      type: "row",
+      fields: [
+        {
+          name: "email",
+          type: "email",
+          label: "E-mail",
+          required: true,
+          admin: {
+            readOnly: true,
+            description: "L'adresse à laquelle répondre.",
+            width: "50%",
+          },
+        },
+        {
+          name: "phone",
+          type: "text",
+          label: "Téléphone",
+          admin: { readOnly: true, width: "50%" },
+        },
+      ],
     },
     {
       name: "message",
@@ -68,22 +77,17 @@ export const ContactMessages: CollectionConfig = {
       label: "Message",
       required: true,
       maxLength: 5000,
-      admin: {
-        readOnly: true,
-        description: "Contenu du message envoyé via le formulaire de contact",
-      },
+      admin: { readOnly: true, rows: 10 },
     },
     {
       name: "readStatus",
       type: "checkbox",
-      label: "Lu",
+      label: "Message lu",
       defaultValue: false,
-      access: {
-        create: () => false,
-      },
       admin: {
         position: "sidebar",
-        description: "Cochez quand le message a été traité",
+        description:
+          "Cochez quand vous avez répondu. Le tableau de bord compte les messages non lus.",
       },
     },
   ],
