@@ -1,0 +1,25 @@
+{
+  "film": {
+    "length": "Le film, {duration}",
+    "close": "Fermer",
+    "controls": "Commandes du film",
+    "play": "Lecture",
+    "pause": "Pause",
+    "progress": "Avancement du film",
+    "position": "{current} sur {total}",
+    "mute": "Couper le son",
+    "volume": "Volume",
+    "volumeLevel": "{percent} %",
+    "captions": "Sous-titres",
+    "fullscreen": "Plein écran",
+    "unmute": "Activer le son",
+    "loading": "Le film arrive",
+    "replay": "Revoir le film",
+    "errorTitle": "Le film ne se charge pas",
+    "errorText": "Vérifiez votre connexion, puis réessayez. Vous pouvez aussi l'ouvrir directement dans votre navigateur.",
+    "retry": "Réessayer",
+    "openFile": "Ouvrir le film dans un nouvel onglet",
+    "schemaName": "L'Instant Tranquille, visite du gîte en vidéo",
+    "schemaDescription": "Visite filmée du gîte L'Instant Tranquille à Romorantin-Lanthenay, en Sologne : une maison entière de 115 m² pour six personnes, trois chambres, une cheminée, un baby-foot et un jardin clos, avec les temps de route vers Cheverny, le zoo de Beauval et Chambord."
+  }
+}

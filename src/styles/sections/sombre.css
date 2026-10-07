@@ -1,0 +1,692 @@
+.section-sombre:is(.crepuscule, .lisiere) {
+  --fond: color-mix(in oklab, var(--etang-clair) 72%, var(--etang));
+  --surface: color-mix(in oklab, var(--etang-clair) 88%, var(--brume));
+  --encre-douce: color-mix(in oklab, var(--brume) 78%, var(--etang));
+  --trait: color-mix(in oklab, var(--brume) 20%, transparent);
+  --ciel: var(--brume);
+  --aube: color-mix(in oklab, var(--lumiere) 46%, var(--bouleau));
+  --soir: color-mix(in oklab, var(--bruyere) 40%, var(--lumiere));
+  --rive: max(108vw, 62rem);
+  --horizon: clamp(8rem, 17vw, 15rem);
+  --nappe: clamp(8rem, 5.5rem + 7vw, 11rem);
+
+  position: relative;
+  isolation: isolate;
+}
+
+.section-sombre.lisiere {
+  --horizon: clamp(9.5rem, 19vw, 17rem);
+  --nappe: clamp(5.5rem, 4rem + 5vw, 8.5rem);
+}
+
+.section-claire + .section-sombre:is(.crepuscule, .lisiere) {
+  --ciel: var(--bouleau);
+}
+
+.section-sombre + .section-sombre.lisiere {
+  --ciel: var(--fond);
+}
+
+:is(.crepuscule, .lisiere).section {
+  padding-top: calc(var(--horizon) + var(--nappe));
+}
+
+.berge {
+  --rivage: color-mix(in oklab, var(--fond) 88%, var(--brume));
+  --lointain: color-mix(in oklab, var(--etang-clair) 42%, var(--aube));
+  --proche: color-mix(in oklab, var(--etang) 76%, var(--aube));
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  content-visibility: auto;
+}
+
+.berge-foret {
+  --lointain: color-mix(in oklab, var(--etang-clair) 46%, var(--soir));
+  --tronc: color-mix(in oklab, var(--brume) 70%, var(--etang-clair));
+}
+
+.berge-horizon {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--horizon) + var(--nappe) + 2rem);
+  background: linear-gradient(
+    to bottom,
+    var(--ciel),
+    color-mix(in oklab, var(--aube) 55%, var(--ciel))
+      calc(var(--horizon) * 0.66),
+    var(--aube) var(--horizon),
+    color-mix(in oklab, var(--aube) 78%, var(--etang-clair))
+      calc(var(--horizon) + 1rem),
+    color-mix(in oklab, var(--brume) 34%, var(--etang-clair))
+      calc(var(--horizon) + var(--nappe) * 0.5),
+    var(--fond) calc(var(--horizon) + var(--nappe) + 1rem)
+  );
+}
+
+.berge-foret .berge-horizon {
+  background: linear-gradient(
+    to bottom,
+    var(--ciel),
+    color-mix(in oklab, var(--soir) 58%, var(--ciel))
+      calc(var(--horizon) * 0.62),
+    var(--soir) var(--horizon),
+    var(--etang) var(--horizon),
+    var(--etang) calc(var(--horizon) + 1.5rem),
+    var(--fond) calc(var(--horizon) + var(--nappe))
+  );
+}
+
+.berge-foret .berge-horizon::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--horizon) * 0.55);
+  background: linear-gradient(to bottom, var(--ciel), transparent);
+}
+
+.berge-ciel {
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--horizon);
+  overflow: clip;
+}
+
+.berge-soleil {
+  position: absolute;
+  left: 66%;
+  bottom: 2.6rem;
+  width: clamp(2.6rem, 5vw, 4.2rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bouleau);
+  box-shadow: 0 0 3.2rem 1.3rem var(--lumiere);
+}
+
+.berge-soleil::after {
+  content: "";
+  position: absolute;
+  inset: -55%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--lumiere) 60%, transparent),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.berge-foret .berge-soleil {
+  left: 27%;
+  bottom: -1.4rem;
+  width: clamp(4rem, 9vw, 7.5rem);
+  background: color-mix(in oklab, var(--lumiere) 64%, var(--brique));
+  box-shadow: 0 0 3.5rem 1rem color-mix(in oklab, var(--soir) 70%, transparent);
+}
+
+.berge-vol {
+  position: absolute;
+  left: 18%;
+  top: calc(var(--horizon) * 0.2);
+  width: clamp(4.5rem, 9vw, 8rem);
+  overflow: visible;
+  stroke: var(--etang);
+  stroke-width: 1.4;
+  opacity: 0.42;
+}
+
+.berge-foret .berge-vol {
+  left: 58%;
+  top: calc(var(--horizon) * 0.3);
+}
+
+.berge-lisiere {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--horizon) - var(--rive) * 0.1875);
+  width: var(--rive);
+  max-width: none;
+  translate: -50% 0;
+}
+
+.paysage-pins {
+  fill: color-mix(in oklab, var(--etang) 84%, var(--soir));
+}
+
+.paysage-tronc,
+.paysage-branche {
+  stroke: var(--tronc);
+}
+
+.paysage-tronc {
+  stroke-linecap: butt;
+}
+
+.paysage-branche {
+  stroke-width: 3;
+}
+
+.paysage-ecorce {
+  stroke: var(--nuit);
+  stroke-linecap: butt;
+  opacity: 0.62;
+}
+
+.paysage-fronde {
+  stroke: color-mix(in oklab, var(--fougere) 24%, var(--etang));
+  stroke-width: 3.2;
+  transform-box: fill-box;
+  transform-origin: 30% 100%;
+}
+
+.berge-eau {
+  position: absolute;
+  left: 0;
+  top: calc(var(--horizon) + 0.3rem);
+  width: 100%;
+  height: calc(100% - var(--horizon) - 0.3rem);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.berge-nenuphars {
+  position: absolute;
+  left: 52%;
+  top: calc(var(--horizon) + var(--nappe) * 0.3);
+  width: clamp(7rem, 15vw, 13rem);
+  overflow: visible;
+}
+
+.paysage-nenuphar {
+  fill: color-mix(in oklab, var(--fougere) 30%, var(--etang));
+}
+
+.paysage-fleur {
+  fill: var(--bouleau);
+  stroke: var(--bruyere);
+  stroke-width: 0.8;
+}
+
+.berge-brume {
+  position: absolute;
+  left: -12%;
+  top: calc(var(--horizon) - 2.4rem);
+  width: 64%;
+  height: 3.4rem;
+  border-radius: 62% 38% 55% 45% / 58% 44% 56% 42%;
+  background: var(--bouleau);
+  filter: blur(1.4rem);
+  opacity: 0.55;
+}
+
+.berge-brume ~ .berge-brume {
+  left: 44%;
+  top: calc(var(--horizon) - 1.1rem);
+  width: 74%;
+  height: 2.6rem;
+  border-radius: 40% 60% 48% 52% / 46% 60% 40% 54%;
+  opacity: 0.6;
+}
+
+.berge-foret .berge-brume {
+  top: calc(var(--horizon) - 1.6rem);
+  opacity: 0.4;
+}
+
+.berge-foret .berge-brume ~ .berge-brume {
+  top: calc(var(--horizon) + 0.4rem);
+  opacity: 0.2;
+}
+
+.berge-heron {
+  position: absolute;
+  left: 21%;
+  top: calc(var(--horizon) + 1.3rem);
+  width: clamp(3.4rem, 6vw, 5rem);
+  height: auto;
+  color: var(--etang);
+}
+
+.berge-libellule {
+  position: absolute;
+  left: 30%;
+  top: calc(var(--horizon) + 2.2rem);
+  width: clamp(1.5rem, 2.4vw, 2.1rem);
+}
+
+.berge-libellule > svg {
+  overflow: visible;
+}
+
+.paysage-abdomen {
+  stroke: var(--etang);
+  stroke-width: 2.2;
+}
+
+.paysage-aile {
+  fill: var(--bouleau);
+  opacity: 0.7;
+  transform-origin: 23px 12px;
+}
+
+.berge-cerf {
+  --cerf: clamp(4.6rem, 9vw, 8rem);
+
+  position: absolute;
+  left: 60%;
+  top: calc(var(--horizon) + 0.7rem - var(--cerf) * 1.096);
+  width: var(--cerf);
+  height: auto;
+  overflow: visible;
+  color: var(--nuit);
+}
+
+.berge-coin {
+  position: absolute;
+  bottom: -0.5rem;
+  left: -0.75rem;
+  width: clamp(7.5rem, 20vw, 16rem);
+  overflow: visible;
+}
+
+.berge-coin-droit {
+  left: auto;
+  right: -0.75rem;
+  width: clamp(6rem, 15vw, 12rem);
+  scale: -1 1;
+}
+
+.berge-coin-fougere {
+  width: clamp(7rem, 17vw, 14rem);
+}
+
+.berge-coin-fougere.berge-coin-droit {
+  width: clamp(5.5rem, 13vw, 11rem);
+}
+
+.pied {
+  --voute: clamp(4.5rem, 9vw, 8rem);
+}
+
+.pied.section-sombre {
+  padding-top: calc(var(--rythme-section) * 0.7 + var(--voute));
+}
+
+.berge-nuit {
+  background: radial-gradient(
+    circle at 86% 3.4rem,
+    color-mix(in oklab, var(--bouleau) 11%, transparent),
+    transparent 17rem
+  );
+}
+
+.berge-etoiles {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: calc(var(--voute) + 1.5rem);
+}
+
+.paysage-etoile {
+  stroke: var(--bouleau);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.5;
+}
+
+.paysage-etoile:nth-child(2) {
+  stroke-width: 2.3;
+  opacity: 0.7;
+}
+
+.paysage-etoile:nth-child(3) {
+  stroke: var(--lumiere);
+  stroke-width: 3;
+  opacity: 0.9;
+}
+
+.berge-lune {
+  position: absolute;
+  right: max(var(--gouttiere), 11%);
+  top: 1.5rem;
+  width: clamp(2.1rem, 3.6vw, 3.2rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 36% 34%,
+    var(--bouleau),
+    var(--brume) 72%
+  );
+  box-shadow: 0 0 2.4rem 0.2rem
+    color-mix(in oklab, var(--bouleau) 30%, transparent);
+}
+
+.frontend-app {
+  --oree: calc(max(108vw, 44rem) * 0.08125);
+}
+
+#contenu > :last-child {
+  padding-bottom: calc(var(--rythme-section) * 0.6 + var(--oree));
+}
+
+.pied-lisiere {
+  --rive: max(108vw, 44rem);
+  --lointain: color-mix(in oklab, var(--etang-clair) 58%, var(--brume));
+  --proche: var(--nuit);
+
+  position: relative;
+  height: var(--oree);
+  margin-top: calc(var(--oree) * -1);
+  overflow: clip;
+  pointer-events: none;
+}
+
+.pied-lisiere > svg {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: var(--rive);
+  max-width: none;
+  translate: -50% 0;
+}
+
+.entete-page:not(:has(.entete-photo)) {
+  background:
+    repeating-radial-gradient(
+      circle at 82% 46%,
+      transparent 0 5.4rem,
+      color-mix(in oklab, var(--brume) 10%, transparent) 5.4rem
+        calc(5.4rem + 1px)
+    ),
+    radial-gradient(
+      circle at 82% 46%,
+      color-mix(in oklab, var(--lumiere) 26%, transparent),
+      transparent 24rem
+    ),
+    linear-gradient(
+      to bottom,
+      var(--etang),
+      color-mix(in oklab, var(--etang-clair) 72%, var(--etang))
+    );
+}
+
+@keyframes berge-leve {
+  from {
+    translate: 0 6.5rem;
+  }
+}
+
+@keyframes berge-couche {
+  from {
+    translate: 0 -2.4rem;
+  }
+  to {
+    translate: 0 1.2rem;
+  }
+}
+
+@keyframes berge-glisse {
+  from {
+    translate: calc(var(--glisse) * -1) 0;
+  }
+  to {
+    translate: var(--glisse) 0;
+  }
+}
+
+@keyframes berge-plane {
+  from {
+    translate: 0 var(--plane);
+  }
+  to {
+    translate: 0 calc(var(--plane) * -1);
+  }
+}
+
+@keyframes berge-pousse {
+  from {
+    translate: 0 var(--pousse, 4rem);
+  }
+}
+
+@keyframes berge-vent {
+  from {
+    rotate: -1.6deg;
+  }
+  to {
+    rotate: 2.4deg;
+  }
+}
+
+@keyframes berge-halo {
+  to {
+    scale: 1.3;
+    opacity: 0.2;
+  }
+}
+
+@keyframes berge-voile {
+  to {
+    opacity: 0.3;
+  }
+}
+
+@keyframes berge-passage {
+  to {
+    translate: 3.5rem -0.6rem;
+  }
+}
+
+@keyframes berge-scintille {
+  to {
+    opacity: 0.15;
+  }
+}
+
+@keyframes berge-libellule {
+  0%,
+  18% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  22%,
+  41% {
+    translate: 5rem -1.6rem;
+    rotate: -8deg;
+  }
+  46%,
+  60% {
+    translate: 9.5rem 0.4rem;
+    rotate: 6deg;
+  }
+  61% {
+    translate: 9.5rem 0.4rem;
+    scale: -1 1;
+  }
+  66%,
+  84% {
+    translate: 3rem -0.8rem;
+    rotate: 0deg;
+    scale: -1 1;
+  }
+  90%,
+  99.9% {
+    translate: 0 0;
+    scale: -1 1;
+  }
+}
+
+@keyframes berge-aile {
+  to {
+    scale: 1 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .berge-soleil::after {
+    animation: berge-halo 7s ease-in-out infinite alternate;
+  }
+
+  .berge-vol > path {
+    animation: berge-passage 46s linear infinite alternate;
+  }
+
+  .berge .berge-coin .paysage-touffe,
+  .berge-coin .paysage-fronde {
+    animation: berge-vent 6.4s ease-in-out infinite alternate;
+  }
+
+  .berge .berge-coin .paysage-touffe:nth-child(2),
+  .berge-coin .paysage-fronde:nth-child(2n) {
+    animation-duration: 8.2s;
+    animation-delay: -3s;
+  }
+
+  .berge .berge-coin .paysage-touffe:nth-child(3),
+  .berge-coin .paysage-fronde:nth-child(3n) {
+    animation-duration: 7.1s;
+    animation-delay: -5.5s;
+  }
+
+  .berge-libellule {
+    animation: berge-libellule 17s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+  }
+
+  .paysage-aile {
+    animation: berge-aile 90ms linear infinite alternate;
+  }
+
+  .paysage-etoile {
+    animation: berge-scintille 4.6s ease-in-out infinite alternate;
+  }
+
+  .paysage-etoile:nth-child(2) {
+    animation-duration: 6.3s;
+    animation-delay: -2.2s;
+  }
+
+  .paysage-etoile:nth-child(3) {
+    animation-duration: 7.7s;
+    animation-delay: -5s;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .berge-horizon {
+      view-timeline: --tableau block;
+    }
+
+    .berge-soleil {
+      animation: berge-leve linear both;
+      animation-timeline: --tableau;
+      animation-range: entry 10% cover 52%;
+    }
+
+    .berge-foret .berge-soleil {
+      animation-name: berge-couche;
+      animation-range: entry 30% cover 90%;
+    }
+
+    .berge-horizon
+      :is(
+        .paysage-lointain,
+        .paysage-proche,
+        .paysage-roseliere,
+        .paysage-pins,
+        .paysage-futaie,
+        .paysage-sous-bois
+      ),
+    .berge-nenuphars {
+      animation: berge-glisse linear both;
+      animation-timeline: --tableau;
+    }
+
+    .berge-horizon .paysage-lointain {
+      --glisse: 30px;
+    }
+
+    .berge-horizon :is(.paysage-proche, .paysage-roseliere) {
+      --glisse: -12px;
+    }
+
+    .berge-horizon .paysage-pins {
+      --glisse: -14px;
+    }
+
+    .berge-horizon .paysage-futaie {
+      --glisse: 64px;
+    }
+
+    .berge-horizon .paysage-sous-bois {
+      --glisse: 104px;
+    }
+
+    .berge-nenuphars {
+      --glisse: 1.1rem;
+    }
+
+    .berge-horizon .berge-brume {
+      --glisse: 7%;
+
+      animation:
+        berge-glisse linear both,
+        berge-voile 11s ease-in-out infinite alternate;
+      animation-timeline: --tableau, auto;
+    }
+
+    .berge-horizon .berge-brume ~ .berge-brume {
+      --glisse: -9%;
+
+      animation-duration: auto, 14s;
+    }
+
+    .berge-eau,
+    .berge-vol {
+      --plane: 0.9rem;
+
+      animation: berge-plane linear both;
+      animation-timeline: --tableau;
+    }
+
+    .berge-vol {
+      --plane: -1.8rem;
+    }
+
+    .berge-coin {
+      animation: berge-pousse linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+
+    .berge-nuit {
+      view-timeline: --voute block;
+    }
+
+    .berge-etoiles,
+    .berge-lune {
+      --pousse: 1.6rem;
+
+      animation: berge-pousse linear both;
+      animation-timeline: --voute;
+      animation-range: entry 0% entry 100%;
+    }
+
+    .berge-lune {
+      --pousse: 3.4rem;
+    }
+
+    .pied-lisiere {
+      view-timeline: --oree block;
+    }
+
+    .pied-lisiere .paysage-lointain {
+      --glisse: 26px;
+
+      animation: berge-glisse linear both;
+      animation-timeline: --oree;
+    }
+  }
+}

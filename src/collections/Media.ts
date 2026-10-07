@@ -1,9 +1,15 @@
 import type { CollectionBeforeChangeHook, CollectionConfig } from "payload";
 import sharp from "sharp";
 import { isAuthenticated, isPublic } from "@/lib/access";
+import { charCount } from "@/lib/admin-fields";
 import { revalidateCollection } from "@/lib/revalidate";
+import { validateUrl } from "@/lib/validators";
 
 const webpFormat = { format: "webp" as const, options: { quality: 80 } };
+const ALT_MIN = 10;
+const ALT_MAX = 140;
+const ONE_YEAR = 31536000;
+const FILE_CACHE = `public, max-age=${ONE_YEAR}, s-maxage=${ONE_YEAR}`;
 
 const generateBlurDataURL: CollectionBeforeChangeHook = async ({
   data,
@@ -31,26 +37,37 @@ const generateBlurDataURL: CollectionBeforeChangeHook = async ({
 export const Media: CollectionConfig = {
   slug: "media",
   lockDocuments: false,
-  labels: { singular: "Média", plural: "Médias" },
+  labels: { singular: "Photo", plural: "Photos" },
   hooks: {
     ...revalidateCollection("media"),
     beforeChange: [generateBlurDataURL],
   },
+  defaultSort: "-createdAt",
   upload: {
     staticDir: "media",
     formatOptions: webpFormat,
     imageSizes: [
-      { name: "thumbnail", width: 400, height: 300, formatOptions: webpFormat },
-      { name: "card", width: 768, height: 512, formatOptions: webpFormat },
-      { name: "hero", width: 1920, height: 1080, formatOptions: webpFormat },
+      { name: "thumbnail", width: 480, formatOptions: webpFormat },
+      { name: "share", width: 1200, height: 630, formatOptions: webpFormat },
     ],
     adminThumbnail: "thumbnail",
+    focalPoint: true,
+    crop: true,
     mimeTypes: ["image/*"],
+    modifyResponseHeaders: ({ headers }) => {
+      headers.set("Cache-Control", FILE_CACHE);
+
+      return headers;
+    },
   },
   admin: {
+    group: "Pages du site",
     useAsTitle: "alt",
-    description: "Images et fichiers médias du site",
-    defaultColumns: ["filename", "alt", "mimeType", "updatedAt"],
+    description:
+      "Toutes les photos du site. Déposez une photo ici, puis choisissez-la dans une page, un lieu ou un guide. Le site la redimensionne et l'allège tout seul.",
+    defaultColumns: ["filename", "alt", "credit", "createdAt"],
+    listSearchableFields: ["alt", "filename", "caption"],
+    pagination: { defaultLimit: 50 },
   },
   access: {
     create: isAuthenticated,
@@ -62,13 +79,16 @@ export const Media: CollectionConfig = {
     {
       name: "alt",
       type: "text",
-      label: "Texte alternatif",
+      label: "Description de la photo",
       required: true,
       localized: true,
+      minLength: ALT_MIN,
+      maxLength: ALT_MAX,
       admin: {
         description:
-          "Décrivez l'image en quelques mots (important pour le référencement)",
-        placeholder: "Vue du gîte depuis le jardin",
+          "Décrivez ce qu'on voit, comme à quelqu'un au téléphone. Cette phrase est lue aux personnes malvoyantes et aide Google à comprendre la photo.",
+        placeholder: "Le séjour avec ses deux canapés devant la cheminée",
+        components: charCount(ALT_MAX),
       },
     },
     {
@@ -76,10 +96,39 @@ export const Media: CollectionConfig = {
       type: "text",
       label: "Légende",
       localized: true,
+      maxLength: 120,
       admin: {
-        description: "Texte affiché sous l'image (optionnel)",
-        placeholder: "Le gîte au printemps",
+        description:
+          "Un court texte affiché sous la photo quand on l'agrandit. Facultatif.",
       },
+    },
+    {
+      type: "row",
+      fields: [
+        {
+          name: "credit",
+          type: "text",
+          label: "Crédit photo",
+          maxLength: 120,
+          admin: {
+            description:
+              "L'auteur et la licence. À remplir pour toute photo qui n'est pas la vôtre.",
+            placeholder: "Jean Dupont, CC BY-SA 4.0",
+            width: "50%",
+          },
+        },
+        {
+          name: "creditUrl",
+          type: "text",
+          label: "Lien de la source",
+          validate: validateUrl,
+          admin: {
+            description: "La page où vous avez trouvé la photo.",
+            placeholder: "https://commons.wikimedia.org/wiki/File:...",
+            width: "50%",
+          },
+        },
+      ],
     },
     {
       name: "blurDataURL",

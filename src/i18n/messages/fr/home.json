@@ -1,0 +1,17 @@
+{
+  "home": {
+    "heroImageAlt": "Le séjour du gîte L'Instant Tranquille à Romorantin-Lanthenay",
+    "roseCaption": "Chaque cercle représente un quart d'heure de route.",
+    "factsTitle": "Le gîte en bref",
+    "houseLink": "Visiter la maison pièce par pièce",
+    "surroundingsLink": "Voir tous les lieux et les temps de route",
+    "faqTitle": "Questions fréquentes",
+    "guidesLink": "Voir tous les guides",
+    "ratesLink": "Voir tous les prix et les conditions",
+    "filmButton": "Voir la maison en vidéo",
+    "filmTitle": "L'Instant Tranquille, la maison en vidéo",
+    "tickerLabel": "Temps de route depuis le gîte",
+    "tickerPause": "Mettre le défilement en pause",
+    "tickerPlay": "Relancer le défilement"
+  }
+}

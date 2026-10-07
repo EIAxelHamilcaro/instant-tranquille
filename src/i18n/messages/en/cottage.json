@@ -1,0 +1,38 @@
+{
+  "cottage": {
+    "factsTitle": "The cottage at a glance",
+    "amenitiesTitle": "What the house provides",
+    "galleryTitle": "More views of the house",
+    "reviewsTitle": "What guests say about the house",
+    "bookingTitle": "Book the house",
+    "bookingLink": "See rates and book",
+    "categories": {
+      "indoor": "Indoors",
+      "kitchen": "Kitchen",
+      "bedroom": "Bedrooms",
+      "bathroom": "Bathroom",
+      "comfort": "Comfort",
+      "tech": "Internet and screens",
+      "outdoor": "Outdoors"
+    },
+    "filmButton": "See the house on video",
+    "filmTitle": "L'Instant Tranquille, the house on video",
+    "visitTitle": "The tour",
+    "roomCount": "{count, plural, one {# room} other {# rooms}}",
+    "levels": {
+      "ground": "On the ground floor",
+      "upstairs": "Upstairs",
+      "outdoors": "Outside"
+    },
+    "facts": {
+      "surface": "m²",
+      "guests": "{count, plural, one {guest} other {guests}}",
+      "bedrooms": "{count, plural, one {bedroom} other {bedrooms}}",
+      "bathrooms": "{count, plural, one {bathroom} other {bathrooms}}",
+      "garden": "Enclosed garden and terrace",
+      "petsYes": "Pets welcome",
+      "petsNo": "No pets"
+    },
+    "bookingText": ", for up to {count} guests. The whole house is yours."
+  }
+}

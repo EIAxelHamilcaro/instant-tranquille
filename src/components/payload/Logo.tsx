@@ -1,15 +1,17 @@
+import { Heron } from "./Heron";
+
+const POND_RINGS = [22, 40, 64, 96, 140, 200, 280];
+
 export default function Logo() {
   return (
-    <div
-      style={{
-        fontFamily: "'Georgia', 'Times New Roman', serif",
-        fontSize: "1.25rem",
-        fontWeight: 600,
-        color: "var(--theme-text)",
-        whiteSpace: "nowrap",
-      }}
-    >
-      L&apos;Instant Tranquille
+    <div className="lit-enseigne">
+      <svg className="lit-etang" viewBox="-300 -80 600 160" aria-hidden="true">
+        {POND_RINGS.map((radius) => (
+          <ellipse key={radius} rx={radius} ry={radius / 4} />
+        ))}
+      </svg>
+      <Heron className="lit-heron" />
+      <p className="lit-nom">L&apos;Instant Tranquille</p>
     </div>
   );
 }

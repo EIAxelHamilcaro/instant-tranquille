@@ -1,0 +1,44 @@
+{
+  "contact": {
+    "detailsTitle": "Coordonnées",
+    "formTitle": "Écrire au gîte",
+    "accessTitle": "Venir au gîte",
+    "mapLabel": "Carte : emplacement du gîte à Romorantin-Lanthenay",
+    "directionsLink": "Ouvrir l'itinéraire dans Google Maps",
+    "routeFrom": "Depuis {from}",
+    "accessGuideLink": "Train, voiture, avion : le guide pour venir à Romorantin-Lanthenay",
+    "form": {
+      "name": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone (facultatif)",
+      "dates": "Dates souhaitées (facultatif)",
+      "message": "Message",
+      "submit": "Envoyer le message",
+      "sending": "Envoi en cours…",
+      "successTitle": "Message envoyé",
+      "successText": "Nous vous répondons à l'adresse e-mail que vous avez indiquée.",
+      "errors": {
+        "nameRequired": "Indiquez votre nom.",
+        "nameTooLong": "Raccourcissez le nom à 200 caractères au plus.",
+        "emailRequired": "Indiquez votre adresse e-mail pour recevoir la réponse.",
+        "emailInvalid": "Vérifiez l'adresse e-mail, par exemple prenom@exemple.fr.",
+        "phoneInvalid": "Vérifiez le numéro de téléphone, par exemple 06 12 34 56 78 ou +33 6 12 34 56 78.",
+        "datesTooLong": "Raccourcissez les dates à 80 caractères au plus.",
+        "messageRequired": "Écrivez votre message.",
+        "messageTooLong": "Raccourcissez le message à 5 000 caractères au plus.",
+        "captcha": "La vérification anti-robot a échoué. Attendez qu'elle se termine, puis envoyez le message à nouveau.",
+        "server": "Le message n'est pas parti. Envoyez-le à nouveau, ou écrivez à l'adresse e-mail affichée sur cette page."
+      },
+      "requiredNote": "Nom, e-mail et message sont obligatoires.",
+      "honeypot": "Ne pas remplir ce champ",
+      "privacyNote": "Vos informations servent uniquement à répondre à votre message. Voir la <privacy>politique de confidentialité</privacy>.",
+      "datesHint": "Par exemple : du 12 au 15 juillet, 4 personnes."
+    },
+    "hostsTitle": "{hosts}, vos hôtes",
+    "reviewLabel": "à propos de l'accueil",
+    "phoneLabel": "Téléphone",
+    "emailLabel": "E-mail",
+    "addressLabel": "Adresse",
+    "ratesLink": "Voir les prix"
+  }
+}

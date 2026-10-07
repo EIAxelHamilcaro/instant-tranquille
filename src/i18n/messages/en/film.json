@@ -1,0 +1,25 @@
+{
+  "film": {
+    "length": "The film, {duration}",
+    "close": "Close",
+    "controls": "Film controls",
+    "play": "Play",
+    "pause": "Pause",
+    "progress": "Film progress",
+    "position": "{current} of {total}",
+    "mute": "Mute",
+    "volume": "Volume",
+    "volumeLevel": "{percent}%",
+    "captions": "Subtitles",
+    "fullscreen": "Full screen",
+    "unmute": "Turn the sound on",
+    "loading": "The film is on its way",
+    "replay": "Watch the film again",
+    "errorTitle": "The film will not load",
+    "errorText": "Check your connection, then try again. You can also open it directly in your browser.",
+    "retry": "Try again",
+    "openFile": "Open the film in a new tab",
+    "schemaName": "L'Instant Tranquille, video tour of the holiday home",
+    "schemaDescription": "Video tour of L'Instant Tranquille, a holiday home in Romorantin-Lanthenay, Sologne: a whole 115 m² house for six guests with three bedrooms, a fireplace, table football and an enclosed garden, plus drive times to Cheverny, Beauval zoo and Chambord. French voice-over."
+  }
+}

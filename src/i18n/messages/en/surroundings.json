@@ -1,0 +1,40 @@
+{
+  "surroundings": {
+    "roseTitle": "Where to go, and how long does it take?",
+    "roseText": "The cottage sits at the centre. Each place is shown in its true direction, at a distance that matches its driving time. Filter by interest to plan your days.",
+    "roseCaption": "Each circle stands for a quarter of an hour's drive from the cottage.",
+    "eventsLabel": "Main events, {place}",
+    "officialSite": "Official website",
+    "mapTitle": "All the places on the map",
+    "mapText": "Colours match the categories. Tap a marker to read the name of the place and its driving time.",
+    "mapLabel": "Map of places to visit around the cottage",
+    "guidesTitle": "Which guide should you read before you go?",
+    "guidesLink": "See all {count} travel guides",
+    "categoriesNav": "Jump to a category of places",
+    "placesUnit": "{count, plural, one { place} other { places}}",
+    "categoryRange": "{count, plural, one {# place, {min} by car from the cottage} other {# places, {min} to {max} by car from the cottage}}",
+    "tickerLabel": "Driving times from the cottage",
+    "tickerPause": "Pause the scrolling list",
+    "tickerPlay": "Resume the scrolling list",
+    "riderGuides": "Guides for riders",
+    "calendarTitle": "The main events of the year",
+    "calendarAt": "{place}, {drive} from the cottage",
+    "officialTitle": "Official websites to plan your visits",
+    "officialText": "Opening hours, tickets and event dates change every season. Check them at the source before you set off: tourist offices, institutional websites and town halls are the reference for the Sologne, the Loire Valley and Berry.",
+    "stay": {
+      "title": "You sleep here, you visit there",
+      "text": "L'Instant Tranquille is an entire house with an enclosed garden in Romorantin-Lanthenay, for {count} guests. The farthest place on this page is a {max} drive away.",
+      "rates": "See prices",
+      "house": "Tour the house room by room"
+    },
+    "officialGroups": {
+      "venir": "Romorantin and getting here",
+      "sologne": "Sologne and Loir-et-Cher",
+      "chateaux": "Châteaux and the Loire Valley",
+      "berry": "Berry and Loiret",
+      "velo": "By bike",
+      "terroir": "Wine and local produce",
+      "mairies": "Town halls of the towns and villages"
+    }
+  }
+}

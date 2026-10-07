@@ -1,407 +1,173 @@
 import { unstable_cache } from "next/cache";
+import { draftMode } from "next/headers";
+import type { CollectionSlug, GlobalSlug, Where } from "payload";
+import type { Locale } from "@/i18n/config";
+import type { RosePlace } from "@/lib/places";
+import type { Config, Media, Place } from "@/payload-types";
 import { getPayload } from "./payload";
 
-// ─── Shared types for CMS data ─────────────────────────────
+type Globals = Config["globals"];
+type Collections = Config["collections"];
 
-export type CmsMedia = {
-  id: string | number;
-  url?: string | null;
-  alt?: string | null;
-  width?: number | null;
-  height?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-    } | null;
-    card?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-    } | null;
-    hero?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-    } | null;
-  } | null;
-};
+const ONE_DAY = 86400;
+const EMBEDDED_TAGS = ["media", "guides", "places", "official-sites"];
 
-export type CmsTestimonial = {
-  id: string | number;
-  guestName: string;
-  guestOrigin?: string | null;
-  rating: number;
-  text: string;
-  source?: string | null;
-  status?: string | null;
-  featured?: boolean | null;
-  stayDate?: string | null;
-};
+const PRIVATE_FIELDS = ["calendars"];
 
-export type CmsAmenity = {
-  id: string | number;
-  name: string;
-  icon?: string | null;
-  category: string;
-  photo?: CmsMedia | string | number | null;
-  order?: number | null;
-};
+const withoutPrivateFields = <Doc extends object>(doc: Doc) =>
+  Object.fromEntries(
+    Object.entries(doc).filter(([name]) => !PRIVATE_FIELDS.includes(name)),
+  ) as Doc;
 
-export type CmsRecommendation = {
-  id: string | number;
-  name: string;
-  description?: unknown;
-  category: string;
-  distanceFromGite?: string | null;
-  photo?: CmsMedia | string | number | null;
-  address?: string | null;
-  phone?: string | null;
-  website?: string | null;
-  featured?: boolean | null;
-  order?: number | null;
-  coordinates?: { lat?: number | null; lng?: number | null } | null;
-};
-
-export type CmsPage = {
-  id: string | number;
-  title?: string | null;
-  slug?: string | null;
-  heroTitle?: string | null;
-  heroSubtitle?: string | null;
-  heroImage?: CmsMedia | string | number | null;
-  heroImages?: Array<{ image?: CmsMedia | string | number | null }> | null;
-  introTitle?: string | null;
-  introText?: unknown;
-  introImage?: CmsMedia | string | number | null;
-  gallery?: Array<{
-    image?: CmsMedia | string | number | null;
-    caption?: string | null;
-  }> | null;
-  highlights?: Array<{
-    icon?: string | null;
-    title?: string | null;
-    description?: string | null;
-    linkUrl?: string | null;
-    linkLabel?: string | null;
-  }> | null;
-  highlightsTitle?: string | null;
-  testimonialsTitle?: string | null;
-  ctaTitle?: string | null;
-  ctaSubtitle?: string | null;
-  descriptionTitle?: string | null;
-  descriptionText?: unknown;
-  previewImages?: Array<{
-    image?: CmsMedia | string | number | null;
-    label?: string | null;
-  }> | null;
-  content?: unknown;
-  seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: CmsMedia | string | number | null;
-  } | null;
-};
-
-export type CmsSeason = {
-  name: string;
-  startMonth?: string | null;
-  startDay?: number | null;
-  endMonth?: string | null;
-  endDay?: number | null;
-  nightlyRate?: number | null;
-  weeklyRate?: number | null;
-  minimumStay?: number | null;
-  color?: string | null;
-};
-
-// ─── Globals ───────────────────────────────────────────────
-
-export async function getSiteSettings(locale: string, draft = false) {
-  if (draft) {
-    const payload = await getPayload();
-    return payload.findGlobal({
-      slug: "site-settings",
-      locale: locale as "fr" | "en",
-      draft: true,
-    });
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      return payload.findGlobal({
-        slug: "site-settings",
-        locale: locale as "fr" | "en",
-      });
-    },
-    ["site-settings", locale],
-    { revalidate: 3600, tags: ["site-settings"] },
-  )();
+async function isDraft() {
+  const { isEnabled } = await draftMode();
+  return isEnabled;
 }
 
-export async function getHeaderData(locale: string, draft = false) {
-  if (draft) {
+export async function getGlobal<Slug extends GlobalSlug>(
+  slug: Slug,
+  locale: Locale,
+): Promise<Globals[Slug]> {
+  const load = async (draft: boolean) => {
     const payload = await getPayload();
-    return payload.findGlobal({
-      slug: "header",
-      locale: locale as "fr" | "en",
-      draft: true,
-    });
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      return payload.findGlobal({
-        slug: "header",
-        locale: locale as "fr" | "en",
-      });
-    },
-    ["header", locale],
-    { revalidate: 3600, tags: ["header"] },
-  )();
+    const global = await payload.findGlobal({ slug, locale, draft, depth: 2 });
+
+    return withoutPrivateFields(global);
+  };
+
+  if (await isDraft()) return load(true) as Promise<Globals[Slug]>;
+
+  return unstable_cache(() => load(false), [slug, locale], {
+    revalidate: ONE_DAY,
+    tags: [slug, ...EMBEDDED_TAGS],
+  })() as Promise<Globals[Slug]>;
 }
 
-export async function getFooterData(locale: string, draft = false) {
-  if (draft) {
-    const payload = await getPayload();
-    return payload.findGlobal({
-      slug: "footer",
-      locale: locale as "fr" | "en",
-      draft: true,
-    });
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      return payload.findGlobal({
-        slug: "footer",
-        locale: locale as "fr" | "en",
-      });
-    },
-    ["footer", locale],
-    { revalidate: 3600, tags: ["footer"] },
-  )();
+interface FindOptions {
+  where?: Where;
+  sort?: string | string[];
+  limit?: number;
+  depth?: number;
 }
 
-export async function getPricingConfig(locale: string, draft = false) {
-  if (draft) {
-    const payload = await getPayload();
-    return payload.findGlobal({
-      slug: "pricing-config",
-      locale: locale as "fr" | "en",
-      draft: true,
-    });
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      return payload.findGlobal({
-        slug: "pricing-config",
-        locale: locale as "fr" | "en",
-      });
-    },
-    ["pricing-config", locale],
-    { revalidate: 3600, tags: ["pricing-config"] },
-  )();
-}
-
-// ─── Collections ───────────────────────────────────────────
-
-export async function getFeaturedTestimonials(locale: string, draft = false) {
-  if (draft) {
+async function findDocs<Slug extends CollectionSlug>(
+  collection: Slug,
+  locale: Locale,
+  cacheKey: string,
+  { where, sort, limit = 200, depth = 1 }: FindOptions = {},
+): Promise<Collections[Slug][]> {
+  const load = async (draft: boolean) => {
     const payload = await getPayload();
     const result = await payload.find({
-      collection: "testimonials",
-      where: {
-        featured: { equals: true },
-        status: { equals: "approved" },
-      },
-      sort: "-stayDate",
-      locale: locale as "fr" | "en",
-      limit: 20,
-      draft: true,
+      collection,
+      locale,
+      draft,
+      where,
+      sort,
+      limit,
+      depth,
+      overrideAccess: draft,
     });
-    return result.docs as unknown as CmsTestimonial[];
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "testimonials",
-        where: {
-          featured: { equals: true },
-          status: { equals: "approved" },
-        },
-        sort: "-stayDate",
-        locale: locale as "fr" | "en",
-        limit: 20,
-      });
-      return result.docs as unknown as CmsTestimonial[];
-    },
-    ["testimonials-featured", locale],
-    { revalidate: 3600, tags: ["testimonials"] },
-  )();
+
+    return result.docs;
+  };
+
+  if (await isDraft()) return load(true) as Promise<Collections[Slug][]>;
+
+  const keyParts = [collection, cacheKey, locale, `depth:${depth}`];
+
+  return unstable_cache(() => load(false), keyParts, {
+    revalidate: ONE_DAY,
+    tags: [collection, ...EMBEDDED_TAGS],
+  })() as Promise<Collections[Slug][]>;
 }
 
-export async function getAmenities(locale: string, draft = false) {
-  if (draft) {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "amenities",
-      where: { enabled: { not_equals: false } },
-      sort: "order",
-      locale: locale as "fr" | "en",
-      limit: 100,
-      draft: true,
-    });
-    return result.docs as unknown as CmsAmenity[];
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "amenities",
-        where: { enabled: { not_equals: false } },
-        sort: "order",
-        locale: locale as "fr" | "en",
-        limit: 100,
-      });
-      return result.docs as unknown as CmsAmenity[];
-    },
-    ["amenities", locale],
-    { revalidate: 3600, tags: ["amenities"] },
-  )();
+export const getPlaces = (locale: Locale) =>
+  findDocs("places", locale, "all-with-photo", { sort: "driveMin", depth: 1 });
+
+export const getAmenities = (locale: Locale) =>
+  findDocs("amenities", locale, "enabled", {
+    where: { enabled: { not_equals: false } },
+    sort: "order",
+    depth: 0,
+  });
+
+export const getReviews = (locale: Locale) =>
+  findDocs("testimonials", locale, "approved-featured-first", {
+    where: { status: { equals: "approved" } },
+    sort: ["-featured", "createdAt"],
+    depth: 0,
+  });
+
+export const getOfficialSites = (locale: Locale) =>
+  findDocs("official-sites", locale, "all-by-order", {
+    sort: ["order", "id"],
+    depth: 0,
+  });
+
+export const getGuides = (locale: Locale) =>
+  findDocs("guides", locale, "published", {
+    where: { _status: { equals: "published" } },
+    sort: "title",
+    depth: 1,
+  });
+
+export async function getGuideBySlug(slug: string, locale: Locale) {
+  const [guide] = await findDocs("guides", locale, `slug:${slug}`, {
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 2,
+  });
+
+  return guide ?? null;
 }
 
-export async function getFeaturedRecommendations(
-  locale: string,
-  draft = false,
-) {
-  if (draft) {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "local-recommendations",
-      where: { featured: { equals: true } },
-      sort: "order",
-      locale: locale as "fr" | "en",
-      limit: 50,
-      depth: 1,
-      draft: true,
-    });
-    return result.docs as unknown as CmsRecommendation[];
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "local-recommendations",
-        where: { featured: { equals: true } },
-        sort: "order",
-        locale: locale as "fr" | "en",
-        limit: 50,
-        depth: 1,
-      });
-      return result.docs as unknown as CmsRecommendation[];
-    },
-    ["recommendations-featured", locale],
-    { revalidate: 3600, tags: ["recommendations"] },
-  )();
+export function toRosePlace(place: Place): RosePlace {
+  const image = asMedia(place.image);
+
+  return {
+    commune: place.commune,
+    photo: image?.url
+      ? {
+          url: image.url,
+          alt: image.alt,
+          blurDataURL: image.blurDataURL,
+          position: `${image.focalX ?? 50}% ${image.focalY ?? 50}%`,
+        }
+      : null,
+    id: String(place.id),
+    name: place.name,
+    category: place.category,
+    lat: place.lat,
+    lng: place.lng,
+    driveMin: place.driveMin,
+    driveKm: place.driveKm,
+    summary: place.summary,
+    featured: place.featured,
+  };
 }
 
-export async function getAllRecommendations(locale: string, draft = false) {
-  if (draft) {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "local-recommendations",
-      sort: "order",
-      locale: locale as "fr" | "en",
-      limit: 100,
-      depth: 1,
-      draft: true,
-    });
-    return result.docs as unknown as CmsRecommendation[];
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "local-recommendations",
-        sort: "order",
-        locale: locale as "fr" | "en",
-        limit: 100,
-        depth: 1,
-      });
-      return result.docs as unknown as CmsRecommendation[];
-    },
-    ["recommendations-all", locale],
-    { revalidate: 3600, tags: ["recommendations"] },
-  )();
+export function asMedia(value: number | Media | null | undefined) {
+  return typeof value === "object" && value !== null ? value : null;
 }
 
-export async function getAllApprovedTestimonials(
-  locale: string,
-  draft = false,
-) {
-  if (draft) {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "testimonials",
-      where: { status: { equals: "approved" } },
-      sort: "-stayDate",
-      locale: locale as "fr" | "en",
-      limit: 100,
-      draft: true,
-    });
-    return result.docs as unknown as CmsTestimonial[];
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "testimonials",
-        where: { status: { equals: "approved" } },
-        sort: "-stayDate",
-        locale: locale as "fr" | "en",
-        limit: 100,
-      });
-      return result.docs as unknown as CmsTestimonial[];
-    },
-    ["testimonials-approved", locale],
-    { revalidate: 3600, tags: ["testimonials"] },
-  )();
+export function populated<Doc extends { id: number }>(
+  values: (number | Doc)[] | null | undefined,
+): Doc[] {
+  return (values ?? []).filter(
+    (value): value is Doc => typeof value === "object" && value !== null,
+  );
 }
 
-export async function getPageBySlug(
-  slug: string,
-  locale: string,
-  draft = false,
-) {
-  if (draft) {
-    const payload = await getPayload();
-    const result = await payload.find({
-      collection: "pages",
-      where: { slug: { equals: slug } },
-      locale: locale as "fr" | "en",
-      limit: 1,
-      depth: 2,
-      draft: true,
-    });
-    return (result.docs[0] as unknown as CmsPage) || null;
-  }
-  return unstable_cache(
-    async () => {
-      const payload = await getPayload();
-      const result = await payload.find({
-        collection: "pages",
-        where: { slug: { equals: slug } },
-        locale: locale as "fr" | "en",
-        limit: 1,
-        depth: 2,
-      });
-      return (result.docs[0] as unknown as CmsPage) || null;
-    },
-    ["pages", slug, locale],
-    { revalidate: 3600, tags: ["pages"] },
-  )();
+export async function getPublishedGuideSlugs() {
+  const payload = await getPayload();
+  const { docs } = await payload.find({
+    collection: "guides",
+    where: { _status: { equals: "published" } },
+    select: { slug: true },
+    pagination: false,
+    depth: 0,
+  });
+
+  return docs.map((guide) => guide.slug);
 }

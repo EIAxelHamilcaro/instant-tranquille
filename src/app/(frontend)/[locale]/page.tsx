@@ -1,227 +1,329 @@
-import { draftMode } from "next/headers";
-import { setRequestLocale } from "next-intl/server";
-import { CTASection } from "@/components/home/CTASection";
-import { HeroSection } from "@/components/home/HeroSection";
-import { HighlightsSection } from "@/components/home/HighlightsSection";
-import { IntroSection } from "@/components/home/IntroSection";
-import { StatsBand } from "@/components/home/StatsBand";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import {
-  HomePageClient,
-  type HomePageData,
-} from "@/components/live-preview/HomePageClient";
-import { LeafDivider } from "@/components/shared/LeafDivider";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { FilmDialog } from "@/components/home/FilmDialog";
+import { HeroFilm } from "@/components/home/HeroFilm";
+import { AutoScroll } from "@/components/shared/AutoScroll";
+import { BookingButtons } from "@/components/shared/BookingButtons";
+import { Faq } from "@/components/shared/Faq";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { Photo } from "@/components/shared/Photo";
+import { PhotoViewer } from "@/components/shared/PhotoViewer";
+import { PriceSummary } from "@/components/shared/PriceSummary";
+import { PropertyFacts } from "@/components/shared/PropertyFacts";
+import { Reviews } from "@/components/shared/Reviews";
+import { Sketch } from "@/components/shared/Sketch";
+import { ForestScene, PondScene } from "@/components/shared/Tableaux";
+import { Ticker } from "@/components/shared/Ticker";
+import { DriveTimeRose } from "@/components/surroundings/DriveTimeRose";
 import type { Locale } from "@/i18n/config";
+import { Link } from "@/i18n/navigation";
 import {
-  computePriceRange,
-  extractPlainText,
-  generateFAQJsonLd,
-  generateLodgingBusinessJsonLd,
+  cottageJsonLd,
+  faqJsonLd,
+  filmJsonLd,
+  lexicalToText,
 } from "@/lib/jsonld";
+import { formatDrive } from "@/lib/places";
 import {
   getAmenities,
-  getPageBySlug,
-  getPricingConfig,
-  getSiteSettings,
+  getGlobal,
+  getPlaces,
+  getReviews,
+  populated,
+  toRosePlace,
 } from "@/lib/queries";
-import { REVIEWS } from "@/lib/reviews";
-import { generateCmsPageMetadata } from "@/lib/seo";
+import { roseLabels } from "@/lib/rose-labels";
+import { pageMetadata } from "@/lib/seo";
+import { pageShareImage } from "@/lib/share-image/content";
+import { filmSources } from "@/lib/videos";
+import type { Guide, Place } from "@/payload-types";
+
+interface HomePageProps {
+  params: Promise<{ locale: Locale }>;
+}
+
+const ROSE_MIN_MINUTES = 8;
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+}: HomePageProps): Promise<Metadata> {
   const { locale } = await params;
-  const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
+  const page = await getGlobal("home-page", locale);
 
-  return generateCmsPageMetadata(
-    "home",
-    locale as Locale,
-    "/",
-    `L'Instant Tranquille, ${messages.metadata.title}`,
-    messages.metadata.description,
-    { absoluteTitle: true },
-  );
+  return pageMetadata({
+    locale,
+    href: "/",
+    title: page.title,
+    description: page.lede ?? "",
+    meta: page.meta,
+    share: await pageShareImage("home", locale),
+  });
 }
 
-export default async function HomePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const { isEnabled: isDraft } = await draftMode();
-
-  const [siteSettings, pricingConfig, homePage, amenities] = await Promise.all([
-    getSiteSettings(locale, isDraft),
-    getPricingConfig(locale, isDraft),
-    getPageBySlug("home", locale, isDraft),
-    getAmenities(locale, isDraft),
+  const [
+    t,
+    common,
+    filmText,
+    page,
+    cottage,
+    settings,
+    pricing,
+    places,
+    reviews,
+    amenities,
+  ] = await Promise.all([
+    getTranslations("home"),
+    getTranslations("common"),
+    getTranslations("film"),
+    getGlobal("home-page", locale),
+    getGlobal("cottage-page", locale),
+    getGlobal("site-settings", locale),
+    getGlobal("pricing-config", locale),
+    getPlaces(locale),
+    getReviews(locale),
+    getAmenities(locale),
   ]);
 
-  const settings = siteSettings as Record<string, unknown>;
-  const contact = settings.contact as Record<string, unknown> | undefined;
-  const contactCoords = contact?.coordinates as
-    | Record<string, unknown>
-    | undefined;
-  const pricing = pricingConfig as Record<string, unknown>;
-
-  type CmsMedia = {
-    url?: string | null;
-    sizes?: { hero?: { url?: string | null } };
+  const origin = {
+    lat: settings.contact?.coordinates?.lat ?? 0,
+    lng: settings.contact?.coordinates?.lng ?? 0,
   };
-  const _heroMedia = homePage?.heroImage as CmsMedia | undefined;
-  const heroImageUrl =
-    _heroMedia?.sizes?.hero?.url ?? _heroMedia?.url ?? undefined;
-
-  const propertyDetails = settings.propertyDetails as
-    | {
-        bedrooms?: number;
-        maxGuests?: number;
-        bathrooms?: number;
-        surface?: number;
-        petsAllowed?: boolean;
-      }
-    | undefined;
-
-  const rawSameAs = settings.sameAs as
-    | Array<{ url?: string | null }>
-    | undefined;
-  const sameAsUrls = (rawSameAs ?? [])
-    .map((item) => item.url)
-    .filter((url): url is string => typeof url === "string" && url.length > 0);
-
-  const jsonLd = generateLodgingBusinessJsonLd({
-    telephone: contact?.phone as string | undefined,
-    email: contact?.email as string | undefined,
-    heroImage: heroImageUrl || undefined,
-    lat: contactCoords?.lat as number | undefined,
-    lng: contactCoords?.lng as number | undefined,
-    address: contact?.address as string | undefined,
-    city: contact?.city as string | undefined,
-    postalCode: contact?.postalCode as string | undefined,
-    priceRange: computePriceRange(
-      pricing.seasons as Parameters<typeof computePriceRange>[0],
-      pricing.currency as string | undefined,
-    ),
-    petsAllowed: propertyDetails?.petsAllowed,
-    checkInTime: (pricing.policies as Record<string, unknown> | undefined)
-      ?.checkIn as string | undefined,
-    checkOutTime: (pricing.policies as Record<string, unknown> | undefined)
-      ?.checkOut as string | undefined,
-    numberOfRooms: propertyDetails?.bedrooms,
-    amenities,
-    testimonials: REVIEWS,
-    sameAs: sameAsUrls,
-  });
-
-  const rawFaqs =
-    (settings.faqs as { question: string; answer: unknown }[]) || [];
-  const faqs = rawFaqs.map((faq) => ({
+  const featuredPlaces = places.filter((place) => place.featured);
+  const guides = populated<Guide>(page.featuredGuides);
+  const rooms = cottage.rooms ?? [];
+  const [leadReview] = reviews;
+  const film = filmSources(locale);
+  const [headline, ...place] = page.title.split(", ");
+  const faqItems = (settings.faqs ?? []).map((faq) => ({
     question: faq.question,
-    answer:
-      typeof faq.answer === "string"
-        ? faq.answer
-        : extractPlainText(faq.answer),
+    answer: lexicalToText(faq.answer),
   }));
-  const faqJsonLd = generateFAQJsonLd(faqs);
-
-  const bookingLinks = pricing.bookingLinks as
-    | {
-        airbnb?: string | null;
-        booking?: string | null;
-        abritel?: string | null;
-        email?: string | null;
-      }
-    | undefined;
-
-  const heroImage = homePage?.heroImage ?? null;
-  const heroImages =
-    (homePage?.heroImages as Array<{ image?: unknown }> | undefined) ?? null;
-
-  if (isDraft) {
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        {faqJsonLd && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-          />
-        )}
-        <HomePageClient
-          initialData={{
-            heroImage,
-            heroImages: heroImages as HomePageData["heroImages"],
-            heroTitle: homePage?.heroTitle ?? null,
-            heroSubtitle: homePage?.heroSubtitle ?? null,
-            introImage: homePage?.introImage ?? null,
-            introTitle: homePage?.introTitle ?? null,
-            introText: homePage?.introText ?? null,
-            highlights: homePage?.highlights ?? null,
-            highlightsTitle: homePage?.highlightsTitle ?? null,
-            testimonialsTitle: homePage?.testimonialsTitle ?? null,
-            ctaTitle: homePage?.ctaTitle ?? null,
-            ctaSubtitle: homePage?.ctaSubtitle ?? null,
-            bookingLinks,
-          }}
-          propertyDetails={propertyDetails}
-        />
-      </>
-    );
-  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          cottageJsonLd({
+            locale,
+            settings,
+            pricing,
+            amenities,
+            reviews,
+            cottage,
+          }),
+          faqJsonLd(faqItems),
+          film &&
+            filmJsonLd({
+              film,
+              name: filmText("schemaName"),
+              description: filmText("schemaDescription"),
+            }),
+        ]}
       />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+
+      <section className="hero section-sombre">
+        <HeroFilm fallback={page.image} alt={t("heroImageAlt")} />
+        <div className="page grid gap-8">
+          <h1 className="hero-titre">
+            {headline}
+            {place.length > 0 && (
+              <span className="hero-lieu">{place.join(", ")}</span>
+            )}
+          </h1>
+          <p className="chapeau">{page.lede}</p>
+          <BookingButtons settings={settings} />
+          {film && (
+            <FilmDialog
+              sources={film}
+              label={t("filmButton")}
+              title={t("filmTitle")}
+              endTitle={settings.filmEndTitle ?? ""}
+            >
+              <BookingButtons settings={settings} />
+            </FilmDialog>
+          )}
+        </div>
+      </section>
+
+      <Ticker
+        items={featuredPlaces.map((item) => ({
+          id: String(item.id),
+          label: item.name,
+          detail: formatDrive(item.driveMin),
+        }))}
+        label={t("tickerLabel")}
+        pauseLabel={t("tickerPause")}
+        playLabel={t("tickerPlay")}
+      />
+
+      <section className="page section-serree" aria-labelledby="titre-fiche">
+        <h2 id="titre-fiche" className="sr-only">
+          {t("factsTitle")}
+        </h2>
+        <PropertyFacts settings={settings} />
+      </section>
+
+      <section className="section grid gap-10">
+        <div className="page grid gap-x-12 gap-y-6 lg:grid-cols-12">
+          <h2 className="lg:col-span-7">{page.houseTitle}</h2>
+          <div className="grid content-start gap-5 lg:col-span-5">
+            <p>{page.houseText}</p>
+            <Link href="/le-gite" className="ui lien justify-self-start">
+              {t("houseLink")}
+            </Link>
+          </div>
+        </div>
+        <PhotoViewer>
+          <AutoScroll
+            className="lueur"
+            pauseLabel={t("tickerPause")}
+            playLabel={t("tickerPlay")}
+          >
+            {rooms.map((room, index) => (
+              <li
+                key={room.id}
+                className={index % 3 === 0 ? "large" : undefined}
+              >
+                <Photo
+                  media={room.photos?.[0]?.image}
+                  sizes={
+                    index % 3 === 0
+                      ? "(min-width: 1024px) 42vw, 21rem"
+                      : "(min-width: 1024px) 28vw, 16rem"
+                  }
+                  ratio="aspect-auto"
+                  zoom="photo"
+                />
+                <h3>{room.name}</h3>
+                <p className="ui discret">{room.details}</p>
+              </li>
+            ))}
+          </AutoScroll>
+        </PhotoViewer>
+      </section>
+
+      <section className="section section-sombre crepuscule">
+        <PondScene />
+        <div className="page grid gap-x-12 gap-y-10 lg:grid-cols-12">
+          <h2 className="lg:col-span-7">{page.surroundingsTitle}</h2>
+          <p className="texte lg:col-span-5">{page.surroundingsText}</p>
+          <figure className="lg:col-span-12">
+            <DriveTimeRose
+              origin={origin}
+              places={places
+                .filter((place) => place.driveMin >= ROSE_MIN_MINUTES)
+                .map(toRosePlace)}
+              labels={roseLabels(common)}
+              filterable
+            />
+            <figcaption className="legende">{t("roseCaption")}</figcaption>
+          </figure>
+          <PhotoViewer>
+            <ul className="cartes cartes-quatre lg:col-span-12">
+              {populated<Place>(page.featuredPlaces).map((featured) => (
+                <li key={featured.id} className="carte">
+                  <Photo
+                    media={featured.image}
+                    sizes="(min-width: 1024px) 22vw, (min-width: 704px) 45vw, 92vw"
+                    ratio="aspect-3/2"
+                    zoom="photo"
+                  />
+                  <h3>{featured.name}</h3>
+                  <p className="trajet">
+                    {formatDrive(featured.driveMin)}, {featured.driveKm} km
+                  </p>
+                  <p className="discret">{featured.summary}</p>
+                </li>
+              ))}
+            </ul>
+          </PhotoViewer>
+          <Link
+            href="/les-alentours"
+            className="ui lien justify-self-start lg:col-span-12"
+          >
+            {t("surroundingsLink")}
+          </Link>
+        </div>
+      </section>
+
+      {leadReview && (
+        <section className="lisiere section section-sombre">
+          <ForestScene />
+          <div className="page grid gap-10">
+            <h2>{page.reviewsTitle}</h2>
+            <Reviews reviews={reviews} settings={settings} />
+          </div>
+        </section>
       )}
-      <HeroSection
-        heroImage={heroImage}
-        heroImages={heroImages as HomePageData["heroImages"]}
-        heroTitle={homePage?.heroTitle ?? null}
-        heroSubtitle={homePage?.heroSubtitle ?? null}
-        coordinates={{
-          lat: contactCoords?.lat as number | undefined,
-          lng: contactCoords?.lng as number | undefined,
-        }}
-        bookingLinks={bookingLinks}
-      />
-      <StatsBand
-        maxGuests={propertyDetails?.maxGuests}
-        bedrooms={propertyDetails?.bedrooms}
-        bathrooms={propertyDetails?.bathrooms}
-        surface={propertyDetails?.surface}
-      />
-      <IntroSection
-        introImage={homePage?.introImage ?? null}
-        introTitle={homePage?.introTitle ?? null}
-        introText={homePage?.introText ?? null}
-      />
-      <LeafDivider />
-      <HighlightsSection
-        highlights={homePage?.highlights ?? null}
-        title={homePage?.highlightsTitle ?? null}
-      />
-      <TestimonialsSection title={homePage?.testimonialsTitle ?? null} />
-      <CTASection
-        bookingLinks={bookingLinks}
-        ctaTitle={homePage?.ctaTitle ?? null}
-        ctaSubtitle={homePage?.ctaSubtitle ?? null}
-      />
+
+      <Sketch kind="vol" above />
+      <section className="page section grid gap-x-12 gap-y-10 lg:grid-cols-12">
+        <h2 className="lg:col-span-7">{page.guidesTitle}</h2>
+        <div className="grid content-start gap-5 lg:col-span-5">
+          <p className="texte">{page.guidesText}</p>
+          <Link href="/guides" className="ui lien justify-self-start">
+            {t("guidesLink")}
+          </Link>
+        </div>
+        <PhotoViewer>
+          <ul className="cartes lg:col-span-12">
+            {guides.map((guide) => (
+              <li key={guide.id} className="carte">
+                <Photo
+                  media={guide.image}
+                  sizes="(min-width: 68rem) 30vw, (min-width: 704px) 45vw, 92vw"
+                  ratio="aspect-3/2"
+                  zoom="loupe"
+                />
+                <span className="etiquette">
+                  {common(`categories.${guide.theme}`)}
+                </span>
+                <h3>
+                  <Link
+                    href={{
+                      pathname: "/guides/[slug]",
+                      params: { slug: guide.slug },
+                    }}
+                  >
+                    {guide.title}
+                  </Link>
+                </h3>
+                <p className="discret">{guide.excerpt}</p>
+              </li>
+            ))}
+          </ul>
+        </PhotoViewer>
+      </section>
+
+      <section className="appel section section-claire">
+        <div className="page grid gap-x-12 gap-y-10 lg:grid-cols-12">
+          <div className="grid content-start gap-6 lg:col-span-5">
+            <h2>{page.bookingTitle}</h2>
+            <p className="texte">{page.bookingText}</p>
+            <BookingButtons settings={settings} />
+            <Link
+              href="/tarifs-reservation"
+              className="ui lien justify-self-start"
+            >
+              {t("ratesLink")}
+            </Link>
+          </div>
+          <div className="lg:col-span-7">
+            <PriceSummary pricing={pricing} />
+          </div>
+        </div>
+      </section>
+
+      {faqItems.length > 0 && (
+        <section className="page section section-courte grid gap-10 lg:grid-cols-12">
+          <h2 className="lg:col-span-5">{t("faqTitle")}</h2>
+          <Faq items={faqItems} className="lg:col-span-7" />
+        </section>
+      )}
     </>
   );
 }

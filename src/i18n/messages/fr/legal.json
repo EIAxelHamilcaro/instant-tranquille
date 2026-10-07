@@ -1,0 +1,77 @@
+{
+  "legal": {
+    "updated": "Dernière mise à jour : <time>{date}</time>",
+    "notice": {
+      "title": "Mentions légales",
+      "metaTitle": "Mentions légales | L'Instant Tranquille, gîte en Sologne",
+      "description": "Qui édite et héberge le site du gîte L'Instant Tranquille à Romorantin-Lanthenay : éditeur, hébergeur, crédits des photos et des cartes.",
+      "lede": "Qui édite ce site, qui l'héberge et à qui appartiennent ses contenus.",
+      "sections": {
+        "publisher": {
+          "title": "Éditeur du site",
+          "body": "<p>Ce site est édité par {hosts}, hôtes du gîte L'Instant Tranquille.</p><p>Adresse : {address}, {postalCode} {city}, France.</p><p>Contact : <mail>{email}</mail></p><p>Directeur de la publication : {hosts}.</p>"
+        },
+        "hosting": {
+          "title": "Hébergement",
+          "body": "<p>Le site est hébergé par Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis, <vercel>vercel.com</vercel>. Les fonctions du site s'exécutent dans la région de Francfort, en Allemagne.</p><p>La base de données est hébergée par Neon. Les photos et les fichiers médias sont stockés sur Vercel Blob.</p><p>Le nom de domaine, les DNS, la réception des e-mails et la protection anti-robot du formulaire de contact (Turnstile) sont assurés par Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis.</p>"
+        },
+        "booking": {
+          "title": "Réservation",
+          "body": "<p>La réservation du gîte se fait sur Airbnb et Booking. Ces plateformes appliquent leurs propres conditions et leurs propres politiques de confidentialité.</p><p>Ce site ne collecte aucun paiement.</p>"
+        },
+        "property": {
+          "title": "Propriété intellectuelle et crédits",
+          "body": "<p>Les textes et les photos du gîte appartiennent à {hosts}. Merci de demander leur accord avant de les réutiliser.</p><p>Les photos des lieux aux alentours sont créditées une à une, avec leur licence, à côté de chaque image.</p><p>Les cartes sont fournies par <osm>OpenStreetMap et ses contributeurs</osm>. Les temps de route sont calculés avec <osrm>OSRM</osrm>.</p>"
+        },
+        "data": {
+          "title": "Données personnelles",
+          "body": "<p>Le site ne recueille que les informations que vous envoyez par le formulaire de contact. Le détail figure dans la <privacy>politique de confidentialité</privacy>.</p>"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "metaTitle": "Politique de confidentialité | L'Instant Tranquille",
+      "description": "Les données que recueille le site du gîte L'Instant Tranquille : formulaire de contact, absence de mesure d'audience et de publicité, vos droits.",
+      "lede": "Ce que le site recueille quand vous nous écrivez, à quoi cela sert et comment exercer vos droits.",
+      "sections": {
+        "controller": {
+          "title": "Responsable du traitement",
+          "body": "<p>Les responsables du traitement sont {hosts}, hôtes du gîte L'Instant Tranquille, {address}, {postalCode} {city}, France.</p><p>Contact : <mail>{email}</mail></p>"
+        },
+        "collected": {
+          "title": "Données collectées",
+          "body": "<p>Le site ne collecte que les données que vous saisissez dans le formulaire de contact :</p><ul><li>votre nom ;</li><li>votre adresse e-mail ;</li><li>votre numéro de téléphone, si vous le donnez ;</li><li>les dates souhaitées, si vous les indiquez ;</li><li>votre message.</li></ul><p>Le site ne demande aucune création de compte.</p>"
+        },
+        "purpose": {
+          "title": "Finalité et base légale",
+          "body": "<p>Ces données servent uniquement à répondre à votre demande.</p><p>Ce traitement repose sur les mesures précontractuelles prises à votre demande et sur notre intérêt légitime à vous répondre.</p>"
+        },
+        "recipients": {
+          "title": "Destinataires",
+          "body": "<p>Vos messages sont lus par {hosts}.</p><p>Ils passent par les prestataires techniques du site :</p><ul><li>Vercel, pour l'hébergement du site et des fichiers médias ;</li><li>Neon, pour la base de données où votre message est enregistré ;</li><li>Cloudflare, pour le nom de domaine, la réception des e-mails et la protection anti-robot du formulaire (Turnstile).</li></ul>"
+        },
+        "retention": {
+          "title": "Durée de conservation",
+          "body": "<p>Vos données sont conservées le temps nécessaire pour traiter votre demande et, le cas échéant, le séjour qui en découle.</p><p>Elles sont supprimées sur simple demande à <mail>{email}</mail>.</p>"
+        },
+        "transfers": {
+          "title": "Transferts hors de l'Union européenne",
+          "body": "<p>Vercel, Neon et Cloudflare sont des prestataires américains. Vos données peuvent donc être traitées hors de l'Union européenne. Ces transferts sont encadrés par les engagements contractuels de ces prestataires.</p>"
+        },
+        "cookies": {
+          "title": "Cookies et traceurs",
+          "body": "<p>Ce site n'utilise ni outil de mesure d'audience, ni publicité, et ne dépose lui-même aucun cookie pendant votre visite.</p><p>Il enregistre seulement, dans votre navigateur :</p><ul><li>le fait que l'écran d'entrée a déjà été joué, le temps de votre visite ;</li><li>votre choix d'activer ou non le son de cet écran.</li></ul><p>Quand vous commencez à remplir le formulaire de contact, la protection anti-robot Turnstile de Cloudflare se charge. Elle peut déposer des éléments techniques nécessaires à la vérification.</p><p>Les fonds de carte sont chargés par votre navigateur depuis les serveurs d'OpenStreetMap.</p><p>L'espace d'administration, réservé aux hôtes, utilise un cookie de connexion. Il ne concerne pas les visiteurs.</p>"
+        },
+        "booking": {
+          "title": "Réservation sur Airbnb et Booking",
+          "body": "<p>La réservation se fait sur Airbnb et Booking, qui appliquent leurs propres conditions et leurs propres politiques de confidentialité. Ce site ne collecte aucun paiement.</p>"
+        },
+        "rights": {
+          "title": "Vos droits",
+          "body": "<p>Vous pouvez demander l'accès à vos données, leur rectification, leur effacement, la limitation de leur traitement ou leur portabilité, et vous opposer à leur traitement.</p><p>Pour cela, écrivez à <mail>{email}</mail>.</p><p>Vous pouvez aussi adresser une réclamation à la CNIL, sur <cnil>cnil.fr</cnil>.</p>"
+        }
+      }
+    }
+  }
+}

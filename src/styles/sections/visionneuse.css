@@ -1,0 +1,339 @@
+.agrandir {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border-radius: inherit;
+  background: none;
+  cursor: zoom-in;
+}
+
+.agrandir:hover {
+  background: none;
+}
+
+.frontend-app .agrandir:focus-visible {
+  outline-offset: -5px;
+  border-radius: var(--radius-photo);
+  box-shadow: none;
+}
+
+.defile .agrandir {
+  cursor: inherit;
+}
+
+.agrandir-coin {
+  inset: auto 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  pointer-events: auto;
+}
+
+.agrandir-coin svg {
+  box-sizing: content-box;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.45rem;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--nuit) 62%, transparent);
+  color: var(--brume);
+  backdrop-filter: blur(8px);
+}
+
+.agrandir-coin:is(:hover, :focus-visible) svg {
+  background: var(--lumiere);
+  color: var(--nuit);
+}
+
+.carte .photo:has(> .agrandir-coin) {
+  z-index: 1;
+  pointer-events: none;
+}
+
+[data-visionneuse-origine] {
+  view-transition-name: visionneuse;
+}
+
+[data-slot="dialog-overlay"]:has(+ .visionneuse) {
+  background: none;
+  animation: none;
+}
+
+.visionneuse {
+  --ecart: calc(2 * var(--gouttiere));
+  --encre-douce: color-mix(in oklab, var(--brume) 70%, var(--nuit));
+  --bruyere: var(--lumiere);
+
+  inset: 0;
+  translate: none;
+  display: grid;
+  grid-template:
+    "compteur fermer" auto
+    "scene scene" minmax(0, 1fr)
+    "legende pas" auto
+    / minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  overflow: clip;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  padding: max(0.4rem, env(safe-area-inset-top)) var(--gouttiere)
+    max(0.75rem, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--brume);
+  animation: none;
+  touch-action: pinch-zoom;
+}
+
+.visionneuse::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in oklab, var(--nuit) 96%, transparent);
+  backdrop-filter: blur(16px) saturate(0.7);
+  opacity: calc(1 - var(--recul, 0));
+  transition: opacity 240ms;
+}
+
+.visionneuse[data-glisse]::before {
+  transition: none;
+}
+
+.visionneuse-compteur {
+  grid-area: compteur;
+  font-family: var(--sans);
+  font-size: var(--petit);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--encre-douce);
+}
+
+.visionneuse-touche {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--brume);
+}
+
+.visionneuse-touche svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.visionneuse-touche:hover {
+  background: none;
+  color: var(--brume);
+}
+
+@media (hover: hover) {
+  .visionneuse-touche:hover {
+    background: color-mix(in oklab, var(--brume) 16%, transparent);
+  }
+}
+
+.frontend-app .visionneuse-touche:focus-visible {
+  border-radius: 50%;
+}
+
+.visionneuse-touche.fermer {
+  grid-area: fermer;
+  justify-self: end;
+  margin-right: -0.7rem;
+}
+
+.visionneuse-piste {
+  grid-area: scene;
+  position: relative;
+  align-self: stretch;
+  container-type: size;
+  translate: var(--glisse-x, 0px) var(--glisse-y, 0px);
+  user-select: none;
+}
+
+.visionneuse-vue {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  translate: calc(var(--rang) * (100% + var(--ecart))) 0;
+}
+
+.visionneuse-cadre {
+  position: relative;
+  overflow: hidden;
+  width: min(100cqw, 100cqh * var(--ratio));
+  aspect-ratio: var(--ratio);
+  border-radius: var(--radius-photo);
+  background: var(--etang);
+  box-shadow: 0 2.5rem 6rem -2rem #000;
+}
+
+.visionneuse-vue:not([inert]) .visionneuse-cadre {
+  view-transition-name: visionneuse;
+}
+
+.visionneuse-cadre img {
+  object-fit: cover;
+}
+
+.visionneuse-cadre[data-vignette] .flou {
+  filter: none;
+  scale: 1;
+}
+
+.visionneuse-cadre .flou {
+  --fondu: 280ms;
+}
+
+.visionneuse-legende {
+  grid-area: legende;
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.visionneuse-titre {
+  font-family: var(--serif);
+  font-size: var(--petit);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: normal;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  color: color-mix(in oklab, var(--brume) 86%, transparent);
+}
+
+.visionneuse-pas {
+  grid-area: pas;
+  gap: 0.25rem;
+  margin-right: -0.7rem;
+}
+
+@media (min-width: 64rem) {
+  .visionneuse {
+    --ecart: calc(2 * var(--gouttiere) + 9rem);
+
+    grid-template:
+      "compteur compteur fermer" auto
+      "avant scene apres" minmax(0, 1fr)
+      "legende legende legende" auto
+      / 2.75rem minmax(0, 1fr) 2.75rem;
+    row-gap: 0.75rem;
+    padding-bottom: 1.1rem;
+  }
+
+  .visionneuse-pas {
+    display: contents;
+  }
+
+  .visionneuse-touche.avant {
+    grid-area: avant;
+  }
+
+  .visionneuse-touche.apres {
+    grid-area: apres;
+  }
+
+  .visionneuse-legende {
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-height: 34rem) and (orientation: landscape) {
+  .visionneuse {
+    --ecart: calc(2 * var(--gouttiere) + 12rem);
+
+    grid-template:
+      "scene fermer" auto
+      "scene compteur" auto
+      "scene legende" minmax(0, 1fr)
+      "scene pas" auto
+      / minmax(0, 1fr) 10.5rem;
+    align-items: start;
+    row-gap: 0.4rem;
+    padding-block: max(0.5rem, env(safe-area-inset-top))
+      max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .visionneuse-pas {
+    display: flex;
+    justify-self: end;
+  }
+
+  .visionneuse-touche:is(.avant, .apres) {
+    grid-area: auto;
+  }
+
+  .visionneuse-legende {
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@keyframes visionneuse-parait {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes visionneuse-s-efface {
+  to {
+    opacity: 0;
+  }
+}
+
+.visionneuse[data-fondu][data-state="open"] {
+  animation: visionneuse-parait 260ms both;
+}
+
+.visionneuse[data-fondu][data-state="closed"] {
+  animation: visionneuse-s-efface 200ms both;
+}
+
+::view-transition-group(visionneuse) {
+  animation-duration: 480ms;
+  animation-timing-function: var(--elan);
+}
+
+::view-transition-old(visionneuse),
+::view-transition-new(visionneuse) {
+  height: 100%;
+  object-fit: cover;
+  animation-duration: 320ms;
+}
+
+:root[data-visionneuse="ouvre"]::view-transition-new(entete),
+:root[data-visionneuse="ouvre"]::view-transition-new(barre-reservation) {
+  animation: visionneuse-s-efface 280ms both;
+}
+
+:root[data-visionneuse="ferme"]::view-transition-new(entete),
+:root[data-visionneuse="ferme"]::view-transition-new(barre-reservation) {
+  animation: visionneuse-parait 280ms both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo:has(> .agrandir) img {
+    transition:
+      opacity 900ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      scale 700ms var(--elan);
+  }
+
+  .photo:has(> .agrandir:not(.agrandir-coin):is(:hover, :focus-visible)) img {
+    scale: 1.03;
+  }
+
+  .agrandir-coin svg {
+    transition:
+      background-color 220ms var(--elan),
+      color 220ms var(--elan);
+  }
+}

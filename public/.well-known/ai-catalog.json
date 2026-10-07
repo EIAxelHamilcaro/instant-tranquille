@@ -1,0 +1,30 @@
+{
+  "specVersion": "1.0",
+  "entries": [
+    {
+      "identifier": "urn:air:instant-tranquille.com:guides:llms",
+      "displayName": "L'Instant Tranquille, gîte en Sologne : résumé pour agents",
+      "description": "Faits vérifiables sur le gîte L'Instant Tranquille à Romorantin-Lanthenay (capacité, équipements, tarifs, réservation sur Airbnb et Booking) et liens vers les guides de séjour en Sologne.",
+      "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+      "url": "https://www.instant-tranquille.com/llms.txt",
+      "representativeQueries": [
+        "gîte 6 personnes à Romorantin-Lanthenay en Sologne",
+        "combien coûte une nuit au gîte L'Instant Tranquille",
+        "que faire autour de Romorantin-Lanthenay et à quelle distance en voiture",
+        "holiday cottage in Sologne near the Loire châteaux"
+      ]
+    },
+    {
+      "identifier": "urn:air:instant-tranquille.com:guides:llms-full",
+      "displayName": "L'Instant Tranquille : contenu complet du site pour agents",
+      "description": "Version intégrale en Markdown : le gîte, les tarifs, les lieux des alentours avec leurs temps de route et tous les guides de séjour.",
+      "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+      "url": "https://www.instant-tranquille.com/llms-full.txt",
+      "representativeQueries": [
+        "temps de route depuis Romorantin-Lanthenay vers Chambord, Cheverny et le ZooParc de Beauval",
+        "guides de séjour en Sologne : châteaux de la Loire, brame du cerf, vélo",
+        "how to get to Romorantin-Lanthenay by train or car"
+      ]
+    }
+  ]
+}

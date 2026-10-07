@@ -1,40 +1,39 @@
-import { ChevronRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
-type BreadcrumbItem = {
+export interface Crumb {
   label: string;
-  href?: string;
-};
+  href?: React.ComponentProps<typeof Link>["href"];
+}
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+interface BreadcrumbsProps {
+  items: Crumb[];
+}
+
+export async function Breadcrumbs({ items }: BreadcrumbsProps) {
+  const t = await getTranslations("common");
+
   return (
-    <nav aria-label="Breadcrumb" className="py-4">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ol className="flex items-center gap-1.5 font-sans text-sm text-muted-foreground">
-          {items.map((item, i) => (
-            <li key={i} className="flex items-center gap-1.5">
-              {i > 0 && (
-                <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              )}
-              {item.href ? (
-                <Link
-                  href={item.href as "/"}
-                  className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <span
-                  aria-current="page"
-                  className="text-foreground font-medium"
-                >
-                  {item.label}
-                </span>
-              )}
-            </li>
-          ))}
-        </ol>
-      </div>
+    <nav aria-label={t("breadcrumb")} className="ui discret">
+      <ol className="flex flex-wrap gap-x-2">
+        <li>
+          <Link href="/" className="lien">
+            {t("nav.home")}
+          </Link>
+        </li>
+        {items.map((item) => (
+          <li key={item.label} className="flex gap-x-2">
+            <span aria-hidden="true">/</span>
+            {item.href ? (
+              <Link href={item.href} className="lien">
+                {item.label}
+              </Link>
+            ) : (
+              <span aria-current="page">{item.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
     </nav>
   );
 }

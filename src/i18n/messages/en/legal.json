@@ -1,0 +1,77 @@
+{
+  "legal": {
+    "updated": "Last updated: <time>{date}</time>",
+    "notice": {
+      "title": "Legal notice",
+      "metaTitle": "Legal notice | L'Instant Tranquille, cottage in Sologne",
+      "description": "Who publishes and hosts the website of the L'Instant Tranquille cottage in Romorantin-Lanthenay: publisher, host, photo and map credits.",
+      "lede": "Who publishes this website, who hosts it and who owns its content.",
+      "sections": {
+        "publisher": {
+          "title": "Publisher",
+          "body": "<p>This website is published by {hosts}, hosts of the L'Instant Tranquille cottage.</p><p>Address: {address}, {postalCode} {city}, France.</p><p>Contact: <mail>{email}</mail></p><p>Publication director: {hosts}.</p>"
+        },
+        "hosting": {
+          "title": "Hosting",
+          "body": "<p>The website is hosted by Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, United States, <vercel>vercel.com</vercel>. The website's functions run in the Frankfurt region, in Germany.</p><p>The database is hosted by Neon. Photos and media files are stored on Vercel Blob.</p><p>The domain name, DNS, email reception and the anti-bot protection of the contact form (Turnstile) are provided by Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States.</p>"
+        },
+        "booking": {
+          "title": "Booking",
+          "body": "<p>The cottage is booked on Airbnb and Booking. These platforms apply their own terms and their own privacy policies.</p><p>This website does not collect any payment.</p>"
+        },
+        "property": {
+          "title": "Intellectual property and credits",
+          "body": "<p>The texts and the photos of the cottage belong to {hosts}. Please ask for their consent before reusing them.</p><p>The photos of nearby places are credited one by one, with their licence, next to each image.</p><p>Maps are provided by <osm>OpenStreetMap and its contributors</osm>. Drive times are calculated with <osrm>OSRM</osrm>.</p>"
+        },
+        "data": {
+          "title": "Personal data",
+          "body": "<p>The website only gathers the information you send through the contact form. The details are in the <privacy>privacy policy</privacy>.</p>"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "metaTitle": "Privacy policy | L'Instant Tranquille, cottage in Sologne",
+      "description": "The data gathered by the L'Instant Tranquille cottage website: the contact form, no audience measurement, no advertising, and your rights.",
+      "lede": "What the website gathers when you write to us, what it is used for and how to exercise your rights.",
+      "sections": {
+        "controller": {
+          "title": "Data controller",
+          "body": "<p>The data controllers are {hosts}, hosts of the L'Instant Tranquille cottage, {address}, {postalCode} {city}, France.</p><p>Contact: <mail>{email}</mail></p>"
+        },
+        "collected": {
+          "title": "Data collected",
+          "body": "<p>The website only collects the data you enter in the contact form:</p><ul><li>your name;</li><li>your email address;</li><li>your phone number, if you give it;</li><li>your preferred dates, if you state them;</li><li>your message.</li></ul><p>The website does not ask you to create an account.</p>"
+        },
+        "purpose": {
+          "title": "Purpose and legal basis",
+          "body": "<p>This data is used only to answer your request.</p><p>This processing is based on pre-contractual steps taken at your request and on our legitimate interest in answering you.</p>"
+        },
+        "recipients": {
+          "title": "Recipients",
+          "body": "<p>Your messages are read by {hosts}.</p><p>They pass through the website's technical providers:</p><ul><li>Vercel, for hosting the website and its media files;</li><li>Neon, for the database where your message is saved;</li><li>Cloudflare, for the domain name, email reception and the anti-bot protection of the form (Turnstile).</li></ul>"
+        },
+        "retention": {
+          "title": "Retention period",
+          "body": "<p>Your data is kept for the time needed to handle your request and, where applicable, the stay that follows from it.</p><p>It is deleted on request to <mail>{email}</mail>.</p>"
+        },
+        "transfers": {
+          "title": "Transfers outside the European Union",
+          "body": "<p>Vercel, Neon and Cloudflare are American providers. Your data may therefore be processed outside the European Union. These transfers are governed by the contractual commitments of these providers.</p>"
+        },
+        "cookies": {
+          "title": "Cookies and trackers",
+          "body": "<p>This website uses no audience measurement tool and no advertising, and sets no cookie of its own during your visit.</p><p>It only stores, in your browser:</p><ul><li>the fact that the opening screen has already been played, for the duration of your visit;</li><li>your choice to turn the sound of that screen on or off.</li></ul><p>When you start filling in the contact form, Cloudflare's Turnstile anti-bot protection loads. It may store technical items needed for the check.</p><p>Map backgrounds are loaded by your browser from OpenStreetMap's servers.</p><p>The administration area, reserved for the hosts, uses a login cookie. It does not concern visitors.</p>"
+        },
+        "booking": {
+          "title": "Booking on Airbnb and Booking",
+          "body": "<p>Booking is done on Airbnb and Booking, which apply their own terms and their own privacy policies. This website does not collect any payment.</p>"
+        },
+        "rights": {
+          "title": "Your rights",
+          "body": "<p>You can ask for access to your data, its rectification, its erasure, the restriction of its processing or its portability, and you can object to its processing.</p><p>To do so, write to <mail>{email}</mail>.</p><p>You can also lodge a complaint with the CNIL, the French data protection authority, at <cnil>cnil.fr</cnil>.</p>"
+        }
+      }
+    }
+  }
+}

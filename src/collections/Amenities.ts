@@ -1,19 +1,23 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
+import { AMENITY_ICON_OPTIONS } from "@/lib/amenity-icons";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
-import { validateLucideIcon } from "@/lib/validators";
 
 export const Amenities: CollectionConfig = {
   slug: "amenities",
   lockDocuments: false,
-  labels: { singular: "Équipement", plural: "Équipements" },
+  labels: { singular: "Équipement", plural: "Équipements du gîte" },
+  defaultSort: "order",
   hooks: revalidateCollection("amenities"),
   admin: {
     useAsTitle: "name",
-    group: "Contenu",
-    description: "Équipements et commodités du gîte",
-    defaultColumns: ["name", "category", "order"],
+    group: "Pages du site",
+    description:
+      "La liste des équipements affichée sur la page « Le gîte », rangée par catégorie. Elle est aussi transmise à Google.",
+    defaultColumns: ["name", "category", "order", "enabled"],
+    listSearchableFields: ["name"],
+    pagination: { defaultLimit: 50 },
     livePreview: {
       url: ({ locale }) => previewUrl("/le-gite", { locale }),
     },
@@ -31,27 +35,19 @@ export const Amenities: CollectionConfig = {
       label: "Nom de l'équipement",
       required: true,
       localized: true,
+      maxLength: 50,
       admin: {
-        description: "Nom court affiché sur le site",
-      },
-    },
-    {
-      name: "description",
-      type: "textarea",
-      label: "Description",
-      localized: true,
-      admin: {
-        description: "Détails sur cet équipement (optionnel)",
+        description: "Un nom court, trois ou quatre mots au plus.",
+        placeholder: "Terrasse avec barbecue",
       },
     },
     {
       name: "icon",
-      type: "text",
-      label: "Icône",
-      validate: validateLucideIcon,
+      type: "select",
+      label: "Pictogramme",
+      options: AMENITY_ICON_OPTIONS,
       admin: {
-        description: "Nom de l'icône Lucide (ex: wifi, bed-double, utensils)",
-        placeholder: "wifi",
+        description: "Le petit dessin affiché à côté du nom.",
       },
     },
     {
@@ -60,7 +56,8 @@ export const Amenities: CollectionConfig = {
       label: "Catégorie",
       required: true,
       admin: {
-        description: "Regroupe les équipements par type sur le site",
+        description:
+          "Le groupe où l'équipement apparaît sur la page « Le gîte ».",
       },
       options: [
         { label: "Intérieur", value: "indoor" },
@@ -73,15 +70,6 @@ export const Amenities: CollectionConfig = {
       ],
     },
     {
-      name: "photo",
-      type: "upload",
-      label: "Photo",
-      relationTo: "media",
-      admin: {
-        description: "Illustre cet équipement (optionnel)",
-      },
-    },
-    {
       name: "order",
       type: "number",
       label: "Ordre d'affichage",
@@ -90,17 +78,17 @@ export const Amenities: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Plus le nombre est petit, plus l'équipement apparaît en premier (0, 1, 2...)",
+          "Les plus petits nombres passent en premier dans leur catégorie.",
       },
     },
     {
       name: "enabled",
       type: "checkbox",
-      label: "Actif",
+      label: "Afficher sur le site",
       defaultValue: true,
       admin: {
         position: "sidebar",
-        description: "Décochez pour masquer cet équipement du site",
+        description: "Décochez pour masquer cet équipement sans le supprimer.",
       },
     },
   ],

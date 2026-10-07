@@ -1,0 +1,801 @@
+@keyframes heron-guette-buste {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12%,
+  86% {
+    rotate: 5deg;
+  }
+}
+
+@keyframes heron-guette-cou {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12%,
+  86% {
+    rotate: 15deg;
+  }
+}
+
+@keyframes heron-guette-nuque {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12%,
+  86% {
+    rotate: -11deg;
+  }
+}
+
+@keyframes heron-guette-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  12% {
+    rotate: -5deg;
+  }
+  36% {
+    rotate: 3deg;
+  }
+  60% {
+    rotate: -10deg;
+  }
+  86% {
+    rotate: -3deg;
+  }
+}
+
+@keyframes heron-marche-patte-levee {
+  0%,
+  90%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  14% {
+    translate: 0 13px;
+    rotate: -18deg;
+  }
+  24%,
+  62% {
+    translate: 0 13px;
+    rotate: 0deg;
+  }
+  76% {
+    translate: 0 8px;
+    rotate: 14deg;
+  }
+}
+
+@keyframes heron-marche-cuisse {
+  0%,
+  24%,
+  50%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  36% {
+    translate: 0 -5px;
+    rotate: -20deg;
+  }
+}
+
+@keyframes heron-marche-tibia {
+  0%,
+  24%,
+  50%,
+  100% {
+    rotate: 0deg;
+  }
+  36% {
+    rotate: 55deg;
+  }
+}
+
+@keyframes heron-marche-haut {
+  0%,
+  14%,
+  86%,
+  100% {
+    translate: 0 0;
+  }
+  30%,
+  62% {
+    translate: 2.5px 0;
+  }
+}
+
+@keyframes heron-marche-cou {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: 7deg;
+  }
+  34% {
+    rotate: -5deg;
+  }
+  48% {
+    rotate: 6deg;
+  }
+  62% {
+    rotate: -3deg;
+  }
+  80% {
+    rotate: 4deg;
+  }
+}
+
+@keyframes heron-marche-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: -6deg;
+  }
+  34% {
+    rotate: 4deg;
+  }
+  48% {
+    rotate: -5deg;
+  }
+  62% {
+    rotate: 3deg;
+  }
+  80% {
+    rotate: -3deg;
+  }
+}
+
+@keyframes heron-toilette-buste {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  80% {
+    rotate: -3deg;
+  }
+}
+
+@keyframes heron-toilette-cou {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  30%,
+  46%,
+  62%,
+  78% {
+    rotate: 62deg;
+  }
+  22%,
+  38%,
+  54%,
+  70% {
+    rotate: 55deg;
+  }
+}
+
+@keyframes heron-toilette-nuque {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  78% {
+    rotate: 56deg;
+  }
+}
+
+@keyframes heron-toilette-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  14%,
+  30%,
+  46%,
+  62%,
+  78% {
+    rotate: 20deg;
+  }
+  22%,
+  38%,
+  54%,
+  70% {
+    rotate: 33deg;
+  }
+}
+
+@keyframes heron-toilette-aile {
+  0%,
+  10%,
+  88%,
+  100% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  24%,
+  76% {
+    rotate: 9deg;
+    scale: 1.12;
+  }
+}
+
+@keyframes heron-etire-buste {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  62% {
+    rotate: 6deg;
+  }
+}
+
+@keyframes heron-etire-cou {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  62% {
+    rotate: 20deg;
+  }
+}
+
+@keyframes heron-etire-tete {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  62% {
+    rotate: -16deg;
+  }
+}
+
+@keyframes heron-etire-aile {
+  0%,
+  84%,
+  100% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  20%,
+  40%,
+  60% {
+    rotate: 72deg;
+    scale: 1.9;
+  }
+  30%,
+  50% {
+    rotate: 66deg;
+    scale: 1.9;
+  }
+}
+
+@keyframes heron-etire-patte-levee {
+  0%,
+  86%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  22%,
+  60% {
+    translate: 0 13px;
+    rotate: 58deg;
+  }
+}
+
+@keyframes heron-etire-queue {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20%,
+  60% {
+    rotate: -8deg;
+  }
+}
+
+@keyframes heron-gobe-cou {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  42%,
+  66% {
+    rotate: -20deg;
+  }
+  30%,
+  54% {
+    rotate: -14deg;
+  }
+}
+
+@keyframes heron-gobe-nuque {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  66% {
+    rotate: -8deg;
+  }
+}
+
+@keyframes heron-gobe-tete {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  18%,
+  66% {
+    rotate: -34deg;
+  }
+}
+
+@keyframes heron-gobe-mandibule {
+  0%,
+  16%,
+  60%,
+  100% {
+    rotate: 0deg;
+  }
+  22%,
+  46% {
+    rotate: 13deg;
+  }
+  34% {
+    rotate: 3deg;
+  }
+}
+
+@keyframes heron-secoue-buste {
+  0%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  8% {
+    rotate: 4deg;
+  }
+  16% {
+    rotate: -4deg;
+  }
+  24% {
+    rotate: 3.5deg;
+  }
+  32% {
+    rotate: -3.5deg;
+  }
+  40% {
+    rotate: 3deg;
+  }
+  48% {
+    rotate: -2.5deg;
+  }
+  56% {
+    rotate: 1.5deg;
+  }
+}
+
+@keyframes heron-secoue-cou {
+  0%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  8% {
+    rotate: -6deg;
+  }
+  16% {
+    rotate: 6deg;
+  }
+  24% {
+    rotate: -5deg;
+  }
+  32% {
+    rotate: 5deg;
+  }
+  40% {
+    rotate: -4deg;
+  }
+  48% {
+    rotate: 3deg;
+  }
+  56% {
+    rotate: -2deg;
+  }
+}
+
+@keyframes heron-secoue-tete {
+  0%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  8% {
+    rotate: 5deg;
+  }
+  16% {
+    rotate: -5deg;
+  }
+  24% {
+    rotate: 4deg;
+  }
+  32% {
+    rotate: -4deg;
+  }
+  40% {
+    rotate: 3deg;
+  }
+  48% {
+    rotate: -2deg;
+  }
+}
+
+@keyframes heron-secoue-aile {
+  0%,
+  72%,
+  100% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  8%,
+  24%,
+  40% {
+    rotate: 24deg;
+    scale: 1.28;
+  }
+  16%,
+  32%,
+  48% {
+    rotate: 6deg;
+    scale: 1.2;
+  }
+  56% {
+    rotate: 14deg;
+    scale: 1.1;
+  }
+}
+
+@keyframes heron-secoue-queue {
+  0%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  8%,
+  24%,
+  40% {
+    rotate: 10deg;
+  }
+  16%,
+  32%,
+  48% {
+    rotate: -10deg;
+  }
+}
+
+@keyframes heron-crie-buste {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  16%,
+  72% {
+    rotate: -5deg;
+  }
+}
+
+@keyframes heron-crie-cou {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  16%,
+  36%,
+  56%,
+  72% {
+    rotate: -26deg;
+  }
+  26%,
+  46%,
+  64% {
+    rotate: -23deg;
+  }
+}
+
+@keyframes heron-crie-nuque {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  16%,
+  72% {
+    rotate: -13deg;
+  }
+}
+
+@keyframes heron-crie-tete {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  16%,
+  72% {
+    rotate: -22deg;
+  }
+}
+
+@keyframes heron-crie-mandibule {
+  0%,
+  14%,
+  76%,
+  100% {
+    rotate: 0deg;
+  }
+  20%,
+  36%,
+  52%,
+  68% {
+    rotate: 17deg;
+  }
+  28%,
+  44%,
+  60% {
+    rotate: 11deg;
+  }
+}
+
+@keyframes heron-crie-aile {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  18%,
+  70% {
+    rotate: 15deg;
+    scale: 1.22;
+  }
+}
+
+@keyframes heron-repos-souffle {
+  to {
+    scale: 1.012 1.03;
+  }
+}
+
+@keyframes heron-repos-cou {
+  from {
+    rotate: -0.8deg;
+  }
+  to {
+    rotate: 1.1deg;
+  }
+}
+
+@keyframes heron-repos-plume {
+  0%,
+  78%,
+  92%,
+  100% {
+    rotate: 0deg;
+  }
+  82%,
+  88% {
+    rotate: 3deg;
+  }
+  85% {
+    rotate: -2deg;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .heron-vivant:not([data-sequence]) .heron-corps {
+    animation: heron-repos-souffle 4.7s ease-in-out infinite alternate;
+  }
+
+  .heron-vivant:not([data-sequence]) .heron-cou {
+    animation: heron-repos-cou 9.1s ease-in-out infinite alternate;
+  }
+
+  .heron-vivant:not([data-sequence]) .heron-queue {
+    animation: heron-repos-plume 11.3s ease-in-out infinite;
+  }
+
+  [data-sequence="guette"] {
+    --duree: 6500ms;
+  }
+
+  [data-sequence="guette"] .heron-buste {
+    animation-name: heron-guette-buste;
+  }
+
+  [data-sequence="guette"] .heron-cou {
+    animation-name: heron-guette-cou;
+  }
+
+  [data-sequence="guette"] .heron-nuque {
+    animation-name: heron-guette-nuque;
+  }
+
+  [data-sequence="guette"] .heron-tete {
+    animation-name: heron-guette-tete;
+  }
+
+  [data-sequence="marche"] {
+    --duree: 5600ms;
+  }
+
+  [data-sequence="marche"] .heron-patte-levee {
+    animation-name: heron-marche-patte-levee;
+  }
+
+  [data-sequence="marche"] .heron-cuisse {
+    animation-name: heron-marche-cuisse;
+  }
+
+  [data-sequence="marche"] .heron-tibia {
+    animation-name: heron-marche-tibia;
+  }
+
+  [data-sequence="marche"] .heron-haut {
+    animation-name: heron-marche-haut;
+  }
+
+  [data-sequence="marche"] .heron-cou {
+    animation-name: heron-marche-cou;
+  }
+
+  [data-sequence="marche"] .heron-tete {
+    animation-name: heron-marche-tete;
+  }
+
+  [data-sequence="toilette"] {
+    --duree: 6200ms;
+  }
+
+  [data-sequence="toilette"] .heron-buste {
+    animation-name: heron-toilette-buste;
+  }
+
+  [data-sequence="toilette"] .heron-cou {
+    animation-name: heron-toilette-cou;
+  }
+
+  [data-sequence="toilette"] .heron-nuque {
+    animation-name: heron-toilette-nuque;
+  }
+
+  [data-sequence="toilette"] .heron-tete {
+    animation-name: heron-toilette-tete;
+  }
+
+  [data-sequence="toilette"] .heron-aile {
+    animation-name: heron-toilette-aile;
+  }
+
+  [data-sequence="etire"] {
+    --duree: 5600ms;
+  }
+
+  [data-sequence="etire"] .heron-buste {
+    animation-name: heron-etire-buste;
+  }
+
+  [data-sequence="etire"] .heron-cou {
+    animation-name: heron-etire-cou;
+  }
+
+  [data-sequence="etire"] .heron-tete {
+    animation-name: heron-etire-tete;
+  }
+
+  [data-sequence="etire"] .heron-aile {
+    animation-name: heron-etire-aile;
+  }
+
+  [data-sequence="etire"] .heron-patte-levee {
+    animation-name: heron-etire-patte-levee;
+  }
+
+  [data-sequence="etire"] .heron-queue {
+    animation-name: heron-etire-queue;
+  }
+
+  [data-sequence="gobe"] {
+    --duree: 3400ms;
+  }
+
+  [data-sequence="gobe"] .heron-cou {
+    animation-name: heron-gobe-cou;
+  }
+
+  [data-sequence="gobe"] .heron-nuque {
+    animation-name: heron-gobe-nuque;
+  }
+
+  [data-sequence="gobe"] .heron-tete {
+    animation-name: heron-gobe-tete;
+  }
+
+  [data-sequence="gobe"] .heron-mandibule {
+    animation-name: heron-gobe-mandibule;
+  }
+
+  [data-sequence="secoue"] {
+    --duree: 2600ms;
+  }
+
+  [data-sequence="secoue"] .heron-buste {
+    animation-name: heron-secoue-buste;
+  }
+
+  [data-sequence="secoue"] .heron-cou {
+    animation-name: heron-secoue-cou;
+  }
+
+  [data-sequence="secoue"] .heron-tete {
+    animation-name: heron-secoue-tete;
+  }
+
+  [data-sequence="secoue"] .heron-aile {
+    animation-name: heron-secoue-aile;
+  }
+
+  [data-sequence="secoue"] .heron-queue {
+    animation-name: heron-secoue-queue;
+  }
+
+  [data-sequence="crie"] {
+    --duree: 3800ms;
+  }
+
+  [data-sequence="crie"] .heron-buste {
+    animation-name: heron-crie-buste;
+  }
+
+  [data-sequence="crie"] .heron-cou {
+    animation-name: heron-crie-cou;
+  }
+
+  [data-sequence="crie"] .heron-nuque {
+    animation-name: heron-crie-nuque;
+  }
+
+  [data-sequence="crie"] .heron-tete {
+    animation-name: heron-crie-tete;
+  }
+
+  [data-sequence="crie"] .heron-mandibule {
+    animation-name: heron-crie-mandibule;
+  }
+
+  [data-sequence="crie"] .heron-aile {
+    animation-name: heron-crie-aile;
+  }
+}

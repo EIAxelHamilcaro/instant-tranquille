@@ -1,23 +1,23 @@
 import type { GlobalConfig } from "payload";
-import { isAuthenticated, isPublic } from "@/lib/access";
+import { isAuthenticated, isPublishedOrAuthenticated } from "@/lib/access";
+import { rowLabel } from "@/lib/admin-fields";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateGlobal } from "@/lib/revalidate";
-import { validateUrl } from "@/lib/validators";
 
 export const PricingConfig: GlobalConfig = {
   slug: "pricing-config",
   lockDocuments: false,
-  label: "Tarifs & Réservation",
+  label: "Tarifs et conditions",
   hooks: revalidateGlobal("pricing-config"),
   versions: { drafts: true, max: 25 },
   access: {
-    read: isPublic,
+    read: isPublishedOrAuthenticated,
     update: isAuthenticated,
   },
   admin: {
-    group: "Configuration",
+    group: "Avis et réservations",
     description:
-      "Tarifs par saison, frais supplémentaires et conditions de réservation",
+      "Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions. Tout s'affiche sur la page « Tarifs et réservation ».",
     livePreview: {
       url: ({ locale }) => previewUrl("/tarifs-reservation", { locale }),
     },
@@ -27,7 +27,9 @@ export const PricingConfig: GlobalConfig = {
       type: "tabs",
       tabs: [
         {
-          label: "Tarifs",
+          label: "Prix relevés",
+          description:
+            "Le site affiche exactement les prix d'Airbnb et de Booking. Quand un prix change sur une plateforme, corrigez la ligne ici et mettez à jour la date du relevé.",
           fields: [
             {
               name: "currency",
@@ -36,128 +38,119 @@ export const PricingConfig: GlobalConfig = {
               admin: { hidden: true },
             },
             {
-              name: "seasons",
+              name: "quotes",
               type: "array",
-              label: "Saisons tarifaires",
+              label: "Prix relevés sur Airbnb et Booking",
+              labels: { singular: "Prix relevé", plural: "Prix relevés" },
               admin: {
-                description: "Définissez vos tarifs par période de l'année",
+                description:
+                  "Une ligne par cas : un nombre de voyageurs et une durée. Le site calcule tout seul le prix par nuit.",
+                components: {
+                  RowLabel: rowLabel(
+                    "{guests} voyageurs, {nights} nuits",
+                    "Prix relevé",
+                  ),
+                },
               },
               fields: [
                 {
-                  name: "name",
-                  type: "text",
-                  label: "Nom de la saison",
-                  required: true,
-                  localized: true,
-                  admin: {
-                    description: "Comment s'appelle cette période",
-                    placeholder: "Basse saison",
-                  },
-                },
-                {
-                  name: "startMonth",
-                  type: "select",
-                  label: "Mois de début",
-                  required: true,
-                  options: [
-                    { label: "Janvier", value: "1" },
-                    { label: "Février", value: "2" },
-                    { label: "Mars", value: "3" },
-                    { label: "Avril", value: "4" },
-                    { label: "Mai", value: "5" },
-                    { label: "Juin", value: "6" },
-                    { label: "Juillet", value: "7" },
-                    { label: "Août", value: "8" },
-                    { label: "Septembre", value: "9" },
-                    { label: "Octobre", value: "10" },
-                    { label: "Novembre", value: "11" },
-                    { label: "Décembre", value: "12" },
+                  type: "row",
+                  fields: [
+                    {
+                      name: "guests",
+                      type: "select",
+                      label: "Nombre de voyageurs",
+                      required: true,
+                      options: [
+                        { label: "2 voyageurs", value: "2" },
+                        { label: "4 voyageurs", value: "4" },
+                        { label: "6 voyageurs", value: "6" },
+                      ],
+                      admin: {
+                        width: "50%",
+                        description:
+                          "Le nombre de voyageurs saisi dans la recherche sur la plateforme.",
+                      },
+                    },
+                    {
+                      name: "nights",
+                      type: "select",
+                      label: "Durée du séjour",
+                      required: true,
+                      options: [
+                        { label: "2 nuits", value: "2" },
+                        { label: "7 nuits (une semaine)", value: "7" },
+                      ],
+                      admin: {
+                        width: "50%",
+                        description:
+                          "Le nombre de nuits saisi dans la recherche sur la plateforme.",
+                      },
+                    },
                   ],
-                  admin: { width: "25%" },
                 },
                 {
-                  name: "startDay",
-                  type: "number",
-                  label: "Jour de début",
-                  required: true,
-                  min: 1,
-                  max: 31,
-                  admin: { width: "25%" },
-                },
-                {
-                  name: "endMonth",
-                  type: "select",
-                  label: "Mois de fin",
-                  required: true,
-                  options: [
-                    { label: "Janvier", value: "1" },
-                    { label: "Février", value: "2" },
-                    { label: "Mars", value: "3" },
-                    { label: "Avril", value: "4" },
-                    { label: "Mai", value: "5" },
-                    { label: "Juin", value: "6" },
-                    { label: "Juillet", value: "7" },
-                    { label: "Août", value: "8" },
-                    { label: "Septembre", value: "9" },
-                    { label: "Octobre", value: "10" },
-                    { label: "Novembre", value: "11" },
-                    { label: "Décembre", value: "12" },
-                  ],
-                  admin: { width: "25%" },
-                },
-                {
-                  name: "endDay",
-                  type: "number",
-                  label: "Jour de fin",
-                  required: true,
-                  min: 1,
-                  max: 31,
-                  admin: { width: "25%" },
-                },
-                {
-                  name: "nightlyRate",
-                  type: "number",
-                  label: "Tarif / nuit",
-                  min: 0,
-                  admin: {
-                    description: "Prix par nuit en euros",
-                  },
-                },
-                {
-                  name: "weeklyRate",
-                  type: "number",
-                  label: "Tarif / semaine",
-                  min: 0,
-                  admin: {
-                    description: "Prix pour 7 nuits en euros",
-                  },
-                },
-                {
-                  name: "minimumStay",
-                  type: "number",
-                  label: "Séjour minimum",
-                  defaultValue: 2,
-                  min: 1,
-                  admin: {
-                    description: "Nombre minimum de nuits pour réserver",
-                  },
-                },
-                {
-                  name: "color",
-                  type: "select",
-                  label: "Couleur",
-                  admin: {
-                    description:
-                      "Couleur pour identifier cette saison sur le calendrier",
-                  },
-                  options: [
-                    { label: "Basse saison", value: "green" },
-                    { label: "Moyenne saison", value: "orange" },
-                    { label: "Haute saison", value: "red" },
-                    { label: "Très haute saison", value: "purple" },
+                  type: "row",
+                  fields: [
+                    {
+                      name: "airbnb",
+                      type: "number",
+                      label: "Prix total sur Airbnb (€)",
+                      min: 0,
+                      admin: {
+                        width: "50%",
+                        description:
+                          "Recopiez le prix total affiché par Airbnb pour ce nombre de nuits et de voyageurs, taxes et frais inclus. Ne recopiez pas un prix en promotion (prix barré) : prenez le prix normal. Laissez vide si vous ne l'avez pas relevé.",
+                      },
+                    },
+                    {
+                      name: "booking",
+                      type: "number",
+                      label: "Prix total sur Booking (€)",
+                      min: 0,
+                      admin: {
+                        width: "50%",
+                        description:
+                          "Recopiez le prix total affiché par Booking pour ce nombre de nuits et de voyageurs, taxes et frais inclus, au tarif avec annulation gratuite. Laissez vide si vous ne l'avez pas relevé.",
+                      },
+                    },
                   ],
                 },
               ],
+            },
+            {
+              name: "minimumStay",
+              type: "number",
+              label: "Séjour minimum (nuits)",
+              defaultValue: 2,
+              min: 1,
+              admin: {
+                description:
+                  "Le plus petit nombre de nuits que les plateformes acceptent.",
+              },
+            },
+            {
+              name: "quotedOn",
+              type: "date",
+              label: "Prix relevés le",
+              admin: {
+                date: {
+                  pickerAppearance: "dayOnly",
+                  displayFormat: "d MMMM yyyy",
+                },
+                description:
+                  "Le jour où vous avez recopié les prix. Cette date s'affiche sur le site à côté des prix.",
+              },
+            },
+            {
+              name: "note",
+              type: "textarea",
+              label: "Note sur les prix",
+              localized: true,
+              admin: {
+                description:
+                  "Une ou deux phrases affichées avec les prix, par exemple pour dire qu'ils ne changent pas selon la saison.",
+              },
             },
           ],
         },
@@ -168,9 +161,11 @@ export const PricingConfig: GlobalConfig = {
               name: "additionalFees",
               type: "array",
               label: "Frais supplémentaires",
+              labels: { singular: "Frais", plural: "Frais" },
               admin: {
+                components: { RowLabel: rowLabel("{name}", "Frais") },
                 description:
-                  "Frais en plus du loyer (ménage, taxe de séjour, linge...)",
+                  "À laisser vide tant que les prix des plateformes sont déjà taxes et frais inclus. N'ajoutez une ligne que pour un vrai supplément facturé en plus.",
               },
               fields: [
                 {
@@ -180,7 +175,8 @@ export const PricingConfig: GlobalConfig = {
                   required: true,
                   localized: true,
                   admin: {
-                    description: "De quoi s'agit-il",
+                    description:
+                      "Le nom du supplément, tel qu'il s'affiche sur la page tarifs.",
                     placeholder: "Ménage de fin de séjour",
                   },
                 },
@@ -190,9 +186,6 @@ export const PricingConfig: GlobalConfig = {
                   label: "Montant (€)",
                   required: true,
                   min: 0,
-                  admin: {
-                    description: "Prix en euros",
-                  },
                 },
                 {
                   name: "type",
@@ -200,7 +193,7 @@ export const PricingConfig: GlobalConfig = {
                   label: "Mode de calcul",
                   admin: {
                     description:
-                      "Par séjour = 1 fois, par nuit = chaque nuit, par personne = par voyageur",
+                      "Par séjour : compté une fois. Par nuit : compté chaque nuit. Par personne : compté pour chaque voyageur.",
                   },
                   options: [
                     { label: "Par séjour", value: "per_stay" },
@@ -214,7 +207,7 @@ export const PricingConfig: GlobalConfig = {
                   label: "Précisions",
                   localized: true,
                   admin: {
-                    description: "Détails affichés aux voyageurs",
+                    description: "Une précision affichée sous le montant.",
                     placeholder: "Obligatoire",
                   },
                 },
@@ -223,72 +216,14 @@ export const PricingConfig: GlobalConfig = {
           ],
         },
         {
-          label: "Liens Airbnb et plateformes",
+          label: "Horaires et conditions",
           description:
-            "Collez ici les liens vers vos annonces pour que les boutons « Réserver » du site pointent vers les bons endroits.",
-          fields: [
-            {
-              name: "bookingLinks",
-              type: "group",
-              label: "Liens de réservation",
-              admin: {
-                description:
-                  "Adresses de vos annonces sur les plateformes de location",
-              },
-              fields: [
-                {
-                  name: "airbnb",
-                  type: "text",
-                  label: "Annonce Airbnb",
-                  validate: validateUrl,
-                  admin: {
-                    description: "Lien complet de votre annonce Airbnb",
-                    placeholder: "https://www.airbnb.fr/rooms/...",
-                  },
-                },
-                {
-                  name: "booking",
-                  type: "text",
-                  label: "Annonce Booking",
-                  validate: validateUrl,
-                  admin: {
-                    description: "Lien complet de votre annonce Booking.com",
-                    placeholder: "https://www.booking.com/hotel/...",
-                  },
-                },
-                {
-                  name: "abritel",
-                  type: "text",
-                  label: "Annonce Abritel",
-                  validate: validateUrl,
-                  admin: {
-                    description: "Lien complet de votre annonce Abritel",
-                    placeholder: "https://www.abritel.fr/...",
-                  },
-                },
-                {
-                  name: "email",
-                  type: "email",
-                  label: "Email réservation",
-                  admin: {
-                    description: "Email dédié aux réservations directes",
-                    placeholder: "contact@linstant-tranquille.fr",
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "Conditions",
+            "Les heures d'arrivée et de départ, puis les trois blocs « Conditions de réservation » de la page tarifs.",
           fields: [
             {
               name: "policies",
               type: "group",
-              label: "Politiques",
-              admin: {
-                description: "Règles, horaires et politiques de location",
-              },
+              label: false,
               fields: [
                 {
                   name: "cancellation",
@@ -297,7 +232,7 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "Conditions et délais d'annulation, remboursements",
+                      "Jusqu'à quand un voyageur peut annuler et ce qui lui est remboursé.",
                   },
                 },
                 {
@@ -307,7 +242,7 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "Montant de l'acompte, de la caution, et modalités de paiement",
+                      "Le montant de l'acompte et de la caution, et la façon de les régler.",
                   },
                 },
                 {
@@ -317,8 +252,8 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "À partir de quelle heure les voyageurs peuvent arriver",
-                    placeholder: "À partir de 16h00",
+                      "Affiché sur la page tarifs et dans la fiche du gîte.",
+                    placeholder: "À partir de 17h00",
                   },
                 },
                 {
@@ -328,18 +263,18 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "Avant quelle heure les voyageurs doivent partir",
+                      "Affiché sur la page tarifs et dans la fiche du gîte.",
                     placeholder: "Avant 10h00",
                   },
                 },
                 {
                   name: "additional",
                   type: "richText",
-                  label: "Conditions supplémentaires",
+                  label: "À savoir avant de réserver",
                   localized: true,
                   admin: {
                     description:
-                      "Autres informations importantes (ménage, linge, animaux...)",
+                      "Ce qu'il faut savoir avant de réserver : ménage, linge, animaux.",
                   },
                 },
               ],

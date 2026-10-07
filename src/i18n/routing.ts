@@ -6,24 +6,36 @@ export const routing = defineRouting({
   defaultLocale,
   localePrefix: "as-needed",
   localeDetection: false,
+  localeCookie: false,
   pathnames: {
     "/": "/",
     "/le-gite": {
       fr: "/le-gite",
       en: "/the-cottage",
     },
+    "/les-alentours": {
+      fr: "/les-alentours",
+      en: "/surroundings",
+    },
+    "/guides": "/guides",
+    "/guides/[slug]": "/guides/[slug]",
     "/tarifs-reservation": {
       fr: "/tarifs-reservation",
       en: "/rates-booking",
     },
     "/contact": "/contact",
-    "/livret-accueil/[accessToken]": {
-      fr: "/livret-accueil/[accessToken]",
-      en: "/welcome-booklet/[accessToken]",
+    "/mentions-legales": {
+      fr: "/mentions-legales",
+      en: "/legal-notice",
     },
-    "/les-alentours": {
-      fr: "/les-alentours",
-      en: "/surroundings",
+    "/confidentialite": {
+      fr: "/confidentialite",
+      en: "/privacy-policy",
     },
   },
 });
+
+export type StaticPathname = Exclude<
+  keyof typeof routing.pathnames,
+  "/guides/[slug]"
+>;

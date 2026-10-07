@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -10,11 +10,12 @@
     "includes": [
       "**",
       "!node_modules",
+      "!.claude",
       "!.next",
       "!dist",
       "!build",
       "!docs",
-      "!scripts",
+      "!src/payload-types.ts",
       "!src/app/(payload)/admin/importMap.js"
     ]
   },
@@ -35,7 +36,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "security": {
         "noDangerouslySetInnerHtml": "off"
       },
@@ -48,7 +49,8 @@
         "noImportantStyles": "off"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noDescendingSpecificity": "off"
       },
       "a11y": {
         "useSemanticElements": "off"

@@ -1,0 +1,28 @@
+{
+  "guides": {
+    "articleMetaTitle": "{title} | L'Instant Tranquille",
+    "placesTitle": "Les lieux de ce guide",
+    "roseCaption": "Les lieux de ce guide, placés à leur temps de route depuis le gîte. Chaque cercle représente un quart d'heure.",
+    "faqTitle": "Questions fréquentes",
+    "stayText": "L'Instant Tranquille est une maison entière avec jardin clos, à Romorantin-Lanthenay. Elle accueille jusqu'à {count} personnes.",
+    "moreTitle": "Que lire ensuite ?",
+    "allGuides": "Voir tous les guides",
+    "themesNav": "Filtrer les guides par thème",
+    "readTime": "{minutes} min de lecture",
+    "updated": "Mis à jour le <date></date>",
+    "tocLabel": "Sommaire du guide",
+    "tocTitle": "Dans ce guide",
+    "officialTitle": "Sources et sites officiels",
+    "officialText": "Horaires et tarifs changent chaque saison : vérifiez-les sur le site de chaque lieu ou auprès de l'office de tourisme avant de partir.",
+    "allPlaces": "Voir tous les lieux autour du gîte",
+    "allThemes": "Tous les thèmes",
+    "practicalTitle": "L'essentiel en bref",
+    "plateCaption": "{place}, à <drive></drive> du gîte en voiture",
+    "dayCaption": "{count} étapes, de {start} à {end}, placées sur la course du jour.",
+    "drivesTitle": "Depuis le gîte",
+    "drivesSummary": "{count} lieux, de {nearest} à {farthest} de route.",
+    "drivesLegend": "Chaque trait marque un quart d'heure de route.",
+    "checked": "Horaires, tarifs et adresses vérifiés en {date} sur les sites officiels.",
+    "officialChecked": "Les informations de ce guide ont été vérifiées en {date} sur les pages ci-contre. Horaires et tarifs changent chaque saison : confirmez-les sur le site du lieu avant de partir."
+  }
+}
