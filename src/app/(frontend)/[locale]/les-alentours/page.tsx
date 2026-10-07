@@ -7,7 +7,7 @@ import { Sketch } from "@/components/shared/Sketch";
 import { PondScene } from "@/components/shared/Tableaux";
 import { Ticker } from "@/components/shared/Ticker";
 import { CategoryBar } from "@/components/surroundings/CategoryBar";
-import { DriveTimeRose } from "@/components/surroundings/DriveTimeRose";
+import { FilterableRose } from "@/components/surroundings/FilterableRose";
 import { GuideCards } from "@/components/surroundings/GuideCards";
 import { OfficialLinks } from "@/components/surroundings/OfficialLinks";
 import { PlaceCards } from "@/components/surroundings/PlaceCards";
@@ -197,11 +197,10 @@ export default async function SurroundingsPage({
               <p className="ui discret">{t("roseText")}</p>
             </div>
             <figure className="lg:col-span-12">
-              <DriveTimeRose
+              <FilterableRose
                 origin={origin}
                 places={rosePlaces.map(toRosePlace)}
                 labels={roseLabels(common)}
-                filterable
               />
               <figcaption className="legende">{t("roseCaption")}</figcaption>
             </figure>
