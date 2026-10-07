@@ -32,6 +32,8 @@
     "booking": {
       "check": "Check availability",
       "direct": "Request a booking",
+      "guestFavourite": "Guest favourite",
+      "superhost": "Superhost",
       "on": "Book on {platform}",
       "from": "From {price} per night",
       "call": "Call the cottage",
@@ -126,6 +128,7 @@
       "guests": "{count, plural, one {# guest} other {# guests}}",
       "nights": "{count, plural, one {# night} other {# nights}}",
       "stayFrom": "from {price} for {nights} nights",
+      "superhost": "Superhost",
       "on": "{price} on {platform}",
       "quoted": "Prices recorded on {date}, taxes and fees included.",
       "exact": "The exact price for your dates is shown on the platform."
