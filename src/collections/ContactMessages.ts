@@ -6,6 +6,7 @@ import { revalidateCollection } from "@/lib/revalidate";
 export const ContactMessages: CollectionConfig = {
   slug: "contact-messages",
   lockDocuments: false,
+  trash: true,
   disableDuplicate: true,
   hooks: revalidateCollection("contact-messages"),
   labels: { singular: "Message reçu", plural: "Messages reçus" },

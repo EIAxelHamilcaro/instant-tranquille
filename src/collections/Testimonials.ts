@@ -8,6 +8,7 @@ import { REVIEW_TOPIC_OPTIONS } from "@/lib/review-topics";
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
   lockDocuments: false,
+  trash: true,
   disableDuplicate: true,
   labels: { singular: "Avis", plural: "Avis des voyageurs" },
   hooks: revalidateCollection("testimonials"),

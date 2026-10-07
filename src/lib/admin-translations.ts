@@ -38,6 +38,39 @@ export const adminTranslations: Translations = {
       updatedSuccessfully: "C'est enregistré.",
       successfullyCreated: "C'est ajouté : {{label}}.",
       deletedSuccessfully: "C'est supprimé.",
+      trash: "Corbeille",
+      aboutToTrash:
+        "« <1>{{title}}</1> » part à la corbeille et disparaît du site. Rien n'est perdu : vous pourrez le récupérer dans l'onglet « Corbeille » de cette liste.",
+      aboutToTrashCount:
+        "{{count}} {{label}} partent à la corbeille et disparaissent du site. Vous pourrez les récupérer dans l'onglet « Corbeille ».",
+      titleTrashed:
+        "« {{title}} » est à la corbeille. Pour le récupérer : onglet « Corbeille ».",
+      trashedCountSuccessfully: "{{count}} {{label}} à la corbeille.",
+      documentIsTrashed:
+        "Cette fiche est à la corbeille : elle n'apparaît plus sur le site. Touchez « Récupérer » pour la remettre.",
+      noTrashResults: "La corbeille est vide.",
+      deletedAt: "Mis à la corbeille le",
+      restore: "Récupérer",
+      restoreAsPublished: "Remettre en ligne tout de suite",
+      aboutToRestore:
+        "« <1>{{title}}</1> » sort de la corbeille et retrouve sa place.",
+      aboutToRestoreAsDraft:
+        "« <1>{{title}}</1> » sort de la corbeille en brouillon : ouvrez-le ensuite et touchez « Publier » pour le remettre sur le site.",
+      aboutToRestoreCount: "{{count}} {{label}} sortent de la corbeille.",
+      aboutToRestoreAsDraftCount:
+        "{{count}} {{label}} sortent de la corbeille en brouillon. Publiez-les ensuite pour les remettre sur le site.",
+      titleRestored: "« {{title}} » est récupéré.",
+      restoredCountSuccessfully: "{{count}} {{label}} récupérés.",
+      deletePermanently: "Supprimer pour de bon, sans passer par la corbeille",
+      permanentlyDelete: "Supprimer pour de bon",
+      aboutToPermanentlyDelete:
+        "« <1>{{title}}</1> » va être supprimé pour de bon. Il ne pourra plus être récupéré.",
+      aboutToPermanentlyDeleteTrash:
+        "<0>{{count}}</0> <1>{{label}}</1> vont être supprimés pour de bon. Ils ne pourront plus être récupérés.",
+      permanentlyDeletedCountSuccessfully:
+        "{{count}} {{label}} supprimés pour de bon.",
+      emptyTrash: "Vider la corbeille",
+      emptyTrashLabel: "Vider la corbeille : {{label}}",
     },
     authentication: {
       logOut: "Se déconnecter",

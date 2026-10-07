@@ -37,6 +37,7 @@ const generateBlurDataURL: CollectionBeforeChangeHook = async ({
 export const Media: CollectionConfig = {
   slug: "media",
   lockDocuments: false,
+  trash: true,
   disableDuplicate: true,
   labels: { singular: "Photo", plural: "Photos" },
   hooks: {

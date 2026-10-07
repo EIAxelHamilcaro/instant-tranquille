@@ -8,6 +8,7 @@ import { revalidateCollection } from "@/lib/revalidate";
 export const Amenities: CollectionConfig = {
   slug: "amenities",
   lockDocuments: false,
+  trash: true,
   labels: { singular: "Équipement", plural: "Équipements du gîte" },
   defaultSort: "order",
   hooks: revalidateCollection("amenities"),

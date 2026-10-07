@@ -42,6 +42,7 @@ const slugFromTitle: FieldHook = ({ value, data }) => {
 export const Guides: CollectionConfig = {
   slug: "guides",
   lockDocuments: false,
+  trash: true,
   labels: { singular: "Guide", plural: "Guides de séjour" },
   hooks: revalidateCollection("guides"),
   versions: { drafts: { autosave: { interval: 2000 } }, maxPerDoc: 15 },

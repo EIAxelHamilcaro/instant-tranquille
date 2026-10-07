@@ -234,6 +234,7 @@ export interface Place {
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * Toutes les photos du site. Le site les redimensionne et les allège tout seul.
@@ -263,6 +264,7 @@ export interface Media {
   _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
   url?: string | null;
   thumbnailURL?: string | null;
   filename?: string | null;
@@ -407,6 +409,7 @@ export interface Guide {
   slug: string;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -443,6 +446,7 @@ export interface OfficialSite {
   showInFooter?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * La liste des équipements affichée sur la page « Le gîte », rangée par catégorie. Elle est aussi transmise à Google.
@@ -497,6 +501,7 @@ export interface Amenity {
   order?: number | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * Recopiez ici un avis reçu sur Airbnb ou Booking, puis passez-le en « Approuvé » pour qu'il apparaisse.
@@ -544,6 +549,7 @@ export interface Testimonial {
   topics?: ('house' | 'welcome' | 'value')[] | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * Les demandes envoyées par les voyageurs depuis le formulaire du site. Ouvrez un message pour y répondre, puis cochez « Message lu ».
@@ -568,6 +574,7 @@ export interface ContactMessage {
   readStatus?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * Les personnes qui peuvent se connecter à cet espace. Pour changer votre mot de passe, ouvrez votre compte.
@@ -681,6 +688,7 @@ export interface PlacesSelect<T extends boolean = true> {
   featured?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -726,6 +734,7 @@ export interface GuidesSelect<T extends boolean = true> {
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -741,6 +750,7 @@ export interface OfficialSitesSelect<T extends boolean = true> {
   showInFooter?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -754,6 +764,7 @@ export interface AmenitiesSelect<T extends boolean = true> {
   order?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -771,6 +782,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   topics?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -786,6 +798,7 @@ export interface ContactMessagesSelect<T extends boolean = true> {
   readStatus?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -800,6 +813,7 @@ export interface MediaSelect<T extends boolean = true> {
   _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
   url?: T;
   thumbnailURL?: T;
   filename?: T;
