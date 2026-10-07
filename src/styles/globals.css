@@ -545,8 +545,8 @@ html:has(.frontend-app) {
     overflow: clip;
     display: grid;
     align-items: end;
-    min-height: min(calc(100svh - 3.75rem - var(--hauteur-barre)), 60rem);
-    padding-block: clamp(2.5rem, 6vw, 5rem);
+    min-height: calc(100svh - 3.95rem - 5rem - var(--hauteur-barre));
+    padding-block: clamp(1rem, 2.5svh, 5rem) clamp(2.5rem, 6vw, 5rem);
   }
 
   .hero-film {
