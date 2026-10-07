@@ -1,6 +1,6 @@
 import type { GlobalConfig } from "payload";
 import { isAuthenticated, isPublishedOrAuthenticated } from "@/lib/access";
-import { rowLabel } from "@/lib/admin-fields";
+import { help, rowLabel, screenIntro } from "@/lib/admin-fields";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateGlobal } from "@/lib/revalidate";
 
@@ -17,7 +17,16 @@ export const PricingConfig: GlobalConfig = {
   admin: {
     group: "Avis et réservations",
     description:
-      "Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions. Tout s'affiche sur la page « Tarifs et réservation ».",
+      "Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions.",
+    hideAPIURL: true,
+    components: {
+      elements: {
+        Description: screenIntro(
+          "La page « Tarifs et réservation », et le prix « à partir de » repris sur l'accueil.",
+          "/tarifs-reservation",
+        ),
+      },
+    },
     livePreview: {
       url: ({ locale }) => previewUrl("/tarifs-reservation", { locale }),
     },
@@ -127,6 +136,10 @@ export const PricingConfig: GlobalConfig = {
               admin: {
                 description:
                   "Le plus petit nombre de nuits que les plateformes acceptent.",
+                placeholder: "2",
+                components: help(
+                  "Ce nombre sert aussi au calendrier des disponibilités : un trou plus court que le séjour minimum entre deux réservations est affiché comme pris, puisque personne ne peut le réserver.",
+                ),
               },
             },
             {
@@ -140,16 +153,21 @@ export const PricingConfig: GlobalConfig = {
                 },
                 description:
                   "Le jour où vous avez recopié les prix. Cette date s'affiche sur le site à côté des prix.",
+                components: help(
+                  "Au bout de 90 jours, le résumé vous propose de relever les prix à nouveau. Si rien n'a changé sur Airbnb et Booking, mettez simplement la date du jour.",
+                ),
               },
             },
             {
               name: "note",
               type: "textarea",
-              label: "Note sur les prix",
+              label: "Le prix change-t-il selon la saison ?",
               localized: true,
               admin: {
                 description:
-                  "Une ou deux phrases affichées avec les prix, par exemple pour dire qu'ils ne changent pas selon la saison.",
+                  "Votre réponse à cette question, en une ou deux phrases. Elle s'affiche dans les questions fréquentes de la page tarifs. Laissez vide pour retirer la question.",
+                placeholder:
+                  "Le prix dépend du nombre de voyageurs et de la durée du séjour, pas de la saison.",
               },
             },
           ],
@@ -186,6 +204,10 @@ export const PricingConfig: GlobalConfig = {
                   label: "Montant (€)",
                   required: true,
                   min: 0,
+                  admin: {
+                    description: "En euros, sans le symbole.",
+                    placeholder: "60",
+                  },
                 },
                 {
                   name: "type",
@@ -207,7 +229,8 @@ export const PricingConfig: GlobalConfig = {
                   label: "Précisions",
                   localized: true,
                   admin: {
-                    description: "Une précision affichée sous le montant.",
+                    description:
+                      "Une précision affichée sous le montant. Facultatif.",
                     placeholder: "Obligatoire",
                   },
                 },
@@ -252,7 +275,7 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "Affiché sur la page tarifs et dans la fiche du gîte.",
+                      "Affichée sur la page tarifs après le mot « Arrivée ». Écrivez l'heure en chiffres, avec un h : Google la lit aussi.",
                     placeholder: "À partir de 17h00",
                   },
                 },
@@ -263,7 +286,7 @@ export const PricingConfig: GlobalConfig = {
                   localized: true,
                   admin: {
                     description:
-                      "Affiché sur la page tarifs et dans la fiche du gîte.",
+                      "Affichée sur la page tarifs après le mot « Départ ». Écrivez l'heure en chiffres, avec un h : Google la lit aussi.",
                     placeholder: "Avant 10h00",
                   },
                 },

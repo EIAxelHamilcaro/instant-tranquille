@@ -3,21 +3,28 @@ import { dirname, join } from "node:path";
 import sharp from "sharp";
 
 const ROOT = join(import.meta.dirname, "..");
-const BACKGROUND = "#0e2b28";
-const INK = "#e9ede5";
+const SITE_PALETTE = { background: "#0e2b28", ink: "#e9ede5" };
+const ADMIN_PALETTE = { background: "#f2c66d", ink: "#0e2b28" };
 const HERON_BOX = { x: 3.5, y: 1, size: 62 };
-const HERON = `
-  <g fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+
+const heron = (ink: string) => `
+  <g fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M40 10c-6 0-9 3-7.5 8 1.5 5 7.5 7 7.5 13"/>
-    <path fill="${INK}" stroke="none" d="M40 7.5 61 10 40 12.5ZM37.500 27.500C27 28 15 37 8 48c11 2 25 .5 31-6 3.500-4 3.700-8 3.500-12Z"/>
+    <path fill="${ink}" stroke="none" d="M40 7.5 61 10 40 12.5ZM37.500 27.500C27 28 15 37 8 48c11 2 25 .5 31-6 3.500-4 3.700-8 3.500-12Z"/>
     <path stroke-width="4.5" d="M29 47v10"/>
   </g>`;
+
+interface Palette {
+  background: string;
+  ink: string;
+}
 
 interface IconSpec {
   file: string;
   size: number;
   heronRatio: number;
   cornerRatio: number;
+  palette?: Palette;
 }
 
 const APP_ICON = { heronRatio: 0.64, cornerRatio: 0.22 };
@@ -38,28 +45,59 @@ const PNG_ICONS: IconSpec[] = [
     heronRatio: 0.5,
     ...FULL_BLEED,
   },
+  {
+    file: "public/icons/admin-apple-180.png",
+    size: 180,
+    heronRatio: 0.62,
+    ...FULL_BLEED,
+    palette: ADMIN_PALETTE,
+  },
+  {
+    file: "public/icons/admin-192.png",
+    size: 192,
+    ...APP_ICON,
+    palette: ADMIN_PALETTE,
+  },
+  {
+    file: "public/icons/admin-512.png",
+    size: 512,
+    ...APP_ICON,
+    palette: ADMIN_PALETTE,
+  },
+  {
+    file: "public/icons/admin-maskable-512.png",
+    size: 512,
+    heronRatio: 0.5,
+    ...FULL_BLEED,
+    palette: ADMIN_PALETTE,
+  },
 ];
 const FAVICON = { file: "src/app/favicon.ico", sizes: [16, 32, 48] };
 const FAVICON_STYLE = { heronRatio: 0.74, cornerRatio: 0.2 };
 
-function iconSvg({ size, heronRatio, cornerRatio }: Omit<IconSpec, "file">) {
+function iconSvg({
+  size,
+  heronRatio,
+  cornerRatio,
+  palette = SITE_PALETTE,
+}: Omit<IconSpec, "file">) {
   const scale = (size * heronRatio) / HERON_BOX.size;
   const offset = (size * (1 - heronRatio)) / 2;
   const translateX = offset - HERON_BOX.x * scale;
   const translateY = offset - HERON_BOX.y * scale;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <rect width="${size}" height="${size}" rx="${size * cornerRatio}" fill="${BACKGROUND}"/>
-  <g transform="translate(${translateX} ${translateY}) scale(${scale})">${HERON}</g>
+  <rect width="${size}" height="${size}" rx="${size * cornerRatio}" fill="${palette.background}"/>
+  <g transform="translate(${translateX} ${translateY}) scale(${scale})">${heron(palette.ink)}</g>
 </svg>`;
 }
 
 function renderPng(spec: Omit<IconSpec, "file">) {
   const image = sharp(Buffer.from(iconSvg(spec)));
 
-  return (
-    spec.cornerRatio === 0 ? image.flatten({ background: BACKGROUND }) : image
-  )
+  const { background } = spec.palette ?? SITE_PALETTE;
+
+  return (spec.cornerRatio === 0 ? image.flatten({ background }) : image)
     .png({ compressionLevel: 9, palette: spec.cornerRatio === 0 })
     .toBuffer();
 }

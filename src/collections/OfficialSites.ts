@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { charCount } from "@/lib/admin-fields";
+import { advanced, charCount, listCell, screenIntro } from "@/lib/admin-fields";
 import { OFFICIAL_SITE_GROUP_OPTIONS } from "@/lib/official-sites";
 import { revalidateCollection } from "@/lib/revalidate";
 import { validateUrl } from "@/lib/validators";
@@ -21,6 +21,13 @@ export const OfficialSites: CollectionConfig = {
     defaultColumns: ["name", "group", "url", "showInFooter", "order"],
     listSearchableFields: ["name", "url"],
     pagination: { defaultLimit: 50 },
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "Les liens « Sources officielles » en bas de « Les alentours », à la fin des guides et dans le pied de page.",
+        "/les-alentours",
+      ),
+    },
   },
   access: {
     create: isAuthenticated,
@@ -62,6 +69,7 @@ export const OfficialSites: CollectionConfig = {
       admin: {
         description:
           "Une phrase affichée sous le lien. Inutile pour une mairie.",
+        placeholder: "Agenda, hébergements et idées de balades en Sologne",
         components: charCount(DETAIL_MAX),
       },
     },
@@ -76,17 +84,23 @@ export const OfficialSites: CollectionConfig = {
         description: "La rubrique où le lien apparaît sur « Les alentours ».",
       },
     },
-    {
-      name: "order",
-      type: "number",
-      label: "Ordre",
-      defaultValue: 100,
-      min: 0,
-      admin: {
-        position: "sidebar",
-        description: "Les plus petits nombres passent en premier.",
-      },
-    },
+    advanced(
+      [
+        {
+          name: "order",
+          type: "number",
+          label: "Ordre",
+          defaultValue: 100,
+          min: 0,
+          admin: {
+            description:
+              "Les plus petits nombres passent en premier dans leur rubrique.",
+            placeholder: "100",
+          },
+        },
+      ],
+      "sidebar",
+    ),
     {
       name: "showInFooter",
       type: "checkbox",
@@ -96,6 +110,7 @@ export const OfficialSites: CollectionConfig = {
         position: "sidebar",
         description:
           "Cinq sites au plus, pour que la colonne « Sources officielles » reste courte.",
+        components: { Cell: listCell({ yes: "Pied de page" }) },
       },
     },
   ],

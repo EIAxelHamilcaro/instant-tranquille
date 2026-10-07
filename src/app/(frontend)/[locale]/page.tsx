@@ -14,7 +14,7 @@ import { Reviews } from "@/components/shared/Reviews";
 import { Sketch } from "@/components/shared/Sketch";
 import { ForestScene, PondScene } from "@/components/shared/Tableaux";
 import { Ticker } from "@/components/shared/Ticker";
-import { DriveTimeRose } from "@/components/surroundings/DriveTimeRose";
+import { FilterableRose } from "@/components/surroundings/FilterableRose";
 import type { Locale } from "@/i18n/config";
 import { Link } from "@/i18n/navigation";
 import {
@@ -212,13 +212,12 @@ export default async function HomePage({ params }: HomePageProps) {
           <h2 className="lg:col-span-7">{page.surroundingsTitle}</h2>
           <p className="texte lg:col-span-5">{page.surroundingsText}</p>
           <figure className="lg:col-span-12">
-            <DriveTimeRose
+            <FilterableRose
               origin={origin}
               places={places
                 .filter((place) => place.driveMin >= ROSE_MIN_MINUTES)
                 .map(toRosePlace)}
               labels={roseLabels(common)}
-              filterable
             />
             <figcaption className="legende">{t("roseCaption")}</figcaption>
           </figure>

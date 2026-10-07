@@ -3,10 +3,17 @@
 
 import config from "@payload-config";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
+import type { Viewport } from "next";
 import type { ServerFunctionClient } from "payload";
 import type React from "react";
+import { ADMIN_THEME } from "@/lib/admin-app";
 import { importMap } from "./importMap";
 import "@payloadcms/next/css";
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: ADMIN_THEME.bar,
+};
 
 type Args = {
   children: React.ReactNode;
