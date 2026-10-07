@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import {
   formatRating,
-  isGuestFavourite,
+  isDistinguished,
   platformName,
   ratedPlatforms,
 } from "@/lib/platforms";
@@ -25,7 +25,7 @@ export async function BookingOptions({ settings }: BookingOptionsProps) {
       {ratedPlatforms(settings).map((platform) => (
         <li key={platform.id ?? platform.url}>
           <h3>{platformName(platform)}</h3>
-          {isGuestFavourite(platform.platform) && (
+          {isDistinguished(platform.platform) && (
             <GuestFavourite label={common("booking.guestFavourite")} />
           )}
           <p className="note">
@@ -39,6 +39,8 @@ export async function BookingOptions({ settings }: BookingOptionsProps) {
               count: platform.reviewCount ?? 0,
               platform: platformName(platform),
             })}
+            {isDistinguished(platform.platform) &&
+              `, ${common("booking.superhost")}`}
           </p>
           <Button
             asChild

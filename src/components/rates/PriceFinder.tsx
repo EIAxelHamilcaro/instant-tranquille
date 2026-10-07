@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   type BookingPlatform,
   formatPrice,
-  isGuestFavourite,
+  isDistinguished,
   nightlyPrice,
   type PricedStay,
 } from "@/lib/platforms";
@@ -109,7 +109,7 @@ export function PriceFinder({
               <Button asChild size="lg" className={`plateforme-${platform}`}>
                 <a href={url} rel="noopener" target="_blank">
                   {common("booking.on", { platform: name })}
-                  {isGuestFavourite(platform) && (
+                  {isDistinguished(platform) && (
                     <GuestFavourite
                       label={common("booking.guestFavourite")}
                       compact

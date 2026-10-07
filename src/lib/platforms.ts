@@ -14,10 +14,10 @@ export function platformName(platform: Platform) {
   return PLATFORM_NAMES[platform.platform] || new URL(platform.url).hostname;
 }
 
-const GUEST_FAVOURITE_PLATFORM: Platform["platform"] = "airbnb";
+const DISTINGUISHED_PLATFORM: Platform["platform"] = "airbnb";
 
-export function isGuestFavourite(platform: Platform["platform"]) {
-  return platform === GUEST_FAVOURITE_PLATFORM;
+export function isDistinguished(platform: Platform["platform"]) {
+  return platform === DISTINGUISHED_PLATFORM;
 }
 
 export function ratedPlatforms(settings: SiteSetting) {
