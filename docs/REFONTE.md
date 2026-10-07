@@ -1,6 +1,6 @@
 # Refonte Sologne : état au 7 octobre 2026
 
-Branche `refactor/redesign-sologne`. Rien n'est commité : la prod vient de l'arbre de travail.
+Travail sur `develop`, la prod suit `main` (PR #1 fusionnée le 7 octobre 2026).
 
 ## État : ce qui est en production
 
@@ -15,9 +15,16 @@ Branche `refactor/redesign-sologne`. Rien n'est commité : la prod vient de l'ar
 - SEO et GEO : un nœud JSON-LD complet du gîte (`#gite`), canonical, hreflang, sitemap,
   `llms.txt`, `ai-catalog.json`, robots IA autorisés, IndexNow, FAQ dans le HTML.
 - Contact : formulaire Turnstile, messages lisibles dans l'admin.
-- Cloudflare (zone `instant-tranquille.com`) : DNS seul, DNSSEC actif, DMARC `p=quarantine`,
-  Email Routing `contact@instant-tranquille.com` vers l'adresse de Karine. L'adresse d'Erick est
-  créée mais pas vérifiée (deux destinataires demanderont un Email Worker).
+- Cloudflare (zone `instant-tranquille.com`) : DNS seul, DNSSEC actif, SPF, DKIM, DMARC
+  `p=reject; sp=reject` avec rapports (DMARC Management), MTA-STS en mode `enforce`, 7 jours
+  (`infra/mta-sts-worker`). Alignement prouvé le 7 octobre 2026 sur un envoi du binding
+  `send_email` reçu dans Gmail : `dkim=pass` au nom du domaine, `spf=pass`, `dmarc=pass`. Pas de CAA : la liste des autorités de Vercel et de Cloudflare n'est
+  pas certaine, un CAA incomplet bloquerait un renouvellement de certificat.
+- Emails : `contact@instant-tranquille.com` est la seule adresse affichée. Le Worker
+  `instant-tranquille-email` (`infra/email-worker`) est le répartiteur unique : il notifie les
+  hôtes à chaque message du formulaire et transfère les emails écrits à `contact@`. Les
+  destinataires sont dans son secret `CONTACT_NOTIFY_TO`. Le plan gratuit n'envoie qu'aux adresses
+  vérifiées dans Email Routing : celles de Karine et d'Erick le sont, toutes deux dans le secret.
 - Vérifié : responsive sur 20 pages x 23 formats de 320 à 2560 px (Playwright headless et iframes
   de même origine, car Hyprland ne redimensionne pas la fenêtre), passe lean UI, Lighthouse sur
   les 70 URL.
@@ -72,8 +79,8 @@ Branche `refactor/redesign-sologne`. Rien n'est commité : la prod vient de l'ar
 1. `vercel rollback` vers le déploiement précédent.
 2. Remettre `DATABASE_URL` sur `/neondb` (base conservée en lecture seule). Elle est gérée par
    l'intégration Neon : une resynchronisation peut la remettre sur `neondb`, vérifier après coup.
-3. Ne pas pousser sur `main` entre-temps : `main` est en retard et redéploierait l'ancien code sur
-   la nouvelle base.
+3. Ne rien fusionner dans `main` entre-temps : cela redéploierait le nouveau code sur l'ancienne
+   base.
 
 ### Photos
 
@@ -85,28 +92,31 @@ Branche `refactor/redesign-sologne`. Rien n'est commité : la prod vient de l'ar
 
 ### Priorité haute
 
-- **Commit et PR vers `main`** : la prod tourne sur du code non versionné, `main` est en retard.
-- **Aucun envoi d'email** : pas d'adapter email Payload. Les messages de contact ne se voient que
-  dans l'admin, « mot de passe oublié » n'envoie rien. Choix du service à faire par Axel.
-- **Mentions légales et politique de confidentialité absentes**, alors que le formulaire de contact
-  collecte nom, email et téléphone. À rédiger avec les informations des hôtes (identité de
-  l'éditeur, contact, hébergeur, durée de conservation des messages), jamais inventées, puis à
-  lier depuis le pied de page et sous le formulaire.
+- **Email entrant** : le transfert d'un vrai email écrit à `contact@` n'a jamais été testé (le
+  formulaire, lui, l'est : notification marquée « delivered »).
+- **Mentions légales** : en ligne, mais sans nom de famille ni statut des hôtes (SIRET éventuel) ni
+  durée de conservation chiffrée, et non relues par un juriste.
 - **Plan Vercel à régulariser** (Hobby en prod, quotas surveillés).
-- **Réponses des hôtes** : 62 questions en attente pour Erick et Karine
-  (`docs/guides/QUESTIONS-PROPRIETAIRES.md`). Une FAQ pratique du gîte en dépend.
+- **Fiche Google Business** : absente, c'est le principal manque pour le référencement local.
 
 ### Priorité moyenne
 
+- **Rapports DMARC** : à lire vers le 21 octobre 2026 (Cloudflare, Email, DMARC Management).
+  Tout nouvel expéditeur au nom du domaine doit signer en DKIM aligné, sinon `p=reject` le fait
+  refuser. Retour arrière : remettre `p=quarantine` dans le TXT `_dmarc`.
+- **MTA-STS** : toute modification de la politique (`src/index.ts` du Worker, `wrangler deploy`)
+  demande un nouvel `id` dans le TXT `_mta-sts`. Retour arrière : `mode: testing`.
+- **Réputation** : Google Postmaster Tools et listes noires (Spamhaus, MXToolbox) jamais consultés.
 - **Son de l'écran d'entrée** : il ne démarre pas quand l'autoplay est bloqué (le premier geste
   lance l'envol avant le son).
 - **Upload de plus de 4,5 Mo** : activer `clientUploads` sur le plugin Blob.
-- **Adresse d'Erick** : la vérifier, puis prévoir un Email Worker pour deux destinataires.
-- **Fiche Google Business** : absente.
-- **Guides qui se chevauchent** sur « dormir à Lamotte-Beuvron » : fusions prévues par la charte
-  (`docs/guides/CHARTE.md`).
+- **Autres recoupements de guides**, non fusionnés : week-end et villages, famille et jours de
+  pluie, Chambord et Amboise avec l'itinéraire des châteaux.
+- **Restaurant italien près de la Halle** : laissé sans nom (les annuaires hésitent entre deux).
 - **Temps de route** : quelques minutes d'écart entre le guide « venir » et les temps OSRM de
   `src/lib/places.ts`.
+- **Questions aux hôtes** : décision du client, ne pas relancer. Les voyageurs écrivent par la
+  messagerie des plateformes ou le formulaire (`docs/guides/QUESTIONS-PROPRIETAIRES.md`).
 
 ### Priorité basse
 
