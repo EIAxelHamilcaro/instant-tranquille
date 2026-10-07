@@ -2,10 +2,12 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { GuestFavourite } from "@/components/shared/GuestFavourite";
 import { Button } from "@/components/ui/button";
 import {
   type BookingPlatform,
   formatPrice,
+  isDistinguished,
   nightlyPrice,
   type PricedStay,
 } from "@/lib/platforms";
@@ -107,6 +109,12 @@ export function PriceFinder({
               <Button asChild size="lg" className={`plateforme-${platform}`}>
                 <a href={url} rel="noopener" target="_blank">
                   {common("booking.on", { platform: name })}
+                  {isDistinguished(platform) && (
+                    <GuestFavourite
+                      label={common("booking.guestFavourite")}
+                      compact
+                    />
+                  )}
                   <span className="sr-only"> ({common("opensNewTab")})</span>
                 </a>
               </Button>
