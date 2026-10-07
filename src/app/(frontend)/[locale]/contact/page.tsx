@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { contactFormFields } from "@/components/contact/contact-form-fields";
 import { AreaMap } from "@/components/shared/AreaMap";
 import { BookingButtons } from "@/components/shared/BookingButtons";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -109,7 +110,12 @@ export default async function ContactPage({ params }: ContactPageProps) {
 
         <section className="courrier section-claire lg:col-span-7 lg:row-span-2">
           <h2>{t("formTitle")}</h2>
-          <ContactForm />
+          <ContactForm
+            fields={contactFormFields(page)}
+            datesHint={page.form?.datesHint}
+            sentTitle={page.form?.sentTitle}
+            sentText={page.form?.sentText}
+          />
         </section>
 
         <section className="lg:col-span-5">

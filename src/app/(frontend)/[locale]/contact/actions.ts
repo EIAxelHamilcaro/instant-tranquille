@@ -2,6 +2,7 @@
 
 import { after } from "next/server";
 import { z } from "zod";
+import { contactFormFields } from "@/components/contact/contact-form-fields";
 import {
   type ContactFormState,
   HONEYPOT_FIELD,
@@ -11,8 +12,10 @@ import {
   type ContactValues,
   contactSchema,
 } from "@/components/contact/contact-schema";
+import { defaultLocale } from "@/i18n/config";
 import { notifyContactMessage } from "@/lib/email/notify-contact-message";
 import { getPayload } from "@/lib/payload";
+import { getGlobal } from "@/lib/queries";
 
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -58,7 +61,8 @@ export async function sendContactMessage(
   const values = Object.fromEntries(
     CONTACT_FIELDS.map((field) => [field, textField(formData, field)]),
   );
-  const parsed = contactSchema.safeParse(values);
+  const page = await getGlobal("contact-page", defaultLocale);
+  const parsed = contactSchema(contactFormFields(page)).safeParse(values);
 
   if (!parsed.success) {
     const { fieldErrors } = z.flattenError(parsed.error);

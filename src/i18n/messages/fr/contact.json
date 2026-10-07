@@ -10,8 +10,8 @@
     "form": {
       "name": "Nom",
       "email": "E-mail",
-      "phone": "Téléphone (facultatif)",
-      "dates": "Dates souhaitées (facultatif)",
+      "phone": "Téléphone",
+      "dates": "Dates souhaitées",
       "message": "Message",
       "submit": "Envoyer le message",
       "sending": "Envoi en cours…",
@@ -27,12 +27,15 @@
         "messageRequired": "Écrivez votre message.",
         "messageTooLong": "Raccourcissez le message à 5 000 caractères au plus.",
         "captcha": "La vérification anti-robot a échoué. Attendez qu'elle se termine, puis envoyez le message à nouveau.",
-        "server": "Le message n'est pas parti. Envoyez-le à nouveau, ou écrivez à l'adresse e-mail affichée sur cette page."
+        "server": "Le message n'est pas parti. Envoyez-le à nouveau, ou écrivez à l'adresse e-mail affichée sur cette page.",
+        "phoneRequired": "Indiquez un numéro de téléphone où vous joindre.",
+        "datesRequired": "Indiquez les dates souhaitées, même approximatives."
       },
-      "requiredNote": "Nom, e-mail et message sont obligatoires.",
+      "requiredNote": "{fields} : à remplir pour envoyer.",
       "honeypot": "Ne pas remplir ce champ",
       "privacyNote": "Vos informations servent uniquement à répondre à votre message. Voir la <privacy>politique de confidentialité</privacy>.",
-      "datesHint": "Par exemple : du 12 au 15 juillet, 4 personnes."
+      "datesHint": "Par exemple : du 12 au 15 juillet, 4 personnes.",
+      "optional": "{label} (facultatif)"
     },
     "hostsTitle": "{hosts}, vos hôtes",
     "reviewLabel": "à propos de l'accueil",

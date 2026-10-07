@@ -1295,6 +1295,28 @@ export interface ContactPage {
    * Deux phrases signées de vos prénoms. Un avis de voyageur sur l'accueil s'affiche juste en dessous.
    */
   hostsNote?: string | null;
+  form: {
+    /**
+     * Un formulaire court est rempli plus volontiers : ne rendez le téléphone obligatoire que si vous rappelez vraiment.
+     */
+    phoneField: 'hidden' | 'optional' | 'required';
+    /**
+     * Avec les dates, vous pouvez répondre tout de suite sur les disponibilités.
+     */
+    datesField: 'hidden' | 'optional' | 'required';
+    /**
+     * Montre au voyageur comment écrire ses dates. Laissez vide pour garder l'exemple habituel.
+     */
+    datesHint?: string | null;
+    /**
+     * Laissez vide pour garder « Message envoyé ».
+     */
+    sentTitle?: string | null;
+    /**
+     * Dites au voyageur sous combien de temps vous répondez. Laissez vide pour garder le texte habituel.
+     */
+    sentText?: string | null;
+  };
   /**
    * Le titre de l'appel à réserver en bas de page.
    */
@@ -1849,6 +1871,15 @@ export interface ContactPageSelect<T extends boolean = true> {
   lede?: T;
   image?: T;
   hostsNote?: T;
+  form?:
+    | T
+    | {
+        phoneField?: T;
+        datesField?: T;
+        datesHint?: T;
+        sentTitle?: T;
+        sentText?: T;
+      };
   bookingTitle?: T;
   bookingText?: T;
   meta?:
