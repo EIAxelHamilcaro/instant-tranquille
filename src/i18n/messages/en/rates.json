@@ -24,11 +24,11 @@
     },
     "faq": {
       "priceQuestion": "How much is a night at the cottage?",
-      "priceAnswer": "Allow {price} a night for {guests} guests, taxes and fees included: {prices} for {nights} nights. The exact price for your dates is shown on the platform.",
+      "priceAnswer": "The base price per night is {prices}. The platform adds its service fee and the tourist tax: the exact total for your dates is shown on Airbnb and Booking.com.",
       "minStayQuestion": "What is the minimum stay?",
       "minStayAnswer": "The minimum stay is {count, plural, one {# night} other {# nights}}.",
-      "feesQuestion": "Are there extra fees, such as cleaning?",
-      "feesAnswer": "The fees on top of the rental are: {fees}.",
+      "feesQuestion": "Are there fees on top of the base price?",
+      "feesAnswer": "On top of the base price, allow for: {fees}. The platform also adds its service fee and the tourist tax, and shows the total to pay before you book.",
       "feeItem": "{name} ({amount})",
       "timesQuestion": "What are the check-in and check-out times?",
       "timesAnswer": "Check-in: {checkIn}. Check-out: {checkOut}.",
@@ -37,31 +37,15 @@
       "petsAnswerNo": "No, pets are not allowed at the cottage.",
       "seasonQuestion": "Does the price change with the season?",
       "weekQuestion": "How much is a week at the cottage?",
-      "weekAnswer": "For {nights} nights and {guests} guests, taxes and fees included: {prices}.",
-      "feesAnswerNone": "The totals recorded on Airbnb and Booking.com, taxes and fees included, showed no separate cleaning fee.",
-      "feesAnswerNoneDated": "On {date}, the totals recorded on Airbnb and Booking.com, taxes and fees included, showed no separate cleaning fee."
+      "weekAnswer": "The site gives the base price per night, from {price}. For a week, Airbnb and Booking.com work out the total for your dates, service fee and tourist tax included, with a weekly discount when one applies.",
+      "feesAnswerNone": "Yes: the platform adds its service fee and the tourist tax to the base price. The total to pay is shown on Airbnb and Booking.com before you book."
     },
     "reviewsTitle": "What guests say",
     "finalTitle": "Book the house",
     "finalText": "On Airbnb, on Booking.com or direct: it is the same house, all yours, for up to {count} guests.",
-    "pricesTitle": "Prices, taxes and fees included",
+    "pricesTitle": "The base price per night",
     "headline": "Allow <strong>{price}</strong> a night for {guests} guests",
-    "keySentence": "Allow {price} a night for {guests} guests, taxes and fees included.",
-    "keySentenceDated": "Allow {price} a night for {guests} guests, taxes and fees included. Recorded on {date}, this price was the same for the 6 months checked, from November to August.",
-    "finder": {
-      "guestsQuestion": "How many of you?",
-      "nightsQuestion": "How many nights?",
-      "stay": "for {nights, plural, one {# night} other {# nights}} and {guests, plural, one {# guest} other {# guests}}",
-      "perNight": "that is {price} a night",
-      "lowest": "The cheapest for this stay",
-      "notQuoted": "Price not recorded for this stay: {platform} shows it."
-    },
-    "table": {
-      "caption": "Total prices for the stay.",
-      "stay": "Stay",
-      "perNight": "Per night, from",
-      "notQuoted": "Not recorded"
-    },
+    "keySentence": "Allow {price} a night for {guests} guests. This is the base price of the house: it depends on the number of guests.",
     "availability": {
       "title": "Availability",
       "intro": "Free and booked nights for the next {count} months, from the Airbnb and Booking.com calendars.",
@@ -69,6 +53,18 @@
       "taken": "booked",
       "past": "past",
       "note": "Minimum stay of {count, plural, one {# night} other {# nights}}: a single night left between two bookings is shown as booked. Calendar checked on {date}. Dates are booked on Airbnb or Booking.com, which confirm availability and price."
+    },
+    "nightly": "a night",
+    "sum": {
+      "title": "From the base price to the total for your stay",
+      "base": "Base price",
+      "baseDetail": "per night, depending on the number of guests",
+      "service": "Service fee",
+      "serviceDetail": "added by the platform",
+      "tax": "Tourist tax",
+      "taxDetail": "collected by the platform",
+      "total": "Total for your stay",
+      "totalDetail": "shown on Airbnb and Booking.com for your dates, less the weekly discount when one applies"
     }
   }
 }

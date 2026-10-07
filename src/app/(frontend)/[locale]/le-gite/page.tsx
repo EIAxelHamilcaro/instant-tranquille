@@ -18,7 +18,7 @@ import { mediaOf } from "@/components/shared/viewer-photos";
 import type { Locale } from "@/i18n/config";
 import { Link } from "@/i18n/navigation";
 import { breadcrumbJsonLd, cottageJsonLd, filmJsonLd } from "@/lib/jsonld";
-import { formatPrice, nightlyRange, pricedStays } from "@/lib/platforms";
+import { formatPrice, nightlyRange, nightlyRates } from "@/lib/platforms";
 import { getAmenities, getGlobal, getReviews } from "@/lib/queries";
 import { reviewsAbout } from "@/lib/review-topics";
 import { pageMetadata } from "@/lib/seo";
@@ -65,7 +65,7 @@ export default async function CottagePage({ params }: CottagePageProps) {
   const gallery = mediaOf(page.gallery);
   const houseReviews = reviewsAbout(reviews, "house");
   const film = filmSources(locale);
-  const lowestNightly = nightlyRange(pricedStays(pricing))?.min;
+  const entryPrice = nightlyRange(nightlyRates(pricing))?.min;
 
   return (
     <>
@@ -163,19 +163,24 @@ export default async function CottagePage({ params }: CottagePageProps) {
       <section className="appel section section-claire">
         <div className="page grid justify-items-start gap-6">
           <h2>{t("bookingTitle")}</h2>
-          {lowestNightly && (
-            <p className="chapeau">
-              {common("booking.from", {
-                price: formatPrice(
-                  lowestNightly,
-                  pricing.currency || "EUR",
-                  locale,
-                ),
-              })}
-              {t("bookingText", {
-                count: settings.propertyDetails?.maxGuests ?? 0,
-              })}
-            </p>
+          {entryPrice && (
+            <>
+              <p className="chapeau">
+                {common("booking.from", {
+                  price: formatPrice(
+                    entryPrice,
+                    pricing.currency || "EUR",
+                    locale,
+                  ),
+                })}
+                {t("bookingText", {
+                  count: settings.propertyDetails?.maxGuests ?? 0,
+                })}
+              </p>
+              <p className="discret">
+                {common("rates.base")} {common("rates.exact")}
+              </p>
+            </>
           )}
           <BookingButtons settings={settings} />
           <Link href="/tarifs-reservation" className="ui lien">

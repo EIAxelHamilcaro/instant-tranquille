@@ -29,6 +29,7 @@ const {
   RATES_PAGE,
   SURROUNDINGS_PAGE,
 } = await import("./content/pages");
+const { NIGHTLY_RATES } = await import("./pricing");
 const { richText } = await import("./rich-text");
 const { retireGuides } = await import("./retire");
 const { seedRedirects } = await import("./redirects");
@@ -81,7 +82,7 @@ function metaCorrection(current: Fields, wanted: PageMeta) {
   return { meta: { ...meta, ...next } };
 }
 
-function textCorrection(current: Fields, field: string, wanted: string) {
+function textCorrection(current: Fields, field: string, wanted: string | null) {
   return same(current[field], wanted) ? {} : { [field]: wanted };
 }
 
@@ -93,6 +94,14 @@ function richTextCorrection(
   return plainText(current[field]) === plainText(wanted)
     ? {}
     : { [field]: wanted };
+}
+
+function nightlyRatesCorrection(current: Fields) {
+  const saved = ((current.nightlyRates ?? []) as Row[]).map(
+    ({ guests, price }) => ({ guests, price }),
+  );
+
+  return same(saved, NIGHTLY_RATES) ? {} : { nightlyRates: NIGHTLY_RATES };
 }
 
 function rowCorrection(
@@ -241,6 +250,11 @@ for (const locale of LOCALES) {
       RATES_PAGE[locale].steps[FIRST_STEP]?.text ?? "",
     ),
     ...metaCorrection(current, RATES_PAGE[locale].meta),
+  }));
+
+  await correct(payload, "pricing-config", locale, (current) => ({
+    ...nightlyRatesCorrection(current),
+    ...textCorrection(current, "note", null),
   }));
 
   await correct(payload, "contact-page", locale, (current) =>

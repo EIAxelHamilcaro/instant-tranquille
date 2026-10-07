@@ -24,11 +24,11 @@
     },
     "faq": {
       "priceQuestion": "Combien coûte une nuit au gîte ?",
-      "priceAnswer": "Comptez {price} la nuit pour {guests} personnes, taxes et frais inclus : {prices} pour {nights} nuits. Le prix exact pour vos dates s'affiche sur la plateforme.",
+      "priceAnswer": "Le prix de base par nuit est de {prices}. La plateforme y ajoute ses frais de service et la taxe de séjour : le total exact pour vos dates s'affiche sur Airbnb et Booking.com.",
       "minStayQuestion": "Quelle est la durée minimale d'un séjour ?",
       "minStayAnswer": "Le séjour dure au moins {count, plural, one {# nuit} other {# nuits}}.",
-      "feesQuestion": "Y a-t-il des frais en plus, comme le ménage ?",
-      "feesAnswer": "Les frais en plus de la location sont : {fees}.",
+      "feesQuestion": "Y a-t-il des frais en plus du prix de base ?",
+      "feesAnswer": "En plus du prix de base, comptez : {fees}. La plateforme ajoute aussi ses frais de service et la taxe de séjour, et affiche le total à payer avant la réservation.",
       "feeItem": "{name} ({amount})",
       "timesQuestion": "À quelle heure arriver et partir ?",
       "timesAnswer": "Arrivée : {checkIn}. Départ : {checkOut}.",
@@ -37,31 +37,15 @@
       "petsAnswerNo": "Non, le gîte n'accepte pas les animaux.",
       "seasonQuestion": "Le prix change-t-il selon la saison ?",
       "weekQuestion": "Combien coûte une semaine au gîte ?",
-      "weekAnswer": "Pour {nights} nuits et {guests} personnes, taxes et frais inclus : {prices}.",
-      "feesAnswerNone": "Les totaux relevés sur Airbnb et Booking.com, taxes et frais inclus, n'affichaient pas de frais de ménage séparés.",
-      "feesAnswerNoneDated": "Le {date}, les totaux relevés sur Airbnb et Booking.com, taxes et frais inclus, n'affichaient pas de frais de ménage séparés."
+      "weekAnswer": "Le site annonce le prix de base par nuit, à partir de {price}. Pour une semaine, Airbnb et Booking.com calculent le total pour vos dates, frais de service et taxe de séjour compris, avec une remise à la semaine quand elle s'applique.",
+      "feesAnswerNone": "Oui : la plateforme ajoute au prix de base ses frais de service et la taxe de séjour. Le total à payer s'affiche sur Airbnb et Booking.com avant la réservation."
     },
     "reviewsTitle": "Ce qu'en disent les voyageurs",
     "finalTitle": "Réserver la maison",
     "finalText": "Sur Airbnb, sur Booking.com ou en direct : c'est la même maison, entière, pour {count} personnes au plus.",
-    "pricesTitle": "Les prix, taxes et frais inclus",
+    "pricesTitle": "Le prix de base par nuit",
     "headline": "Comptez <strong>{price}</strong> la nuit pour {guests} personnes",
-    "keySentence": "Comptez {price} la nuit pour {guests} personnes, taxes et frais inclus.",
-    "keySentenceDated": "Comptez {price} la nuit pour {guests} personnes, taxes et frais inclus. Relevé le {date}, ce prix était le même pour les 6 mois consultés, de novembre à août.",
-    "finder": {
-      "guestsQuestion": "Combien êtes-vous ?",
-      "nightsQuestion": "Combien de nuits ?",
-      "stay": "pour {nights, plural, one {# nuit} other {# nuits}} et {guests, plural, one {# voyageur} other {# voyageurs}}",
-      "perNight": "soit {price} la nuit",
-      "lowest": "Le moins cher pour ce séjour",
-      "notQuoted": "Prix non relevé pour ce séjour : il s'affiche sur {platform}."
-    },
-    "table": {
-      "caption": "Prix totaux du séjour.",
-      "stay": "Séjour",
-      "perNight": "Par nuit, dès",
-      "notQuoted": "Non relevé"
-    },
+    "keySentence": "Comptez {price} la nuit pour {guests} personnes. C'est le prix de base de la maison : il dépend du nombre de voyageurs.",
     "availability": {
       "title": "Disponibilités",
       "intro": "Les nuits libres et prises des {count} prochains mois, d'après les calendriers Airbnb et Booking.com.",
@@ -69,6 +53,18 @@
       "taken": "pris",
       "past": "passé",
       "note": "Séjour de {count, plural, one {# nuit} other {# nuits}} au minimum : une nuit isolée entre deux réservations est indiquée comme prise. Calendrier vérifié le {date}. Les dates se réservent sur Airbnb ou Booking.com, qui confirment la disponibilité et le prix."
+    },
+    "nightly": "la nuit",
+    "sum": {
+      "title": "Du prix de base au total de votre séjour",
+      "base": "Prix de base",
+      "baseDetail": "par nuit, selon le nombre de voyageurs",
+      "service": "Frais de service",
+      "serviceDetail": "ajoutés par la plateforme",
+      "tax": "Taxe de séjour",
+      "taxDetail": "collectée par la plateforme",
+      "total": "Total de votre séjour",
+      "totalDetail": "affiché sur Airbnb et Booking.com pour vos dates, remise à la semaine déduite quand elle s'applique"
     }
   }
 }

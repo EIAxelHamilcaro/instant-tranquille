@@ -17,12 +17,12 @@ export const PricingConfig: GlobalConfig = {
   admin: {
     group: "Avis et réservations",
     description:
-      "Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions.",
+      "Votre prix de base par nuit, les horaires d'arrivée et de départ, les conditions.",
     hideAPIURL: true,
     components: {
       elements: {
         Description: screenIntro(
-          "La page « Tarifs et réservation », et le prix « à partir de » repris sur l'accueil.",
+          "La page « Tarifs et réservation », et vos prix de base repris sur l'accueil et sur la page du gîte.",
           "/tarifs-reservation",
         ),
       },
@@ -36,9 +36,9 @@ export const PricingConfig: GlobalConfig = {
       type: "tabs",
       tabs: [
         {
-          label: "Prix relevés",
+          label: "Prix de base",
           description:
-            "Le site affiche exactement les prix d'Airbnb et de Booking. Quand un prix change sur une plateforme, corrigez la ligne ici et mettez à jour la date du relevé.",
+            "Votre prix de base par nuit : celui que vous fixez, avant les frais de service de la plateforme et la taxe de séjour. Le site l'affiche tel quel et renvoie vers Airbnb et Booking pour le total d'un séjour.",
           fields: [
             {
               name: "currency",
@@ -47,18 +47,17 @@ export const PricingConfig: GlobalConfig = {
               admin: { hidden: true },
             },
             {
-              name: "quotes",
+              name: "nightlyRates",
               type: "array",
-              label: "Prix relevés sur Airbnb et Booking",
-              labels: { singular: "Prix relevé", plural: "Prix relevés" },
+              label: "Prix de base par nuit",
+              labels: { singular: "Prix de base", plural: "Prix de base" },
               admin: {
                 description:
-                  "Une ligne par cas : un nombre de voyageurs et une durée. Recopiez le prix total affiché par la plateforme pour ce cas, taxes et frais inclus : le prix normal sur Airbnb (pas un prix barré), le tarif avec annulation gratuite sur Booking. Laissez vide un prix que vous n'avez pas relevé. Le site calcule tout seul le prix par nuit.",
-                initCollapsed: true,
+                  "Une ligne par nombre de voyageurs : 2, 4 et 6. Écrivez le prix d'une seule nuit, celui que vous avez réglé sur Airbnb et Booking, sans les frais de service ni la taxe de séjour. Le site ne calcule aucun total : il affiche ces prix et précise que la plateforme ajoute ses frais.",
                 components: {
                   RowLabel: rowLabel(
-                    "{guests} voyageurs, {nights} nuits, Airbnb {airbnb} €, Booking {booking} €",
-                    "Prix relevé",
+                    "{guests} voyageurs : {price} € la nuit",
+                    "Prix de base",
                   ),
                 },
               },
@@ -79,54 +78,20 @@ export const PricingConfig: GlobalConfig = {
                       admin: { width: "50%" },
                     },
                     {
-                      name: "nights",
-                      type: "select",
-                      label: "Durée du séjour",
+                      name: "price",
+                      type: "number",
+                      label: "Prix de base pour une nuit (€)",
                       required: true,
-                      options: [
-                        { label: "2 nuits", value: "2" },
-                        { label: "7 nuits (une semaine)", value: "7" },
-                      ],
-                      admin: { width: "50%" },
-                    },
-                  ],
-                },
-                {
-                  type: "row",
-                  fields: [
-                    {
-                      name: "airbnb",
-                      type: "number",
-                      label: "Prix total sur Airbnb (€)",
                       min: 0,
-                      admin: { width: "50%" },
-                    },
-                    {
-                      name: "booking",
-                      type: "number",
-                      label: "Prix total sur Booking (€)",
-                      min: 0,
-                      admin: { width: "50%" },
+                      admin: {
+                        width: "50%",
+                        description: "En euros, sans le symbole.",
+                        placeholder: "110",
+                      },
                     },
                   ],
                 },
               ],
-            },
-            {
-              name: "quotedOn",
-              type: "date",
-              label: "Prix relevés le",
-              admin: {
-                date: {
-                  pickerAppearance: "dayOnly",
-                  displayFormat: "d MMMM yyyy",
-                },
-                description:
-                  "Le jour où vous avez recopié les prix. Cette date s'affiche sur le site à côté des prix.",
-                components: help(
-                  "Au bout de 90 jours, le résumé vous propose de relever les prix à nouveau. Si rien n'a changé sur Airbnb et Booking, mettez simplement la date du jour.",
-                ),
-              },
             },
             {
               name: "minimumStay",
@@ -152,7 +117,7 @@ export const PricingConfig: GlobalConfig = {
                 description:
                   "Votre réponse à cette question, en une ou deux phrases. Elle s'affiche dans les questions fréquentes de la page tarifs. Laissez vide pour retirer la question.",
                 placeholder:
-                  "Le prix dépend du nombre de voyageurs et de la durée du séjour, pas de la saison.",
+                  "Le prix de base dépend du nombre de voyageurs, pas de la saison.",
               },
             },
           ],
@@ -168,7 +133,7 @@ export const PricingConfig: GlobalConfig = {
               admin: {
                 components: { RowLabel: rowLabel("{name}", "Frais") },
                 description:
-                  "À laisser vide tant que les prix des plateformes sont déjà taxes et frais inclus. N'ajoutez une ligne que pour un vrai supplément facturé en plus.",
+                  "Un supplément que vous facturez vous-même en plus du prix de base, comme le ménage. Les frais de service de la plateforme et la taxe de séjour n'ont pas leur place ici : le site les annonce déjà.",
               },
               fields: [
                 {

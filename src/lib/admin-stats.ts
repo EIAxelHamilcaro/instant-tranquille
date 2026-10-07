@@ -13,7 +13,6 @@ const DAY_MS = 86_400_000;
 const MONTHS = 12;
 const LATEST_MESSAGES = 3;
 
-export const QUOTE_MAX_AGE_DAYS = 90;
 export const GUIDE_CHECK_MAX_AGE_DAYS = 180;
 
 export const ADMIN_PAGES = [
@@ -165,7 +164,7 @@ export const getAdminStats = unstable_cache(
       payload.findGlobal({
         slug: "pricing-config",
         depth: 0,
-        select: { quotedOn: true },
+        select: { nightlyRates: true },
       }),
       payload.findGlobal({
         slug: "site-settings",
@@ -288,7 +287,7 @@ export const getAdminStats = unstable_cache(
           ),
         ],
       },
-      pricing: { quotedOn: pricing.quotedOn ?? null },
+      pricing: { rates: pricing.nightlyRates?.length ?? 0 },
       pagesWithoutEnglish: ADMIN_PAGES.filter(
         (_, index) => !englishPages[index]?.title,
       ).map(({ slug, label }) => ({ slug, label })),

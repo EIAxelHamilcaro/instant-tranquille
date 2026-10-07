@@ -1,5 +1,5 @@
 import { type Locale, locales } from "@/i18n/config";
-import { nightlyRange, pricedStays, ratedPlatforms } from "@/lib/platforms";
+import { nightlyRange, nightlyRates, ratedPlatforms } from "@/lib/platforms";
 import {
   absoluteUrl,
   type Href,
@@ -84,7 +84,7 @@ function toSchemaTime(value: string | null | undefined) {
 }
 
 function priceRange(pricing: PricingConfig, locale: Locale) {
-  const range = nightlyRange(pricedStays(pricing));
+  const range = nightlyRange(nightlyRates(pricing));
   if (!range) return undefined;
 
   const format = new Intl.NumberFormat(locale, {

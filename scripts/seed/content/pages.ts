@@ -25,7 +25,7 @@ export const HOME_PAGE = {
       "Châteaux, Beauval, concours à Lamotte-Beuvron, étangs et forêts : chaque guide répond à une question précise, avec les temps de route depuis la maison.",
     bookingTitle: "Réservez en direct ou sur votre plateforme habituelle",
     bookingText:
-      "Comptez 130 € la nuit pour 4 personnes, taxes et frais inclus. Relevé le 6 octobre 2026, ce prix était le même pour les 6 mois consultés, de novembre à août. Réservez sur Airbnb ou Booking, ou écrivez-nous pour une demande en direct.",
+      "Comptez 110 € la nuit pour 4 personnes : c'est le prix de base, auquel la plateforme ajoute ses frais de service et la taxe de séjour. Réservez sur Airbnb ou Booking, ou écrivez-nous pour une demande en direct.",
     meta: {
       title: "Gîte en Sologne, Romorantin-Lanthenay | L'Instant Tranquille",
       description:
@@ -48,7 +48,7 @@ export const HOME_PAGE = {
       "Châteaux, Beauval, shows at Lamotte-Beuvron, ponds and forests: each guide answers one precise question, with driving times from the house.",
     bookingTitle: "Book direct or on the platform you already use",
     bookingText:
-      "Allow €130 a night for 4 guests, taxes and fees included. Recorded on 6 October 2026, this price was the same for the 6 months checked, from November to August. Book on Airbnb or Booking, or email us for a direct request.",
+      "Allow €110 a night for 4 guests: this is the base price, to which the platform adds its service fee and the tourist tax. Book on Airbnb or Booking, or email us for a direct request.",
     meta: {
       title: "Sologne holiday cottage, Romorantin | L'Instant Tranquille",
       description:
@@ -324,12 +324,12 @@ export const SURROUNDINGS_PAGE = {
 export const RATES_PAGE = {
   fr: {
     title: "Tarifs du gîte et réservation",
-    lede: "Le prix dépend du nombre de voyageurs et de la durée du séjour. La maison se loue en entier, jusqu'à 6 personnes.",
+    lede: "Le prix de base dépend du nombre de voyageurs : à partir de 100 € la nuit. La maison se loue en entier, jusqu'à 6 personnes.",
     stepsTitle: "Comment réserver, en 3 étapes",
     steps: [
       {
         title: "Comptez voyageurs et nuits",
-        text: "Le prix dépend du nombre de voyageurs et de la durée du séjour. Le séjour dure au moins {sejour_minimum}.",
+        text: "Le prix de base par nuit dépend du nombre de voyageurs. Le séjour dure au moins {sejour_minimum}.",
       },
       {
         title: "Vérifiez vos dates",
@@ -346,18 +346,18 @@ export const RATES_PAGE = {
     meta: {
       title: "Tarifs et réservation du gîte à Romorantin-Lanthenay",
       description:
-        "Tarifs du gîte L'Instant Tranquille à Romorantin-Lanthenay : 130 € la nuit pour 4 personnes, taxes et frais inclus, prix relevés en octobre 2026.",
+        "Tarifs du gîte L'Instant Tranquille à Romorantin-Lanthenay : prix de base de 100 à 120 € la nuit selon le nombre de voyageurs, 2 nuits au minimum.",
       shareTitle: "Tarifs et réservation du gîte",
     },
   },
   en: {
     title: "Cottage rates and booking",
-    lede: "The price depends on the number of guests and the length of your stay. The house is rented as a whole, for up to 6 guests.",
+    lede: "The base price depends on the number of guests: from €100 a night. The house is rented as a whole, for up to 6 guests.",
     stepsTitle: "How to book, in 3 steps",
     steps: [
       {
         title: "Count guests and nights",
-        text: "The price depends on the number of guests and the length of stay. The minimum stay is {sejour_minimum}.",
+        text: "The base price per night depends on the number of guests. The minimum stay is {sejour_minimum}.",
       },
       {
         title: "Check your dates",
@@ -374,7 +374,7 @@ export const RATES_PAGE = {
     meta: {
       title: "Rates and booking: holiday cottage in Romorantin-Lanthenay",
       description:
-        "Rates for L'Instant Tranquille in Romorantin-Lanthenay: €130 a night for 4 guests, taxes and fees included, prices recorded in October 2026.",
+        "Rates for L'Instant Tranquille in Romorantin-Lanthenay: base price of €100 to €120 a night depending on the number of guests, 2-night minimum.",
       shareTitle: "Rates and how to book",
     },
   },

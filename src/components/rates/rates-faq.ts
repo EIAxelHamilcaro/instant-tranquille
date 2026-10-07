@@ -1,15 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import type { FaqItem } from "@/lib/jsonld";
-import {
-  BOOKING_PLATFORM_NAMES,
-  BOOKING_PLATFORMS,
-  formatPrice,
-  formatQuoteDate,
-  type PricedStay,
-  pricedStays,
-  referenceStay,
-} from "@/lib/platforms";
+import { formatPrice, nightlyRange, nightlyRates } from "@/lib/platforms";
 import type { PricingConfig, SiteSetting } from "@/payload-types";
 
 export async function ratesFaq(
@@ -22,39 +14,27 @@ export async function ratesFaq(
   const feeLabel = await getTranslations({ locale, namespace: "rates.fees" });
   const currency = pricing.currency || "EUR";
   const fees = pricing.additionalFees ?? [];
-  const stays = pricedStays(pricing);
-  const reference = referenceStay(stays);
-  const longest = stays.findLast((stay) => stay.guests === reference?.guests);
+  const rates = nightlyRates(pricing);
+  const entryPrice = nightlyRange(rates)?.min;
   const { checkIn, checkOut } = pricing.policies ?? {};
   const petsAllowed = settings.propertyDetails?.petsAllowed;
   const items: FaqItem[] = [];
 
   const list = (parts: string[]) =>
     new Intl.ListFormat(locale, { type: "conjunction" }).format(parts);
-  const platformPrices = (stay: PricedStay) =>
-    list(
-      BOOKING_PLATFORMS.flatMap((platform) => {
-        const total = stay.prices[platform];
 
-        return typeof total === "number"
-          ? [
-              common("on", {
-                platform: BOOKING_PLATFORM_NAMES[platform],
-                price: formatPrice(total, currency, locale),
-              }),
-            ]
-          : [];
-      }),
-    );
-
-  if (reference) {
+  if (rates.length > 0) {
     items.push({
       question: t("priceQuestion"),
       answer: t("priceAnswer", {
-        price: formatPrice(reference.nightly, currency, locale),
-        guests: reference.guests,
-        nights: reference.nights,
-        prices: platformPrices(reference),
+        prices: list(
+          rates.map((rate) =>
+            common("rateFor", {
+              price: formatPrice(rate.price, currency, locale),
+              guests: rate.guests,
+            }),
+          ),
+        ),
       }),
     });
   }
@@ -63,13 +43,11 @@ export async function ratesFaq(
     items.push({ question: t("seasonQuestion"), answer: pricing.note });
   }
 
-  if (longest && longest !== reference) {
+  if (typeof entryPrice === "number") {
     items.push({
-      question: t("weekQuestion", { nights: longest.nights }),
+      question: t("weekQuestion"),
       answer: t("weekAnswer", {
-        nights: longest.nights,
-        guests: longest.guests,
-        prices: platformPrices(longest),
+        price: formatPrice(entryPrice, currency, locale),
       }),
     });
   }
@@ -97,11 +75,7 @@ export async function ratesFaq(
               ),
             ),
           })
-        : pricing.quotedOn
-          ? t("feesAnswerNoneDated", {
-              date: formatQuoteDate(pricing.quotedOn, locale),
-            })
-          : t("feesAnswerNone"),
+        : t("feesAnswerNone"),
   });
 
   if (checkIn && checkOut) {

@@ -1837,7 +1837,7 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
- * Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions.
+ * Votre prix de base par nuit, les horaires d'arrivée et de départ, les conditions.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pricing-config".
@@ -1846,26 +1846,15 @@ export interface PricingConfig {
   id: number;
   currency?: string | null;
   /**
-   * Une ligne par cas : un nombre de voyageurs et une durée. Le site calcule tout seul le prix par nuit.
+   * Une ligne par nombre de voyageurs : 2, 4 et 6. Écrivez le prix d'une seule nuit, celui que vous avez réglé sur Airbnb et Booking, sans les frais de service ni la taxe de séjour. Le site ne calcule aucun total : il affiche ces prix et précise que la plateforme ajoute ses frais.
    */
-  quotes?:
+  nightlyRates?:
     | {
-        /**
-         * Le nombre de voyageurs saisi dans la recherche sur la plateforme.
-         */
         guests: '2' | '4' | '6';
         /**
-         * Le nombre de nuits saisi dans la recherche sur la plateforme.
+         * En euros, sans le symbole.
          */
-        nights: '2' | '7';
-        /**
-         * Recopiez le prix total affiché par Airbnb pour ce nombre de nuits et de voyageurs, taxes et frais inclus. Ne recopiez pas un prix en promotion (prix barré) : prenez le prix normal. Laissez vide si vous ne l'avez pas relevé.
-         */
-        airbnb?: number | null;
-        /**
-         * Recopiez le prix total affiché par Booking pour ce nombre de nuits et de voyageurs, taxes et frais inclus, au tarif avec annulation gratuite. Laissez vide si vous ne l'avez pas relevé.
-         */
-        booking?: number | null;
+        price: number;
         id?: string | null;
       }[]
     | null;
@@ -1874,15 +1863,11 @@ export interface PricingConfig {
    */
   minimumStay?: number | null;
   /**
-   * Le jour où vous avez recopié les prix. Cette date s'affiche sur le site à côté des prix.
-   */
-  quotedOn?: string | null;
-  /**
    * Votre réponse à cette question, en une ou deux phrases. Elle s'affiche dans les questions fréquentes de la page tarifs. Laissez vide pour retirer la question.
    */
   note?: string | null;
   /**
-   * À laisser vide tant que les prix des plateformes sont déjà taxes et frais inclus. N'ajoutez une ligne que pour un vrai supplément facturé en plus.
+   * Un supplément que vous facturez vous-même en plus du prix de base, comme le ménage. Les frais de service de la plateforme et la taxe de séjour n'ont pas leur place ici : le site les annonce déjà.
    */
   additionalFees?:
     | {
@@ -2270,17 +2255,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  */
 export interface PricingConfigSelect<T extends boolean = true> {
   currency?: T;
-  quotes?:
+  nightlyRates?:
     | T
     | {
         guests?: T;
-        nights?: T;
-        airbnb?: T;
-        booking?: T;
+        price?: T;
         id?: T;
       };
   minimumStay?: T;
-  quotedOn?: T;
   note?: T;
   additionalFees?:
     | T
