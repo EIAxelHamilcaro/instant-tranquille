@@ -84,14 +84,14 @@ export const ContactPage = pageGlobal({
             {
               name: "datesHint",
               type: "text",
-              label: "Exemple sous le champ des dates",
+              label: "Phrase sous les dates",
               localized: true,
               maxLength: HINT_MAX,
               admin: {
                 condition: (_, form) => form?.datesField !== "hidden",
                 description:
-                  "Montre au voyageur comment écrire ses dates. Laissez vide pour garder l'exemple habituel.",
-                placeholder: "Par exemple : du 12 au 15 juillet, 4 personnes.",
+                  "Le voyageur choisit son arrivée et son départ dans un calendrier. Cette phrase s'affiche juste en dessous. Laissez vide pour garder la phrase habituelle.",
+                placeholder: "Dates souples ? Dites-le dans le message.",
                 components: charCount(HINT_MAX),
               },
             },

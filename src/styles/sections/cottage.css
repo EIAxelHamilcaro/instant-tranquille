@@ -63,6 +63,27 @@
     }
   }
 
+  .sejour {
+    grid-template-columns: 1fr 1fr;
+    min-width: 0;
+  }
+
+  .sejour legend {
+    padding-bottom: 0.4rem;
+    font-family: var(--sans);
+    font-size: var(--petit);
+    font-weight: 500;
+  }
+
+  .sejour label {
+    font-weight: 400;
+    color: var(--encre-douce);
+  }
+
+  .sejour > .indice {
+    grid-column: 1 / -1;
+  }
+
   .piege {
     position: absolute;
     left: -200vw;
