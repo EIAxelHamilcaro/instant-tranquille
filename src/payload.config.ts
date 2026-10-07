@@ -52,6 +52,7 @@ import {
   ADMIN_MANIFEST_PATH,
 } from "@/lib/admin-app";
 import { adminTranslations } from "@/lib/admin-translations";
+import { assistantAccess } from "@/lib/assistant";
 import { readEmailConfig } from "@/lib/email/email-config";
 import { workerEmailAdapter } from "@/lib/email/payload-email-adapter";
 import { frenchSeoTab, seoFields } from "@/lib/seo-fields";
@@ -211,6 +212,7 @@ export default buildConfig({
     redirectsPlugin({ collections: ["guides"], overrides: Redirects }),
     importExportPlugin(spreadsheetExports),
     oneTapSpreadsheet,
+    assistantAccess,
     ...(blobToken
       ? [
           vercelBlobStorage({

@@ -5,7 +5,7 @@ import {
 } from "@payloadcms/richtext-lexical";
 import type { CollectionConfig, FieldHook } from "payload";
 import { GuideProgramme } from "@/collections/blocks/GuideProgramme";
-import { isAuthenticated } from "@/lib/access";
+import { isAuthenticated, isPublishedOrAuthenticated } from "@/lib/access";
 import {
   advanced,
   charCount,
@@ -94,8 +94,7 @@ export const Guides: CollectionConfig = {
   },
   access: {
     create: isAuthenticated,
-    read: ({ req: { user } }) =>
-      user ? true : { _status: { equals: "published" } },
+    read: isPublishedOrAuthenticated,
     update: isAuthenticated,
     delete: isAuthenticated,
   },
