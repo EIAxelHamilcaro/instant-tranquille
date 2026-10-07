@@ -11,7 +11,18 @@ const siteUrl = new URL(
 const isLocalSite =
   !process.env.VERCEL && ["localhost", "127.0.0.1"].includes(siteUrl.hostname);
 
-const ROUTED_SEGMENTS = ["fr", "en", "api", "admin", "og", "_next"];
+const ROUTED_SEGMENTS = [
+  "fr",
+  "en",
+  "api",
+  "admin",
+  "og",
+  "_next",
+  "airbnb",
+  "booking",
+  "google",
+  "gites-de-france",
+];
 
 const MERGED_GUIDES = {
   "hebergement-cavaliers-lamotte-beuvron": "tourisme-equestre-en-sologne",
