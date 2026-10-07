@@ -11,6 +11,7 @@
     "guidesTitle": "Quel guide lire avant de partir ?",
     "guidesLink": "Voir les {count} guides de séjour",
     "categoriesNav": "Aller à une catégorie de lieux",
+    "placesNav": "Passer d'une catégorie de lieux à l'autre",
     "placesUnit": "{count, plural, one { lieu} other { lieux}}",
     "categoryRange": "{count, plural, one {# lieu, à {min} du gîte en voiture} other {# lieux, de {min} à {max} du gîte en voiture}}",
     "tickerLabel": "Temps de route en voiture depuis le gîte",

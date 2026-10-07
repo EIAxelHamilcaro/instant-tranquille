@@ -11,6 +11,7 @@
     "guidesTitle": "Which guide should you read before you go?",
     "guidesLink": "See all {count} travel guides",
     "categoriesNav": "Jump to a category of places",
+    "placesNav": "Move between categories of places",
     "placesUnit": "{count, plural, one { place} other { places}}",
     "categoryRange": "{count, plural, one {# place, {min} by car from the cottage} other {# places, {min} to {max} by car from the cottage}}",
     "tickerLabel": "Driving times from the cottage",
