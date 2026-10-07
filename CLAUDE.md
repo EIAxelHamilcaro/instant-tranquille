@@ -38,7 +38,7 @@ node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le site
 ## Production et déploiement
 
 - Projet Vercel `instant-tranquille` (équipe `ei-axel-hamilcaro`, Hobby, région `fra1`). L'apex redirige en 308 vers `www`. Cloudflare en « DNS seul », pas de proxy devant Vercel.
-- Déploiement : `vercel deploy --prod --yes --force` depuis l'arbre de travail. Rien n'est commité, `main` est en retard sur la prod : **un push sur `main` redéploierait l'ancien code sur la nouvelle base**.
+- Déploiement : la prod suit `main`, qui ne reçoit que des PR depuis `develop`. Le contenu se met à jour avant le déploiement (voir `docs/REFONTE.md`).
 - Prod sur la base Neon `instant_tranquille_v2`. L'ancienne `neondb` reste en lecture seule pour un retour arrière (`vercel rollback` puis `DATABASE_URL` sur `/neondb`). `DATABASE_URL` vient de l'intégration Neon : une resynchronisation peut la remettre sur `neondb`.
 - Build Vercel = `next build`, ni migration ni seed. Contenu de prod : seed puis `apply-corrections` sur la base v2 (avec `SEED_ALLOW_REMOTE=1`), PUIS déploiement (le build lit le contenu ; un seed hors Vercel ne revalide pas le cache du site). Le seed ne remplit un global de page que si le champ est vide, d'où `apply-corrections.ts`.
 - `.vercelignore` exclut `.env*`, `.claude`, `media`, `data`, `scripts/seed/assets` et remplace `.gitignore` pour le CLI : le garder complet.
@@ -50,7 +50,7 @@ node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le site
 ## Architecture
 
 - `src/payload.config.ts` : collections `Places` (lieux et temps de route), `Guides` (articles SEO), `OfficialSites`, `Amenities`, `Testimonials`, `ContactMessages`, `Media`, `Users`. Globals : une par page (`src/globals/pages/` : `HomePage`, `CottagePage`, `SurroundingsPage`, `GuidesPage`, `RatesPage`, `ContactPage`, fabriquées par `pageGlobal`), plus `SiteSettings` (faits de la maison, NAP, hôtes, plateformes, calendriers iCal, FAQ, écran d'entrée) et `PricingConfig`. Tout texte éditorial vit dans le CMS, localisé FR et EN ; les messages next-intl (`src/i18n/messages/{fr,en}/<namespace>.json`, fusionnés par `request.ts`) ne gardent que la microcopie d'interface.
-- Aucun envoi d'email : pas d'adapter email Payload. Les messages de contact ne se lisent que dans l'admin, « mot de passe oublié » n'envoie rien.
+- **Emails** : `contact@instant-tranquille.com` est la seule adresse affichée. Le Worker Cloudflare `infra/email-worker` notifie les hôtes à chaque message du formulaire (`contact/actions.ts`, via `after()`) et transfère les emails écrits à `contact@` ; destinataires dans son secret `CONTACT_NOTIFY_TO`. Adapter email Payload dans `src/lib/email/` (« mot de passe oublié », non testé). DMARC en `p=reject` et MTA-STS en `enforce` (`infra/mta-sts-worker`) : tout nouvel expéditeur au nom du domaine doit signer en DKIM aligné.
 - **Admin** : composants dans `src/components/payload/`, style dans `src/styles/admin.css` (jamais dans `globals.css`), libellés français dans `src/lib/admin-translations.ts`. Après ajout d'un composant : `pnpm generate:importmap`.
 - **Automatisations** : `src/lib/routing/` (adresse d'un lieu, puis Nominatim et OSRM, mêmes arrondis que le seed ; le seed passe `context: { skipRouting: true }`), `src/lib/availability/` (calendriers iCal Airbnb et Booking, lus côté serveur, cache 2 h).
 - `src/app/(frontend)/[locale]/` : `/`, `/le-gite`, `/les-alentours`, `/guides`, `/guides/[slug]`, `/tarifs-reservation`, `/contact`, `[...rest]` (404 localisée). Livret d'accueil supprimé (décision du client). Hors locale : `og/`, `llms.txt`, `llms-full.txt`, `sitemap.ts`, `robots.ts`, `manifest.ts`, `api/preview`.
@@ -107,7 +107,8 @@ node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le site
 `DATABASE_URL`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL` (vrai domaine en prod),
 `BLOB_READ_WRITE_TOKEN`, `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (posées sur
 Vercel, Production et Preview). Optionnelles : `PREVIEW_SECRET`, `SEED_ADMIN_EMAIL` /
-`SEED_ADMIN_PASSWORD`, `SEED_ALLOW_REMOTE`. Pas de `RESEND_API_KEY` : aucun code d'envoi.
+`SEED_ADMIN_PASSWORD`, `SEED_ALLOW_REMOTE`. Emails : `EMAIL_WORKER_URL` et `EMAIL_WORKER_SECRET`
+(Vercel, Production et Preview).
 
 ## État et feuille de route
 

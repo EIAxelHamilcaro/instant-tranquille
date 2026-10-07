@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "instant-tranquille-mta-sts",
+  "account_id": "3bc01860f5cfd8922be4d225dfce3584",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "mta-sts.instant-tranquille.com", "custom_domain": true }
+  ]
+}
