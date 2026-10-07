@@ -251,7 +251,7 @@ export function cottageJsonLd({
       "@type": "Review",
       author: { "@type": "Person", name: review.guestName },
       reviewBody: review.text,
-      datePublished: review.stayDate ?? undefined,
+      datePublished: (review.stayDate ?? review.createdAt).slice(0, 10),
       reviewRating: {
         "@type": "Rating",
         ratingValue: review.rating,
