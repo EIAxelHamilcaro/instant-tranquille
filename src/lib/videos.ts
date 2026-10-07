@@ -3,7 +3,7 @@ import manifest from "@/lib/video-manifest.json";
 
 export const FILM_SPOKEN_LOCALE: Locale = "fr";
 
-export const FILM_PUBLISHED_ON = "2026-10-06";
+export const FILM_PUBLISHED_ON = "2026-10-06T08:00:00+02:00";
 
 export interface VideoManifest {
   files: string[];
