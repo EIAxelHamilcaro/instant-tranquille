@@ -53,10 +53,11 @@ export const PricingConfig: GlobalConfig = {
               labels: { singular: "Prix relevé", plural: "Prix relevés" },
               admin: {
                 description:
-                  "Une ligne par cas : un nombre de voyageurs et une durée. Le site calcule tout seul le prix par nuit.",
+                  "Une ligne par cas : un nombre de voyageurs et une durée. Recopiez le prix total affiché par la plateforme pour ce cas, taxes et frais inclus : le prix normal sur Airbnb (pas un prix barré), le tarif avec annulation gratuite sur Booking. Laissez vide un prix que vous n'avez pas relevé. Le site calcule tout seul le prix par nuit.",
+                initCollapsed: true,
                 components: {
                   RowLabel: rowLabel(
-                    "{guests} voyageurs, {nights} nuits",
+                    "{guests} voyageurs, {nights} nuits, Airbnb {airbnb} €, Booking {booking} €",
                     "Prix relevé",
                   ),
                 },
@@ -75,11 +76,7 @@ export const PricingConfig: GlobalConfig = {
                         { label: "4 voyageurs", value: "4" },
                         { label: "6 voyageurs", value: "6" },
                       ],
-                      admin: {
-                        width: "50%",
-                        description:
-                          "Le nombre de voyageurs saisi dans la recherche sur la plateforme.",
-                      },
+                      admin: { width: "50%" },
                     },
                     {
                       name: "nights",
@@ -90,11 +87,7 @@ export const PricingConfig: GlobalConfig = {
                         { label: "2 nuits", value: "2" },
                         { label: "7 nuits (une semaine)", value: "7" },
                       ],
-                      admin: {
-                        width: "50%",
-                        description:
-                          "Le nombre de nuits saisi dans la recherche sur la plateforme.",
-                      },
+                      admin: { width: "50%" },
                     },
                   ],
                 },
@@ -106,41 +99,18 @@ export const PricingConfig: GlobalConfig = {
                       type: "number",
                       label: "Prix total sur Airbnb (€)",
                       min: 0,
-                      admin: {
-                        width: "50%",
-                        description:
-                          "Recopiez le prix total affiché par Airbnb pour ce nombre de nuits et de voyageurs, taxes et frais inclus. Ne recopiez pas un prix en promotion (prix barré) : prenez le prix normal. Laissez vide si vous ne l'avez pas relevé.",
-                      },
+                      admin: { width: "50%" },
                     },
                     {
                       name: "booking",
                       type: "number",
                       label: "Prix total sur Booking (€)",
                       min: 0,
-                      admin: {
-                        width: "50%",
-                        description:
-                          "Recopiez le prix total affiché par Booking pour ce nombre de nuits et de voyageurs, taxes et frais inclus, au tarif avec annulation gratuite. Laissez vide si vous ne l'avez pas relevé.",
-                      },
+                      admin: { width: "50%" },
                     },
                   ],
                 },
               ],
-            },
-            {
-              name: "minimumStay",
-              type: "number",
-              label: "Séjour minimum (nuits)",
-              defaultValue: 2,
-              min: 1,
-              admin: {
-                description:
-                  "Le plus petit nombre de nuits que les plateformes acceptent.",
-                placeholder: "2",
-                components: help(
-                  "Ce nombre sert aussi au calendrier des disponibilités : un trou plus court que le séjour minimum entre deux réservations est affiché comme pris, puisque personne ne peut le réserver.",
-                ),
-              },
             },
             {
               name: "quotedOn",
@@ -155,6 +125,21 @@ export const PricingConfig: GlobalConfig = {
                   "Le jour où vous avez recopié les prix. Cette date s'affiche sur le site à côté des prix.",
                 components: help(
                   "Au bout de 90 jours, le résumé vous propose de relever les prix à nouveau. Si rien n'a changé sur Airbnb et Booking, mettez simplement la date du jour.",
+                ),
+              },
+            },
+            {
+              name: "minimumStay",
+              type: "number",
+              label: "Séjour minimum (nuits)",
+              defaultValue: 2,
+              min: 1,
+              admin: {
+                description:
+                  "Le plus petit nombre de nuits que les plateformes acceptent.",
+                placeholder: "2",
+                components: help(
+                  "Ce nombre sert aussi au calendrier des disponibilités : un trou plus court que le séjour minimum entre deux réservations est affiché comme pris, puisque personne ne peut le réserver.",
                 ),
               },
             },

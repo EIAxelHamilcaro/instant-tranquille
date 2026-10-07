@@ -19,6 +19,7 @@ const SUMMARY_MAX = 220;
 export const Places: CollectionConfig = {
   slug: "places",
   lockDocuments: false,
+  trash: true,
   labels: { singular: "Lieu", plural: "Lieux aux alentours" },
   hooks: {
     ...revalidateCollection("places"),

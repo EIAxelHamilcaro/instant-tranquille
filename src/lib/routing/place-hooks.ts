@@ -4,6 +4,7 @@ import {
   type PayloadRequest,
   ValidationError,
 } from "payload";
+import { isHostAccount } from "@/lib/access";
 import type { GeoPoint } from "@/lib/places";
 import { type PlacePosition, resolvePosition } from "./position";
 import { routeServices } from "./services";
@@ -50,24 +51,28 @@ export const computeRoute: CollectionBeforeValidateHook = async ({
   };
   if (isComplete({ ...originalDoc, ...computed })) return computed;
 
-  throw new ValidationError({
-    collection: "places",
-    errors: [
-      {
-        path: "address",
-        message:
-          message ??
-          "Écrivez l'adresse du lieu : elle sert à le placer sur la carte et à calculer le temps de route.",
-      },
-    ],
-  });
+  throw new ValidationError(
+    {
+      collection: "places",
+      errors: [
+        {
+          path: "address",
+          label: "Adresse du lieu",
+          message:
+            message ??
+            "Écrivez l'adresse du lieu : elle sert à le placer sur la carte et à calculer le temps de route.",
+        },
+      ],
+    },
+    req.t,
+  );
 };
 
 export const recalculateRoute: Endpoint = {
   path: "/:id/recalculate-route",
   method: "post",
   handler: async (req) => {
-    if (!req.user)
+    if (!isHostAccount(req.user))
       return Response.json(
         { message: "Connectez-vous pour recalculer un temps de route." },
         { status: 401 },

@@ -28,6 +28,7 @@ const { seedCottage } = await import("./cottage");
 const { seedPlaces } = await import("./places");
 const { seedGuides } = await import("./guides");
 const { retireGuides } = await import("./retire");
+const { seedRedirects } = await import("./redirects");
 const { seedOfficialSites } = await import("./official-sites");
 const { seedPages } = await import("./pages");
 const { seedPhotos, attachPhotos } = await import("./photos");
@@ -43,6 +44,7 @@ await seedCottage(payload);
 const places = await seedPlaces(payload);
 await retireGuides(payload);
 const guides = await seedGuides(payload, { media, places });
+await seedRedirects(payload);
 
 const placePhotos = await seedPhotos(
   payload,

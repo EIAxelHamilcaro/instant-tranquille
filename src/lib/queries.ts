@@ -3,6 +3,7 @@ import { draftMode } from "next/headers";
 import type { CollectionSlug, GlobalSlug, Where } from "payload";
 import type { Locale } from "@/i18n/config";
 import type { RosePlace } from "@/lib/places";
+import type { RedirectRule } from "@/lib/redirects";
 import type { Config, Media, Place } from "@/payload-types";
 import { getPayload } from "./payload";
 
@@ -171,3 +172,29 @@ export async function getPublishedGuideSlugs() {
 
   return docs.map((guide) => guide.slug);
 }
+
+export const getRedirectRules = unstable_cache(
+  async (): Promise<RedirectRule[]> => {
+    const payload = await getPayload();
+    const { docs } = await payload.find({
+      collection: "redirects",
+      pagination: false,
+      depth: 1,
+      select: { from: true, to: true },
+    });
+
+    return docs.flatMap(({ from, to }): RedirectRule[] => {
+      if (to?.type === "custom") {
+        return to.url ? [{ from, to: { kind: "address", url: to.url } }] : [];
+      }
+
+      const guide = to?.reference?.value;
+
+      return typeof guide === "object" && guide?._status === "published"
+        ? [{ from, to: { kind: "guide", slug: guide.slug } }]
+        : [];
+    });
+  },
+  ["redirect-rules"],
+  { revalidate: ONE_DAY, tags: ["redirects", "guides"] },
+);

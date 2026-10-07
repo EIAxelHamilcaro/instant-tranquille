@@ -5,7 +5,7 @@ import {
 } from "@payloadcms/richtext-lexical";
 import type { CollectionConfig, FieldHook } from "payload";
 import { GuideProgramme } from "@/collections/blocks/GuideProgramme";
-import { isAuthenticated } from "@/lib/access";
+import { isAuthenticated, isPublishedOrAuthenticated } from "@/lib/access";
 import {
   advanced,
   charCount,
@@ -13,6 +13,10 @@ import {
   rowLabel,
   screenIntro,
 } from "@/lib/admin-fields";
+import {
+  redirectFormerSlug,
+  rememberLiveSlug,
+} from "@/lib/guide-redirect-hooks";
 import { GUIDE_THEME_OPTIONS } from "@/lib/place-categories";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -25,6 +29,8 @@ import {
 const TITLE_MAX = 90;
 const EXCERPT_MAX = 240;
 const SLUG_MAX = 70;
+const PUBLISHED_IN_THE_MORNING = "'le matin'";
+const ONE_SLOT_A_DAY = 24 * 60;
 
 const slugFromTitle: FieldHook = ({ value, data }) => {
   if (value || data?._status !== "published") return value;
@@ -39,12 +45,28 @@ const slugFromTitle: FieldHook = ({ value, data }) => {
     .replace(/^-|-$/g, "");
 };
 
+const guideCache = revalidateCollection("guides");
+
 export const Guides: CollectionConfig = {
   slug: "guides",
   lockDocuments: false,
+  trash: true,
   labels: { singular: "Guide", plural: "Guides de séjour" },
-  hooks: revalidateCollection("guides"),
-  versions: { drafts: { autosave: { interval: 2000 } }, maxPerDoc: 15 },
+  hooks: {
+    beforeChange: [rememberLiveSlug],
+    afterChange: [...guideCache.afterChange, redirectFormerSlug],
+    afterDelete: guideCache.afterDelete,
+  },
+  versions: {
+    drafts: {
+      autosave: { interval: 2000 },
+      schedulePublish: {
+        timeFormat: PUBLISHED_IN_THE_MORNING,
+        timeIntervals: ONE_SLOT_A_DAY,
+      },
+    },
+    maxPerDoc: 15,
+  },
   admin: {
     useAsTitle: "title",
     group: "Autour du gîte",
@@ -72,8 +94,7 @@ export const Guides: CollectionConfig = {
   },
   access: {
     create: isAuthenticated,
-    read: ({ req: { user } }) =>
-      user ? true : { _status: { equals: "published" } },
+    read: isPublishedOrAuthenticated,
     update: isAuthenticated,
     delete: isAuthenticated,
   },
@@ -335,7 +356,7 @@ export const Guides: CollectionConfig = {
           hooks: { beforeValidate: [slugFromTitle] },
           admin: {
             description:
-              "Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Ne la changez plus ensuite : les liens existants seraient cassés.",
+              "Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Si vous la changez ensuite, l'ancienne adresse renvoie toute seule vers la nouvelle.",
             placeholder: "zooparc-de-beauval",
             components: help(
               "L'adresse d'un guide s'écrit instant-tranquille.com/guides/ suivi de ce texte. Avec « zooparc-de-beauval », la page est instant-tranquille.com/guides/zooparc-de-beauval. Des mots simples, sans accent, séparés par des tirets.",

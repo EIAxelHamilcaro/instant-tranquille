@@ -56,7 +56,11 @@ const NAVIGATION: { label: string; items: NavItem[] }[] = [
   },
   {
     label: "Réglages",
-    items: [global("site-settings"), collection("users")],
+    items: [
+      global("site-settings"),
+      collection("redirects"),
+      collection("users"),
+    ],
   },
 ];
 

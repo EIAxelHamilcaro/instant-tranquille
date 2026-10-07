@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import {
   isAuthenticated,
-  isAuthenticatedField,
+  isHostField,
   isPublishedOrAuthenticated,
 } from "@/lib/access";
 import {
@@ -532,8 +532,8 @@ export const SiteSettings: GlobalConfig = {
               type: "group",
               label: "Calendriers des disponibilités",
               access: {
-                read: isAuthenticatedField,
-                update: isAuthenticatedField,
+                read: isHostField,
+                update: isHostField,
               },
               admin: {
                 description:
