@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/config";
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 };
 export const SHARE_IMAGE_TYPE = "image/jpeg";
 export const SHARE_IMAGE_EXTENSION = ".jpg";
-export const SHARE_TEMPLATE_VERSION = 1;
+export const SHARE_TEMPLATE_VERSION = 4;
 
 export const SHARE_PAGES = [
   "home",
@@ -48,4 +48,23 @@ export function parseShareKey(segments: string[]): ShareTarget | null {
 export interface ShareImage {
   url: string;
   alt: string;
+}
+
+export const SHARE_SCENES = [
+  "opening",
+  "pond",
+  "pond-heron",
+  "forest",
+] as const;
+
+export type ShareScene = (typeof SHARE_SCENES)[number];
+
+export interface ShareFigure {
+  value: string;
+  label: string;
+}
+
+export interface SharePanel {
+  scene: ShareScene;
+  figures: ShareFigure[];
 }

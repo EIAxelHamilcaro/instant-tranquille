@@ -17,6 +17,8 @@ import {
   SHARE_TEMPLATE_VERSION,
   type ShareImage,
   type SharePage,
+  type SharePanel,
+  type ShareScene,
   type ShareTarget,
   shareImagePath,
 } from "./spec";
@@ -29,6 +31,7 @@ export interface ShareContent {
   proof: string | null;
   photo: Media | null;
   alt: string;
+  panel: SharePanel;
 }
 
 const HOME_COMMUNE = "romorantin";
@@ -51,6 +54,7 @@ const GENERIC_PLACE_WORDS = new Set([
   "croisiere",
 ]);
 const SHOWN_PLATFORMS = 2;
+const FOREST_THEMES = new Set<Guide["theme"]>(["nature", "equestre"]);
 const PAGE_GLOBALS = {
   home: "home-page",
   cottage: "cottage-page",
@@ -92,10 +96,14 @@ function namedPlace(title: string, places: Place[]) {
   );
 }
 
+function guideSubject(title: string, places: Place[]) {
+  return places.length === 1 ? places[0] : namedPlace(title, places);
+}
+
 function driveProof(title: string, places: Place[], t: ShareTranslator) {
   if (places.length === 0) return null;
 
-  const subject = places.length === 1 ? places[0] : namedPlace(title, places);
+  const subject = guideSubject(title, places);
   if (subject)
     return t("guide.single", { drive: formatDrive(subject.driveMin) });
 
@@ -169,6 +177,97 @@ async function pageProof(page: SharePage, locale: Locale, t: ShareTranslator) {
     : null;
 }
 
+async function pagePanel(
+  page: SharePage,
+  locale: Locale,
+  t: ShareTranslator,
+): Promise<SharePanel> {
+  if (page === "home" || page === "contact") {
+    return { scene: "opening", figures: [] };
+  }
+
+  if (page === "surroundings") {
+    const count = (await getPlaces(locale)).length;
+
+    return {
+      scene: "forest",
+      figures: [
+        { value: String(count), label: t("figures.places", { count }) },
+      ],
+    };
+  }
+
+  if (page === "guides") {
+    const count = (await getGuides(locale)).length;
+
+    return {
+      scene: "forest",
+      figures: [
+        { value: String(count), label: t("figures.guides", { count }) },
+      ],
+    };
+  }
+
+  const settings = await getGlobal("site-settings", locale);
+
+  if (page === "rates") {
+    return {
+      scene: "pond",
+      figures: ratedPlatforms(settings)
+        .slice(0, SHOWN_PLATFORMS)
+        .map((platform) => ({
+          value: formatRating(platform.rating ?? 0, locale),
+          label: t("figures.rating", {
+            scale: platform.ratingScale ?? 5,
+            platform: platformName(platform),
+          }),
+        })),
+    };
+  }
+
+  const facts = await getTranslations({ locale, namespace: "cottage.facts" });
+  const { surface, maxGuests, bedrooms, bathrooms } =
+    settings.propertyDetails ?? {};
+
+  return {
+    scene: "pond-heron",
+    figures: [
+      { value: surface, label: facts("surface") },
+      { value: maxGuests, label: facts("guests", { count: maxGuests ?? 0 }) },
+      { value: bedrooms, label: facts("bedrooms", { count: bedrooms ?? 0 }) },
+      {
+        value: bathrooms,
+        label: facts("bathrooms", { count: bathrooms ?? 0 }),
+      },
+    ].flatMap(({ value, label }) =>
+      value ? [{ value: String(value), label }] : [],
+    ),
+  };
+}
+
+function guideFigures(title: string, places: Place[], t: ShareTranslator) {
+  if (places.length === 0) return [];
+
+  const subject = guideSubject(title, places);
+  if (subject) {
+    return [
+      { value: formatDrive(subject.driveMin), label: t("figures.drive") },
+    ];
+  }
+
+  const count = places.length;
+  const nearest = Math.min(...places.map((place) => place.driveMin));
+
+  return [
+    { value: String(count), label: t("figures.guidePlaces", { count }) },
+    { value: formatDrive(nearest), label: t("figures.nearest") },
+  ];
+}
+
+function guideScene(guide: Guide): ShareScene {
+  return FOREST_THEMES.has(guide.theme) ? "forest" : "pond-heron";
+}
+
 async function pagePhoto(page: SharePage, locale: Locale) {
   const home = () => getGlobal("home-page", locale);
 
@@ -227,9 +326,10 @@ async function pageContent(
     getTranslations({ locale, namespace: "share" }),
     getTranslations({ locale, namespace: "common" }),
   ]);
-  const [proof, photo, global] = await Promise.all([
+  const [proof, photo, panel, global] = await Promise.all([
     pageProof(page, locale, t),
     pagePhoto(page, locale),
+    pagePanel(page, locale, t),
     getGlobal(PAGE_GLOBALS[page], locale),
   ]);
   const title = global.meta?.shareTitle || shortTitle(global.title);
@@ -238,6 +338,7 @@ async function pageContent(
     title,
     proof,
     photo,
+    panel,
     alt: describe(title, photo, common("siteName")),
   };
 }
@@ -269,6 +370,7 @@ async function guideContent(
     title,
     proof: driveProof(title, cited, t),
     photo,
+    panel: { scene: guideScene(guide), figures: guideFigures(title, cited, t) },
     alt: describe(title, photo, common("siteName")),
   };
 }
@@ -284,7 +386,7 @@ export async function shareContent(
   return guide ? guideContent(guide, locale) : null;
 }
 
-function contentVersion({ title, proof, photo }: ShareContent) {
+function contentVersion({ title, proof, photo, panel }: ShareContent) {
   const fingerprint = JSON.stringify([
     SHARE_TEMPLATE_VERSION,
     title,
@@ -293,6 +395,7 @@ function contentVersion({ title, proof, photo }: ShareContent) {
     photo?.updatedAt,
     photo?.focalX,
     photo?.focalY,
+    panel,
   ]);
 
   return createHash("sha1").update(fingerprint).digest("hex").slice(0, 10);

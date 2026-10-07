@@ -18,6 +18,14 @@
     "guide": {
       "single": "À {drive} du gîte en voiture",
       "range": "{count} lieux, de {min} à {max} du gîte"
+    },
+    "figures": {
+      "places": "{count, plural, one {lieu} other {lieux}} autour du gîte",
+      "guides": "{count, plural, one {guide de séjour} other {guides de séjour}}",
+      "drive": "du gîte en voiture",
+      "guidePlaces": "{count, plural, one {lieu} other {lieux}} dans ce guide",
+      "nearest": "pour le plus proche",
+      "rating": "sur {scale}, {platform}"
     }
   }
 }

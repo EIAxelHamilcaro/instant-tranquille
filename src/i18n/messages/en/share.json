@@ -18,6 +18,14 @@
     "guide": {
       "single": "{drive} by car from the cottage",
       "range": "{count} places, {min} to {max} from the cottage"
+    },
+    "figures": {
+      "places": "{count, plural, one {place} other {places}} around the cottage",
+      "guides": "{count, plural, one {travel guide} other {travel guides}}",
+      "drive": "by car from the cottage",
+      "guidePlaces": "{count, plural, one {place} other {places}} in this guide",
+      "nearest": "to the nearest one",
+      "rating": "out of {scale}, {platform}"
     }
   }
 }
