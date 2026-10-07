@@ -5,7 +5,7 @@ import type {
 
 export interface ContactFormState {
   status: "idle" | "success" | "error";
-  formError?: "captcha" | "server";
+  formError?: "captcha" | "server" | "tooMany";
   fieldErrors: Partial<Record<ContactField, string>>;
   values: Partial<ContactValues>;
 }

@@ -9,6 +9,8 @@ export default function ListCell({ cellData, yes, no, suffix }: ListCellProps) {
   if (suffix)
     return typeof cellData === "number" ? `${cellData} ${suffix}` : null;
 
+  if (typeof cellData === "string") return cellData;
+
   const label = cellData === true ? yes : no;
   if (!label) return null;
 

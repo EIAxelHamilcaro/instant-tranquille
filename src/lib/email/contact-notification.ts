@@ -1,4 +1,4 @@
-import type { ContactValues } from "@/components/contact/contact-schema";
+import type { ContactEnquiry } from "@/components/contact/contact-schema";
 import type { EmailWorkerRequest } from "@/lib/email/email-worker-contract";
 
 const HTML_ENTITIES: Record<string, string> = {
@@ -24,7 +24,7 @@ export function headerSafe(value: string) {
     .trim();
 }
 
-function subjectOf({ name, dates }: ContactValues) {
+function subjectOf({ name, dates }: ContactEnquiry) {
   const traveller = headerSafe(name);
   const stay = headerSafe(dates);
 
@@ -33,7 +33,7 @@ function subjectOf({ name, dates }: ContactValues) {
     : `Nouveau message de ${traveller}`;
 }
 
-function rowsOf({ name, email, phone, dates }: ContactValues) {
+function rowsOf({ name, email, phone, dates }: ContactEnquiry) {
   return [
     { label: "Nom", value: name },
     { label: "E-mail", value: email },
@@ -42,7 +42,7 @@ function rowsOf({ name, email, phone, dates }: ContactValues) {
   ];
 }
 
-function textOf(values: ContactValues) {
+function textOf(values: ContactEnquiry) {
   const fields = rowsOf(values).map(
     ({ label, value }) => `${label} : ${value}`,
   );
@@ -60,7 +60,7 @@ function textOf(values: ContactValues) {
   ].join("\n");
 }
 
-function htmlOf(values: ContactValues) {
+function htmlOf(values: ContactEnquiry) {
   const rows = rowsOf(values)
     .map(
       ({ label, value }) =>
@@ -79,7 +79,7 @@ function htmlOf(values: ContactValues) {
 }
 
 export function buildContactNotification(
-  values: ContactValues,
+  values: ContactEnquiry,
 ): EmailWorkerRequest {
   return {
     replyTo: headerSafe(values.email),

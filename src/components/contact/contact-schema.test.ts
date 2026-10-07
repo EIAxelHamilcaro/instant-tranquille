@@ -5,7 +5,8 @@ const message = {
   name: "Claire Martin",
   email: "claire@example.com",
   phone: "",
-  dates: "",
+  arrival: "",
+  departure: "",
   message: "Bonjour, le gîte est-il libre en juillet ?",
 };
 
@@ -22,7 +23,8 @@ describe("contactSchema", () => {
 
     expect(result.error?.issues.map((issue) => issue.message)).toEqual([
       "phoneRequired",
-      "datesRequired",
+      "arrivalRequired",
+      "departureRequired",
     ]);
   });
 
@@ -38,9 +40,43 @@ describe("contactSchema", () => {
     const result = schema.safeParse({
       ...message,
       phone: "not a phone",
-      dates: "x".repeat(500),
+      arrival: "x".repeat(500),
+      departure: "yesterday",
     });
 
-    expect(result.data).toMatchObject({ phone: "", dates: "" });
+    expect(result.data).toMatchObject({
+      phone: "",
+      arrival: "",
+      departure: "",
+    });
+  });
+
+  test.each([
+    ["2026-10-06", "2026-10-09", "arrival", "arrivalPast"],
+    ["2026-10-12", "", "departure", "departureRequired"],
+    ["", "2026-10-15", "arrival", "arrivalRequired"],
+    ["2026-10-12", "2026-10-12", "departure", "departureBeforeArrival"],
+    ["2026-02-31", "2026-03-02", "arrival", "dateInvalid"],
+    ["12 au 15 juillet", "", "arrival", "dateInvalid"],
+  ])("refuses the stay %s to %s on %s", (arrival, departure, field, code) => {
+    const schema = contactSchema(
+      { phone: "optional", dates: "optional" },
+      "2026-10-07",
+    );
+    const result = schema.safeParse({ ...message, arrival, departure });
+
+    expect(result.error?.issues).toMatchObject([
+      { path: [field], message: code },
+    ]);
+  });
+
+  test("accepts a stay that starts today", () => {
+    const schema = contactSchema(
+      { phone: "optional", dates: "required" },
+      "2026-10-07",
+    );
+    const stay = { arrival: "2026-10-07", departure: "2026-10-09" };
+
+    expect(schema.safeParse({ ...message, ...stay }).success).toBe(true);
   });
 });
