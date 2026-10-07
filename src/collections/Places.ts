@@ -1,6 +1,13 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { charCount, rowLabel } from "@/lib/admin-fields";
+import {
+  advanced,
+  charCount,
+  help,
+  listCell,
+  rowLabel,
+  screenIntro,
+} from "@/lib/admin-fields";
 import { PLACE_CATEGORY_OPTIONS } from "@/lib/place-categories";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -23,10 +30,17 @@ export const Places: CollectionConfig = {
     useAsTitle: "name",
     group: "Autour du gîte",
     description:
-      "Châteaux, sites équestres, sorties en famille, nature : tout ce qui se visite depuis le gîte. Chaque lieu apparaît sur la page « Les alentours », sur la carte des temps de route, et peut être cité dans un guide.",
+      "Tout ce qui se visite depuis le gîte : châteaux, sites équestres, sorties en famille, nature. Un lieu peut aussi être cité dans un guide.",
     defaultColumns: ["name", "category", "commune", "driveMin", "featured"],
     listSearchableFields: ["name", "commune"],
     pagination: { defaultLimit: 50 },
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "Chaque lieu a sa carte sur « Les alentours » et son point sur la carte des temps de route.",
+        "/les-alentours",
+      ),
+    },
     livePreview: {
       url: ({ locale }) => previewUrl("/les-alentours", { locale }),
     },
@@ -45,7 +59,11 @@ export const Places: CollectionConfig = {
       required: true,
       localized: true,
       maxLength: 80,
-      admin: { placeholder: "Château de Cheverny" },
+      admin: {
+        description:
+          "Le nom officiel, tel qu'il est écrit sur le site du lieu.",
+        placeholder: "Château de Cheverny",
+      },
     },
     {
       type: "row",
@@ -66,7 +84,11 @@ export const Places: CollectionConfig = {
           name: "commune",
           type: "text",
           label: "Commune",
-          admin: { placeholder: "Cheverny", width: "50%" },
+          admin: {
+            description: "La ville ou le village où se trouve le lieu.",
+            placeholder: "Cheverny",
+            width: "50%",
+          },
         },
       ],
     },
@@ -109,6 +131,9 @@ export const Places: CollectionConfig = {
             description:
               "Le nom du lieu ou sa rue, puis la commune. Plus l'adresse est précise, plus la position est juste.",
             placeholder: "Château de Cheverny, 41700 Cheverny",
+            components: help(
+              "À l'enregistrement, le site cherche cette adresse sur une carte, puis calcule le trajet en voiture depuis le gîte. Si le temps affiché vous semble faux, précisez l'adresse (numéro, rue, code postal) et touchez « Recalculer ».",
+            ),
           },
         },
         {
@@ -131,6 +156,7 @@ export const Places: CollectionConfig = {
                 description: "Calculé automatiquement depuis l'adresse.",
                 readOnly: true,
                 width: "50%",
+                components: { Cell: listCell({ suffix: "min" }) },
               },
             },
             {
@@ -165,50 +191,56 @@ export const Places: CollectionConfig = {
             components: { Field: "/components/payload/RecalculateRoute" },
           },
         },
-        {
-          type: "row",
-          fields: [
-            {
-              name: "lat",
-              type: "number",
-              label: "Latitude",
-              required: true,
-              validate: computedNumber,
-              min: -90,
-              max: 90,
-              admin: {
-                description:
-                  "Trouvée automatiquement depuis l'adresse. Si le lieu est mal placé sur la carte : clic droit sur le lieu dans Google Maps, recopiez ici le premier nombre.",
-                placeholder: "47.5002",
-                width: "50%",
+        advanced([
+          {
+            type: "row",
+            fields: [
+              {
+                name: "lat",
+                type: "number",
+                label: "Latitude",
+                required: true,
+                validate: computedNumber,
+                min: -90,
+                max: 90,
+                admin: {
+                  description:
+                    "La position nord-sud du lieu. Trouvée automatiquement depuis l'adresse.",
+                  placeholder: "47.5002",
+                  width: "50%",
+                  components: help(
+                    "Si le lieu est mal placé sur la carte : ouvrez Google Maps, appuyez longuement sur le lieu (clic droit sur ordinateur). Deux nombres s'affichent, par exemple 47.5002, 1.4580. Le premier est la latitude, le second la longitude. Recopiez-les, puis cochez « Position corrigée à la main ».",
+                  ),
+                },
               },
-            },
-            {
-              name: "lng",
-              type: "number",
-              label: "Longitude",
-              required: true,
-              validate: computedNumber,
-              min: -180,
-              max: 180,
-              admin: {
-                description: "Le second nombre.",
-                placeholder: "1.4580",
-                width: "50%",
+              {
+                name: "lng",
+                type: "number",
+                label: "Longitude",
+                required: true,
+                validate: computedNumber,
+                min: -180,
+                max: 180,
+                admin: {
+                  description:
+                    "La position est-ouest du lieu : le second nombre donné par Google Maps.",
+                  placeholder: "1.4580",
+                  width: "50%",
+                },
               },
-            },
-          ],
-        },
-        {
-          name: "positionLocked",
-          type: "checkbox",
-          label: "Position corrigée à la main",
-          defaultValue: false,
-          admin: {
-            description:
-              "Cochée, la latitude et la longitude ne sont plus jamais remplacées par le calcul automatique. Le temps de route reste calculé depuis cette position.",
+            ],
           },
-        },
+          {
+            name: "positionLocked",
+            type: "checkbox",
+            label: "Position corrigée à la main",
+            defaultValue: false,
+            admin: {
+              description:
+                "Cochée, la latitude et la longitude ne sont plus jamais remplacées par le calcul automatique. Le temps de route reste calculé depuis cette position.",
+            },
+          },
+        ]),
       ],
     },
     {
@@ -243,14 +275,22 @@ export const Places: CollectionConfig = {
               label: "Nom",
               required: true,
               localized: true,
-              admin: { placeholder: "Generali Open de France", width: "60%" },
+              admin: {
+                description: "Le nom de l'événement.",
+                placeholder: "Generali Open de France",
+                width: "60%",
+              },
             },
             {
               name: "period",
               type: "text",
               label: "Période habituelle",
               localized: true,
-              admin: { placeholder: "Juillet", width: "40%" },
+              admin: {
+                description: "Le mois ou la saison, sans année.",
+                placeholder: "Juillet",
+                width: "40%",
+              },
             },
           ],
         },
@@ -265,6 +305,7 @@ export const Places: CollectionConfig = {
         position: "sidebar",
         description:
           "Le lieu défile dans le bandeau des temps de route, en haut de l'accueil et de la page « Les alentours ». Dix lieux au plus.",
+        components: { Cell: listCell({ yes: "En avant" }) },
       },
     },
   ],

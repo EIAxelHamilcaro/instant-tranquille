@@ -1,6 +1,6 @@
 import type { Field, GlobalConfig, GlobalSlug, Tab } from "payload";
 import { isAuthenticated, isPublishedOrAuthenticated } from "@/lib/access";
-import { charCount } from "@/lib/admin-fields";
+import { charCount, help, screenIntro } from "@/lib/admin-fields";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateGlobal } from "@/lib/revalidate";
 import { factCheckedText, factCheckedTextarea } from "@/lib/validators";
@@ -47,6 +47,12 @@ export function pageGlobal({
     admin: {
       group: "Pages du site",
       description,
+      hideAPIURL: true,
+      components: {
+        elements: {
+          Description: screenIntro(`La page « ${label} » du site.`, path),
+        },
+      },
       livePreview: {
         url: ({ locale }) => previewUrl(path, { locale }),
       },
@@ -87,7 +93,12 @@ export const headerTab = ({
         description:
           `Le titre principal de la page. Google le lit en premier : gardez le lieu et le mot gîte ou maison dedans. ${titleNote}`.trim(),
         placeholder: titlePlaceholder,
-        components: charCount(TITLE_MAX),
+        components: {
+          ...charCount(TITLE_MAX),
+          ...help(
+            "Quand quelqu'un cherche un gîte sur Google, ce titre aide le site à apparaître. Gardez le nom de la ville et le mot gîte ou maison, et restez sous 70 caractères.",
+          ),
+        },
       },
     },
     {
@@ -99,6 +110,8 @@ export const headerTab = ({
       validate: factCheckedTextarea,
       admin: {
         description: `Deux ou trois phrases sous le titre. ${ledeNote}`.trim(),
+        placeholder:
+          "Une maison de 115 m² pour six personnes, à deux pas des étangs.",
         components: charCount(LEDE_MAX),
       },
     },
@@ -109,7 +122,10 @@ export const headerTab = ({
       relationTo: "media",
       admin: {
         description:
-          `La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible. ${photoNote}`.trim(),
+          `La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. ${photoNote}`.trim(),
+        components: help(
+          "Sur téléphone, la photo est recadrée en hauteur. Pour choisir ce qui reste visible : ouvrez la photo dans « Photos », touchez « Modifier l'image », puis déplacez le point sur le sujet principal.",
+        ),
       },
     },
   ],

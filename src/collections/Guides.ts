@@ -3,10 +3,16 @@ import {
   EXPERIMENTAL_TableFeature,
   lexicalEditor,
 } from "@payloadcms/richtext-lexical";
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, FieldHook } from "payload";
 import { GuideProgramme } from "@/collections/blocks/GuideProgramme";
 import { isAuthenticated } from "@/lib/access";
-import { charCount, rowLabel } from "@/lib/admin-fields";
+import {
+  advanced,
+  charCount,
+  help,
+  rowLabel,
+  screenIntro,
+} from "@/lib/admin-fields";
 import { GUIDE_THEME_OPTIONS } from "@/lib/place-categories";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -18,6 +24,20 @@ import {
 
 const TITLE_MAX = 90;
 const EXCERPT_MAX = 240;
+const SLUG_MAX = 70;
+
+const slugFromTitle: FieldHook = ({ value, data }) => {
+  if (value || data?._status !== "published") return value;
+  if (typeof data.title !== "string") return value;
+
+  return data.title
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .slice(0, SLUG_MAX)
+    .replace(/^-|-$/g, "");
+};
 
 export const Guides: CollectionConfig = {
   slug: "guides",
@@ -29,10 +49,17 @@ export const Guides: CollectionConfig = {
     useAsTitle: "title",
     group: "Autour du gîte",
     description:
-      "Des articles pratiques pour les voyageurs : châteaux, Beauval, séjours équestres, nature. Chaque guide a sa propre page et aide le site à être trouvé sur Google.",
+      "Des articles pratiques pour les voyageurs : châteaux, Beauval, séjours équestres, nature. Ils aident le site à être trouvé sur Google.",
     defaultColumns: ["title", "theme", "_status", "updatedAt"],
     listSearchableFields: ["title", "slug"],
     pagination: { defaultLimit: 50 },
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "Chaque guide publié a sa propre page, rangée dans « Guides ». Un brouillon reste invisible.",
+        "/guides",
+      ),
+    },
     livePreview: {
       url: ({ data, locale }) =>
         typeof data.slug === "string" && data.slug
@@ -111,6 +138,9 @@ export const Guides: CollectionConfig = {
               admin: {
                 description:
                   "Découpez le texte avec des titres de niveau 2 : ils forment le sommaire du guide. Le bouton « + » ajoute un programme heure par heure ou un tableau (tarifs, comparatif). Citez les temps de route depuis le gîte.",
+                components: help(
+                  "Pour faire un titre : écrivez la ligne, sélectionnez-la, puis choisissez « Titre 2 » dans la barre au-dessus du texte. Un guide se lit bien avec quatre à six titres.",
+                ),
               },
             },
           ],
@@ -140,7 +170,10 @@ export const Guides: CollectionConfig = {
                   required: true,
                   localized: true,
                   maxLength: 40,
-                  admin: { placeholder: "Budget" },
+                  admin: {
+                    description: "Un ou deux mots.",
+                    placeholder: "Budget",
+                  },
                 },
                 {
                   name: "value",
@@ -150,6 +183,8 @@ export const Guides: CollectionConfig = {
                   localized: true,
                   maxLength: 180,
                   admin: {
+                    description:
+                      "Une phrase courte, avec un chiffre si possible.",
                     placeholder:
                       "Environ 45 € par adulte, entrées et déjeuner compris (tarifs 2026)",
                   },
@@ -167,6 +202,9 @@ export const Guides: CollectionConfig = {
                   pickerAppearance: "dayOnly",
                   displayFormat: "d MMMM yyyy",
                 },
+                components: help(
+                  "Les horaires et les tarifs changent chaque année. Au bout de six mois sans relecture, le résumé vous propose de vérifier le guide. Relisez les sites officiels, corrigez le texte, puis mettez la date du jour.",
+                ),
               },
             },
             {
@@ -189,6 +227,7 @@ export const Guides: CollectionConfig = {
                   localized: true,
                   maxLength: 90,
                   admin: {
+                    description: "Le nom du site, puis ce qu'on y a vérifié.",
                     placeholder: "Musée de Sologne, horaires et tarifs",
                   },
                 },
@@ -199,6 +238,8 @@ export const Guides: CollectionConfig = {
                   required: true,
                   validate: validateUrl,
                   admin: {
+                    description:
+                      "Ouvrez la page et copiez l'adresse affichée en haut du navigateur.",
                     placeholder:
                       "https://www.museedesologne.com/infos-pratiques",
                   },
@@ -242,6 +283,12 @@ export const Guides: CollectionConfig = {
                   required: true,
                   localized: true,
                   maxLength: 140,
+                  admin: {
+                    description:
+                      "Une question telle qu'un voyageur la taperait dans Google.",
+                    placeholder:
+                      "Combien de temps faut-il pour visiter le ZooParc de Beauval ?",
+                  },
                 },
                 {
                   name: "answer",
@@ -250,6 +297,12 @@ export const Guides: CollectionConfig = {
                   required: true,
                   localized: true,
                   maxLength: 600,
+                  admin: {
+                    description:
+                      "Répondez dès la première phrase, puis précisez en une ou deux phrases.",
+                    placeholder:
+                      "Comptez une journée entière. Le parc ouvre à 9h et il faut 50 minutes de route depuis le gîte.",
+                  },
                 },
               ],
             },
@@ -269,20 +322,28 @@ export const Guides: CollectionConfig = {
           "Range le guide dans la liste des guides et choisit les sites officiels proposés à la fin.",
       },
     },
-    {
-      name: "slug",
-      type: "text",
-      label: "Adresse de la page",
-      required: true,
-      unique: true,
-      index: true,
-      validate: validateSlug,
-      admin: {
-        position: "sidebar",
-        description:
-          "La fin de l'adresse web, en minuscules avec des tirets. Ne la changez plus une fois le guide publié : les liens existants seraient cassés.",
-        placeholder: "zooparc-de-beauval",
-      },
-    },
+    advanced(
+      [
+        {
+          name: "slug",
+          type: "text",
+          label: "Adresse de la page",
+          required: true,
+          unique: true,
+          index: true,
+          validate: validateSlug,
+          hooks: { beforeValidate: [slugFromTitle] },
+          admin: {
+            description:
+              "Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Ne la changez plus ensuite : les liens existants seraient cassés.",
+            placeholder: "zooparc-de-beauval",
+            components: help(
+              "L'adresse d'un guide s'écrit instant-tranquille.com/guides/ suivi de ce texte. Avec « zooparc-de-beauval », la page est instant-tranquille.com/guides/zooparc-de-beauval. Des mots simples, sans accent, séparés par des tirets.",
+            ),
+          },
+        },
+      ],
+      "sidebar",
+    ),
   ],
 };

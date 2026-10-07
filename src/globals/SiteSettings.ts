@@ -4,7 +4,13 @@ import {
   isAuthenticatedField,
   isPublishedOrAuthenticated,
 } from "@/lib/access";
-import { charCount, note, rowLabel } from "@/lib/admin-fields";
+import {
+  charCount,
+  help,
+  note,
+  rowLabel,
+  screenIntro,
+} from "@/lib/admin-fields";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateGlobal } from "@/lib/revalidate";
 import {
@@ -32,6 +38,15 @@ export const SiteSettings: GlobalConfig = {
     group: "Réglages",
     description:
       "Tout ce qui décrit le gîte et sert sur plusieurs pages : capacité, coordonnées, annonces Airbnb et Booking, questions fréquentes.",
+    hideAPIURL: true,
+    components: {
+      elements: {
+        Description: screenIntro(
+          "Toutes les pages : pied de page, page « Contact », boutons de réservation, et ce que Google sait du gîte.",
+          "/",
+        ),
+      },
+    },
     livePreview: {
       url: ({ locale }) => previewUrl("/", { locale }),
     },
@@ -65,7 +80,11 @@ export const SiteSettings: GlobalConfig = {
                       required: true,
                       min: 20,
                       max: 500,
-                      admin: { width: "25%" },
+                      admin: {
+                        description: "La surface habitable.",
+                        placeholder: "115",
+                        width: "25%",
+                      },
                     },
                     {
                       name: "maxGuests",
@@ -74,7 +93,11 @@ export const SiteSettings: GlobalConfig = {
                       required: true,
                       min: 1,
                       max: 15,
-                      admin: { width: "25%" },
+                      admin: {
+                        description: "Comme sur vos annonces.",
+                        placeholder: "6",
+                        width: "25%",
+                      },
                     },
                     {
                       name: "bedrooms",
@@ -83,7 +106,11 @@ export const SiteSettings: GlobalConfig = {
                       required: true,
                       min: 1,
                       max: 10,
-                      admin: { width: "25%" },
+                      admin: {
+                        description: "Les pièces fermées avec un lit.",
+                        placeholder: "3",
+                        width: "25%",
+                      },
                     },
                     {
                       name: "bathrooms",
@@ -92,7 +119,11 @@ export const SiteSettings: GlobalConfig = {
                       required: true,
                       min: 1,
                       max: 10,
-                      admin: { width: "25%" },
+                      admin: {
+                        description: "Avec douche ou baignoire.",
+                        placeholder: "1",
+                        width: "25%",
+                      },
                     },
                   ],
                 },
@@ -117,7 +148,14 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description:
                   "Ce paragraphe n'apparaît pas sur les pages : il décrit le gîte à Google et aux assistants comme ChatGPT.",
-                components: charCount(DESCRIPTION_MAX),
+                placeholder:
+                  "L'Instant Tranquille est une maison de 115 m² pour six personnes à Romorantin-Lanthenay, en Sologne.",
+                components: {
+                  ...charCount(DESCRIPTION_MAX),
+                  ...help(
+                    "Quand quelqu'un demande à Google ou à un assistant « un gîte pour six en Sologne », c'est ce texte qui présente la maison. Dites où elle est, pour combien de personnes, et ce qui la distingue. Pas de slogan.",
+                  ),
+                },
               },
             },
           ],
@@ -175,7 +213,12 @@ export const SiteSettings: GlobalConfig = {
                   name: "address",
                   type: "textarea",
                   label: "Numéro et rue",
-                  admin: { placeholder: "23 rue de Loreux", rows: 2 },
+                  admin: {
+                    description:
+                      "Affichée sur la page contact et dans le pied de page.",
+                    placeholder: "23 rue de Loreux",
+                    rows: 2,
+                  },
                 },
                 {
                   type: "row",
@@ -184,13 +227,18 @@ export const SiteSettings: GlobalConfig = {
                       name: "postalCode",
                       type: "text",
                       label: "Code postal",
-                      admin: { placeholder: "41200", width: "30%" },
+                      admin: {
+                        description: "Cinq chiffres.",
+                        placeholder: "41200",
+                        width: "30%",
+                      },
                     },
                     {
                       name: "city",
                       type: "text",
                       label: "Ville",
                       admin: {
+                        description: "Le nom complet de la commune.",
                         placeholder: "Romorantin-Lanthenay",
                         width: "70%",
                       },
@@ -203,7 +251,7 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     initCollapsed: true,
                     description:
-                      "Le point de départ de tous les temps de route. À ne changer que si le repère de la carte est mal placé.",
+                      "Réglage avancé. Le point de départ de tous les temps de route : à ne changer que si le repère de la carte est mal placé.",
                   },
                   fields: [
                     {
@@ -222,8 +270,12 @@ export const SiteSettings: GlobalConfig = {
                               max: 90,
                               admin: {
                                 description:
-                                  "Clic droit sur la maison dans Google Maps : le premier nombre.",
+                                  "La position nord-sud de la maison.",
+                                placeholder: "47.3608",
                                 width: "50%",
+                                components: help(
+                                  "Dans Google Maps, appuyez longuement sur la maison (clic droit sur ordinateur). Deux nombres s'affichent : le premier est la latitude, le second la longitude.",
+                                ),
                               },
                             },
                             {
@@ -233,7 +285,9 @@ export const SiteSettings: GlobalConfig = {
                               min: -180,
                               max: 180,
                               admin: {
-                                description: "Le second nombre.",
+                                description:
+                                  "La position est-ouest : le second nombre donné par Google Maps.",
+                                placeholder: "1.7533",
                                 width: "50%",
                               },
                             },
@@ -302,7 +356,11 @@ export const SiteSettings: GlobalConfig = {
                       label: "Depuis",
                       required: true,
                       localized: true,
-                      admin: { placeholder: "Paris", width: "40%" },
+                      admin: {
+                        description: "La ville de départ.",
+                        placeholder: "Paris",
+                        width: "40%",
+                      },
                     },
                     {
                       name: "duration",
@@ -310,14 +368,22 @@ export const SiteSettings: GlobalConfig = {
                       label: "Durée",
                       required: true,
                       localized: true,
-                      admin: { placeholder: "2h00", width: "30%" },
+                      admin: {
+                        description: "En voiture.",
+                        placeholder: "2h00",
+                        width: "30%",
+                      },
                     },
                     {
                       name: "distance",
                       type: "text",
                       label: "Distance",
                       required: true,
-                      admin: { placeholder: "190 km", width: "30%" },
+                      admin: {
+                        description: "Par la route.",
+                        placeholder: "190 km",
+                        width: "30%",
+                      },
                     },
                   ],
                 },
@@ -329,6 +395,7 @@ export const SiteSettings: GlobalConfig = {
                   localized: true,
                   maxLength: 120,
                   admin: {
+                    description: "Les routes principales, en une ligne.",
                     placeholder:
                       "A10 direction Orléans, puis sortie Blois / Sologne",
                   },
@@ -354,6 +421,13 @@ export const SiteSettings: GlobalConfig = {
                   RowLabel: rowLabel(
                     "{platform}, {rating} sur {ratingScale}",
                     "Annonce",
+                    {
+                      airbnb: "Airbnb",
+                      booking: "Booking.com",
+                      google: "Google",
+                      "gites-de-france": "Gîtes de France",
+                      other: "Autre plateforme",
+                    },
                   ),
                 },
               },
@@ -373,7 +447,10 @@ export const SiteSettings: GlobalConfig = {
                         { label: "Gîtes de France", value: "gites-de-france" },
                         { label: "Autre", value: "other" },
                       ],
-                      admin: { width: "30%" },
+                      admin: {
+                        description: "Le site où se trouve l'annonce.",
+                        width: "30%",
+                      },
                     },
                     {
                       name: "url",
@@ -399,7 +476,13 @@ export const SiteSettings: GlobalConfig = {
                       label: "Note",
                       min: 0,
                       max: 10,
-                      admin: { placeholder: "4.9", step: 0.1, width: "33%" },
+                      admin: {
+                        description:
+                          "La note affichée sur votre annonce, avec un point : 4.9.",
+                        placeholder: "4.9",
+                        step: 0.1,
+                        width: "33%",
+                      },
                     },
                     {
                       name: "ratingScale",
@@ -410,7 +493,11 @@ export const SiteSettings: GlobalConfig = {
                       max: 10,
                       admin: {
                         description: "5 pour Airbnb, 10 pour Booking.",
+                        placeholder: "5",
                         width: "33%",
+                        components: help(
+                          "Airbnb et Google notent sur 5, Booking sur 10. Le site ramène tout sur 5 pour calculer la note d'ensemble, mais affiche chaque note telle qu'elle est sur sa plateforme.",
+                        ),
                       },
                     },
                     {
@@ -418,7 +505,11 @@ export const SiteSettings: GlobalConfig = {
                       type: "number",
                       label: "Nombre d'avis",
                       min: 0,
-                      admin: { width: "33%" },
+                      admin: {
+                        description: "Le total affiché sur l'annonce.",
+                        placeholder: "15",
+                        width: "33%",
+                      },
                     },
                   ],
                 },
@@ -455,6 +546,9 @@ export const SiteSettings: GlobalConfig = {
                   label: "Lien du calendrier Airbnb",
                   validate: validateCalendarUrl,
                   admin: {
+                    components: help(
+                      "Ce lien permet au site de lire vos nuits réservées, sans aucun nom de voyageur. Il sert au calendrier de la page tarifs et au taux d'occupation du résumé. Ne le partagez pas.",
+                    ),
                     description:
                       "Sur Airbnb : Calendrier, Disponibilité, Connecter les calendriers, Exporter le calendrier. Copiez le lien qui finit par .ics.",
                     placeholder: "https://www.airbnb.fr/calendar/ical/...",
@@ -568,6 +662,8 @@ export const SiteSettings: GlobalConfig = {
                   label: "Page Facebook",
                   validate: validateUrl,
                   admin: {
+                    description:
+                      "Ouvrez votre page et copiez l'adresse affichée en haut du navigateur.",
                     placeholder: "https://www.facebook.com/linstanttranquille",
                   },
                 },
@@ -577,6 +673,7 @@ export const SiteSettings: GlobalConfig = {
                   label: "Profil Instagram",
                   validate: validateUrl,
                   admin: {
+                    description: "L'adresse complète de votre profil.",
                     placeholder: "https://www.instagram.com/linstanttranquille",
                   },
                 },
@@ -585,18 +682,30 @@ export const SiteSettings: GlobalConfig = {
                   type: "text",
                   label: "Profil Pinterest",
                   validate: validateUrl,
+                  admin: {
+                    description: "Laissez vide si vous n'en avez pas.",
+                    placeholder: "https://www.pinterest.fr/linstanttranquille",
+                  },
                 },
                 {
                   name: "youtube",
                   type: "text",
                   label: "Chaîne YouTube",
                   validate: validateUrl,
+                  admin: {
+                    description: "Laissez vide si vous n'en avez pas.",
+                    placeholder: "https://www.youtube.com/@linstanttranquille",
+                  },
                 },
                 {
                   name: "tiktok",
                   type: "text",
                   label: "Profil TikTok",
                   validate: validateUrl,
+                  admin: {
+                    description: "Laissez vide si vous n'en avez pas.",
+                    placeholder: "https://www.tiktok.com/@linstanttranquille",
+                  },
                 },
               ],
             },

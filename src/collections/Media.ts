@@ -1,7 +1,7 @@
 import type { CollectionBeforeChangeHook, CollectionConfig } from "payload";
 import sharp from "sharp";
 import { isAuthenticated, isPublic } from "@/lib/access";
-import { charCount } from "@/lib/admin-fields";
+import { charCount, help, note, screenIntro } from "@/lib/admin-fields";
 import { revalidateCollection } from "@/lib/revalidate";
 import { validateUrl } from "@/lib/validators";
 
@@ -37,6 +37,7 @@ const generateBlurDataURL: CollectionBeforeChangeHook = async ({
 export const Media: CollectionConfig = {
   slug: "media",
   lockDocuments: false,
+  disableDuplicate: true,
   labels: { singular: "Photo", plural: "Photos" },
   hooks: {
     ...revalidateCollection("media"),
@@ -64,10 +65,16 @@ export const Media: CollectionConfig = {
     group: "Pages du site",
     useAsTitle: "alt",
     description:
-      "Toutes les photos du site. Déposez une photo ici, puis choisissez-la dans une page, un lieu ou un guide. Le site la redimensionne et l'allège tout seul.",
+      "Toutes les photos du site. Le site les redimensionne et les allège tout seul.",
     defaultColumns: ["filename", "alt", "credit", "createdAt"],
     listSearchableFields: ["alt", "filename", "caption"],
     pagination: { defaultLimit: 50 },
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "Une photo n'apparaît sur le site qu'une fois choisie dans une page, un lieu ou un guide.",
+      ),
+    },
   },
   access: {
     create: isAuthenticated,
@@ -76,6 +83,11 @@ export const Media: CollectionConfig = {
     delete: isAuthenticated,
   },
   fields: [
+    note(
+      "uploadNote",
+      "Avant d'envoyer une photo",
+      "Une photo de plus de 4,5 Mo est refusée. Pour recadrer une photo déjà en ligne, envoyez la version recadrée comme une nouvelle photo : l'ancienne reste affichée plusieurs jours sinon.",
+    ),
     {
       name: "alt",
       type: "text",
@@ -88,7 +100,12 @@ export const Media: CollectionConfig = {
         description:
           "Décrivez ce qu'on voit, comme à quelqu'un au téléphone. Cette phrase est lue aux personnes malvoyantes et aide Google à comprendre la photo.",
         placeholder: "Le séjour avec ses deux canapés devant la cheminée",
-        components: charCount(ALT_MAX),
+        components: {
+          ...charCount(ALT_MAX),
+          ...help(
+            "Cette phrase ne se voit pas à l'écran. Elle est lue à voix haute aux personnes malvoyantes, et Google s'en sert pour comprendre la photo. Dites simplement ce qu'on voit : la pièce, le lieu, la saison.",
+          ),
+        },
       },
     },
     {
@@ -100,6 +117,7 @@ export const Media: CollectionConfig = {
       admin: {
         description:
           "Un court texte affiché sous la photo quand on l'agrandit. Facultatif.",
+        placeholder: "La terrasse au petit matin",
       },
     },
     {
@@ -115,6 +133,9 @@ export const Media: CollectionConfig = {
               "L'auteur et la licence. À remplir pour toute photo qui n'est pas la vôtre.",
             placeholder: "Jean Dupont, CC BY-SA 4.0",
             width: "50%",
+            components: help(
+              "Vos propres photos n'ont pas besoin de crédit. Pour une photo trouvée ailleurs, écrivez le nom de l'auteur et la licence indiqués sur la page d'origine. Sans licence claire, ne l'utilisez pas.",
+            ),
           },
         },
         {

@@ -42,6 +42,11 @@ import { RatesPage } from "@/globals/pages/RatesPage";
 import { SurroundingsPage } from "@/globals/pages/SurroundingsPage";
 import { SiteSettings } from "@/globals/SiteSettings";
 import { defaultLocale, locales } from "@/i18n/config";
+import {
+  ADMIN_APP_NAME,
+  ADMIN_ICONS,
+  ADMIN_MANIFEST_PATH,
+} from "@/lib/admin-app";
 import { adminTranslations } from "@/lib/admin-translations";
 import { readEmailConfig } from "@/lib/email/email-config";
 import { workerEmailAdapter } from "@/lib/email/payload-email-adapter";
@@ -89,10 +94,17 @@ export default buildConfig({
         Icon: "/components/payload/Icon",
       },
       Nav: "/components/payload/Nav",
+      header: ["/components/payload/TabBar"],
       beforeLogin: ["/components/payload/BeforeLogin"],
       providers: ["/components/payload/AdminFonts"],
       views: {
         dashboard: { Component: "/components/payload/Dashboard" },
+        pages: {
+          Component: "/components/payload/PagesView",
+          path: "/pages",
+          exact: true,
+          meta: { title: "Pages du site" },
+        },
       },
     },
     meta: {
@@ -100,8 +112,14 @@ export default buildConfig({
       description: "L'espace de gestion du site du gîte L'Instant Tranquille.",
       icons: [
         { rel: "icon", type: "image/svg+xml", url: "/icon.svg" },
-        { rel: "apple-touch-icon", url: "/apple-touch-icon.png" },
+        { rel: "apple-touch-icon", sizes: "180x180", url: ADMIN_ICONS.apple },
       ],
+      manifest: ADMIN_MANIFEST_PATH,
+      appleWebApp: {
+        capable: true,
+        title: ADMIN_APP_NAME,
+        statusBarStyle: "default",
+      },
     },
     livePreview: {
       breakpoints: [

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated, isPublic } from "@/lib/access";
+import { advanced, listCell, screenIntro } from "@/lib/admin-fields";
 import { AMENITY_ICON_OPTIONS } from "@/lib/amenity-icons";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -18,6 +19,13 @@ export const Amenities: CollectionConfig = {
     defaultColumns: ["name", "category", "order", "enabled"],
     listSearchableFields: ["name"],
     pagination: { defaultLimit: 50 },
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "La liste « Équipements » de la page « Le gîte ».",
+        "/le-gite",
+      ),
+    },
     livePreview: {
       url: ({ locale }) => previewUrl("/le-gite", { locale }),
     },
@@ -70,18 +78,6 @@ export const Amenities: CollectionConfig = {
       ],
     },
     {
-      name: "order",
-      type: "number",
-      label: "Ordre d'affichage",
-      defaultValue: 0,
-      min: 0,
-      admin: {
-        position: "sidebar",
-        description:
-          "Les plus petits nombres passent en premier dans leur catégorie.",
-      },
-    },
-    {
       name: "enabled",
       type: "checkbox",
       label: "Afficher sur le site",
@@ -89,7 +85,25 @@ export const Amenities: CollectionConfig = {
       admin: {
         position: "sidebar",
         description: "Décochez pour masquer cet équipement sans le supprimer.",
+        components: { Cell: listCell({ yes: "Affiché", no: "Masqué" }) },
       },
     },
+    advanced(
+      [
+        {
+          name: "order",
+          type: "number",
+          label: "Ordre d'affichage",
+          defaultValue: 0,
+          min: 0,
+          admin: {
+            description:
+              "Les plus petits nombres passent en premier dans leur catégorie. Deux équipements au même nombre sont rangés par ordre alphabétique.",
+            placeholder: "10",
+          },
+        },
+      ],
+      "sidebar",
+    ),
   ],
 };

@@ -8,8 +8,10 @@ import { EntityType, type NavGroupType } from "@payloadcms/ui/shared";
 import Link from "next/link";
 import type { ServerProps } from "payload";
 import { formatAdminURL } from "payload/shared";
+import { getUnreadMessages } from "@/lib/admin-stats";
 import { SITE_URL } from "@/lib/seo";
 import { Heron } from "./Heron";
+import NavHome from "./NavHome";
 
 interface NavItem {
   type: EntityType;
@@ -69,10 +71,7 @@ export default async function Nav({
 }: ServerProps) {
   const siteHref = locale?.code === "en" ? `${SITE_URL}/en` : SITE_URL;
   const { collections, globals, routes } = payload.config;
-  const { totalDocs: unread } = await payload.count({
-    collection: "contact-messages",
-    where: { readStatus: { not_equals: true } },
-  });
+  const unread = await getUnreadMessages();
 
   const labelOf = ({ type, slug }: NavItem) => {
     if (type === EntityType.collection) {
@@ -112,9 +111,12 @@ export default async function Nav({
           <Heron />
           <span>
             L&apos;Instant Tranquille
-            <small>Tableau de bord</small>
+            <small>Espace de gestion</small>
           </span>
         </Link>
+        <NavHome
+          href={formatAdminURL({ adminRoute: routes.admin, path: "" })}
+        />
         <DefaultNavClient groups={groups} navPreferences={NAV_PREFERENCES} />
         <a
           className="lit-nav-site"
