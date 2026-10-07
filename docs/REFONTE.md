@@ -114,7 +114,11 @@ Le site en ligne ignore ces ajouts, le script peut donc passer avant le déploie
 Retour arrière : `vercel rollback`. Les tables et colonnes ajoutées peuvent rester, l'ancien code
 ne les lit pas. Les 6 redirections reviennent avec l'ancien `next.config.ts`.
 
-### Mettre en prod les prix de base (branche `feat/prix-de-base`)
+### Mettre en prod les prix de base (fait le 7 octobre 2026)
+
+En ligne : script SQL appliqué, prix et textes écrits, pages contrôlées. Reste à faire : supprimer les
+objets morts listés plus bas une fois la bascule validée, et demander aux hôtes si le prix change
+selon la saison (la question est vidée en attendant). La marche suivie, pour mémoire :
 
 Le site n'affiche plus de totaux recopiés des plateformes mais le prix de base par nuit fixé par
 les hôtes (100, 110 et 120 € pour 2, 4 et 6 voyageurs). Il ne calcule aucun total de séjour : les
