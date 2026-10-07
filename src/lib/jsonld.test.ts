@@ -8,6 +8,7 @@ import type {
   Media,
   PricingConfig,
   SiteSetting,
+  Testimonial,
 } from "@/payload-types";
 
 const AIRBNB = "https://www.airbnb.fr/rooms/1605140748799580144";
@@ -68,6 +69,31 @@ describe("cottage JSON-LD", () => {
     reviews: [],
     cottage,
   }) as Record<string, unknown>;
+
+  test("given a review without a stay date, when the node is built, then it is dated by the day it was recorded", () => {
+    const review = {
+      guestName: "Claire",
+      text: "Maison calme.",
+      rating: 5,
+      stayDate: null,
+      createdAt: "2026-10-06T09:12:00.000Z",
+    } as Testimonial;
+    const dated = { ...review, stayDate: "2026-08-01T00:00:00.000Z" };
+
+    const { review: reviews } = cottageJsonLd({
+      locale: "fr",
+      settings,
+      pricing,
+      amenities: [],
+      reviews: [review, dated],
+      cottage,
+    }) as { review: { datePublished: string }[] };
+
+    expect(reviews.map(({ datePublished }) => datePublished)).toEqual([
+      "2026-10-06",
+      "2026-08-01",
+    ]);
+  });
 
   test("given an empty phone and email, when the node is built, then no empty property is emitted", () => {
     expect(node).not.toHaveProperty("telephone");
