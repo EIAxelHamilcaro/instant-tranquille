@@ -10,8 +10,8 @@
     "form": {
       "name": "Name",
       "email": "Email",
-      "phone": "Phone (optional)",
-      "dates": "Preferred dates (optional)",
+      "phone": "Phone",
+      "dates": "Preferred dates",
       "message": "Message",
       "submit": "Send the message",
       "sending": "Sending…",
@@ -27,12 +27,15 @@
         "messageRequired": "Write your message.",
         "messageTooLong": "Shorten the message to 5,000 characters at most.",
         "captcha": "The anti-spam check failed. Wait for it to finish, then send the message again.",
-        "server": "The message was not sent. Send it again, or write to the email address shown on this page."
+        "server": "The message was not sent. Send it again, or write to the email address shown on this page.",
+        "phoneRequired": "Enter a phone number where we can reach you.",
+        "datesRequired": "Enter your preferred dates, even approximate ones."
       },
-      "requiredNote": "Name, email and message are required.",
+      "requiredNote": "{fields}: needed to send the message.",
       "honeypot": "Leave this field empty",
       "privacyNote": "Your details are used only to answer your message. See the <privacy>privacy policy</privacy>.",
-      "datesHint": "For example: 12 to 15 July, 4 guests."
+      "datesHint": "For example: 12 to 15 July, 4 guests.",
+      "optional": "{label} (optional)"
     },
     "hostsTitle": "{hosts}, your hosts",
     "reviewLabel": "about the welcome",

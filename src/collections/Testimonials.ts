@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload";
-import { isAuthenticated } from "@/lib/access";
+import { isAuthenticated, isHostAccount } from "@/lib/access";
 import { advanced, help, listCell, screenIntro } from "@/lib/admin-fields";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -8,6 +8,7 @@ import { REVIEW_TOPIC_OPTIONS } from "@/lib/review-topics";
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
   lockDocuments: false,
+  trash: true,
   disableDuplicate: true,
   labels: { singular: "Avis", plural: "Avis des voyageurs" },
   hooks: revalidateCollection("testimonials"),
@@ -33,7 +34,7 @@ export const Testimonials: CollectionConfig = {
   access: {
     create: isAuthenticated,
     read: ({ req: { user } }) =>
-      user ? true : { status: { equals: "approved" } },
+      isHostAccount(user) ? true : { status: { equals: "approved" } },
     update: isAuthenticated,
     delete: isAuthenticated,
   },

@@ -4,6 +4,7 @@ import {
   type PayloadRequest,
   ValidationError,
 } from "payload";
+import { isHostAccount } from "@/lib/access";
 import type { GeoPoint } from "@/lib/places";
 import { type PlacePosition, resolvePosition } from "./position";
 import { routeServices } from "./services";
@@ -71,7 +72,7 @@ export const recalculateRoute: Endpoint = {
   path: "/:id/recalculate-route",
   method: "post",
   handler: async (req) => {
-    if (!req.user)
+    if (!isHostAccount(req.user))
       return Response.json(
         { message: "Connectez-vous pour recalculer un temps de route." },
         { status: 401 },

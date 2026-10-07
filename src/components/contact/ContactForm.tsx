@@ -8,7 +8,11 @@ import {
   HONEYPOT_FIELD,
   INITIAL_CONTACT_STATE,
 } from "@/components/contact/contact-form-state";
-import type { ContactField } from "@/components/contact/contact-schema";
+import type {
+  ContactField,
+  ContactFormFields,
+  OptionalFieldMode,
+} from "@/components/contact/contact-schema";
 import { Emblem } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,7 +60,27 @@ function Field({ name, label, hint, error, className, ...input }: FieldProps) {
   );
 }
 
-export function ContactForm() {
+interface ContactFormProps {
+  fields: ContactFormFields;
+  datesHint?: string | null;
+  sentTitle?: string | null;
+  sentText?: string | null;
+}
+
+function sentenceList(labels: string[], locale: string) {
+  const list = new Intl.ListFormat(locale, { type: "conjunction" })
+    .format(labels)
+    .toLocaleLowerCase(locale);
+
+  return list.replace(/^./u, (first) => first.toLocaleUpperCase(locale));
+}
+
+export function ContactForm({
+  fields,
+  datesHint,
+  sentTitle,
+  sentText,
+}: ContactFormProps) {
   const t = useTranslations("contact.form");
   const locale = useLocale();
   const [state, formAction, pending] = useActionState(
@@ -82,8 +106,8 @@ export function ContactForm() {
           scene="still"
           play="peche"
         />
-        <strong>{t("successTitle")}</strong>
-        {t("successText")}
+        <strong>{sentTitle || t("successTitle")}</strong>
+        {sentText || t("successText")}
       </p>
     );
   }
@@ -94,6 +118,18 @@ export function ContactForm() {
     return code ? t(`errors.${code}`) : undefined;
   };
   const messageError = errorOf("message");
+  const labelOf = (field: "phone" | "dates", mode: OptionalFieldMode) =>
+    mode === "required" ? t(field) : t("optional", { label: t(field) });
+  const requiredLabels = [
+    t("name"),
+    t("email"),
+    ...(["phone", "dates"] as const)
+      .filter((field) => fields[field] === "required")
+      .map((field) => t(field)),
+    t("message"),
+  ];
+  const isLoneField =
+    (fields.phone === "hidden") !== (fields.dates === "hidden");
 
   return (
     <form
@@ -103,7 +139,9 @@ export function ContactForm() {
       className="formulaire"
       onFocusCapture={() => setIsArmed(true)}
     >
-      <p className="indice">{t("requiredNote")}</p>
+      <p className="indice">
+        {t("requiredNote", { fields: sentenceList(requiredLabels, locale) })}
+      </p>
       <Field
         name="name"
         type="text"
@@ -125,23 +163,31 @@ export function ContactForm() {
         defaultValue={state.values.email}
         error={errorOf("email")}
       />
-      <Field
-        name="phone"
-        type="tel"
-        label={t("phone")}
-        autoComplete="tel"
-        defaultValue={state.values.phone}
-        error={errorOf("phone")}
-      />
-      <Field
-        name="dates"
-        type="text"
-        label={t("dates")}
-        hint={t("datesHint")}
-        autoComplete="off"
-        defaultValue={state.values.dates}
-        error={errorOf("dates")}
-      />
+      {fields.phone !== "hidden" && (
+        <Field
+          name="phone"
+          type="tel"
+          label={labelOf("phone", fields.phone)}
+          autoComplete="tel"
+          required={fields.phone === "required"}
+          className={isLoneField ? "large" : undefined}
+          defaultValue={state.values.phone}
+          error={errorOf("phone")}
+        />
+      )}
+      {fields.dates !== "hidden" && (
+        <Field
+          name="dates"
+          type="text"
+          label={labelOf("dates", fields.dates)}
+          hint={datesHint || t("datesHint")}
+          autoComplete="off"
+          required={fields.dates === "required"}
+          className={isLoneField ? "large" : undefined}
+          defaultValue={state.values.dates}
+          error={errorOf("dates")}
+        />
+      )}
 
       <div className="champ large">
         <Label htmlFor="contact-message">{t("message")}</Label>
