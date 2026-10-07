@@ -127,11 +127,11 @@
       "perNight": "{price} per night",
       "guests": "{count, plural, one {# guest} other {# guests}}",
       "nights": "{count, plural, one {# night} other {# nights}}",
-      "stayFrom": "from {price} for {nights} nights",
       "superhost": "Superhost",
-      "on": "{price} on {platform}",
-      "quoted": "Prices recorded on {date}, taxes and fees included.",
-      "exact": "The exact price for your dates is shown on the platform."
+      "exact": "The exact total for your dates is shown on Airbnb and Booking.com.",
+      "rateFor": "{price} for {guests, plural, one {# guest} other {# guests}}",
+      "offerName": "Base price per night for {guests, plural, one {# guest} other {# guests}}",
+      "base": "Base price per night, before the platform's service fee and the tourist tax."
     }
   }
 }

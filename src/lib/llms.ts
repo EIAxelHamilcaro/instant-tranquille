@@ -4,14 +4,11 @@ import { LEGAL_DOCUMENTS } from "@/lib/legal";
 import { NAV_ITEMS } from "@/lib/nav";
 import { formatDrive, PLACE_CATEGORIES } from "@/lib/places";
 import {
-  BOOKING_PLATFORM_NAMES,
-  BOOKING_PLATFORMS,
   formatPrice,
-  formatQuoteDate,
   formatRating,
-  type PricedStay,
+  type NightlyRate,
+  nightlyRates,
   platformName,
-  pricedStays,
   ratedPlatforms,
 } from "@/lib/platforms";
 import { getAmenities, getGlobal, getGuides, getPlaces } from "@/lib/queries";
@@ -201,18 +198,8 @@ function pageLinks({ common, ledes, guides }: Content) {
   ];
 }
 
-function stayLine(stay: PricedStay, currency: string) {
-  const prices = BOOKING_PLATFORMS.flatMap((platform) => {
-    const total = stay.prices[platform];
-
-    return typeof total === "number"
-      ? [
-          `${formatPrice(total, currency, LOCALE)} sur ${BOOKING_PLATFORM_NAMES[platform]}`,
-        ]
-      : [];
-  });
-
-  return `- ${stay.nights} nuits, ${stay.guests} voyageurs : ${prices.join(", ")} (dès ${formatPrice(stay.nightly, currency, LOCALE)} la nuit)`;
+function rateLine(rate: NightlyRate, currency: string) {
+  return `- ${rate.guests} voyageurs : ${formatPrice(rate.price, currency, LOCALE)} la nuit, prix de base`;
 }
 
 function placeLine(place: Place) {
@@ -281,6 +268,7 @@ export async function llmsFull() {
     content;
   const { contact, propertyDetails: property } = settings;
   const currency = pricing.currency || "EUR";
+  const rates = nightlyRates(pricing);
 
   return [
     ...heading(content),
@@ -308,10 +296,9 @@ export async function llmsFull() {
       amenities.map((amenity) => `- ${amenity.name}`),
     ),
     ...section("Tarifs", [
-      ...pricedStays(pricing).map((stay) => stayLine(stay, currency)),
+      ...rates.map((rate) => rateLine(rate, currency)),
       pricing.minimumStay && `- Séjour minimum : ${pricing.minimumStay} nuits`,
-      pricing.quotedOn &&
-        `- Prix relevés le ${formatQuoteDate(pricing.quotedOn, LOCALE)}, taxes et frais inclus. Le prix exact pour vos dates s'affiche sur la plateforme.`,
+      rates.length > 0 && `- ${common("rates.base")} ${common("rates.exact")}`,
       pricing.note && `- ${pricing.note}`,
       ...(pricing.additionalFees ?? []).map(
         (fee) =>

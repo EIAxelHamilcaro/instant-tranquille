@@ -114,6 +114,36 @@ Le site en ligne ignore ces ajouts, le script peut donc passer avant le déploie
 Retour arrière : `vercel rollback`. Les tables et colonnes ajoutées peuvent rester, l'ancien code
 ne les lit pas. Les 6 redirections reviennent avec l'ancien `next.config.ts`.
 
+### Mettre en prod les prix de base (branche `feat/prix-de-base`)
+
+Le site n'affiche plus de totaux recopiés des plateformes mais le prix de base par nuit fixé par
+les hôtes (100, 110 et 120 € pour 2, 4 et 6 voyageurs). Il ne calcule aucun total de séjour : les
+frais de service, la taxe de séjour et la remise à la semaine restent l'affaire d'Airbnb et de
+Booking. Le schéma gagne 2 tables et 2 types `enum`, rien n'est retiré ni modifié.
+
+1. `psql "<url de prod>" -v ON_ERROR_STOP=1 -f scripts/schema/prix-de-base.sql` (une transaction).
+   Le site en ligne ignore ces tables : le script peut passer avant le déploiement.
+2. PR `develop` vers `main`. Tant que les prix ne sont pas saisis, le nouveau code n'affiche aucun
+   prix (ni faux prix, ni erreur) et le résumé de l'admin le signale.
+3. Aussitôt après, dans l'admin : « Tarifs et conditions », onglet « Prix de base », saisir les
+   3 lignes et vider « Le prix change-t-il selon la saison ? » ; puis les textes de l'accueil et
+   de la page des tarifs, en français et en anglais (valeurs dans `scripts/seed/content/pages.ts`).
+   Ou `SEED_ALLOW_REMOTE=1 pnpm exec tsx scripts/seed/apply-corrections.ts`, qui écrit les prix
+   et ces textes mais ne revalide pas le cache du site : réenregistrer ensuite les 3 écrans dans
+   l'admin.
+4. Vérifier `/tarifs-reservation`, `/`, `/le-gite` et `/llms-full.txt`.
+
+Objets morts après la bascule, que le code ne lit plus : tables `pricing_config_quotes` et
+`_pricing_config_v_version_quotes`, colonnes `pricing_config.quoted_on` et
+`_pricing_config_v.version_quoted_on`, types `enum_pricing_config_quotes_guests`,
+`enum_pricing_config_quotes_nights`, `enum__pricing_config_v_version_quotes_guests` et
+`enum__pricing_config_v_version_quotes_nights`. Ils gardent les anciens relevés et permettent le
+retour arrière (`vercel rollback`) ; à supprimer à la main une fois la bascule validée.
+
+Base locale : `pnpm dev` pose une question (créer ou renommer un type) et se fige, parce que
+drizzle voit des objets à retirer. Avant de le lancer, rejouer `scripts/schema/prix-de-base.sql`
+sur la base locale puis y supprimer à la main les objets morts listés ci-dessus.
+
 ### Brancher un assistant (MCP)
 
 Coupé par défaut. À n'ouvrir que le temps d'un usage voulu : l'assistant écrit dans le contenu de

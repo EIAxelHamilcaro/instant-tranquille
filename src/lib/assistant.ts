@@ -70,7 +70,8 @@ const globals: MCPPluginConfig["globals"] = {
   },
   "pricing-config": {
     enabled: PAGE,
-    description: "Rates, seasons and booking conditions.",
+    description:
+      "Base price per night by number of guests, before platform fees and tourist tax, and booking conditions. Never write a stay total.",
   },
 };
 

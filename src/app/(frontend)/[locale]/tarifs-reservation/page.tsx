@@ -3,12 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AdditionalFees } from "@/components/rates/AdditionalFees";
 import { Availability } from "@/components/rates/Availability";
 import { BookingOptions } from "@/components/rates/BookingOptions";
-import {
-  type FinderPlatform,
-  PriceFinder,
-} from "@/components/rates/PriceFinder";
-import { PriceTable } from "@/components/rates/PriceTable";
-import { quoteOffersJsonLd } from "@/components/rates/quote-offers";
+import { NightlyRates } from "@/components/rates/NightlyRates";
+import { rateOffersJsonLd } from "@/components/rates/rate-offers";
 import { ratesFaq } from "@/components/rates/rates-faq";
 import { BookingButtons } from "@/components/shared/BookingButtons";
 import { Faq } from "@/components/shared/Faq";
@@ -23,14 +19,7 @@ import type { Locale } from "@/i18n/config";
 import { Link } from "@/i18n/navigation";
 import { getAvailability } from "@/lib/availability/load";
 import { breadcrumbJsonLd, faqJsonLd } from "@/lib/jsonld";
-import {
-  BOOKING_PLATFORM_NAMES,
-  BOOKING_PLATFORMS,
-  formatPrice,
-  formatQuoteDate,
-  pricedStays,
-  referenceStay,
-} from "@/lib/platforms";
+import { formatPrice, nightlyRates, referenceRate } from "@/lib/platforms";
 import { getGlobal, getReviews } from "@/lib/queries";
 import { reviewsLedBy } from "@/lib/review-topics";
 import { pageMetadata } from "@/lib/seo";
@@ -77,25 +66,9 @@ export default async function RatesPage({ params }: RatesPageProps) {
 
   const faqItems = await ratesFaq(pricing, settings, locale);
   const currency = pricing.currency || "EUR";
-  const stays = pricedStays(pricing);
-  const reference = referenceStay(stays);
-  const finderPlatforms: FinderPlatform[] = BOOKING_PLATFORMS.flatMap(
-    (platform) => {
-      const listing = settings.platforms?.find(
-        (item) => item.platform === platform,
-      );
-
-      return listing
-        ? [
-            {
-              platform,
-              name: BOOKING_PLATFORM_NAMES[platform],
-              url: listing.url,
-            },
-          ]
-        : [];
-    },
-  );
+  const rates = nightlyRates(pricing);
+  const reference = referenceRate(rates);
+  const priceBasis = `${common("rates.base")} ${common("rates.exact")}`;
   const minimumStay = common("rates.nights", {
     count: pricing.minimumStay ?? 0,
   });
@@ -118,7 +91,12 @@ export default async function RatesPage({ params }: RatesPageProps) {
           breadcrumbJsonLd(locale, [
             { name: common("nav.rates"), href: "/tarifs-reservation" },
           ]),
-          quoteOffersJsonLd(pricing, locale),
+          rateOffersJsonLd({
+            pricing,
+            locale,
+            description: priceBasis,
+            nameFor: (guests) => common("rates.offerName", { guests }),
+          }),
           faqJsonLd(faqItems),
         ]}
       />
@@ -132,7 +110,7 @@ export default async function RatesPage({ params }: RatesPageProps) {
         {reference && (
           <p className="prix-phare">
             {t.rich("headline", {
-              price: formatPrice(reference.nightly, currency, locale),
+              price: formatPrice(reference.price, currency, locale),
               guests: reference.guests,
               strong: (chunks) => <strong>{chunks}</strong>,
             })}
@@ -147,34 +125,16 @@ export default async function RatesPage({ params }: RatesPageProps) {
             <h2 className="lg:col-span-6">{t("pricesTitle")}</h2>
             <div className="texte lg:col-span-6">
               <p className="chapeau">
-                {pricing.quotedOn
-                  ? t("keySentenceDated", {
-                      price: formatPrice(reference.nightly, currency, locale),
-                      guests: reference.guests,
-                      date: formatQuoteDate(pricing.quotedOn, locale),
-                    })
-                  : t("keySentence", {
-                      price: formatPrice(reference.nightly, currency, locale),
-                      guests: reference.guests,
-                    })}
+                {t("keySentence", {
+                  price: formatPrice(reference.price, currency, locale),
+                  guests: reference.guests,
+                })}
               </p>
-              {pricing.quotedOn && (
-                <p className="discret">
-                  {common("rates.quoted", {
-                    date: formatQuoteDate(pricing.quotedOn, locale),
-                  })}{" "}
-                  {common("rates.exact")}
-                </p>
-              )}
+              <p className="discret">{priceBasis}</p>
             </div>
           </div>
-          <PriceFinder
-            stays={stays}
-            platforms={finderPlatforms}
-            currency={currency}
-            defaultGuests={reference.guests}
-          />
-          <PriceTable pricing={pricing} />
+          <NightlyRates rates={rates} currency={currency} />
+          <BookingButtons settings={settings} />
         </section>
       )}
 

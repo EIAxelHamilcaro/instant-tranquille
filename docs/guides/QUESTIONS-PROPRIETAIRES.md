@@ -88,7 +88,7 @@ Tant qu'une question reste sans réponse, le site n'écrit rien sur le sujet et 
 50. Le ménage de fin de séjour est-il compris dans le prix, ou facturé à part, en réservation directe comme sur Airbnb et Booking ?
 51. Les draps et les serviettes sont-ils fournis pour tous les séjours, sans supplément ?
 52. Quels animaux acceptez-vous en dehors des chiens (chats, autres) ?
-53. Le prix change-t-il selon la saison, les vacances scolaires ou les semaines de concours à Lamotte-Beuvron ? Le relevé du 6 octobre 2026 donnait le même prix pour novembre, janvier, mars, mai, juillet et août.
+53. Le prix change-t-il selon la saison, les vacances scolaires ou les semaines de concours à Lamotte-Beuvron ? Le site annonce un seul prix de base par nuit (100, 110 et 120 € pour 2, 4 et 6 voyageurs), sans dire s'il varie : tant que la réponse manque, la question « Le prix change-t-il selon la saison ? » reste hors de la page tarifs.
 54. Quelles sont vos conditions en réservation directe : acompte, moyen de paiement, annulation ?
 
 ### Équipement de la maison
