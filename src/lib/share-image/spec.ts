@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/config";
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 };
 export const SHARE_IMAGE_TYPE = "image/jpeg";
 export const SHARE_IMAGE_EXTENSION = ".jpg";
-export const SHARE_TEMPLATE_VERSION = 1;
+export const SHARE_TEMPLATE_VERSION = 2;
 
 export const SHARE_PAGES = [
   "home",

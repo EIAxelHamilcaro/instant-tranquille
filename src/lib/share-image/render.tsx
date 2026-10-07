@@ -5,8 +5,14 @@ import sharp from "sharp";
 import { SHARE_IMAGE_SIZE } from "./spec";
 
 const { width: WIDTH, height: HEIGHT } = SHARE_IMAGE_SIZE;
-const SAFE_MARGIN = 60;
-const TEXT_WIDTH = HEIGHT - 2 * 24;
+const CARD_WIDTH = HEIGHT - 2 * 24;
+const CARD_PADDING = 34;
+const CARD_BOTTOM = 34;
+const TEXT_WIDTH = CARD_WIDTH - 2 * CARD_PADDING;
+const STAMP = 84;
+const RING_STEP = 150;
+const RING_COUNT = 5;
+const RING_REACH = RING_STEP * RING_COUNT;
 const SUBJECT_LINE = 0.36;
 const MAX_BYTES = 300_000;
 const JPEG_QUALITIES = [84, 78, 72, 66];
@@ -15,25 +21,25 @@ const COLORS = {
   nuit: "#071917",
   etang: "#0e2b28",
   bouleau: "#f8f9f4",
-  lumiere: "#f2c66d",
+  bruyere: "#93467a",
+  encreDouce: "#4a5f59",
 };
 
 const TITLE_SCALE = [
-  { size: 96, lines: 2 },
-  { size: 84, lines: 2 },
-  { size: 74, lines: 3 },
-  { size: 64, lines: 3 },
-  { size: 56, lines: 3 },
-  { size: 50, lines: 3 },
+  { size: 76, lines: 2 },
+  { size: 66, lines: 2 },
+  { size: 58, lines: 3 },
+  { size: 52, lines: 3 },
+  { size: 46, lines: 3 },
 ];
 const TITLE_GLYPH_RATIO = 0.4;
 const TITLE_FILL = 0.86;
-const SMALLEST_TITLE = { size: 50, lines: 3 };
+const SMALLEST_TITLE = { size: 46, lines: 3 };
 const PROOF_SCALE = [
-  { size: 35, maxLength: 37 },
-  { size: 30, maxLength: 44 },
+  { size: 32, maxLength: 36 },
+  { size: 28, maxLength: 42 },
 ];
-const SMALLEST_PROOF = 26;
+const SMALLEST_PROOF = 25;
 
 const FONT_DIRECTORY = join(process.cwd(), "src/assets/fonts");
 
@@ -161,6 +167,7 @@ interface OverlayProps {
 
 function Overlay({ siteName, title, proof }: OverlayProps) {
   const fitted = fitTitle(title);
+  const stampCenter = CARD_PADDING + STAMP / 2;
 
   return (
     <div
@@ -168,100 +175,134 @@ function Overlay({ siteName, title, proof }: OverlayProps) {
         width: "100%",
         height: "100%",
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-between",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        paddingBottom: CARD_BOTTOM,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          paddingTop: SAFE_MARGIN - 14,
-          paddingBottom: 16,
-          paddingLeft: 26,
-          paddingRight: 30,
-          borderBottomLeftRadius: 6,
-          borderBottomRightRadius: 6,
-          background: COLORS.bouleau,
-          color: COLORS.etang,
-          fontFamily: "Bricolage",
-          fontSize: 34,
-          letterSpacing: "-0.01em",
-          lineHeight: 1,
-        }}
-      >
+      <div style={{ display: "flex", position: "relative", width: CARD_WIDTH }}>
         <svg
-          viewBox="0 0 64 64"
-          width="46"
-          height="46"
+          width={RING_REACH * 2}
+          height={RING_REACH * 2}
+          viewBox={`0 0 ${RING_REACH * 2} ${RING_REACH * 2}`}
           fill="none"
-          stroke={COLORS.etang}
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          stroke={COLORS.bouleau}
+          style={{
+            position: "absolute",
+            left: stampCenter - RING_REACH,
+            top: -RING_REACH,
+          }}
           aria-hidden="true"
         >
-          <path d="M40 10c-6 0-9 3-7.5 8 1.5 5 7.5 7 7.5 13" />
-          <path
-            fill={COLORS.etang}
-            stroke="none"
-            d="M40 8 60 10 40 12ZM38 27.5C27 28 15 37 8 48c11 2 25 .5 31-6 3.5-4 3.6-8 3-12Z"
-          />
-          <path strokeWidth="3" d="M29 47v9.5" />
-          <ellipse cx="29" cy="56.5" rx="18" ry="4.5" strokeWidth="3" />
+          {Array.from({ length: RING_COUNT }, (_, ring) => (
+            <circle
+              key={RING_STEP * (ring + 1)}
+              cx={RING_REACH}
+              cy={RING_REACH}
+              r={RING_STEP * (ring + 1)}
+              strokeWidth="1.5"
+              strokeOpacity={0.46 - ring * 0.07}
+            />
+          ))}
         </svg>
-        {siteName}
-      </div>
 
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          paddingTop: 130,
-          paddingBottom: SAFE_MARGIN - 6,
-          backgroundImage:
-            "linear-gradient(to bottom, rgba(7,25,23,0) 0px, rgba(7,25,23,0.32) 45px, rgba(7,25,23,0.7) 95px, rgba(7,25,23,0.87) 130px, rgba(7,25,23,0.95) 100%)",
-        }}
-      >
         <div
           style={{
+            width: "100%",
             display: "flex",
-            justifyContent: "center",
-            width: TEXT_WIDTH,
-            textAlign: "center",
-            textWrap: "balance",
-            fontFamily: "Bricolage",
-            fontSize: fitted.size,
-            lineHeight: 0.96,
-            letterSpacing: "-0.02em",
-            color: COLORS.bouleau,
+            flexDirection: "column",
+            paddingTop: STAMP / 2 + 22,
+            paddingBottom: CARD_PADDING - 2,
+            paddingLeft: CARD_PADDING,
+            paddingRight: CARD_PADDING,
+            borderRadius: 6,
+            background: COLORS.bouleau,
+            boxShadow: "0 22px 60px rgba(7, 25, 23, 0.38)",
           }}
         >
-          {fitted.text}
-        </div>
-        {proof ? (
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              width: TEXT_WIDTH,
-              marginTop: 18,
-              textAlign: "center",
-              fontFamily: "Newsreader",
-              fontStyle: "italic",
-              fontWeight: 500,
-              fontSize: proofSize(proof),
-              lineHeight: 1.15,
-              color: COLORS.lumiere,
+              textWrap: "balance",
+              fontFamily: "Bricolage",
+              fontSize: fitted.size,
+              lineHeight: 0.96,
+              letterSpacing: "-0.02em",
+              color: COLORS.etang,
             }}
           >
-            {proof}
+            {fitted.text}
           </div>
-        ) : null}
+          {proof ? (
+            <div
+              style={{
+                display: "flex",
+                marginTop: 16,
+                fontFamily: "Newsreader",
+                fontStyle: "italic",
+                fontWeight: 500,
+                fontSize: proofSize(proof),
+                lineHeight: 1.15,
+                color: COLORS.bruyere,
+              }}
+            >
+              {proof}
+            </div>
+          ) : null}
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: CARD_PADDING,
+            top: -STAMP / 2,
+            width: STAMP,
+            height: STAMP,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: STAMP / 2,
+            border: `4px solid ${COLORS.bouleau}`,
+            background: COLORS.etang,
+          }}
+        >
+          <svg
+            viewBox="0 0 64 64"
+            width="50"
+            height="50"
+            fill="none"
+            stroke={COLORS.bouleau}
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M40 10c-6 0-9 3-7.5 8 1.5 5 7.5 7 7.5 13" />
+            <path
+              fill={COLORS.bouleau}
+              stroke="none"
+              d="M40 8 60 10 40 12ZM38 27.5C27 28 15 37 8 48c11 2 25 .5 31-6 3.5-4 3.6-8 3-12Z"
+            />
+            <path strokeWidth="3" d="M29 47v9.5" />
+            <ellipse cx="29" cy="56.5" rx="18" ry="4.5" strokeWidth="3" />
+          </svg>
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: CARD_PADDING + STAMP + 14,
+            top: 12,
+            display: "flex",
+            fontFamily: "Bricolage",
+            fontSize: 27,
+            letterSpacing: "-0.01em",
+            lineHeight: 1,
+            color: COLORS.encreDouce,
+          }}
+        >
+          {siteName}
+        </div>
       </div>
     </div>
   );
