@@ -26,7 +26,7 @@ pnpm generate:icons      # favicon, icônes et manifest à partir du héron
 pnpm generate:videos     # manifeste src/lib/video-manifest.json, après tout changement de public/videos
 bun test src             # tests (jsonld, vidéos, iCal, temps de route), les *.test.ts sont exclus de tsc
 node_modules/.bin/tsc --noEmit && node_modules/.bin/biome check   # « fini » = les deux verts
-node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le sitemap à IndexNow)
+node scripts/indexnow.mjs   # soumet le sitemap à IndexNow ; lancé par la CI après chaque déploiement de production (.github/workflows/indexnow.yml), à la main seulement après un gros changement de contenu dans le CMS
 node scripts/scroll-bench.mjs <origine> [chemins]   # fluidité du défilement, page par page (Chromium de Playwright, CPU 4x, cache froid), avant toute mise en prod qui touche aux animations
 ```
 
@@ -82,7 +82,7 @@ node scripts/scroll-bench.mjs <origine> [chemins]   # fluidité du défilement, 
 
 - JSON-LD (`src/lib/jsonld.ts`) : un seul nœud complet du gîte (`#gite`, `VacationRental` + `LodgingBusiness`) sur `/` et `/le-gite`, références `@id` ailleurs ; `FAQPage`, `BreadcrumbList`, `Offer`, lieux (`TouristAttraction`), guides (`Article`). La note globale utilise la même fonction que l'affichage des avis.
 - `pageMetadata` (`src/lib/seo.ts`) : canonical, hreflang, Open Graph, titre posé en `absolute` (pas de suffixe automatique). Titres de 60 caractères au plus, descriptions de 120 à 155.
-- `robots.ts` autorise les robots IA ; `/llms.txt`, `/llms-full.txt`, `public/.well-known/ai-catalog.json`. Clé IndexNow : `public/<clé>.txt`, soumission par `scripts/indexnow.mjs`.
+- `robots.ts` autorise les robots IA ; `/llms.txt`, `/llms-full.txt`, `public/.well-known/ai-catalog.json`. Clé IndexNow : `public/<clé>.txt`, soumission par `scripts/indexnow.mjs`, déclenchée par la CI à chaque déploiement de production réussi (événement `deployment_status` de Vercel).
 - Réponses de FAQ montées dans le HTML (`forceMount` dans `shared/Faq.tsx`).
 - Cookie de langue next-intl désactivé. `X-Robots-Tag: noindex` sur `*.vercel.app`.
 - Images de partage : `src/app/og/[locale]/[...key]/route.ts` sert `/og/fr/home.jpg`, `/og/en/guides/<slug>.jpg`... (1200x630, gabarit dans `src/lib/share-image/` : photo intacte, étiquette claire dans le carré central, héron en tampon et anneaux de la rose ; textes dans `messages/*/share.json` ; incrémenter `SHARE_TEMPLATE_VERSION` à chaque changement de gabarit pour renouveler les caches). Icônes : `pnpm generate:icons`.
