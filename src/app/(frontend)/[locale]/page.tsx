@@ -11,6 +11,7 @@ import { PhotoViewer } from "@/components/shared/PhotoViewer";
 import { PriceSummary } from "@/components/shared/PriceSummary";
 import { PropertyFacts } from "@/components/shared/PropertyFacts";
 import { Reviews } from "@/components/shared/Reviews";
+import { Seam } from "@/components/shared/Seam";
 import { Sketch } from "@/components/shared/Sketch";
 import { ForestScene, PondScene } from "@/components/shared/Tableaux";
 import { Ticker } from "@/components/shared/Ticker";
@@ -147,6 +148,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </FilmDialog>
           )}
         </div>
+        <Seam kind="arbres" />
       </section>
 
       <Ticker
@@ -251,6 +253,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {leadReview && (
         <section className="lisiere section section-sombre">
+          <Seam kind="pins" />
           <ForestScene />
           <div className="page grid gap-10">
             <h2>{page.reviewsTitle}</h2>

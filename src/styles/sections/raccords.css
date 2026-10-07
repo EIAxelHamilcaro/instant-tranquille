@@ -1,0 +1,93 @@
+.section-sombre:has(> .raccord-rive) {
+  --raccord-rive: max(108vw, 44rem);
+  --raccord: calc(var(--raccord-rive) * 130 / 1600);
+}
+
+.section-sombre:has(> .raccord-pins) {
+  --raccord-rive: max(108vw, 56rem);
+  --raccord: calc(var(--raccord-rive) * 190 / 3200);
+}
+
+.section-sombre:has(> .raccord-arbres) {
+  --raccord-rive: max(108vw, 52rem);
+  --raccord: calc(var(--raccord-rive) * 130 / 2400);
+}
+
+.section.section-sombre:has(> .raccord) {
+  padding-bottom: max(var(--rythme-section), var(--raccord) + 2rem);
+}
+
+:is(.hero, .entete-page):has(> .raccord) {
+  padding-bottom: calc(var(--raccord) + 1.5rem);
+}
+
+.entete-page:has(> .raccord) .credit {
+  bottom: calc(var(--raccord) + 0.2rem);
+}
+
+.raccord {
+  --aval: var(--brume);
+
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: var(--raccord);
+  overflow: clip;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--aval) 18%, transparent),
+    transparent
+  );
+}
+
+.section-sombre:has(+ .section-claire) > .raccord {
+  --aval: var(--bouleau);
+}
+
+.raccord > svg {
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: var(--raccord-rive);
+  max-width: none;
+  translate: -50% 0;
+  fill: var(--aval);
+}
+
+.raccord-lointain {
+  opacity: 0.38;
+}
+
+.raccord-pins .raccord-lointain {
+  opacity: 0.62;
+}
+
+.raccord-arbres {
+  z-index: auto;
+  background: none;
+}
+
+.raccord-arbres .raccord-lointain {
+  opacity: 0.5;
+}
+
+:is(#contenu, article) > .section-claire {
+  --fondu: calc(var(--rythme-section) * 0.75);
+
+  background-image: linear-gradient(
+    to bottom,
+    var(--amont, var(--fond)),
+    var(--fond) var(--fondu),
+    var(--fond) calc(100% - var(--fondu)),
+    var(--aval, var(--fond))
+  );
+}
+
+:not(.section-sombre, .esquisse-rive) + .section-claire {
+  --amont: var(--brume);
+}
+
+.section-claire:has(+ :not(.section-sombre)) {
+  --aval: var(--brume);
+}

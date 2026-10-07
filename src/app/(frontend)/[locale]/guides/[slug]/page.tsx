@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Faq } from "@/components/shared/Faq";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { PageHero } from "@/components/shared/PageHero";
+import { Seam } from "@/components/shared/Seam";
 import { ForestScene, PondScene } from "@/components/shared/Tableaux";
 import { DriveTimeRose } from "@/components/surroundings/DriveTimeRose";
 import { GuideBody } from "@/components/surroundings/GuideBody";
@@ -228,6 +229,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
             inForest ? "lisiere" : "crepuscule",
           )}
         >
+          <Seam kind={inForest ? "pins" : "rive"} />
           {inForest ? <ForestScene stag="brame" /> : <PondScene />}
           <div className="page grid gap-x-12 gap-y-10 lg:grid-cols-12">
             <div className="grid content-start gap-6 lg:col-span-5">
