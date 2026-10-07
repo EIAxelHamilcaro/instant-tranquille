@@ -133,6 +133,7 @@ Un étang de Sologne à l'aube : calme, dessiné à la main, jamais de pictogram
 - **Redirections** : une règle ne joue que sur une adresse qui n'existe plus (elle passe après les vraies pages). Le chemin se saisit sans langue, il vaut pour `/` et `/en`.
 - **Profondeur des requêtes** : `getGuideBySlug` est en `depth: 2`, sinon les lieux d'un guide n'ont plus leur photo. La profondeur fait partie de la clé de cache.
 - **Écran d'entrée** : il ne se lance pas dans une iframe (`self !== top`). Pour le tester en iframe, poser `data-ouverture` sur `<html>`. Son bloqué par l'autoplay : le premier geste lance l'envol avant le son (connu).
+- **Prix** : `PricingConfig.nightlyRates` porte le prix de base par nuit fixé par les hôtes, par nombre de voyageurs (`nightlyRates` dans `src/lib/platforms.ts`). Ne jamais en tirer un total de séjour ni un prix à la semaine : les plateformes ajoutent leurs frais et la taxe de séjour, et remisent la semaine. Partout où un prix s'affiche, la phrase `common.rates.base` le dit.
 - **Calendriers iCal** : champs privés de `SiteSettings`, vides tant que les hôtes n'ont pas fourni leurs liens ; la section des disponibilités est alors absente du site.
 - **Tests terrain** jamais faits sur vrai téléphone, Safari ni Firefox (voir `docs/REFONTE.md`).
 

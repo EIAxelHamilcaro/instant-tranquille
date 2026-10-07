@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { quoteOffersJsonLd } from "@/components/rates/quote-offers";
+import { rateOffersJsonLd } from "@/components/rates/rate-offers";
 import { guideWordCount } from "@/components/surroundings/guide-content";
 import {
   cottageBeds,
@@ -47,8 +47,10 @@ const settings = {
 
 const pricing = {
   currency: "EUR",
-  quotedOn: "2026-10-06T00:00:00.000Z",
-  quotes: [{ guests: "4", nights: "2", airbnb: 260, booking: 262 }],
+  nightlyRates: [
+    { guests: "4", price: 110 },
+    { guests: "2", price: 100 },
+  ],
 } as unknown as PricingConfig;
 
 const cottage = {
@@ -98,6 +100,10 @@ describe("cottage JSON-LD", () => {
       "2026-10-06",
       "2026-08-01",
     ]);
+  });
+
+  test("given base prices of 100 and 110 per night, when the node is built, then the price range spans them", () => {
+    expect(node.priceRange).toBe("100\u00a0€ - 110\u00a0€");
   });
 
   test("given rooms described in French or in English, when beds are counted, then doubles and singles are totalled by type", () => {
@@ -164,12 +170,52 @@ describe("overall rating", () => {
 });
 
 describe("offers JSON-LD", () => {
-  const offers = quoteOffersJsonLd(pricing, "fr")?.["@graph"] ?? [];
+  const description = "Prix de base par nuit, hors frais de la plateforme.";
+  const offers =
+    rateOffersJsonLd({
+      pricing,
+      locale: "fr",
+      description,
+      nameFor: (guests) => `Prix de base pour ${guests}`,
+    })?.["@graph"] ?? [];
 
-  test("given recorded prices, when offers are built, then they carry no validity date and point to the cottage by reference", () => {
-    expect(offers).toHaveLength(1);
-    expect(offers[0]).not.toHaveProperty("validFrom");
-    expect(Object.keys(offers[0]?.itemOffered ?? {})).toEqual(["@id"]);
+  test("given base prices per night, when offers are built, then each one is a price per night that says what it leaves out, never a stay total", () => {
+    expect(offers.map((offer) => offer.priceSpecification)).toEqual([
+      {
+        "@type": "UnitPriceSpecification",
+        price: 100,
+        priceCurrency: "EUR",
+        unitCode: "DAY",
+      },
+      {
+        "@type": "UnitPriceSpecification",
+        price: 110,
+        priceCurrency: "EUR",
+        unitCode: "DAY",
+      },
+    ]);
+    expect(offers.map((offer) => offer.description)).toEqual([
+      description,
+      description,
+    ]);
+
+    for (const offer of offers) {
+      expect(offer).not.toHaveProperty("price");
+      expect(offer).not.toHaveProperty("eligibleDuration");
+      expect(offer).not.toHaveProperty("validFrom");
+      expect(Object.keys(offer.itemOffered)).toEqual(["@id"]);
+    }
+  });
+
+  test("given no base price, when offers are built, then nothing is emitted", () => {
+    expect(
+      rateOffersJsonLd({
+        pricing: { nightlyRates: [] } as unknown as PricingConfig,
+        locale: "fr",
+        description,
+        nameFor: String,
+      }),
+    ).toBe(null);
   });
 });
 

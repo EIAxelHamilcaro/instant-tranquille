@@ -1,34 +1,40 @@
 import type { Locale } from "@/i18n/config";
 import { cottageReference } from "@/lib/jsonld";
-import { pricedStays } from "@/lib/platforms";
+import { nightlyRates } from "@/lib/platforms";
 import { absoluteUrl } from "@/lib/seo";
 import type { PricingConfig } from "@/payload-types";
 
-export function quoteOffersJsonLd(pricing: PricingConfig, locale: Locale) {
+interface RateOffersInput {
+  pricing: PricingConfig;
+  locale: Locale;
+  description: string;
+  nameFor: (guests: number) => string;
+}
+
+export function rateOffersJsonLd({
+  pricing,
+  locale,
+  description,
+  nameFor,
+}: RateOffersInput) {
   const priceCurrency = pricing.currency || "EUR";
   const url = absoluteUrl("/tarifs-reservation", locale);
-  const offers = pricedStays(pricing).map((stay) => ({
+  const offers = nightlyRates(pricing).map((rate) => ({
     "@type": "Offer",
     url,
-    price: stay.lowest,
-    priceCurrency,
+    name: nameFor(rate.guests),
+    description,
     itemOffered: cottageReference,
     eligibleQuantity: {
       "@type": "QuantitativeValue",
-      maxValue: stay.guests,
+      maxValue: rate.guests,
       unitText: "guests",
-    },
-    eligibleDuration: {
-      "@type": "QuantitativeValue",
-      value: stay.nights,
-      unitCode: "DAY",
     },
     priceSpecification: {
       "@type": "UnitPriceSpecification",
-      price: stay.nightly,
+      price: rate.price,
       priceCurrency,
       unitCode: "DAY",
-      valueAddedTaxIncluded: true,
     },
   }));
 

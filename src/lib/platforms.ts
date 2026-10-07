@@ -41,79 +41,33 @@ export function formatPrice(amount: number, currency: string, locale: string) {
   }).format(amount);
 }
 
-export type BookingPlatform = "airbnb" | "booking";
-
-export interface PricedStay {
+export interface NightlyRate {
   guests: number;
-  nights: number;
-  prices: Partial<Record<BookingPlatform, number>>;
-  lowest: number;
-  nightly: number;
+  price: number;
 }
-
-export const BOOKING_PLATFORMS: BookingPlatform[] = ["airbnb", "booking"];
-
-export const BOOKING_PLATFORM_NAMES: Record<BookingPlatform, string> = {
-  airbnb: PLATFORM_NAMES.airbnb,
-  booking: PLATFORM_NAMES.booking,
-};
 
 const REFERENCE_GUESTS = 4;
 
-export function nightlyPrice(total: number, nights: number) {
-  return Math.round((total / nights) * 100) / 100;
+export function nightlyRates(pricing: PricingConfig): NightlyRate[] {
+  return (pricing.nightlyRates ?? [])
+    .flatMap(({ guests, price }) =>
+      typeof price === "number" ? [{ guests: Number(guests), price }] : [],
+    )
+    .sort((a, b) => a.guests - b.guests);
 }
 
-export function pricedStays(pricing: PricingConfig): PricedStay[] {
-  return (pricing.quotes ?? [])
-    .flatMap((quote) => {
-      const prices = {
-        airbnb: quote.airbnb ?? undefined,
-        booking: quote.booking ?? undefined,
-      };
-      const totals = Object.values(prices).filter(
-        (total): total is number => typeof total === "number",
-      );
-      if (totals.length === 0) return [];
-
-      const nights = Number(quote.nights);
-      const lowest = Math.min(...totals);
-
-      return [
-        {
-          guests: Number(quote.guests),
-          nights,
-          prices,
-          lowest,
-          nightly: nightlyPrice(lowest, nights),
-        },
-      ];
-    })
-    .sort((a, b) => a.nights - b.nights || a.guests - b.guests);
+export function referenceRate(rates: NightlyRate[]) {
+  return rates.find((rate) => rate.guests === REFERENCE_GUESTS) ?? rates[0];
 }
 
-export function shortestStays(stays: PricedStay[]) {
-  const nights = Math.min(...stays.map((stay) => stay.nights));
+export function nightlyRange(rates: NightlyRate[]) {
+  const prices = rates.map((rate) => rate.price);
+  if (prices.length === 0) return null;
 
-  return stays.filter((stay) => stay.nights === nights);
+  return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 
-export function referenceStay(stays: PricedStay[]) {
-  const shortest = shortestStays(stays);
-
-  return (
-    shortest.find((stay) => stay.guests === REFERENCE_GUESTS) ?? shortest[0]
-  );
-}
-
-export function nightlyRange(stays: PricedStay[]) {
-  const rates = shortestStays(stays).map((stay) => stay.nightly);
-  if (rates.length === 0) return null;
-
-  return { min: Math.min(...rates), max: Math.max(...rates) };
-}
-
-export function formatQuoteDate(date: string, locale: string) {
+export function formatLongDate(date: string, locale: string) {
   return new Intl.DateTimeFormat(locale, {
     dateStyle: "long",
     timeZone: "UTC",

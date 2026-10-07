@@ -16,7 +16,6 @@ import {
   GUIDE_CHECK_MAX_AGE_DAYS,
   getAdminStats,
   getUnreadMessages,
-  QUOTE_MAX_AGE_DAYS,
 } from "@/lib/admin-stats";
 import { todayInParis } from "@/lib/availability/ical";
 import { getAvailability } from "@/lib/availability/load";
@@ -112,10 +111,6 @@ export default async function Dashboard({ payload, user }: ServerProps) {
   const accountName =
     user && "name" in user && typeof user.name === "string" ? user.name : "";
   const greeted = stats.hosts || accountName;
-  const quotedOn = stats.pricing.quotedOn;
-  const quoteAge = quotedOn
-    ? Math.floor((Date.now() - new Date(quotedOn).getTime()) / DAY_MS)
-    : null;
   const { reviews, places, guides, photos, messages, platforms } = stats;
   const untranslated =
     places.withoutEnglish +
@@ -138,22 +133,13 @@ export default async function Dashboard({ payload, user }: ServerProps) {
       href: `${to("/collections/testimonials")}?${where([["status", "equals", "pending"]])}`,
       isUrgent: true,
     },
-    quoteAge === null && {
+    stats.pricing.rates === 0 && {
       figure: "0",
-      title: "prix relevé pour l'instant",
-      detail: "Recopiez les prix d'Airbnb et de Booking pour les afficher.",
+      title: "prix de base saisi pour l'instant",
+      detail: "Écrivez votre prix par nuit pour 2, 4 et 6 voyageurs.",
       href: to("/globals/pricing-config"),
       isUrgent: true,
     },
-    quoteAge !== null &&
-      quoteAge > QUOTE_MAX_AGE_DAYS && {
-        figure: String(quoteAge),
-        title: "jours depuis le dernier relevé des prix",
-        detail:
-          "Comparez avec Airbnb et Booking, corrigez si besoin, puis mettez la date du jour.",
-        href: to("/globals/pricing-config"),
-        isUrgent: true,
-      },
     guides.stale > 0 && {
       figure: String(guides.stale),
       title: plural(guides.stale, "guide à relire", "guides à relire"),
@@ -220,12 +206,6 @@ export default async function Dashboard({ payload, user }: ServerProps) {
       ? currentMonth.count - previousMonth.count
       : 0;
   const lastMessage = messages.latest[0];
-  const nextQuote =
-    quotedOn && quoteAge !== null && quoteAge <= QUOTE_MAX_AGE_DAYS
-      ? new Date(
-          new Date(quotedOn).getTime() + QUOTE_MAX_AGE_DAYS * DAY_MS,
-        ).toISOString()
-      : null;
   const shownBySource = new Map<string, number>(
     reviews.bySource.map(({ source, count }) => [source, count]),
   );
@@ -271,15 +251,6 @@ export default async function Dashboard({ payload, user }: ServerProps) {
               <div>
                 <dt>dernier message reçu, de {lastMessage.name}</dt>
                 <dd>{ago(lastMessage.createdAt, today)}</dd>
-              </div>
-            )}
-            {quotedOn && nextQuote && (
-              <div>
-                <dt>
-                  dernier relevé des tarifs, à refaire avant le{" "}
-                  {dayAndMonth.format(new Date(nextQuote))}
-                </dt>
-                <dd>{ago(quotedOn, today)}</dd>
               </div>
             )}
             {reviews.latestAt && (

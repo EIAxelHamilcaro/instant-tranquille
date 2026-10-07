@@ -10,7 +10,7 @@ import {
   LEGAL_UPDATED_AT,
   type LegalDocumentKey,
 } from "@/lib/legal";
-import { formatQuoteDate } from "@/lib/platforms";
+import { formatLongDate } from "@/lib/platforms";
 import { getGlobal } from "@/lib/queries";
 
 const EXTERNAL_LINKS = {
@@ -77,7 +77,7 @@ export async function LegalDocument({ document, locale }: LegalDocumentProps) {
       >
         <p className="ui discret">
           {t.rich("updated", {
-            date: formatQuoteDate(LEGAL_UPDATED_AT, locale),
+            date: formatLongDate(LEGAL_UPDATED_AT, locale),
             time: (chunks) => <time dateTime={LEGAL_UPDATED_AT}>{chunks}</time>,
           })}
         </p>
