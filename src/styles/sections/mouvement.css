@@ -392,7 +392,8 @@
       animation: none;
     }
 
-    :is(.defile, .cartes, .planche, .mosaique, .section) .photo {
+    :is(.defile, .cartes, .planche, .mosaique, .section)
+      .photo:not(.carte-lieu *) {
       animation: traverse-photo linear both;
       animation-timeline: view();
     }
