@@ -1,12 +1,12 @@
 import type { Payload } from "payload";
-import type { ContactValues } from "@/components/contact/contact-schema";
+import type { ContactEnquiry } from "@/components/contact/contact-schema";
 import { buildContactNotification } from "@/lib/email/contact-notification";
 import { readEmailConfig } from "@/lib/email/email-config";
 import { sendEmail } from "@/lib/email/send-email";
 
 export async function notifyContactMessage(
   payload: Payload,
-  values: ContactValues,
+  values: ContactEnquiry,
 ) {
   try {
     const config = readEmailConfig();

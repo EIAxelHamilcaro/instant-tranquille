@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import type { ContactValues } from "@/components/contact/contact-schema";
+import type { ContactEnquiry } from "@/components/contact/contact-schema";
 import { buildContactNotification } from "@/lib/email/contact-notification";
 import { emailWorkerRequestSchema } from "@/lib/email/email-worker-contract";
 
-const traveller: ContactValues = {
+const traveller: ContactEnquiry = {
   name: "Jeanne Martin",
   email: "jeanne@example.org",
   phone: "06 12 34 56 78",

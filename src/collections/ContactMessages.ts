@@ -61,6 +61,7 @@ export const ContactMessages: CollectionConfig = {
             readOnly: true,
             width: "50%",
             condition: (data) => Boolean(data?.dates),
+            components: { Cell: listCell({}) },
           },
         },
       ],

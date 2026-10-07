@@ -8,10 +8,11 @@ import {
   HONEYPOT_FIELD,
   INITIAL_CONTACT_STATE,
 } from "@/components/contact/contact-form-state";
-import type {
-  ContactField,
-  ContactFormFields,
-  OptionalFieldMode,
+import {
+  type ContactField,
+  type ContactFormFields,
+  type OptionalFieldMode,
+  stayToday,
 } from "@/components/contact/contact-schema";
 import { Emblem } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
@@ -90,6 +91,10 @@ export function ContactForm({
   const form = useRef<HTMLFormElement>(null);
   const turnstile = useRef<TurnstileInstance>(null);
   const [isArmed, setIsArmed] = useState(false);
+  const [today, setToday] = useState<string>();
+  const [arrival, setArrival] = useState<string>();
+
+  useEffect(() => setToday(stayToday()), []);
 
   useEffect(() => {
     if (state.status !== "error") return;
@@ -176,17 +181,31 @@ export function ContactForm({
         />
       )}
       {fields.dates !== "hidden" && (
-        <Field
-          name="dates"
-          type="text"
-          label={labelOf("dates", fields.dates)}
-          hint={datesHint || t("datesHint")}
-          autoComplete="off"
-          required={fields.dates === "required"}
-          className={isLoneField ? "large" : undefined}
-          defaultValue={state.values.dates}
-          error={errorOf("dates")}
-        />
+        <fieldset className={cn("champ sejour", isLoneField && "large")}>
+          <legend>{labelOf("dates", fields.dates)}</legend>
+          <Field
+            name="arrival"
+            type="date"
+            label={t("arrival")}
+            autoComplete="off"
+            min={today}
+            required={fields.dates === "required"}
+            defaultValue={state.values.arrival}
+            onChange={(event) => setArrival(event.target.value)}
+            error={errorOf("arrival")}
+          />
+          <Field
+            name="departure"
+            type="date"
+            label={t("departure")}
+            autoComplete="off"
+            min={arrival || state.values.arrival || today}
+            required={fields.dates === "required"}
+            defaultValue={state.values.departure}
+            error={errorOf("departure")}
+          />
+          <p className="indice">{datesHint || t("datesHint")}</p>
+        </fieldset>
       )}
 
       <div className="champ large">
