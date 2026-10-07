@@ -1,3 +1,4 @@
+import { Seam } from "@/components/shared/Seam";
 import { SITE_URL } from "@/lib/seo";
 
 interface ScreenIntroProps {
@@ -24,6 +25,7 @@ export default function ScreenIntro({
           </a>
         )}
       </p>
+      <Seam kind="arbres" />
     </div>
   );
 }

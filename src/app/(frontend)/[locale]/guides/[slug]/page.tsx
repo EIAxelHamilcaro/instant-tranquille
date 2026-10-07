@@ -22,6 +22,7 @@ import { PlaceCards } from "@/components/surroundings/PlaceCards";
 import { StayCall } from "@/components/surroundings/StayCall";
 import { type Locale, locales } from "@/i18n/config";
 import { Link } from "@/i18n/navigation";
+import { followRedirect } from "@/lib/follow-redirect";
 import {
   breadcrumbJsonLd,
   faqJsonLd,
@@ -101,7 +102,10 @@ export default async function GuidePage({ params }: GuidePageProps) {
   setRequestLocale(locale);
 
   const guide = await getGuideBySlug(slug, locale);
-  if (!guide) notFound();
+  if (!guide) {
+    await followRedirect(`/guides/${slug}`, locale);
+    notFound();
+  }
 
   const inForest = FOREST_GUIDES.has(slug);
 

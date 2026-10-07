@@ -10,6 +10,7 @@ const DETAIL_MAX = 160;
 export const OfficialSites: CollectionConfig = {
   slug: "official-sites",
   lockDocuments: false,
+  trash: true,
   labels: { singular: "Site officiel", plural: "Sites officiels" },
   hooks: revalidateCollection("official-sites"),
   defaultSort: "order",

@@ -1,6 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { importExportPlugin } from "@payloadcms/plugin-import-export";
+import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import {
   AlignFeature,
@@ -30,6 +32,7 @@ import { Guides } from "@/collections/Guides";
 import { Media } from "@/collections/Media";
 import { OfficialSites } from "@/collections/OfficialSites";
 import { Places } from "@/collections/Places";
+import { Redirects } from "@/collections/Redirects";
 import { Testimonials } from "@/collections/Testimonials";
 import { Users } from "@/collections/Users";
 import { PricingConfig } from "@/globals/PricingConfig";
@@ -42,15 +45,21 @@ import { RatesPage } from "@/globals/pages/RatesPage";
 import { SurroundingsPage } from "@/globals/pages/SurroundingsPage";
 import { SiteSettings } from "@/globals/SiteSettings";
 import { defaultLocale, locales } from "@/i18n/config";
+import { isScheduler } from "@/lib/access";
 import {
   ADMIN_APP_NAME,
   ADMIN_ICONS,
   ADMIN_MANIFEST_PATH,
 } from "@/lib/admin-app";
 import { adminTranslations } from "@/lib/admin-translations";
+import { assistantAccess } from "@/lib/assistant";
 import { readEmailConfig } from "@/lib/email/email-config";
 import { workerEmailAdapter } from "@/lib/email/payload-email-adapter";
 import { frenchSeoTab, seoFields } from "@/lib/seo-fields";
+import {
+  oneTapSpreadsheet,
+  spreadsheetExports,
+} from "@/lib/spreadsheet-export";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -73,6 +82,7 @@ const isLocalDatabase = LOCAL_DATABASE_HOSTS.includes(
 );
 
 const CONTENT_LANGUAGES = { fr: "Français", en: "Anglais" };
+const SITE_TIMEZONE = { label: "Heure de Paris", value: "Europe/Paris" };
 
 export default buildConfig({
   i18n: {
@@ -85,6 +95,10 @@ export default buildConfig({
     theme: "light",
     avatar: "default",
     dateFormat: "d MMMM yyyy",
+    timezones: {
+      defaultTimezone: SITE_TIMEZONE.value,
+      supportedTimezones: [SITE_TIMEZONE],
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -173,6 +187,7 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   secret: process.env.PAYLOAD_SECRET!,
+  jobs: { access: { run: isScheduler } },
   email: emailConfig ? workerEmailAdapter(emailConfig) : undefined,
   db: postgresAdapter({
     push: isLocalDatabase,
@@ -194,6 +209,10 @@ export default buildConfig({
         "",
     }),
     frenchSeoTab,
+    redirectsPlugin({ collections: ["guides"], overrides: Redirects }),
+    importExportPlugin(spreadsheetExports),
+    oneTapSpreadsheet,
+    assistantAccess,
     ...(blobToken
       ? [
           vercelBlobStorage({

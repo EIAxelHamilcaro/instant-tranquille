@@ -12,18 +12,6 @@ const siteUrl = new URL(
 const isLocalSite =
   !process.env.VERCEL && ["localhost", "127.0.0.1"].includes(siteUrl.hostname);
 
-const MERGED_GUIDES = {
-  "hebergement-cavaliers-lamotte-beuvron": "tourisme-equestre-en-sologne",
-  "generali-open-de-france-ou-dormir": "tourisme-equestre-en-sologne",
-  "game-fair-lamotte-beuvron-hebergement": "tourisme-equestre-en-sologne",
-  "coucher-de-soleil-et-apero-sur-la-loire-en-bateau":
-    "balade-en-bateau-sur-la-loire-depuis-la-sologne",
-  "vouvray-et-montlouis-caves-a-visiter-depuis-romorantin":
-    "route-des-vins-cheverny-touraine-depuis-la-sologne",
-  "incontournables-centre-val-de-loire-depuis-romorantin":
-    "chateaux-de-la-loire-depuis-romorantin",
-};
-
 const STATIC_ASSET_CACHE =
   "public, max-age=604800, stale-while-revalidate=2592000";
 
@@ -58,15 +46,6 @@ const nextConfig: NextConfig = {
         pathname: "/api/media/**",
       },
     ],
-  },
-  async redirects() {
-    return Object.entries(MERGED_GUIDES).flatMap(([merged, target]) =>
-      ["", "/en"].map((prefix) => ({
-        source: `${prefix}/guides/${merged}`,
-        destination: `${prefix}/guides/${target}`,
-        permanent: true,
-      })),
-    );
   },
   async rewrites() {
     return {
