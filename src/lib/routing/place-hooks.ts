@@ -50,17 +50,21 @@ export const computeRoute: CollectionBeforeValidateHook = async ({
   };
   if (isComplete({ ...originalDoc, ...computed })) return computed;
 
-  throw new ValidationError({
-    collection: "places",
-    errors: [
-      {
-        path: "address",
-        message:
-          message ??
-          "Écrivez l'adresse du lieu : elle sert à le placer sur la carte et à calculer le temps de route.",
-      },
-    ],
-  });
+  throw new ValidationError(
+    {
+      collection: "places",
+      errors: [
+        {
+          path: "address",
+          label: "Adresse du lieu",
+          message:
+            message ??
+            "Écrivez l'adresse du lieu : elle sert à le placer sur la carte et à calculer le temps de route.",
+        },
+      ],
+    },
+    req.t,
+  );
 };
 
 export const recalculateRoute: Endpoint = {

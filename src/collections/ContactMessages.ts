@@ -33,19 +33,12 @@ export const ContactMessages: CollectionConfig = {
   },
   fields: [
     {
-      name: "reply",
-      type: "ui",
-      admin: {
-        components: { Field: "/components/payload/MessageActions" },
-      },
-    },
-    {
       name: "subject",
       type: "text",
       label: "Objet",
       required: true,
       maxLength: 300,
-      admin: { readOnly: true },
+      admin: { readOnly: true, hidden: true },
     },
     {
       type: "row",
@@ -63,9 +56,28 @@ export const ContactMessages: CollectionConfig = {
           type: "text",
           label: "Dates souhaitées",
           maxLength: 80,
-          admin: { readOnly: true, width: "50%" },
+          admin: {
+            readOnly: true,
+            width: "50%",
+            condition: (data) => Boolean(data?.dates),
+          },
         },
       ],
+    },
+    {
+      name: "message",
+      type: "textarea",
+      label: "Message",
+      required: true,
+      maxLength: 5000,
+      admin: { readOnly: true, rows: 10 },
+    },
+    {
+      name: "reply",
+      type: "ui",
+      admin: {
+        components: { Field: "/components/payload/MessageActions" },
+      },
     },
     {
       type: "row",
@@ -85,17 +97,13 @@ export const ContactMessages: CollectionConfig = {
           name: "phone",
           type: "text",
           label: "Téléphone",
-          admin: { readOnly: true, width: "50%" },
+          admin: {
+            readOnly: true,
+            width: "50%",
+            condition: (data) => Boolean(data?.phone),
+          },
         },
       ],
-    },
-    {
-      name: "message",
-      type: "textarea",
-      label: "Message",
-      required: true,
-      maxLength: 5000,
-      admin: { readOnly: true, rows: 10 },
     },
     {
       name: "readStatus",

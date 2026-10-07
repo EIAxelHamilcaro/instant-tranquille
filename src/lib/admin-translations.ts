@@ -38,6 +38,17 @@ export const adminTranslations: Translations = {
       updatedSuccessfully: "C'est enregistré.",
       successfullyCreated: "C'est ajouté : {{label}}.",
       deletedSuccessfully: "C'est supprimé.",
+      submit: "Valider",
+      untitled: "Nouvelle fiche",
+      perPage: "Par page : {{limit}}",
+      payloadSettings: "Affichage de cet espace",
+      language: "Langue des menus",
+      resetPreferences: "Remettre l'affichage d'origine",
+      selectValue: "Choisissez dans la liste",
+      noOptions: "Rien à choisir dans cette liste",
+      none: "Aucun",
+      addBelow: "Ajouter en dessous",
+      row: "Ligne",
     },
     authentication: {
       logOut: "Se déconnecter",
@@ -45,17 +56,33 @@ export const adminTranslations: Translations = {
       account: "Mon compte",
       forgotPassword: "Mot de passe oublié",
       forgotPasswordQuestion: "Mot de passe oublié ?",
+      forgotPasswordEmailInstructions:
+        "Écrivez l'adresse e-mail de votre compte. Vous recevrez un lien pour choisir un nouveau mot de passe.",
+      checkYourEmailForPasswordReset:
+        "Si cette adresse correspond à un compte, un e-mail vient de partir avec un lien pour choisir un nouveau mot de passe. Regardez aussi dans les courriers indésirables.",
+      emailSent: "E-mail envoyé",
+      backToLogin: "Revenir à la connexion",
+      forceUnlock: "Débloquer ce compte",
+      loggedOutSuccessfully: "Vous êtes déconnecté.",
+      loggedOutInactivity:
+        "Vous avez été déconnecté après une longue pause. Reconnectez-vous pour continuer.",
+      logBackIn: "Se reconnecter",
     },
     upload: {
       editImage: "Recadrer la photo",
       dragAndDrop: "Glissez une photo ici",
       selectFile: "Choisir une photo",
+      bulkUpload: "Envoyer plusieurs photos",
+      previewSizes: "Voir les tailles",
     },
     fields: {
       saveChanges: "Enregistrer",
       removeUpload: "Retirer la photo",
       addNew: "Ajouter",
       addNewLabel: "Ajouter : {{label}}",
+      addLabel: "Ajouter : {{label}}",
+      collapseAll: "Tout replier",
+      showAll: "Tout déplier",
       chooseFromExisting: "Choisir une photo déjà envoyée",
     },
     localization: {
@@ -72,6 +99,7 @@ export const adminTranslations: Translations = {
     },
     version: {
       saveDraft: "Enregistrer",
+      versions: "Historique",
       publish: "Publier",
       publishChanges: "Publier",
       draft: "Brouillon, pas encore sur le site",
@@ -89,6 +117,26 @@ export const adminTranslations: Translations = {
     error: {
       localesNotSaved_one: "Cette langue n'a pas pu être enregistrée :",
       localesNotSaved_other: "Ces langues n'ont pas pu être enregistrées :",
+      followingFieldsInvalid_one: "Ce n'est pas enregistré. À corriger :",
+      followingFieldsInvalid_other: "Ce n'est pas enregistré. À corriger :",
+      correctInvalidFields:
+        "Ce n'est pas enregistré : corrigez les champs signalés en rouge.",
+      emailOrPasswordIncorrect:
+        "L'adresse e-mail ou le mot de passe ne correspond pas. Vérifiez les deux, ou touchez « Mot de passe oublié ».",
+      userLocked:
+        "Trop d'essais : ce compte est bloqué 10 minutes. Réessayez ensuite, ou demandez à l'autre hôte de le débloquer.",
+      unknown:
+        "Quelque chose n'a pas fonctionné. Vérifiez votre connexion, puis réessayez.",
+      problemUploadingFile:
+        "La photo n'a pas pu être envoyée. Vérifiez qu'elle pèse moins de 4,5 Mo, puis réessayez.",
+      noFilesUploaded: "Choisissez d'abord une photo à envoyer.",
+      invalidFileType: "Ce fichier n'est pas une photo.",
+      valueMustBeUnique: "Cette valeur est déjà utilisée ailleurs.",
+      notAllowedToPerformAction:
+        "Votre compte n'a pas le droit de faire cette action.",
+      unauthorized: "Votre session est terminée. Reconnectez-vous.",
+      tokenInvalidOrExpired:
+        "Ce lien n'est plus valable. Demandez-en un nouveau avec « Mot de passe oublié ».",
     },
     validation: {
       required: "Ce champ est obligatoire : remplissez-le pour enregistrer.",
