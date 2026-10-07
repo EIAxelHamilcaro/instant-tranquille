@@ -29,6 +29,8 @@ import {
 const TITLE_MAX = 90;
 const EXCERPT_MAX = 240;
 const SLUG_MAX = 70;
+const PUBLISHED_IN_THE_MORNING = "'le matin'";
+const ONE_SLOT_A_DAY = 24 * 60;
 
 const slugFromTitle: FieldHook = ({ value, data }) => {
   if (value || data?._status !== "published") return value;
@@ -55,7 +57,16 @@ export const Guides: CollectionConfig = {
     afterChange: [...guideCache.afterChange, redirectFormerSlug],
     afterDelete: guideCache.afterDelete,
   },
-  versions: { drafts: { autosave: { interval: 2000 } }, maxPerDoc: 15 },
+  versions: {
+    drafts: {
+      autosave: { interval: 2000 },
+      schedulePublish: {
+        timeFormat: PUBLISHED_IN_THE_MORNING,
+        timeIntervals: ONE_SLOT_A_DAY,
+      },
+    },
+    maxPerDoc: 15,
+  },
   admin: {
     useAsTitle: "title",
     group: "Autour du gîte",

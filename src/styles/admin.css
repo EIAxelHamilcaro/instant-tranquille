@@ -2351,6 +2351,16 @@ html[data-langue="en"] .field-label .localized::after {
   }
 }
 
+@media (max-width: 768px) {
+  .schedule-publish__upcoming .table tbody td {
+    border: 0;
+  }
+
+  .schedule-publish__upcoming .table tbody .cell-delete {
+    margin-left: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition-duration: 0.01ms !important;

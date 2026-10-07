@@ -44,6 +44,7 @@ import { RatesPage } from "@/globals/pages/RatesPage";
 import { SurroundingsPage } from "@/globals/pages/SurroundingsPage";
 import { SiteSettings } from "@/globals/SiteSettings";
 import { defaultLocale, locales } from "@/i18n/config";
+import { isScheduler } from "@/lib/access";
 import {
   ADMIN_APP_NAME,
   ADMIN_ICONS,
@@ -75,6 +76,7 @@ const isLocalDatabase = LOCAL_DATABASE_HOSTS.includes(
 );
 
 const CONTENT_LANGUAGES = { fr: "Français", en: "Anglais" };
+const SITE_TIMEZONE = { label: "Heure de Paris", value: "Europe/Paris" };
 
 export default buildConfig({
   i18n: {
@@ -87,6 +89,10 @@ export default buildConfig({
     theme: "light",
     avatar: "default",
     dateFormat: "d MMMM yyyy",
+    timezones: {
+      defaultTimezone: SITE_TIMEZONE.value,
+      supportedTimezones: [SITE_TIMEZONE],
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -175,6 +181,7 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   secret: process.env.PAYLOAD_SECRET!,
+  jobs: { access: { run: isScheduler } },
   email: emailConfig ? workerEmailAdapter(emailConfig) : undefined,
   db: postgresAdapter({
     push: isLocalDatabase,

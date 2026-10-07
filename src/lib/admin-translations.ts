@@ -38,6 +38,11 @@ export const adminTranslations: Translations = {
       updatedSuccessfully: "C'est enregistré.",
       successfullyCreated: "C'est ajouté : {{label}}.",
       deletedSuccessfully: "C'est supprimé.",
+      schedulePublishFor: "Programmer : {{title}}",
+      time: "Jour choisi",
+      upcomingEvents: "Ce qui est programmé",
+      noUpcomingEventsScheduled: "Rien n'est programmé pour l'instant.",
+      noDateSelected: "Choisissez un jour",
       trash: "Corbeille",
       aboutToTrash:
         "« <1>{{title}}</1> » part à la corbeille et disparaît du site. Rien n'est perdu : vous pourrez le récupérer dans l'onglet « Corbeille » de cette liste.",
@@ -115,6 +120,10 @@ export const adminTranslations: Translations = {
       publishAllLocales: "Publier en français et en anglais",
       revertToPublished: "Revenir à la version en ligne",
       unpublish: "Retirer du site",
+      schedulePublish: "Programmer pour plus tard",
+      type: "Ce jour-là",
+      scheduledSuccessfully:
+        "C'est programmé : ce sera fait tôt le matin du jour choisi, avant 6 h.",
       lastSavedAgo: "Enregistré il y a {{distance}}",
       selectLocales: "Choisissez les langues à afficher",
       showLocales: "Afficher les langues :",
