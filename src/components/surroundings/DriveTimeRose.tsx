@@ -1,9 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useRef, useState } from "react";
+import {
+  type ComponentType,
+  type ReactNode,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { Emblem } from "@/components/shared/Logo";
-import { Button } from "@/components/ui/button";
 import {
   formatDrive,
   type GeoPoint,
@@ -141,11 +147,18 @@ export interface DriveTimeRoseLabels {
   categories: Partial<Record<PlaceCategory, string>>;
 }
 
-interface DriveTimeRoseProps {
+export interface RoseFilterProps {
+  className: string;
+  isPressed: boolean;
+  onPress: () => void;
+  children: ReactNode;
+}
+
+export interface DriveTimeRoseProps {
   origin: GeoPoint;
   places: RosePlace[];
   labels: DriveTimeRoseLabels;
-  filterable?: boolean;
+  Filter?: ComponentType<RoseFilterProps>;
   className?: string;
 }
 
@@ -153,7 +166,7 @@ export function DriveTimeRose({
   origin,
   places,
   labels,
-  filterable = false,
+  Filter,
   className,
 }: DriveTimeRoseProps) {
   const titleId = useId();
@@ -371,31 +384,27 @@ export function DriveTimeRose({
   const rise = MAX_RADIUS * Math.cos(Math.PI / 15);
 
   return (
-    <div ref={frame} className={cn("rose-cadre grid gap-5", className)}>
-      {filterable && (
-        <div className="rose-filtres flex flex-wrap gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+    <div ref={frame} className={cn("rose-cadre", className)}>
+      {Filter && (
+        <div className="rose-filtres">
+          <Filter
             className="pastille pastille-ronde"
-            aria-pressed={category === null}
-            onClick={() => filter(null)}
+            isPressed={category === null}
+            onPress={() => filter(null)}
           >
             {labels.all}
             <span className="compte">{places.length}</span>
-          </Button>
+          </Filter>
           {categories.map((item) => (
-            <Button
+            <Filter
               key={item}
-              variant="outline"
-              size="sm"
               className={cn("pastille pastille-ronde", `categorie-${item}`)}
-              aria-pressed={category === item}
-              onClick={() => filter(category === item ? null : item)}
+              isPressed={category === item}
+              onPress={() => filter(category === item ? null : item)}
             >
               {labels.categories[item] ?? item}
               <span className="compte">{countByCategory(item)}</span>
-            </Button>
+            </Filter>
           ))}
         </div>
       )}
@@ -645,7 +654,7 @@ export function DriveTimeRose({
           >
             {place.photo && (
               <div
-                className="photo aspect-3/2"
+                className="photo"
                 style={
                   { "--foyer": place.photo.position } as React.CSSProperties
                 }
@@ -692,7 +701,7 @@ export function DriveTimeRose({
           <>
             {active.photo && (
               <span
-                className="photo aspect-3/2"
+                className="photo"
                 style={
                   { "--foyer": active.photo.position } as React.CSSProperties
                 }

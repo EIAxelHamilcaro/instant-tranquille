@@ -1,16 +1,27 @@
 import type { CollectionConfig } from "payload";
 import { isAuthenticated } from "@/lib/access";
+import { listCell, screenIntro } from "@/lib/admin-fields";
+import { revalidateCollection } from "@/lib/revalidate";
 
 export const ContactMessages: CollectionConfig = {
   slug: "contact-messages",
   lockDocuments: false,
+  disableDuplicate: true,
+  hooks: revalidateCollection("contact-messages"),
   labels: { singular: "Message reçu", plural: "Messages reçus" },
   defaultSort: "-createdAt",
   admin: {
     group: "Avis et réservations",
     useAsTitle: "subject",
     description:
-      "Les messages envoyés depuis le formulaire de la page contact. Répondez depuis votre boîte e-mail, puis cochez « Message lu ».",
+      "Les demandes envoyées par les voyageurs depuis le formulaire du site. Ouvrez un message pour y répondre, puis cochez « Message lu ».",
+    hideAPIURL: true,
+    components: {
+      Description: screenIntro(
+        "Ces messages restent privés, rien n'est affiché. Ils viennent du formulaire de la page « Contact ».",
+        "/contact",
+      ),
+    },
     defaultColumns: ["subject", "name", "dates", "createdAt", "readStatus"],
     listSearchableFields: ["name", "email", "subject", "message"],
   },
@@ -21,6 +32,13 @@ export const ContactMessages: CollectionConfig = {
     delete: isAuthenticated,
   },
   fields: [
+    {
+      name: "reply",
+      type: "ui",
+      admin: {
+        components: { Field: "/components/payload/MessageActions" },
+      },
+    },
     {
       name: "subject",
       type: "text",
@@ -87,7 +105,8 @@ export const ContactMessages: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Cochez quand vous avez répondu. Le tableau de bord compte les messages non lus.",
+          "Cochez quand vous avez répondu, puis enregistrez. Le résumé ne compte que les messages à lire.",
+        components: { Cell: listCell({ yes: "Lu", no: "À lire" }) },
       },
     },
   ],

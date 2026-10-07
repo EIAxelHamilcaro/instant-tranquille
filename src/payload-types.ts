@@ -146,13 +146,16 @@ export interface UserAuthOperations {
   };
 }
 /**
- * Châteaux, sites équestres, sorties en famille, nature : tout ce qui se visite depuis le gîte. Chaque lieu apparaît sur la page « Les alentours », sur la carte des temps de route, et peut être cité dans un guide.
+ * Tout ce qui se visite depuis le gîte : châteaux, sites équestres, sorties en famille, nature. Un lieu peut aussi être cité dans un guide.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "places".
  */
 export interface Place {
   id: number;
+  /**
+   * Le nom officiel, tel qu'il est écrit sur le site du lieu.
+   */
   name: string;
   /**
    * Range le lieu sur la page « Les alentours » et lui donne sa couleur sur les cartes.
@@ -167,6 +170,9 @@ export interface Place {
     | 'loire'
     | 'romorantin'
     | 'pratique';
+  /**
+   * La ville ou le village où se trouve le lieu.
+   */
   commune?: string | null;
   /**
    * Ce qu'on y fait ou ce qu'on y voit, en une phrase factuelle. Affichée sur la carte du lieu.
@@ -191,11 +197,11 @@ export interface Place {
   driveKm: number;
   routeMessage?: string | null;
   /**
-   * Trouvée automatiquement depuis l'adresse. Si le lieu est mal placé sur la carte : clic droit sur le lieu dans Google Maps, recopiez ici le premier nombre.
+   * La position nord-sud du lieu. Trouvée automatiquement depuis l'adresse.
    */
   lat: number;
   /**
-   * Le second nombre.
+   * La position est-ouest du lieu : le second nombre donné par Google Maps.
    */
   lng: number;
   /**
@@ -211,7 +217,13 @@ export interface Place {
    */
   events?:
     | {
+        /**
+         * Le nom de l'événement.
+         */
         name: string;
+        /**
+         * Le mois ou la saison, sans année.
+         */
         period?: string | null;
         id?: string | null;
       }[]
@@ -224,7 +236,7 @@ export interface Place {
   createdAt: string;
 }
 /**
- * Toutes les photos du site. Déposez une photo ici, puis choisissez-la dans une page, un lieu ou un guide. Le site la redimensionne et l'allège tout seul.
+ * Toutes les photos du site. Le site les redimensionne et les allège tout seul.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -280,7 +292,7 @@ export interface Media {
   };
 }
 /**
- * Des articles pratiques pour les voyageurs : châteaux, Beauval, séjours équestres, nature. Chaque guide a sa propre page et aide le site à être trouvé sur Google.
+ * Des articles pratiques pour les voyageurs : châteaux, Beauval, séjours équestres, nature. Ils aident le site à être trouvé sur Google.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "guides".
@@ -322,7 +334,13 @@ export interface Guide {
    */
   practical?:
     | {
+        /**
+         * Un ou deux mots.
+         */
         label: string;
+        /**
+         * Une phrase courte, avec un chiffre si possible.
+         */
         value: string;
         id?: string | null;
       }[]
@@ -336,7 +354,13 @@ export interface Guide {
    */
   sources?:
     | {
+        /**
+         * Le nom du site, puis ce qu'on y a vérifié.
+         */
         name: string;
+        /**
+         * Ouvrez la page et copiez l'adresse affichée en haut du navigateur.
+         */
         url: string;
         id?: string | null;
       }[]
@@ -350,7 +374,13 @@ export interface Guide {
    */
   faq?:
     | {
+        /**
+         * Une question telle qu'un voyageur la taperait dans Google.
+         */
         question: string;
+        /**
+         * Répondez dès la première phrase, puis précisez en une ou deux phrases.
+         */
         answer: string;
         id?: string | null;
       }[]
@@ -372,7 +402,7 @@ export interface Guide {
    */
   theme: 'chateaux' | 'equestre' | 'famille' | 'nature' | 'villages' | 'terroir' | 'loire' | 'romorantin';
   /**
-   * La fin de l'adresse web, en minuscules avec des tirets. Ne la changez plus une fois le guide publié : les liens existants seraient cassés.
+   * Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Ne la changez plus ensuite : les liens existants seraient cassés.
    */
   slug: string;
   updatedAt: string;
@@ -404,7 +434,7 @@ export interface OfficialSite {
    */
   group: 'venir' | 'sologne' | 'chateaux' | 'berry' | 'velo' | 'terroir' | 'mairies';
   /**
-   * Les plus petits nombres passent en premier.
+   * Les plus petits nombres passent en premier dans leur rubrique.
    */
   order?: number | null;
   /**
@@ -458,18 +488,18 @@ export interface Amenity {
    */
   category: 'indoor' | 'outdoor' | 'kitchen' | 'comfort' | 'bedroom' | 'bathroom' | 'tech';
   /**
-   * Les plus petits nombres passent en premier dans leur catégorie.
-   */
-  order?: number | null;
-  /**
    * Décochez pour masquer cet équipement sans le supprimer.
    */
   enabled?: boolean | null;
+  /**
+   * Les plus petits nombres passent en premier dans leur catégorie. Deux équipements au même nombre sont rangés par ordre alphabétique.
+   */
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
- * Les avis affichés sur le site. Recopiez ici un avis reçu sur Airbnb ou Booking, puis passez-le en « Approuvé » pour qu'il apparaisse.
+ * Recopiez ici un avis reçu sur Airbnb ou Booking, puis passez-le en « Approuvé » pour qu'il apparaisse.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
@@ -489,15 +519,15 @@ export interface Testimonial {
    */
   text: string;
   /**
-   * Pour Booking, divisez la note par deux.
+   * De 1 à 5. Pour Booking, divisez la note par deux.
    */
   rating: number;
   /**
-   * Sert aux lecteurs d'écran pour prononcer l'avis correctement.
+   * La langue dans laquelle l'avis est écrit. Elle sert aux lecteurs d'écran pour le prononcer correctement.
    */
   language?: ('fr' | 'en' | 'nl' | 'de' | 'es') | null;
   /**
-   * Transmise à Google avec l'avis.
+   * Le mois du séjour, si vous le connaissez. Transmis à Google avec l'avis.
    */
   stayDate?: string | null;
   /**
@@ -516,7 +546,7 @@ export interface Testimonial {
   createdAt: string;
 }
 /**
- * Les messages envoyés depuis le formulaire de la page contact. Répondez depuis votre boîte e-mail, puis cochez « Message lu ».
+ * Les demandes envoyées par les voyageurs depuis le formulaire du site. Ouvrez un message pour y répondre, puis cochez « Message lu ».
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-messages".
@@ -533,7 +563,7 @@ export interface ContactMessage {
   phone?: string | null;
   message: string;
   /**
-   * Cochez quand vous avez répondu. Le tableau de bord compte les messages non lus.
+   * Cochez quand vous avez répondu, puis enregistrez. Le résumé ne compte que les messages à lire.
    */
   readStatus?: boolean | null;
   updatedAt: string;
@@ -548,7 +578,7 @@ export interface ContactMessage {
 export interface User {
   id: number;
   /**
-   * Affiché sur le tableau de bord pour vous saluer.
+   * Affiché sur le résumé pour vous saluer.
    */
   name?: string | null;
   updatedAt: string;
@@ -720,8 +750,8 @@ export interface AmenitiesSelect<T extends boolean = true> {
   name?: T;
   icon?: T;
   category?: T;
-  order?: T;
   enabled?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -874,7 +904,7 @@ export interface HomePage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible. Elle ne sert que si le film d'accueil ne peut pas se lancer.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Elle ne sert que si le film d'accueil ne peut pas se lancer.
    */
   image?: (number | null) | Media;
   /**
@@ -954,7 +984,7 @@ export interface CottagePage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur.
    */
   image?: (number | null) | Media;
   /**
@@ -1047,7 +1077,7 @@ export interface SurroundingsPage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur.
    */
   image?: (number | null) | Media;
   /**
@@ -1133,7 +1163,7 @@ export interface GuidesPage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible. Laissez vide pour reprendre la photo du guide mis en avant.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Laissez vide pour reprendre la photo du guide mis en avant.
    */
   image?: (number | null) | Media;
   /**
@@ -1187,7 +1217,7 @@ export interface RatesPage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur.
    */
   image?: (number | null) | Media;
   /**
@@ -1258,7 +1288,7 @@ export interface ContactPage {
    */
   lede?: string | null;
   /**
-   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur. Le point focal réglé sur la photo décide de ce qui reste visible.
+   * La grande photo affichée derrière le titre. Choisissez une photo lumineuse, en largeur.
    */
   image?: (number | null) | Media;
   /**
@@ -1298,9 +1328,21 @@ export interface ContactPage {
 export interface SiteSetting {
   id: number;
   propertyDetails: {
+    /**
+     * La surface habitable.
+     */
     surface: number;
+    /**
+     * Comme sur vos annonces.
+     */
     maxGuests: number;
+    /**
+     * Les pièces fermées avec un lit.
+     */
     bedrooms: number;
+    /**
+     * Avec douche ou baignoire.
+     */
     bathrooms: number;
     /**
      * Affiché dans la fiche du gîte et dans les questions sur les tarifs.
@@ -1324,16 +1366,25 @@ export interface SiteSetting {
      * Laissez vide pour ne pas afficher de numéro.
      */
     phone?: string | null;
+    /**
+     * Affichée sur la page contact et dans le pied de page.
+     */
     address?: string | null;
+    /**
+     * Cinq chiffres.
+     */
     postalCode?: string | null;
+    /**
+     * Le nom complet de la commune.
+     */
     city?: string | null;
     coordinates?: {
       /**
-       * Clic droit sur la maison dans Google Maps : le premier nombre.
+       * La position nord-sud de la maison.
        */
       lat?: number | null;
       /**
-       * Le second nombre.
+       * La position est-ouest : le second nombre donné par Google Maps.
        */
       lng?: number | null;
       /**
@@ -1351,9 +1402,21 @@ export interface SiteSetting {
    */
   accessRoutes?:
     | {
+        /**
+         * La ville de départ.
+         */
         from: string;
+        /**
+         * En voiture.
+         */
         duration: string;
+        /**
+         * Par la route.
+         */
         distance: string;
+        /**
+         * Les routes principales, en une ligne.
+         */
         description: string;
         id?: string | null;
       }[]
@@ -1363,16 +1426,25 @@ export interface SiteSetting {
    */
   platforms?:
     | {
+        /**
+         * Le site où se trouve l'annonce.
+         */
         platform: 'airbnb' | 'booking' | 'google' | 'gites-de-france' | 'other';
         /**
          * Ouvrez votre annonce et copiez l'adresse affichée en haut du navigateur.
          */
         url: string;
+        /**
+         * La note affichée sur votre annonce, avec un point : 4.9.
+         */
         rating?: number | null;
         /**
          * 5 pour Airbnb, 10 pour Booking.
          */
         ratingScale?: number | null;
+        /**
+         * Le total affiché sur l'annonce.
+         */
         reviewCount?: number | null;
         /**
          * Une distinction décernée par la plateforme, si vous en avez une.
@@ -1430,10 +1502,25 @@ export interface SiteSetting {
    */
   filmEndTitle?: string | null;
   socialLinks?: {
+    /**
+     * Ouvrez votre page et copiez l'adresse affichée en haut du navigateur.
+     */
     facebook?: string | null;
+    /**
+     * L'adresse complète de votre profil.
+     */
     instagram?: string | null;
+    /**
+     * Laissez vide si vous n'en avez pas.
+     */
     pinterest?: string | null;
+    /**
+     * Laissez vide si vous n'en avez pas.
+     */
     youtube?: string | null;
+    /**
+     * Laissez vide si vous n'en avez pas.
+     */
     tiktok?: string | null;
   };
   _status?: ('draft' | 'published') | null;
@@ -1441,7 +1528,7 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
- * Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions. Tout s'affiche sur la page « Tarifs et réservation ».
+ * Les prix relevés sur Airbnb et Booking, les horaires d'arrivée et de départ, les conditions.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pricing-config".
@@ -1482,7 +1569,7 @@ export interface PricingConfig {
    */
   quotedOn?: string | null;
   /**
-   * Une ou deux phrases affichées avec les prix, par exemple pour dire qu'ils ne changent pas selon la saison.
+   * Votre réponse à cette question, en une ou deux phrases. Elle s'affiche dans les questions fréquentes de la page tarifs. Laissez vide pour retirer la question.
    */
   note?: string | null;
   /**
@@ -1494,13 +1581,16 @@ export interface PricingConfig {
          * Le nom du supplément, tel qu'il s'affiche sur la page tarifs.
          */
         name: string;
+        /**
+         * En euros, sans le symbole.
+         */
         amount: number;
         /**
          * Par séjour : compté une fois. Par nuit : compté chaque nuit. Par personne : compté pour chaque voyageur.
          */
         type?: ('per_stay' | 'per_night' | 'per_person') | null;
         /**
-         * Une précision affichée sous le montant.
+         * Une précision affichée sous le montant. Facultatif.
          */
         description?: string | null;
         id?: string | null;
@@ -1544,11 +1634,11 @@ export interface PricingConfig {
       [k: string]: unknown;
     } | null;
     /**
-     * Affiché sur la page tarifs et dans la fiche du gîte.
+     * Affichée sur la page tarifs après le mot « Arrivée ». Écrivez l'heure en chiffres, avec un h : Google la lit aussi.
      */
     checkIn?: string | null;
     /**
-     * Affiché sur la page tarifs et dans la fiche du gîte.
+     * Affichée sur la page tarifs après le mot « Départ ». Écrivez l'heure en chiffres, avec un h : Google la lit aussi.
      */
     checkOut?: string | null;
     /**
