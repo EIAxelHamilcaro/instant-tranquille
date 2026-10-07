@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
-import { bearingFrom, formatDrive, type GeoPoint } from "@/lib/places";
+import { formatDrive } from "@/lib/places";
 import { formatRating, platformName, ratedPlatforms } from "@/lib/platforms";
 import {
   asMedia,
@@ -18,6 +18,7 @@ import {
   type ShareImage,
   type SharePage,
   type SharePanel,
+  type ShareScene,
   type ShareTarget,
   shareImagePath,
 } from "./spec";
@@ -30,7 +31,7 @@ export interface ShareContent {
   proof: string | null;
   photo: Media | null;
   alt: string;
-  panel: SharePanel | null;
+  panel: SharePanel;
 }
 
 const HOME_COMMUNE = "romorantin";
@@ -53,8 +54,7 @@ const GENERIC_PLACE_WORDS = new Set([
   "croisiere",
 ]);
 const SHOWN_PLATFORMS = 2;
-const ROSE_MINUTES = 90;
-const ROSE_LABELLED_RINGS = [30, 60, 90];
+const FOREST_THEMES = new Set<Guide["theme"]>(["nature", "equestre"]);
 const PAGE_GLOBALS = {
   home: "home-page",
   cottage: "cottage-page",
@@ -94,50 +94,6 @@ function namedPlace(title: string, places: Place[]) {
   return places.find((place) =>
     properNouns(place).some((word) => titleWords.has(word)),
   );
-}
-
-async function gitePosition(locale: Locale): Promise<GeoPoint | null> {
-  const { lat, lng } =
-    (await getGlobal("site-settings", locale)).contact?.coordinates ?? {};
-
-  return typeof lat === "number" && typeof lng === "number"
-    ? { lat, lng }
-    : null;
-}
-
-function rosePosition(origin: GeoPoint, place: Place) {
-  const bearing = bearingFrom(origin, place);
-  const reach = Math.min(place.driveMin, ROSE_MINUTES) / ROSE_MINUTES;
-
-  return { x: reach * Math.sin(bearing), y: -reach * Math.cos(bearing) };
-}
-
-function rosePanel(
-  origin: GeoPoint | null,
-  places: Place[],
-  highlighted: Place[],
-  subject: Place | undefined,
-  t: ShareTranslator,
-): SharePanel | null {
-  if (!origin || places.length === 0) return null;
-
-  const highlightedIds = new Set(highlighted.map((place) => place.id));
-
-  return {
-    kind: "rose",
-    points: places.map((place) => ({
-      ...rosePosition(origin, place),
-      category: place.category,
-      highlighted: highlightedIds.has(place.id),
-    })),
-    ringLabels: ROSE_LABELLED_RINGS.map(formatDrive),
-    caption: t("rose.caption"),
-    count: t("rose.count", { count: places.length }),
-    subject: subject && {
-      ...rosePosition(origin, subject),
-      label: formatDrive(subject.driveMin),
-    },
-  };
 }
 
 function guideSubject(title: string, places: Place[]) {
@@ -225,17 +181,57 @@ async function pagePanel(
   page: SharePage,
   locale: Locale,
   t: ShareTranslator,
-): Promise<SharePanel | null> {
+): Promise<SharePanel> {
+  if (page === "home" || page === "contact") {
+    return { scene: "opening", figures: [] };
+  }
+
+  if (page === "surroundings") {
+    const count = (await getPlaces(locale)).length;
+
+    return {
+      scene: "forest",
+      figures: [
+        { value: String(count), label: t("figures.places", { count }) },
+      ],
+    };
+  }
+
+  if (page === "guides") {
+    const count = (await getGuides(locale)).length;
+
+    return {
+      scene: "forest",
+      figures: [
+        { value: String(count), label: t("figures.guides", { count }) },
+      ],
+    };
+  }
+
   const settings = await getGlobal("site-settings", locale);
 
-  if (page === "cottage") {
-    const facts = await getTranslations({
-      locale,
-      namespace: "cottage.facts",
-    });
-    const { surface, maxGuests, bedrooms, bathrooms } =
-      settings.propertyDetails ?? {};
-    const figures = [
+  if (page === "rates") {
+    return {
+      scene: "pond",
+      figures: ratedPlatforms(settings)
+        .slice(0, SHOWN_PLATFORMS)
+        .map((platform) => ({
+          value: formatRating(platform.rating ?? 0, locale),
+          label: t("figures.rating", {
+            scale: platform.ratingScale ?? 5,
+            platform: platformName(platform),
+          }),
+        })),
+    };
+  }
+
+  const facts = await getTranslations({ locale, namespace: "cottage.facts" });
+  const { surface, maxGuests, bedrooms, bathrooms } =
+    settings.propertyDetails ?? {};
+
+  return {
+    scene: "pond-heron",
+    figures: [
       { value: surface, label: facts("surface") },
       { value: maxGuests, label: facts("guests", { count: maxGuests ?? 0 }) },
       { value: bedrooms, label: facts("bedrooms", { count: bedrooms ?? 0 }) },
@@ -245,34 +241,31 @@ async function pagePanel(
       },
     ].flatMap(({ value, label }) =>
       value ? [{ value: String(value), label }] : [],
-    );
+    ),
+  };
+}
 
-    return figures.length > 0 ? { kind: "figures", figures } : null;
+function guideFigures(title: string, places: Place[], t: ShareTranslator) {
+  if (places.length === 0) return [];
+
+  const subject = guideSubject(title, places);
+  if (subject) {
+    return [
+      { value: formatDrive(subject.driveMin), label: t("figures.drive") },
+    ];
   }
 
-  if (page === "rates") {
-    const figures = ratedPlatforms(settings)
-      .slice(0, SHOWN_PLATFORMS)
-      .map((platform) => ({
-        value: formatRating(platform.rating ?? 0, locale),
-        label: t("rates.figure", {
-          scale: platform.ratingScale ?? 5,
-          platform: platformName(platform),
-        }),
-      }));
+  const count = places.length;
+  const nearest = Math.min(...places.map((place) => place.driveMin));
 
-    if (figures.length > 0) return { kind: "figures", figures };
-  }
+  return [
+    { value: String(count), label: t("figures.guidePlaces", { count }) },
+    { value: formatDrive(nearest), label: t("figures.nearest") },
+  ];
+}
 
-  const places = await getPlaces(locale);
-
-  return rosePanel(
-    await gitePosition(locale),
-    places,
-    places.filter((place) => place.featured),
-    undefined,
-    t,
-  );
+function guideScene(guide: Guide): ShareScene {
+  return FOREST_THEMES.has(guide.theme) ? "forest" : "pond-heron";
 }
 
 async function pagePhoto(page: SharePage, locale: Locale) {
@@ -354,12 +347,11 @@ async function guideContent(
   guide: Guide,
   locale: Locale,
 ): Promise<ShareContent> {
-  const [t, common, allPlaces, home, origin] = await Promise.all([
+  const [t, common, allPlaces, home] = await Promise.all([
     getTranslations({ locale, namespace: "share" }),
     getTranslations({ locale, namespace: "common" }),
     getPlaces(locale),
     getGlobal("home-page", locale),
-    gitePosition(locale),
   ]);
   const cited = populated<Place>(guide.places);
   const citedIds = new Set(cited.map((place) => place.id));
@@ -378,7 +370,7 @@ async function guideContent(
     title,
     proof: driveProof(title, cited, t),
     photo,
-    panel: rosePanel(origin, allPlaces, cited, guideSubject(title, cited), t),
+    panel: { scene: guideScene(guide), figures: guideFigures(title, cited, t) },
     alt: describe(title, photo, common("siteName")),
   };
 }

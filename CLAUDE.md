@@ -24,6 +24,7 @@ pnpm generate:types      # régénère src/payload-types.ts après un changement
 pnpm generate:importmap  # après ajout d'un composant admin
 pnpm generate:icons      # favicon, icônes et manifest à partir du héron
 pnpm generate:videos     # manifeste src/lib/video-manifest.json, après tout changement de public/videos
+pnpm generate:share-scenes [origine]   # tableaux des images de partage (src/assets/share-scenes), capturés sur le site local ; après tout changement des tableaux ou de l'écran d'entrée
 bun test src             # tests (jsonld, vidéos, iCal, temps de route), les *.test.ts sont exclus de tsc
 node_modules/.bin/tsc --noEmit && node_modules/.bin/biome check   # « fini » = les deux verts
 node scripts/indexnow.mjs   # soumet le sitemap à IndexNow ; lancé par la CI après chaque déploiement de production (.github/workflows/indexnow.yml), à la main seulement après un gros changement de contenu dans le CMS
@@ -85,7 +86,7 @@ node scripts/scroll-bench.mjs <origine> [chemins]   # fluidité du défilement, 
 - `robots.ts` autorise les robots IA ; `/llms.txt`, `/llms-full.txt`, `public/.well-known/ai-catalog.json`. Clé IndexNow : `public/<clé>.txt`, soumission par `scripts/indexnow.mjs`, déclenchée par la CI à chaque déploiement de production réussi (événement `deployment_status` de Vercel).
 - Réponses de FAQ montées dans le HTML (`forceMount` dans `shared/Faq.tsx`).
 - Cookie de langue next-intl désactivé. `X-Robots-Tag: noindex` sur `*.vercel.app`.
-- Images de partage : `src/app/og/[locale]/[...key]/route.ts` sert `/og/fr/home.jpg`, `/og/en/guides/<slug>.jpg`... (1200x630, gabarit dans `src/lib/share-image/` : photo intacte, étiquette claire dans le carré central, héron en tampon et anneaux de la rose ; textes dans `messages/*/share.json` ; incrémenter `SHARE_TEMPLATE_VERSION` à chaque changement de gabarit pour renouveler les caches). Icônes : `pnpm generate:icons`.
+- Images de partage : `src/app/og/[locale]/[...key]/route.ts` sert `/og/fr/home.jpg`, `/og/en/guides/<slug>.jpg`... (1200x630, gabarit dans `src/lib/share-image/` : photo à gauche avec la carte de titre, à droite un tableau du site, écran d'entrée, étang ou forêt, capturé par `pnpm generate:share-scenes`, avec les chiffres clés de la page posés dessus ; textes dans `messages/*/share.json` ; incrémenter `SHARE_TEMPLATE_VERSION` à chaque changement de gabarit pour renouveler les caches). Icônes : `pnpm generate:icons`.
 - Un seul `h1` par page. Chaque guide répond à une requête précise et cite ses temps de route.
 - Faits à ne pas déformer : 115 m², 6 personnes, 3 chambres, 1 salle de bain. Le site FFE de Lamotte-Beuvron s'appelle le **Parc équestre fédéral** (le « Grand Parquet » est à Fontainebleau).
 

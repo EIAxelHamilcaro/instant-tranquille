@@ -2,8 +2,12 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
-import type { PlaceCategory } from "@/lib/places";
-import { SHARE_IMAGE_SIZE, type SharePanel } from "./spec";
+import {
+  SHARE_IMAGE_SIZE,
+  type ShareFigure,
+  type SharePanel,
+  type ShareScene,
+} from "./spec";
 
 const { width: WIDTH, height: HEIGHT } = SHARE_IMAGE_SIZE;
 const PHOTO_WIDTH = 690;
@@ -14,11 +18,12 @@ const CARD_PADDING = 32;
 const CARD_BOTTOM = 34;
 const PANEL_PADDING = 44;
 const TEXT_WIDTH = CARD_WIDTH - 2 * CARD_PADDING;
-const ROSE_RADIUS = 208;
-const ROSE_CENTER = { x: PHOTO_WIDTH + PANEL_WIDTH / 2, y: 252 };
-const ROSE_RINGS = 6;
-const ROSE_LABELLED_EVERY = 2;
-const STAMP = 52;
+const WATERLINE = 256;
+const FIGURE_SCALE = [
+  { count: 1, size: 156, label: 34 },
+  { count: 2, size: 116, label: 29 },
+  { count: 4, size: 104, label: 26 },
+];
 const SUBJECT_LINE = 0.4;
 const MAX_BYTES = 300_000;
 const JPEG_QUALITIES = [84, 78, 72, 66];
@@ -26,24 +31,11 @@ const JPEG_QUALITIES = [84, 78, 72, 66];
 const COLORS = {
   nuit: "#071917",
   etang: "#0e2b28",
-  etangClair: "#1c423d",
   brume: "#e9ede5",
   bouleau: "#f8f9f4",
   lumiere: "#f2c66d",
   bruyere: "#93467a",
   encreDouce: "#4a5f59",
-};
-
-const CATEGORY_COLORS: Record<PlaceCategory, string> = {
-  chateaux: "#d8b25a",
-  equestre: "#e3a8cf",
-  famille: "#e58a5f",
-  nature: "#8fc7a2",
-  villages: "#c9bda3",
-  terroir: "#e49b9b",
-  loire: "#89bec2",
-  romorantin: "#86b9d6",
-  pratique: "#a9b5ab",
 };
 
 const TITLE_SCALE = [
@@ -63,6 +55,7 @@ const PROOF_SCALE = [
 const SMALLEST_PROOF = 24;
 
 const FONT_DIRECTORY = join(process.cwd(), "src/assets/fonts");
+const SCENE_DIRECTORY = join(process.cwd(), "src/assets/share-scenes");
 
 let fontsPromise: Promise<
   {
@@ -170,6 +163,18 @@ async function cropPhoto(source: Buffer, focal: FocalPoint) {
     .toBuffer();
 }
 
+const scenes = new Map<ShareScene, Promise<Buffer>>();
+
+function loadScene(scene: ShareScene) {
+  const cached = scenes.get(scene);
+  if (cached) return cached;
+
+  const loading = readFile(join(SCENE_DIRECTORY, `${scene}.png`));
+  scenes.set(scene, loading);
+
+  return loading;
+}
+
 function canvas() {
   return sharp({
     create: {
@@ -215,221 +220,31 @@ function Heron({ size, color }: { size: number; color: string }) {
   );
 }
 
-function Rose({ panel }: { panel: Extract<SharePanel, { kind: "rose" }> }) {
-  const span = ROSE_RADIUS * 2 + 40;
-  const middle = span / 2;
-  const ringStep = ROSE_RADIUS / ROSE_RINGS;
-  const quiet = panel.points.filter((point) => !point.highlighted);
-  const loud = panel.points.filter((point) => point.highlighted);
-  const subject = panel.subject;
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: ROSE_CENTER.x - middle,
-        top: ROSE_CENTER.y - middle,
-        width: span,
-        height: span,
-        display: "flex",
-      }}
-    >
-      <svg
-        width={span}
-        height={span}
-        viewBox={`0 0 ${span} ${span}`}
-        fill="none"
-        aria-hidden="true"
-      >
-        {Array.from({ length: ROSE_RINGS }, (_, ring) => (
-          <circle
-            key={ringStep * (ring + 1)}
-            cx={middle}
-            cy={middle}
-            r={ringStep * (ring + 1)}
-            stroke={COLORS.brume}
-            strokeWidth={(ring + 1) % ROSE_LABELLED_EVERY === 0 ? 1.5 : 1}
-            strokeOpacity={(ring + 1) % ROSE_LABELLED_EVERY === 0 ? 0.42 : 0.2}
-          />
-        ))}
-        {subject ? (
-          <line
-            x1={middle}
-            y1={middle}
-            x2={middle + subject.x * ROSE_RADIUS}
-            y2={middle + subject.y * ROSE_RADIUS}
-            stroke={COLORS.lumiere}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-        ) : null}
-        {quiet.map((point, index) => (
-          <circle
-            key={`quiet-${index}-${point.x}`}
-            cx={middle + point.x * ROSE_RADIUS}
-            cy={middle + point.y * ROSE_RADIUS}
-            r="3.4"
-            fill={CATEGORY_COLORS[point.category]}
-            fillOpacity="0.62"
-          />
-        ))}
-        {loud.map((point, index) => (
-          <circle
-            key={`loud-${index}-${point.x}`}
-            cx={middle + point.x * ROSE_RADIUS}
-            cy={middle + point.y * ROSE_RADIUS}
-            r="7.5"
-            fill={CATEGORY_COLORS[point.category]}
-            stroke={COLORS.etang}
-            strokeWidth="2.5"
-          />
-        ))}
-        {subject ? (
-          <circle
-            cx={middle + subject.x * ROSE_RADIUS}
-            cy={middle + subject.y * ROSE_RADIUS}
-            r="10"
-            fill={COLORS.lumiere}
-            stroke={COLORS.etang}
-            strokeWidth="3"
-          />
-        ) : null}
-      </svg>
-
-      {panel.ringLabels.map((label, index) => (
-        <div
-          key={label}
-          style={{
-            position: "absolute",
-            left: middle + 6,
-            top: middle - ringStep * ROSE_LABELLED_EVERY * (index + 1) - 21,
-            display: "flex",
-            fontFamily: "Bricolage",
-            fontSize: 17,
-            lineHeight: 1,
-            color: COLORS.brume,
-            opacity: 0.72,
-          }}
-        >
-          {label}
-        </div>
-      ))}
-
-      <div
-        style={{
-          position: "absolute",
-          left: middle - STAMP / 2,
-          top: middle - STAMP / 2,
-          width: STAMP,
-          height: STAMP,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: STAMP / 2,
-          background: COLORS.bouleau,
-        }}
-      >
-        <Heron size={30} color={COLORS.etang} />
-      </div>
-
-      {subject ? (
-        <div
-          style={{
-            position: "absolute",
-            left:
-              middle + subject.x * ROSE_RADIUS + (subject.x > 0.35 ? -96 : 16),
-            top:
-              middle + subject.y * ROSE_RADIUS + (subject.y > 0.5 ? -44 : 12),
-            display: "flex",
-            padding: "5px 11px 6px",
-            borderRadius: 99,
-            background: COLORS.lumiere,
-            color: COLORS.nuit,
-            fontFamily: "Bricolage",
-            fontSize: 23,
-            lineHeight: 1,
-          }}
-        >
-          {subject.label}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function RoseLegend({
-  panel,
-}: {
-  panel: Extract<SharePanel, { kind: "rose" }>;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: PHOTO_WIDTH + PANEL_PADDING,
-        right: PANEL_PADDING,
-        bottom: CARD_BOTTOM,
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: 6,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          fontFamily: "Bricolage",
-          fontSize: 27,
-          lineHeight: 1.02,
-          letterSpacing: "-0.01em",
-          color: COLORS.bouleau,
-        }}
-      >
-        {panel.count}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          fontFamily: "Newsreader",
-          fontStyle: "italic",
-          fontWeight: 500,
-          fontSize: 22,
-          lineHeight: 1.15,
-          color: COLORS.lumiere,
-        }}
-      >
-        {panel.caption}
-      </div>
-    </div>
-  );
-}
-
-function Figures({
-  panel,
-}: {
-  panel: Extract<SharePanel, { kind: "figures" }>;
-}) {
-  const large = panel.figures.length <= 2;
+function Figures({ figures }: { figures: ShareFigure[] }) {
+  const scale =
+    FIGURE_SCALE.find(({ count }) => figures.length <= count) ??
+    FIGURE_SCALE[FIGURE_SCALE.length - 1];
+  if (!scale) return null;
 
   return (
     <div
       style={{
         position: "absolute",
         left: PHOTO_WIDTH + PANEL_PADDING,
-        top: 0,
+        top: WATERLINE,
         width: PANEL_WIDTH - 2 * PANEL_PADDING,
-        height: HEIGHT,
+        height: HEIGHT - WATERLINE - CARD_BOTTOM,
         display: "flex",
         flexWrap: "wrap",
-        alignContent: "center",
-        rowGap: large ? 54 : 64,
+        alignContent: "flex-start",
+        rowGap: 28,
       }}
     >
-      {panel.figures.map(({ value, label }) => (
+      {figures.map(({ value, label }) => (
         <div
           key={label}
           style={{
-            width: large ? "100%" : "50%",
+            width: scale.count === 4 ? "50%" : "100%",
             display: "flex",
             flexDirection: "column",
           }}
@@ -438,7 +253,7 @@ function Figures({
             style={{
               display: "flex",
               fontFamily: "Bricolage",
-              fontSize: large ? 168 : 136,
+              fontSize: scale.size,
               lineHeight: 0.88,
               letterSpacing: "-0.03em",
               color: COLORS.bouleau,
@@ -453,7 +268,7 @@ function Figures({
               fontFamily: "Newsreader",
               fontStyle: "italic",
               fontWeight: 500,
-              fontSize: large ? 34 : 29,
+              fontSize: scale.label,
               lineHeight: 1.1,
               color: COLORS.lumiere,
             }}
@@ -481,9 +296,7 @@ function Overlay({ siteName, title, proof, panel }: OverlayProps) {
         paddingBottom: CARD_BOTTOM,
       }}
     >
-      {panel?.kind === "rose" ? <Rose panel={panel} /> : null}
-      {panel?.kind === "rose" ? <RoseLegend panel={panel} /> : null}
-      {panel?.kind === "figures" ? <Figures panel={panel} /> : null}
+      {panel ? <Figures figures={panel.figures} /> : null}
 
       <div
         style={{
@@ -559,9 +372,10 @@ export async function renderShareImage({
   focal = { x: 50, y: 50 },
   ...overlayProps
 }: ShareImageInput) {
-  const [background, picture, overlay] = await Promise.all([
+  const [background, picture, scene, overlay] = await Promise.all([
     canvas(),
     photo ? cropPhoto(photo, focal) : null,
+    overlayProps.panel ? loadScene(overlayProps.panel.scene) : null,
     loadFonts()
       .then((fonts) =>
         new ImageResponse(<Overlay {...overlayProps} />, {
@@ -574,6 +388,7 @@ export async function renderShareImage({
   const composed = await sharp(background)
     .composite([
       ...(picture ? [{ input: picture, left: 0, top: 0 }] : []),
+      ...(scene ? [{ input: scene, left: PHOTO_WIDTH, top: 0 }] : []),
       { input: overlay },
     ])
     .removeAlpha()

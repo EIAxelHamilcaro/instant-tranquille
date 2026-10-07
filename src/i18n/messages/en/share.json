@@ -19,12 +19,13 @@
       "single": "{drive} by car from the cottage",
       "range": "{count} places, {min} to {max} from the cottage"
     },
-    "rose": {
-      "caption": "One ring = 15 min by car",
-      "count": "{count, plural, one {# place} other {# places}} around the cottage"
-    },
-    "rates": {
-      "figure": "out of {scale}, {platform}"
+    "figures": {
+      "places": "{count, plural, one {place} other {places}} around the cottage",
+      "guides": "{count, plural, one {travel guide} other {travel guides}}",
+      "drive": "by car from the cottage",
+      "guidePlaces": "{count, plural, one {place} other {places}} in this guide",
+      "nearest": "to the nearest one",
+      "rating": "out of {scale}, {platform}"
     }
   }
 }

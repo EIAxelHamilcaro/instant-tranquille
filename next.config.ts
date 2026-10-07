@@ -43,6 +43,9 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "/*": ["scripts/**/*", "media/**/*"],
   },
+  outputFileTracingIncludes: {
+    "/og/[locale]/[...key]": ["./src/assets/share-scenes/*"],
+  },
   turbopack: {
     resolveAlias: {
       "@payload-config": "./src/payload.config.ts",

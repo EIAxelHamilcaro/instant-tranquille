@@ -12,6 +12,7 @@
     "seed": "tsx scripts/seed/index.ts",
     "generate:icons": "tsx scripts/generate-icons.ts",
     "generate:videos": "tsx scripts/generate-videos.ts",
+    "generate:share-scenes": "node scripts/generate-share-scenes.mjs",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap"
   },
