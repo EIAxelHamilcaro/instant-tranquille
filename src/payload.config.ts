@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { importExportPlugin } from "@payloadcms/plugin-import-export";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import {
@@ -54,6 +55,10 @@ import { adminTranslations } from "@/lib/admin-translations";
 import { readEmailConfig } from "@/lib/email/email-config";
 import { workerEmailAdapter } from "@/lib/email/payload-email-adapter";
 import { frenchSeoTab, seoFields } from "@/lib/seo-fields";
+import {
+  oneTapSpreadsheet,
+  spreadsheetExports,
+} from "@/lib/spreadsheet-export";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -204,6 +209,8 @@ export default buildConfig({
     }),
     frenchSeoTab,
     redirectsPlugin({ collections: ["guides"], overrides: Redirects }),
+    importExportPlugin(spreadsheetExports),
+    oneTapSpreadsheet,
     ...(blobToken
       ? [
           vercelBlobStorage({
