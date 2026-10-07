@@ -16,6 +16,7 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { PageHero } from "@/components/shared/PageHero";
 import { Reviews } from "@/components/shared/Reviews";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
+import { Seam } from "@/components/shared/Seam";
 import { Sketch } from "@/components/shared/Sketch";
 import { ForestScene, PondScene } from "@/components/shared/Tableaux";
 import type { Locale } from "@/i18n/config";
@@ -221,6 +222,7 @@ export default async function RatesPage({ params }: RatesPageProps) {
       </section>
 
       <section className="section section-sombre crepuscule">
+        <Seam kind="rive" />
         <PondScene heron />
         <div className="page grid gap-y-14">
           <div className="grid gap-x-12 gap-y-6 lg:grid-cols-12">
@@ -259,6 +261,7 @@ export default async function RatesPage({ params }: RatesPageProps) {
 
       {reviews.length > 0 && (
         <section className="lisiere section section-sombre">
+          <Seam kind="pins" />
           <ForestScene />
           <div className="page grid gap-10">
             <h2>{t("reviewsTitle")}</h2>

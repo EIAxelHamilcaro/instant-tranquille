@@ -1,6 +1,7 @@
 import { Breadcrumbs, type Crumb } from "@/components/shared/Breadcrumbs";
 import { focalPosition } from "@/components/shared/Photo";
 import { PhotoCredit } from "@/components/shared/PhotoCredit";
+import { Seam } from "@/components/shared/Seam";
 import { SoftImage } from "@/components/shared/SoftImage";
 import { asMedia } from "@/lib/queries";
 import type { Media } from "@/payload-types";
@@ -46,6 +47,7 @@ export function PageHero({
         {lede && <p className="chapeau">{lede}</p>}
         {children}
       </div>
+      <Seam kind="arbres" />
       {media && <PhotoCredit media={media} />}
     </header>
   );

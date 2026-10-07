@@ -11,6 +11,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { PhotoViewer } from "@/components/shared/PhotoViewer";
 import { Reviews } from "@/components/shared/Reviews";
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer";
+import { Seam } from "@/components/shared/Seam";
 import { Sketch } from "@/components/shared/Sketch";
 import { ForestScene, PondScene } from "@/components/shared/Tableaux";
 import { mediaOf } from "@/components/shared/viewer-photos";
@@ -125,6 +126,7 @@ export default async function CottagePage({ params }: CottagePageProps) {
 
       {amenities.length > 0 && (
         <section className="section section-sombre crepuscule">
+          <Seam kind="rive" />
           <PondScene heron />
           <div className="page grid gap-y-10">
             <h2>{t("amenitiesTitle")}</h2>
@@ -149,6 +151,7 @@ export default async function CottagePage({ params }: CottagePageProps) {
 
       {houseReviews.length > 0 && (
         <section className="lisiere section section-sombre">
+          <Seam kind="pins" />
           <ForestScene />
           <div className="page grid gap-10">
             <h2>{t("reviewsTitle")}</h2>

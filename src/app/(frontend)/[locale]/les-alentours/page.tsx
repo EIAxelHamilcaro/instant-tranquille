@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { PageHero } from "@/components/shared/PageHero";
+import { Seam } from "@/components/shared/Seam";
 import { Sketch } from "@/components/shared/Sketch";
 import { PondScene } from "@/components/shared/Tableaux";
 import { Ticker } from "@/components/shared/Ticker";
@@ -254,6 +255,7 @@ export default async function SurroundingsPage({
           id="categorie-equestre"
           className="section section-sombre crepuscule ancre"
         >
+          <Seam kind="rive" />
           <PondScene heron />
           <div className="page grid gap-x-12 gap-y-12 lg:grid-cols-12">
             <div className="grid content-start gap-6 lg:col-span-5">
