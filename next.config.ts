@@ -1,6 +1,7 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { UNKNOWN_ROOT_SEGMENT } from "./src/lib/root-routes";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -10,19 +11,6 @@ const siteUrl = new URL(
 
 const isLocalSite =
   !process.env.VERCEL && ["localhost", "127.0.0.1"].includes(siteUrl.hostname);
-
-const ROUTED_SEGMENTS = [
-  "fr",
-  "en",
-  "api",
-  "admin",
-  "og",
-  "_next",
-  "airbnb",
-  "booking",
-  "google",
-  "gites-de-france",
-];
 
 const MERGED_GUIDES = {
   "hebergement-cavaliers-lamotte-beuvron": "tourisme-equestre-en-sologne",
@@ -85,7 +73,7 @@ const nextConfig: NextConfig = {
       beforeFiles: [],
       afterFiles: [
         {
-          source: `/:segment((?!(?:${ROUTED_SEGMENTS.join("|")})(?:/|$))[^/]+)/:rest*`,
+          source: `/:segment(${UNKNOWN_ROOT_SEGMENT})/:rest*`,
           destination: "/fr/:segment/:rest*",
         },
       ],

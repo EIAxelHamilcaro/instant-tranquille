@@ -47,7 +47,7 @@ Travail sur `develop`, la prod suit `main` (PR #1 fusionnée le 7 octobre 2026).
 - **Un seul nœud JSON-LD du gîte** (`#gite`) sur `/` et `/le-gite`, `@id` ailleurs : pas de doublon
   d'entité. Note globale calculée par la même fonction que le JSON-LD.
 - **Rewrite `afterFiles`** : tout premier segment inconnu part vers la 404 localisée. Tout nouveau
-  segment racine s'ajoute à `ROUTED_SEGMENTS` dans `next.config.ts`.
+  segment racine s'ajoute à `ROUTED_SEGMENTS` dans `src/lib/root-routes.ts`.
 - **Titres à 60 caractères au plus** (posés en `absolute`), descriptions de 120 à 155.
 - **Cookie de langue next-intl désactivé** ; `X-Robots-Tag: noindex` sur `*.vercel.app`.
 
