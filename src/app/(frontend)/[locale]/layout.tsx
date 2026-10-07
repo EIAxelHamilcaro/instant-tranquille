@@ -3,12 +3,12 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { AnchorGuard } from "@/components/layout/AnchorGuard";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { LivePreviewRefresh } from "@/components/layout/LivePreviewRefresh";
 import { Opening } from "@/components/layout/Opening";
 import { OpeningGuard } from "@/components/layout/OpeningGuard";
+import { SectionSizes } from "@/components/layout/SectionSizes";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { BookingButtons } from "@/components/shared/BookingButtons";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -85,7 +85,7 @@ export default async function FrontendLayout({
       <body className="frontend-app flex min-h-screen flex-col">
         {!preview && <OpeningGuard />}
         <SoftImageReveal />
-        <AnchorGuard />
+        <SectionSizes />
         <JsonLd data={webSiteJsonLd()} />
         <SmoothScroll />
         <NextIntlClientProvider>

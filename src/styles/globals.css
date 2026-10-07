@@ -229,11 +229,12 @@ html:has(.frontend-app) {
     padding-block: calc(var(--rythme-section) / 2);
   }
 
-  @media not ((hover: hover) and (pointer: fine)) {
-    html:not([data-ancres]) #contenu > section:not(.hero) {
-      content-visibility: auto;
-      contain-intrinsic-block-size: auto 48rem;
-    }
+  #contenu > section:not(.hero) {
+    contain-intrinsic-block-size: auto 48rem;
+  }
+
+  html:not([data-mesure]) #contenu > section:not(.hero) {
+    content-visibility: auto;
   }
 
   .affiche {

@@ -6,6 +6,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { Sketch } from "@/components/shared/Sketch";
 import { PondScene } from "@/components/shared/Tableaux";
 import { Ticker } from "@/components/shared/Ticker";
+import { CategoryBar } from "@/components/surroundings/CategoryBar";
 import { DriveTimeRose } from "@/components/surroundings/DriveTimeRose";
 import { GuideCards } from "@/components/surroundings/GuideCards";
 import { OfficialLinks } from "@/components/surroundings/OfficialLinks";
@@ -207,6 +208,25 @@ export default async function SurroundingsPage({
           </div>
         </section>
       )}
+
+      <CategoryBar
+        label={t("placesNav")}
+        stops={[
+          ...groups.map(({ category, places: categoryPlaces }) => ({
+            category,
+            label: common(`categories.${category}`),
+            count: categoryPlaces.length,
+          })),
+          ...(showRiders
+            ? [
+                {
+                  category: "equestre" as const,
+                  label: common("categories.equestre"),
+                },
+              ]
+            : []),
+        ]}
+      />
 
       {groups.map(({ category, places: categoryPlaces }) => (
         <section

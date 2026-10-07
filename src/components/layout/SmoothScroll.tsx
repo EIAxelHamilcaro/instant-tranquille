@@ -7,8 +7,9 @@ import "lenis/dist/lenis.css";
 const WHEEL_DEVICE =
   "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 const NATIVE_SCROLL = ".leaflet-container, [role='dialog']";
-const SIDEWAYS_SCROLL = ".defile, .bandeau-piste, .rose-filtres";
-const SNAP_TARGETS = "#contenu > :is(section, header), .pied";
+const SIDEWAYS_SCROLL = ".defile, .bandeau-piste, .rose-filtres, .jalons";
+const SNAP_TARGETS =
+  "#contenu > :is(section, header):not(.section-serree), .pied";
 const SNAP_REACH = 0.5;
 const SNAP_REST = 150;
 const SNAP_LERP = 0.07;

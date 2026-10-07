@@ -27,6 +27,7 @@ pnpm generate:videos     # manifeste src/lib/video-manifest.json, après tout ch
 bun test src             # tests (jsonld, vidéos, iCal, temps de route), les *.test.ts sont exclus de tsc
 node_modules/.bin/tsc --noEmit && node_modules/.bin/biome check   # « fini » = les deux verts
 node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le sitemap à IndexNow)
+node scripts/scroll-bench.mjs <origine> [chemins]   # fluidité du défilement, page par page (Chromium de Playwright, CPU 4x, cache froid), avant toute mise en prod qui touche aux animations
 ```
 
 > **Base de données : `.env` pointe sur la base Neon de PRODUCTION.** Ne jamais lancer `pnpm dev`, `pnpm seed` ni `scripts/seed/apply-corrections.ts` sans un `.env.local` qui surcharge `DATABASE_URL` vers une base locale. Le seed et `apply-corrections` refusent une base non locale sauf `SEED_ALLOW_REMOTE=1`. Base locale : conteneur Docker `lit-local-pg`, `127.0.0.1:5546`, base `lit_v2` ; `pnpm dev` une fois (push du schéma) puis `pnpm seed`. `BLOB_READ_WRITE_TOKEN=` vide en local (médias sur disque). Avant toute commande qui charge Payload : `grep -c "127.0.0.1:5546" .env.local` doit rendre 1.
@@ -38,7 +39,7 @@ node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le site
 ## Production et déploiement
 
 - Projet Vercel `instant-tranquille` (équipe `ei-axel-hamilcaro`, Hobby, région `fra1`). L'apex redirige en 308 vers `www`. Cloudflare en « DNS seul », pas de proxy devant Vercel.
-- Déploiement : la prod suit `main`, qui ne reçoit que des PR depuis `develop`. Le contenu se met à jour avant le déploiement (voir `docs/REFONTE.md`).
+- Déploiement : la prod suit `main`, qui ne reçoit que des PR depuis `develop`. **Toute mise en prod passe par une PR `develop` vers `main`** : jamais de push direct sur `main`, jamais de `vercel --prod` à la main. Le contenu se met à jour avant le déploiement (voir `docs/REFONTE.md`).
 - Prod sur la base Neon `instant_tranquille_v2`. L'ancienne `neondb` reste en lecture seule pour un retour arrière (`vercel rollback` puis `DATABASE_URL` sur `/neondb`). `DATABASE_URL` vient de l'intégration Neon : une resynchronisation peut la remettre sur `neondb`.
 - Build Vercel = `next build`, ni migration ni seed. Contenu de prod : seed puis `apply-corrections` sur la base v2 (avec `SEED_ALLOW_REMOTE=1`), PUIS déploiement (le build lit le contenu ; un seed hors Vercel ne revalide pas le cache du site). Le seed ne remplit un global de page que si le champ est vide, d'où `apply-corrections.ts`.
 - `.vercelignore` exclut `.env*`, `.claude`, `media`, `data`, `scripts/seed/assets` et remplace `.gitignore` pour le CLI : le garder complet.
@@ -70,6 +71,7 @@ node scripts/indexnow.mjs   # APRÈS chaque déploiement en prod (soumet le site
 - Signature : la **rose des temps de route** (gîte au centre, lieux à leur vrai cap, anneaux de 15 min). Temps OSRM, jamais d'estimations. Sélection au point le plus proche du pointeur (`placeNear` dans `DriveTimeRose.tsx`) : ne pas remettre de survol par point.
 - Motifs : tableaux des sections sombres avec parallaxe (`shared/Tableaux.tsx`, `Scenery.tsx`, `sombre.css`), cerf animé (`shared/Stag.tsx`, `cerf.css`, guide du brame), motifs des sections claires (`shared/Sketch.tsx`, `clair.css`), visionneuse de photos (`shared/PhotoViewer.tsx`, `visionneuse.css`), habillage des guides (`surroundings/Guide*.tsx`, `guides.css`). La classe des planches de guide est `.planche-guide` (`.planche` appartient à la page du gîte).
 - **Pas de scroll-snap sur tactile** (retiré, ne pas le remettre).
+- **Défilement** : toutes les sections de `#contenu` sont en `content-visibility: auto` ; `layout/SectionSizes.tsx` pose `data-mesure` deux frames au chargement et au changement de largeur pour mémoriser leurs vraies hauteurs. L'aimantation Lenis ignore les `.section-serree`. Pas d'animation pilotée par le défilement dans une carte de lieu (110 cartes sur `/les-alentours`) : toute nouvelle animation se mesure avec `scripts/scroll-bench.mjs`.
 - Airbnb et Booking sont mis en avant partout via `BookingButtons` (données dans `SiteSettings`).
 - Toute nouvelle page reprend les classes et composants existants (skill `frontend-design`). Le contenu reste rattaché au gîte : c'est sa vitrine, pas un site d'office de tourisme.
 - Aucune photo à la licence douteuse : Galerie Capazza et Fondation du doute restent sans photo.
