@@ -32,6 +32,7 @@
     "booking": {
       "check": "Check availability",
       "direct": "Request a booking",
+      "guestFavourite": "Guest favourite",
       "on": "Book on {platform}",
       "from": "From {price} per night",
       "call": "Call the cottage",

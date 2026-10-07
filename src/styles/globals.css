@@ -734,6 +734,40 @@ html:has(.frontend-app) {
   opacity: 0.78;
 }
 
+.coup-de-coeur {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.coup-de-coeur > svg {
+  flex: none;
+  width: 0.85em;
+  height: 1.7em;
+  color: var(--roseau);
+  fill: currentColor;
+}
+
+.coup-de-coeur > svg > path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.6;
+  stroke-linecap: round;
+}
+
+.coup-de-coeur > svg:last-child {
+  scale: -1 1;
+}
+
+.plateforme-airbnb .coup-de-coeur > svg {
+  color: var(--lumiere);
+}
+
 .faq {
   border-top: 1px solid var(--trait);
 }

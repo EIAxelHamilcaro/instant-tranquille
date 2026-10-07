@@ -32,6 +32,7 @@
     "booking": {
       "check": "Voir les disponibilités",
       "direct": "Demander une réservation",
+      "guestFavourite": "Coup de cœur voyageurs",
       "on": "Réserver sur {platform}",
       "from": "À partir de {price} la nuit",
       "call": "Appeler le gîte",

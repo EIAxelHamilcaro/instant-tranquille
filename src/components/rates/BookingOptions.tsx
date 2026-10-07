@@ -1,7 +1,13 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { GuestFavourite } from "@/components/shared/GuestFavourite";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { formatRating, platformName, ratedPlatforms } from "@/lib/platforms";
+import {
+  formatRating,
+  isGuestFavourite,
+  platformName,
+  ratedPlatforms,
+} from "@/lib/platforms";
 import type { SiteSetting } from "@/payload-types";
 
 interface BookingOptionsProps {
@@ -19,6 +25,9 @@ export async function BookingOptions({ settings }: BookingOptionsProps) {
       {ratedPlatforms(settings).map((platform) => (
         <li key={platform.id ?? platform.url}>
           <h3>{platformName(platform)}</h3>
+          {isGuestFavourite(platform.platform) && (
+            <GuestFavourite label={common("booking.guestFavourite")} />
+          )}
           <p className="note">
             {common("reviews.rating", {
               rating: formatRating(platform.rating ?? 0, locale),

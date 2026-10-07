@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { GuestFavourite } from "@/components/shared/GuestFavourite";
 import { Button } from "@/components/ui/button";
-import { formatRating, platformName } from "@/lib/platforms";
+import { formatRating, isGuestFavourite, platformName } from "@/lib/platforms";
 import { cn } from "@/lib/utils";
 import type { SiteSetting } from "@/payload-types";
 
@@ -33,6 +34,12 @@ export async function BookingButtons({
             {compact
               ? platformName(platform)
               : t("booking.on", { platform: platformName(platform) })}
+            {isGuestFavourite(platform.platform) && (
+              <GuestFavourite
+                label={t("booking.guestFavourite")}
+                compact={compact}
+              />
+            )}
             {!compact && platform.rating && platform.reviewCount && (
               <small>
                 {t("reviews.rating", {
