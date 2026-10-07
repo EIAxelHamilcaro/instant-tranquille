@@ -88,6 +88,53 @@ Travail sur `develop`, la prod suit `main` (PR #1 fusionnée le 7 octobre 2026).
   Redéposer la photo comme nouveau fichier.
 - Au-delà de 4,5 Mo, l'upload est refusé sur Vercel (voir `clientUploads` plus bas).
 
+### Mettre en prod les fonctions Payload (branche `feat/payload-fonctions`)
+
+Corbeille, anciennes adresses, publication programmée, réglages du formulaire, export en tableur.
+Le schéma change : 7 tables, 18 colonnes et 14 types `enum` en plus, rien de retiré ni de modifié.
+Le site en ligne ignore ces ajouts, le script peut donc passer avant le déploiement.
+
+1. Neon : créer une branche de `instant_tranquille_v2` (sauvegarde et répétition). Y rejouer
+   `psql "<url de la branche>" -v ON_ERROR_STOP=1 -f scripts/schema/fonctions-payload.sql`.
+   Le script est une seule transaction : une erreur n'applique rien.
+2. Même commande sur la base de prod. Le script part du schéma de `develop` : si d'autres
+   changements de schéma attendent sur `develop`, les passer d'abord.
+3. Vercel, Production : poser `CRON_SECRET` (32 caractères aléatoires au moins). Sans elle, la
+   route des publications programmées refuse tout appel et rien ne paraît.
+4. PR `develop` vers `main`. Après le déploiement, Vercel doit lister une tâche planifiée
+   `/api/payload-jobs/run` à 3 h UTC.
+5. Aussitôt après : recréer les 6 redirections des guides fusionnés, qui ne sont plus dans
+   `next.config.ts`. Soit à la main dans « Réglages », « Anciennes adresses » (liste dans
+   `RETIRED_GUIDES`, `scripts/seed/content/guides`), soit par
+   `SEED_ALLOW_REMOTE=1 pnpm exec tsx scripts/seed/apply-corrections.ts`, qui réimpose aussi les
+   textes des pages : à éviter si les hôtes les ont retouchés.
+6. Vérifier : `curl -I https://www.instant-tranquille.com/guides/hebergement-cavaliers-lamotte-beuvron`
+   rend 308, `/api/payload-jobs/run` rend 401 sans le secret, `/api/mcp` rend 404.
+
+Retour arrière : `vercel rollback`. Les tables et colonnes ajoutées peuvent rester, l'ancien code
+ne les lit pas. Les 6 redirections reviennent avec l'ancien `next.config.ts`.
+
+### Brancher un assistant (MCP)
+
+Coupé par défaut. À n'ouvrir que le temps d'un usage voulu : l'assistant écrit dans le contenu de
+production, et une modification paraît aussitôt (sauf guide enregistré en brouillon).
+
+1. Une fois : `psql "<url de prod>" -v ON_ERROR_STOP=1 -f scripts/schema/assistant.sql` (1 table,
+   1 colonne), après le script précédent.
+2. Vercel, Production : `MCP_ENABLED=1`, puis redéployer.
+3. Dans l'admin, ouvrir `/admin/collections/payload-mcp-api-keys`, créer une clé, cocher ce que
+   l'assistant peut lire et modifier, copier la clé. Elle agit au nom du compte qui l'a créée.
+4. Claude Code : `claude mcp add --transport http instant-tranquille
+   https://www.instant-tranquille.com/api/mcp --header "Authorization: Bearer <clé>"`.
+   Claude Desktop : passer par `npx mcp-remote <url> --header "Authorization: Bearer <clé>"`.
+   claude.ai et l'application mobile : connecteur personnalisé, à condition qu'il accepte un
+   en-tête d'autorisation (non essayé).
+5. Couper : supprimer la clé (effet immédiat), ou vider `MCP_ENABLED` et redéployer.
+
+Portée : lieux, guides, avis, équipements, sites officiels, pages, réglages et tarifs en lecture
+et écriture, photothèque en lecture seule. Jamais les comptes, les messages des voyageurs ni les
+liens des calendriers. Ni suppression, ni corbeille, ni modification de plusieurs fiches à la fois.
+
 ## Reste à faire
 
 ### Priorité haute
@@ -110,6 +157,15 @@ Travail sur `develop`, la prod suit `main` (PR #1 fusionnée le 7 octobre 2026).
 - **Son de l'écran d'entrée** : il ne démarre pas quand l'autoplay est bloqué (le premier geste
   lance l'envol avant le son).
 - **Upload de plus de 4,5 Mo** : activer `clientUploads` sur le plugin Blob.
+- **Fonctions Payload** (corbeille, anciennes adresses, publication programmée, formulaire,
+  export, assistant) : essayées en local seulement, bascule de prod à faire (procédure plus haut).
+- **Publication programmée** : au jour près, le matin (une tâche par jour sur le plan Hobby). Une
+  heure précise demande un déclencheur externe (Worker Cloudflare ou GitHub Actions).
+- **Assistant (MCP)** : jamais essayé sur Vercel (le plugin charge le compilateur TypeScript à
+  l'exécution) ni depuis claude.ai. Pas de limite de débit sur `/api/mcp`. L'écran des clés reste
+  en anglais, hors du menu des hôtes.
+- **Recherche dans tout l'admin** : non faite. Le plugin `search` de Payload indexe pour le site
+  public, il n'ajoute pas de recherche à l'admin ; chaque liste a déjà la sienne.
 - **Autres recoupements de guides**, non fusionnés : week-end et villages, famille et jours de
   pluie, Chambord et Amboise avec l'itinéraire des châteaux.
 - **Restaurant italien près de la Halle** : laissé sans nom (les annuaires hésitent entre deux).
