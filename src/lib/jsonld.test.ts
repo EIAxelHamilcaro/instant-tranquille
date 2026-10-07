@@ -1,7 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { rateOffersJsonLd } from "@/components/rates/rate-offers";
 import { guideWordCount } from "@/components/surroundings/guide-content";
-import { cottageJsonLd, overallRating, withoutEmpty } from "@/lib/jsonld";
+import {
+  cottageBeds,
+  cottageJsonLd,
+  overallRating,
+  withoutEmpty,
+} from "@/lib/jsonld";
 import type {
   CottagePage,
   Guide,
@@ -99,6 +104,31 @@ describe("cottage JSON-LD", () => {
 
   test("given base prices of 100 and 110 per night, when the node is built, then the price range spans them", () => {
     expect(node.priceRange).toBe("100\u00a0€ - 110\u00a0€");
+  });
+
+  test("given rooms described in French or in English, when beds are counted, then doubles and singles are totalled by type", () => {
+    const rooms = (details: string[]) =>
+      ({ rooms: details.map((text) => ({ details: text })) }) as CottagePage;
+
+    const expected = [
+      { "@type": "BedDetails", numberOfBeds: 2, typeOfBed: "Double" },
+      { "@type": "BedDetails", numberOfBeds: 2, typeOfBed: "Single" },
+    ];
+
+    expect(
+      cottageBeds(
+        rooms([
+          "Deux canapés",
+          "1 lit double",
+          "1 lit double",
+          "2 lits simples",
+        ]),
+      ),
+    ).toEqual(expected);
+    expect(
+      cottageBeds(rooms(["1 double bed", "1 double bed", "2 single beds"])),
+    ).toEqual(expected);
+    expect(cottageBeds(rooms(["Baby-foot"]))).toEqual([]);
   });
 
   test("given an empty phone and email, when the node is built, then no empty property is emitted", () => {

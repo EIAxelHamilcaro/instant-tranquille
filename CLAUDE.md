@@ -86,6 +86,27 @@ node scripts/scroll-bench.mjs <origine> [chemins]   # fluidité du défilement, 
 - Aucune photo à la licence douteuse : Galerie Capazza et Fondation du doute restent sans photo.
 - **Responsive** : audité de 320 à 2560 px, téléphone couché compris. Jetons : `--gouttiere` (safe-area incluse), `--hauteur-barre` (barre de réservation mobile). La rose passe en mode compact par container query (58rem). Sous Hyprland la fenêtre ne se redimensionne pas : tester dans des iframes de même origine ou en headless (`--mute-audio`).
 
+### Direction artistique
+
+Un étang de Sologne à l'aube : calme, dessiné à la main, jamais de pictogramme générique ni de dégradé décoratif. Le site alterne des sections claires (brume) et des tableaux sombres (étang, nuit).
+
+- **Palette** (`:root` de `globals.css`) : `--nuit` #071917, `--etang` #0e2b28, `--etang-clair` #1c423d, `--brume` #e9ede5 (fond clair), `--bouleau` #f8f9f4 (surface), `--lumiere` #f2c66d (or des titres et des lauriers). Accents réglés par contexte dans `.section-claire` et `.section-sombre` : `--bruyere` (soulignement et temps de route), `--fougere`, `--roseau`, `--brique`, `--eau`, `--pierre`. Une couleur se prend toujours par son jeton, jamais en dur ; seules les couleurs des plateformes (`--airbnb`, `--booking`) sortent de la palette.
+- **Typographie** : Bricolage Grotesque (`--sans`) en largeur étroite (`wdth` 80) et graisse forte pour les titres et l'enseigne, Newsreader (`--serif`) pour le texte courant et les chapeaux en italique. Pas de capitales pour les libellés, pas de troisième police.
+- **Tracés partagés** (`src/lib/scenery.ts`) : tous les dessins viennent d'un seul jeu de tracés SVG (arbres lointains et proches, pins, roselière, ondes, reflets, vol d'oiseaux, fougères, bruyère, nénuphars, libellule, étoiles). Un nouveau dessin s'ajoute là et se compose à partir de ces tracés, pas dans un composant.
+- **Illustrations, par rôle** :
+  - tableaux des sections sombres : `PondScene` (étang, héron en option), `ForestScene` (forêt, cerf en option), `NightTreeline` et `NightSky`, dans `shared/Tableaux.tsx` avec les briques de `Scenery.tsx`, styles dans `sombre.css` ;
+  - le héron : emblème et personnage, rig dans `shared/Logo.tsx`, répertoire de gestes dans `heron-repertoire.css` ;
+  - le cerf du guide du brame : `shared/Stag.tsx`, `cerf.css` ;
+  - esquisses des sections claires : `shared/Sketch.tsx`, `clair.css` ;
+  - lisières entre sections : `shared/Seam.tsx`, `raccords.css` ;
+  - la rose des temps de route : `surroundings/DriveTimeRose.tsx`, `rose.css` ;
+  - lauriers de la distinction Airbnb : `shared/GuestFavourite.tsx` ;
+  - ondes d'étang sous les liens de la navigation (`.navigation a::before`, `mouvement.css`) ;
+  - écran d'entrée et images de partage : mêmes tableaux, rien de dessiné à part.
+- **Mouvement** (`mouvement.css`) : il répond à un geste ou marque un seul moment (l'écran d'entrée, l'arrivée du héron). Pas d'apparition en fondu sur chaque section. Tout est coupé sous `prefers-reduced-motion`, et rien n'est piloté par le défilement dans les listes longues.
+- **Admin** : même palette, mêmes polices, mêmes tableaux et lisières, importés par `admin.css` sans charger `globals.css`.
+- **Accueil** : la hero remplit l'écran avec le bandeau des villes (`.hero`, propre à l'accueil) ; les autres pages gardent l'en-tête de page court (`PageHero`), pour que le contenu cherché reste visible sans défiler.
+
 ## SEO
 
 - JSON-LD (`src/lib/jsonld.ts`) : un seul nœud complet du gîte (`#gite`, `VacationRental` + `LodgingBusiness`) sur `/` et `/le-gite`, références `@id` ailleurs ; `FAQPage`, `BreadcrumbList`, `Offer`, lieux (`TouristAttraction`), guides (`Article`). La note globale utilise la même fonction que l'affichage des avis.

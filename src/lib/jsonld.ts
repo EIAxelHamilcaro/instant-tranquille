@@ -127,6 +127,32 @@ function aggregateRating(settings: SiteSetting) {
   return rating ? { "@type": "AggregateRating", ...rating } : undefined;
 }
 
+const BED_TYPES = [
+  {
+    typeOfBed: "Double",
+    wording: /(\d+)\s+(?:lits?\s+doubles?|double\s+beds?)/i,
+  },
+  {
+    typeOfBed: "Single",
+    wording: /(\d+)\s+(?:lits?\s+simples?|single\s+beds?)/i,
+  },
+];
+
+export function cottageBeds(cottage: CottagePage) {
+  const details = (cottage.rooms ?? []).map((room) => room.details ?? "");
+
+  return BED_TYPES.flatMap(({ typeOfBed, wording }) => {
+    const numberOfBeds = details.reduce(
+      (total, text) => total + Number(text.match(wording)?.[1] ?? 0),
+      0,
+    );
+
+    return numberOfBeds > 0
+      ? [{ "@type": "BedDetails", numberOfBeds, typeOfBed }]
+      : [];
+  });
+}
+
 export function cottageImages(cottage: CottagePage) {
   const photos = [
     ...(cottage.rooms ?? []).flatMap((room) =>
@@ -232,6 +258,7 @@ export function cottageJsonLd({
         value: property?.maxGuests,
       },
       numberOfBedrooms: property?.bedrooms,
+      bed: cottageBeds(cottage),
       numberOfBathroomsTotal: property?.bathrooms,
       floorSize: property?.surface
         ? {
