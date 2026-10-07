@@ -31,6 +31,7 @@ const {
 } = await import("./content/pages");
 const { richText } = await import("./rich-text");
 const { retireGuides } = await import("./retire");
+const { seedRedirects } = await import("./redirects");
 
 type Locale = "fr" | "en";
 type Fields = Record<string, unknown>;
@@ -194,6 +195,7 @@ async function renameAmenities(payload: Payload) {
 const payload = await getPayload({ config });
 
 await retireGuides(payload);
+await seedRedirects(payload);
 await renameAmenities(payload);
 
 const featuredGuides = await guideIds(payload, HOME_PAGE.featuredGuides);

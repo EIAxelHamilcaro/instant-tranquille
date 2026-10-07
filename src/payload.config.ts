@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import {
   AlignFeature,
@@ -30,6 +31,7 @@ import { Guides } from "@/collections/Guides";
 import { Media } from "@/collections/Media";
 import { OfficialSites } from "@/collections/OfficialSites";
 import { Places } from "@/collections/Places";
+import { Redirects } from "@/collections/Redirects";
 import { Testimonials } from "@/collections/Testimonials";
 import { Users } from "@/collections/Users";
 import { PricingConfig } from "@/globals/PricingConfig";
@@ -194,6 +196,7 @@ export default buildConfig({
         "",
     }),
     frenchSeoTab,
+    redirectsPlugin({ collections: ["guides"], overrides: Redirects }),
     ...(blobToken
       ? [
           vercelBlobStorage({

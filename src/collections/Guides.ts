@@ -13,6 +13,10 @@ import {
   rowLabel,
   screenIntro,
 } from "@/lib/admin-fields";
+import {
+  redirectFormerSlug,
+  rememberLiveSlug,
+} from "@/lib/guide-redirect-hooks";
 import { GUIDE_THEME_OPTIONS } from "@/lib/place-categories";
 import { previewUrl } from "@/lib/preview-url";
 import { revalidateCollection } from "@/lib/revalidate";
@@ -39,12 +43,18 @@ const slugFromTitle: FieldHook = ({ value, data }) => {
     .replace(/^-|-$/g, "");
 };
 
+const guideCache = revalidateCollection("guides");
+
 export const Guides: CollectionConfig = {
   slug: "guides",
   lockDocuments: false,
   trash: true,
   labels: { singular: "Guide", plural: "Guides de séjour" },
-  hooks: revalidateCollection("guides"),
+  hooks: {
+    beforeChange: [rememberLiveSlug],
+    afterChange: [...guideCache.afterChange, redirectFormerSlug],
+    afterDelete: guideCache.afterDelete,
+  },
   versions: { drafts: { autosave: { interval: 2000 } }, maxPerDoc: 15 },
   admin: {
     useAsTitle: "title",
@@ -336,7 +346,7 @@ export const Guides: CollectionConfig = {
           hooks: { beforeValidate: [slugFromTitle] },
           admin: {
             description:
-              "Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Ne la changez plus ensuite : les liens existants seraient cassés.",
+              "Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Si vous la changez ensuite, l'ancienne adresse renvoie toute seule vers la nouvelle.",
             placeholder: "zooparc-de-beauval",
             components: help(
               "L'adresse d'un guide s'écrit instant-tranquille.com/guides/ suivi de ce texte. Avec « zooparc-de-beauval », la page est instant-tranquille.com/guides/zooparc-de-beauval. Des mots simples, sans accent, séparés par des tirets.",

@@ -75,6 +75,7 @@ export interface Config {
     'contact-messages': ContactMessage;
     media: Media;
     users: User;
+    redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -89,6 +90,7 @@ export interface Config {
     'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -404,7 +406,7 @@ export interface Guide {
    */
   theme: 'chateaux' | 'equestre' | 'famille' | 'nature' | 'villages' | 'terroir' | 'loire' | 'romorantin';
   /**
-   * Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Ne la changez plus ensuite : les liens existants seraient cassés.
+   * Laissez vide : l'adresse se crée toute seule à partir du titre, à la première publication. Si vous la changez ensuite, l'ancienne adresse renvoie toute seule vers la nouvelle.
    */
   slug: string;
   updatedAt: string;
@@ -607,6 +609,36 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * Quand l'adresse d'une page change, l'ancienne renvoie vers la nouvelle : les liens déjà partagés et Google arrivent toujours au bon endroit. Changer l'adresse d'un guide ajoute sa ligne ici tout seul.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  /**
+   * L'adresse qui n'existe plus. Vous pouvez la coller en entier, elle sera raccourcie toute seule. Elle vaut pour le site en français et en anglais.
+   */
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    /**
+     * Si ce guide change d'adresse plus tard, le renvoi suit tout seul.
+     */
+    reference?: {
+      relationTo: 'guides';
+      value: number | Guide;
+    } | null;
+    /**
+     * Une page du site, par exemple /le-gite, ou l'adresse entière d'un autre site.
+     */
+    url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -871,6 +903,23 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
