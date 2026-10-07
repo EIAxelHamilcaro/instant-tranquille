@@ -1,9 +1,10 @@
 import type { Locale } from "@/i18n/config";
+import type { PlaceCategory } from "@/lib/places";
 
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 };
 export const SHARE_IMAGE_TYPE = "image/jpeg";
 export const SHARE_IMAGE_EXTENSION = ".jpg";
-export const SHARE_TEMPLATE_VERSION = 2;
+export const SHARE_TEMPLATE_VERSION = 3;
 
 export const SHARE_PAGES = [
   "home",
@@ -49,3 +50,26 @@ export interface ShareImage {
   url: string;
   alt: string;
 }
+
+export interface SharePoint {
+  x: number;
+  y: number;
+  category: PlaceCategory;
+  highlighted: boolean;
+}
+
+export interface ShareFigure {
+  value: string;
+  label: string;
+}
+
+export type SharePanel =
+  | {
+      kind: "rose";
+      points: SharePoint[];
+      ringLabels: string[];
+      caption: string;
+      count: string;
+      subject?: { x: number; y: number; label: string };
+    }
+  | { kind: "figures"; figures: ShareFigure[] };

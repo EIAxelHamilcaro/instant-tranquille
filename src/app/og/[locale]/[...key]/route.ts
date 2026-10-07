@@ -50,6 +50,7 @@ export async function GET(request: Request, { params }: RouteContext) {
     siteName: common("siteName"),
     title: content.title,
     proof: content.proof,
+    panel: content.panel,
     photo,
     focal: {
       x: content.photo?.focalX ?? DEFAULT_FOCAL,

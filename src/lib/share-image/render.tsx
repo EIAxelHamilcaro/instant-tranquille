@@ -2,44 +2,65 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
-import { SHARE_IMAGE_SIZE } from "./spec";
+import type { PlaceCategory } from "@/lib/places";
+import { SHARE_IMAGE_SIZE, type SharePanel } from "./spec";
 
 const { width: WIDTH, height: HEIGHT } = SHARE_IMAGE_SIZE;
-const CARD_WIDTH = HEIGHT - 2 * 24;
-const CARD_PADDING = 34;
+const PHOTO_WIDTH = 690;
+const PANEL_WIDTH = WIDTH - PHOTO_WIDTH;
+const CARD_LEFT = 34;
+const CARD_WIDTH = PHOTO_WIDTH - 2 * CARD_LEFT;
+const CARD_PADDING = 32;
 const CARD_BOTTOM = 34;
+const PANEL_PADDING = 44;
 const TEXT_WIDTH = CARD_WIDTH - 2 * CARD_PADDING;
-const STAMP = 84;
-const RING_STEP = 150;
-const RING_COUNT = 5;
-const RING_REACH = RING_STEP * RING_COUNT;
-const SUBJECT_LINE = 0.36;
+const ROSE_RADIUS = 208;
+const ROSE_CENTER = { x: PHOTO_WIDTH + PANEL_WIDTH / 2, y: 252 };
+const ROSE_RINGS = 6;
+const ROSE_LABELLED_EVERY = 2;
+const STAMP = 52;
+const SUBJECT_LINE = 0.4;
 const MAX_BYTES = 300_000;
 const JPEG_QUALITIES = [84, 78, 72, 66];
 
 const COLORS = {
   nuit: "#071917",
   etang: "#0e2b28",
+  etangClair: "#1c423d",
+  brume: "#e9ede5",
   bouleau: "#f8f9f4",
+  lumiere: "#f2c66d",
   bruyere: "#93467a",
   encreDouce: "#4a5f59",
 };
 
+const CATEGORY_COLORS: Record<PlaceCategory, string> = {
+  chateaux: "#d8b25a",
+  equestre: "#e3a8cf",
+  famille: "#e58a5f",
+  nature: "#8fc7a2",
+  villages: "#c9bda3",
+  terroir: "#e49b9b",
+  loire: "#89bec2",
+  romorantin: "#86b9d6",
+  pratique: "#a9b5ab",
+};
+
 const TITLE_SCALE = [
-  { size: 76, lines: 2 },
-  { size: 66, lines: 2 },
-  { size: 58, lines: 3 },
-  { size: 52, lines: 3 },
-  { size: 46, lines: 3 },
+  { size: 72, lines: 2 },
+  { size: 64, lines: 2 },
+  { size: 56, lines: 3 },
+  { size: 50, lines: 3 },
+  { size: 44, lines: 3 },
 ];
 const TITLE_GLYPH_RATIO = 0.4;
 const TITLE_FILL = 0.86;
-const SMALLEST_TITLE = { size: 46, lines: 3 };
+const SMALLEST_TITLE = { size: 44, lines: 3 };
 const PROOF_SCALE = [
-  { size: 32, maxLength: 36 },
-  { size: 28, maxLength: 42 },
+  { size: 30, maxLength: 36 },
+  { size: 27, maxLength: 42 },
 ];
-const SMALLEST_PROOF = 25;
+const SMALLEST_PROOF = 24;
 
 const FONT_DIRECTORY = join(process.cwd(), "src/assets/fonts");
 
@@ -118,10 +139,13 @@ async function cropPhoto(source: Buffer, focal: FocalPoint) {
     resolveWithObject: true,
   });
   const scale = Math.max(
-    WIDTH / upright.info.width,
+    PHOTO_WIDTH / upright.info.width,
     HEIGHT / upright.info.height,
   );
-  const scaledWidth = Math.max(WIDTH, Math.round(upright.info.width * scale));
+  const scaledWidth = Math.max(
+    PHOTO_WIDTH,
+    Math.round(upright.info.width * scale),
+  );
   const scaledHeight = Math.max(
     HEIGHT,
     Math.round(upright.info.height * scale),
@@ -133,20 +157,20 @@ async function cropPhoto(source: Buffer, focal: FocalPoint) {
     .resize(scaledWidth, scaledHeight)
     .extract({
       left: clamp(
-        (focal.x / 100) * scaledWidth - WIDTH / 2,
-        scaledWidth - WIDTH,
+        (focal.x / 100) * scaledWidth - PHOTO_WIDTH / 2,
+        scaledWidth - PHOTO_WIDTH,
       ),
       top: clamp(
         (focal.y / 100) * scaledHeight - HEIGHT * SUBJECT_LINE,
         scaledHeight - HEIGHT,
       ),
-      width: WIDTH,
+      width: PHOTO_WIDTH,
       height: HEIGHT,
     })
     .toBuffer();
 }
 
-function plainBackground() {
+function canvas() {
   return sharp({
     create: {
       width: WIDTH,
@@ -163,146 +187,363 @@ interface OverlayProps {
   siteName: string;
   title: string;
   proof?: string | null;
+  panel?: SharePanel | null;
 }
 
-function Overlay({ siteName, title, proof }: OverlayProps) {
-  const fitted = fitTitle(title);
-  const stampCenter = CARD_PADDING + STAMP / 2;
+function Heron({ size, color }: { size: number; color: string }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill="none"
+      stroke={color}
+      strokeWidth="4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M40 10c-6 0-9 3-7.5 8 1.5 5 7.5 7 7.5 13" />
+      <path
+        fill={color}
+        stroke="none"
+        d="M40 8 60 10 40 12ZM38 27.5C27 28 15 37 8 48c11 2 25 .5 31-6 3.5-4 3.6-8 3-12Z"
+      />
+      <path strokeWidth="3" d="M29 47v9.5" />
+      <ellipse cx="29" cy="56.5" rx="18" ry="4.5" strokeWidth="3" />
+    </svg>
+  );
+}
+
+function Rose({ panel }: { panel: Extract<SharePanel, { kind: "rose" }> }) {
+  const span = ROSE_RADIUS * 2 + 40;
+  const middle = span / 2;
+  const ringStep = ROSE_RADIUS / ROSE_RINGS;
+  const quiet = panel.points.filter((point) => !point.highlighted);
+  const loud = panel.points.filter((point) => point.highlighted);
+  const subject = panel.subject;
 
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
+        position: "absolute",
+        left: ROSE_CENTER.x - middle,
+        top: ROSE_CENTER.y - middle,
+        width: span,
+        height: span,
         display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
-        paddingBottom: CARD_BOTTOM,
       }}
     >
-      <div style={{ display: "flex", position: "relative", width: CARD_WIDTH }}>
-        <svg
-          width={RING_REACH * 2}
-          height={RING_REACH * 2}
-          viewBox={`0 0 ${RING_REACH * 2} ${RING_REACH * 2}`}
-          fill="none"
-          stroke={COLORS.bouleau}
+      <svg
+        width={span}
+        height={span}
+        viewBox={`0 0 ${span} ${span}`}
+        fill="none"
+        aria-hidden="true"
+      >
+        {Array.from({ length: ROSE_RINGS }, (_, ring) => (
+          <circle
+            key={ringStep * (ring + 1)}
+            cx={middle}
+            cy={middle}
+            r={ringStep * (ring + 1)}
+            stroke={COLORS.brume}
+            strokeWidth={(ring + 1) % ROSE_LABELLED_EVERY === 0 ? 1.5 : 1}
+            strokeOpacity={(ring + 1) % ROSE_LABELLED_EVERY === 0 ? 0.42 : 0.2}
+          />
+        ))}
+        {subject ? (
+          <line
+            x1={middle}
+            y1={middle}
+            x2={middle + subject.x * ROSE_RADIUS}
+            y2={middle + subject.y * ROSE_RADIUS}
+            stroke={COLORS.lumiere}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+        ) : null}
+        {quiet.map((point, index) => (
+          <circle
+            key={`quiet-${index}-${point.x}`}
+            cx={middle + point.x * ROSE_RADIUS}
+            cy={middle + point.y * ROSE_RADIUS}
+            r="3.4"
+            fill={CATEGORY_COLORS[point.category]}
+            fillOpacity="0.62"
+          />
+        ))}
+        {loud.map((point, index) => (
+          <circle
+            key={`loud-${index}-${point.x}`}
+            cx={middle + point.x * ROSE_RADIUS}
+            cy={middle + point.y * ROSE_RADIUS}
+            r="7.5"
+            fill={CATEGORY_COLORS[point.category]}
+            stroke={COLORS.etang}
+            strokeWidth="2.5"
+          />
+        ))}
+        {subject ? (
+          <circle
+            cx={middle + subject.x * ROSE_RADIUS}
+            cy={middle + subject.y * ROSE_RADIUS}
+            r="10"
+            fill={COLORS.lumiere}
+            stroke={COLORS.etang}
+            strokeWidth="3"
+          />
+        ) : null}
+      </svg>
+
+      {panel.ringLabels.map((label, index) => (
+        <div
+          key={label}
           style={{
             position: "absolute",
-            left: stampCenter - RING_REACH,
-            top: -RING_REACH,
+            left: middle + 6,
+            top: middle - ringStep * ROSE_LABELLED_EVERY * (index + 1) - 21,
+            display: "flex",
+            fontFamily: "Bricolage",
+            fontSize: 17,
+            lineHeight: 1,
+            color: COLORS.brume,
+            opacity: 0.72,
           }}
-          aria-hidden="true"
         >
-          {Array.from({ length: RING_COUNT }, (_, ring) => (
-            <circle
-              key={RING_STEP * (ring + 1)}
-              cx={RING_REACH}
-              cy={RING_REACH}
-              r={RING_STEP * (ring + 1)}
-              strokeWidth="1.5"
-              strokeOpacity={0.46 - ring * 0.07}
-            />
-          ))}
-        </svg>
+          {label}
+        </div>
+      ))}
 
+      <div
+        style={{
+          position: "absolute",
+          left: middle - STAMP / 2,
+          top: middle - STAMP / 2,
+          width: STAMP,
+          height: STAMP,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: STAMP / 2,
+          background: COLORS.bouleau,
+        }}
+      >
+        <Heron size={30} color={COLORS.etang} />
+      </div>
+
+      {subject ? (
         <div
           style={{
-            width: "100%",
+            position: "absolute",
+            left:
+              middle + subject.x * ROSE_RADIUS + (subject.x > 0.35 ? -96 : 16),
+            top:
+              middle + subject.y * ROSE_RADIUS + (subject.y > 0.5 ? -44 : 12),
+            display: "flex",
+            padding: "5px 11px 6px",
+            borderRadius: 99,
+            background: COLORS.lumiere,
+            color: COLORS.nuit,
+            fontFamily: "Bricolage",
+            fontSize: 23,
+            lineHeight: 1,
+          }}
+        >
+          {subject.label}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function RoseLegend({
+  panel,
+}: {
+  panel: Extract<SharePanel, { kind: "rose" }>;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: PHOTO_WIDTH + PANEL_PADDING,
+        right: PANEL_PADDING,
+        bottom: CARD_BOTTOM,
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "column",
+        gap: 6,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "Bricolage",
+          fontSize: 27,
+          lineHeight: 1.02,
+          letterSpacing: "-0.01em",
+          color: COLORS.bouleau,
+        }}
+      >
+        {panel.count}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "Newsreader",
+          fontStyle: "italic",
+          fontWeight: 500,
+          fontSize: 22,
+          lineHeight: 1.15,
+          color: COLORS.lumiere,
+        }}
+      >
+        {panel.caption}
+      </div>
+    </div>
+  );
+}
+
+function Figures({
+  panel,
+}: {
+  panel: Extract<SharePanel, { kind: "figures" }>;
+}) {
+  const large = panel.figures.length <= 2;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: PHOTO_WIDTH + PANEL_PADDING,
+        top: 0,
+        width: PANEL_WIDTH - 2 * PANEL_PADDING,
+        height: HEIGHT,
+        display: "flex",
+        flexWrap: "wrap",
+        alignContent: "center",
+        rowGap: large ? 54 : 64,
+      }}
+    >
+      {panel.figures.map(({ value, label }) => (
+        <div
+          key={label}
+          style={{
+            width: large ? "100%" : "50%",
             display: "flex",
             flexDirection: "column",
-            paddingTop: STAMP / 2 + 22,
-            paddingBottom: CARD_PADDING - 2,
-            paddingLeft: CARD_PADDING,
-            paddingRight: CARD_PADDING,
-            borderRadius: 6,
-            background: COLORS.bouleau,
-            boxShadow: "0 22px 60px rgba(7, 25, 23, 0.38)",
           }}
         >
           <div
             style={{
               display: "flex",
-              textWrap: "balance",
               fontFamily: "Bricolage",
-              fontSize: fitted.size,
-              lineHeight: 0.96,
-              letterSpacing: "-0.02em",
-              color: COLORS.etang,
+              fontSize: large ? 168 : 136,
+              lineHeight: 0.88,
+              letterSpacing: "-0.03em",
+              color: COLORS.bouleau,
             }}
           >
-            {fitted.text}
+            {value}
           </div>
-          {proof ? (
-            <div
-              style={{
-                display: "flex",
-                marginTop: 16,
-                fontFamily: "Newsreader",
-                fontStyle: "italic",
-                fontWeight: 500,
-                fontSize: proofSize(proof),
-                lineHeight: 1.15,
-                color: COLORS.bruyere,
-              }}
-            >
-              {proof}
-            </div>
-          ) : null}
+          <div
+            style={{
+              display: "flex",
+              marginTop: 8,
+              fontFamily: "Newsreader",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: large ? 34 : 29,
+              lineHeight: 1.1,
+              color: COLORS.lumiere,
+            }}
+          >
+            {label}
+          </div>
         </div>
+      ))}
+    </div>
+  );
+}
 
+function Overlay({ siteName, title, proof, panel }: OverlayProps) {
+  const fitted = fitTitle(title);
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "flex-end",
+        paddingLeft: CARD_LEFT,
+        paddingBottom: CARD_BOTTOM,
+      }}
+    >
+      {panel?.kind === "rose" ? <Rose panel={panel} /> : null}
+      {panel?.kind === "rose" ? <RoseLegend panel={panel} /> : null}
+      {panel?.kind === "figures" ? <Figures panel={panel} /> : null}
+
+      <div
+        style={{
+          width: CARD_WIDTH,
+          display: "flex",
+          flexDirection: "column",
+          paddingTop: 24,
+          paddingBottom: CARD_PADDING - 4,
+          paddingLeft: CARD_PADDING,
+          paddingRight: CARD_PADDING,
+          borderRadius: 6,
+          background: COLORS.bouleau,
+          boxShadow: "0 22px 60px rgba(7, 25, 23, 0.45)",
+        }}
+      >
         <div
           style={{
-            position: "absolute",
-            left: CARD_PADDING,
-            top: -STAMP / 2,
-            width: STAMP,
-            height: STAMP,
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            borderRadius: STAMP / 2,
-            border: `4px solid ${COLORS.bouleau}`,
-            background: COLORS.etang,
-          }}
-        >
-          <svg
-            viewBox="0 0 64 64"
-            width="50"
-            height="50"
-            fill="none"
-            stroke={COLORS.bouleau}
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M40 10c-6 0-9 3-7.5 8 1.5 5 7.5 7 7.5 13" />
-            <path
-              fill={COLORS.bouleau}
-              stroke="none"
-              d="M40 8 60 10 40 12ZM38 27.5C27 28 15 37 8 48c11 2 25 .5 31-6 3.5-4 3.6-8 3-12Z"
-            />
-            <path strokeWidth="3" d="M29 47v9.5" />
-            <ellipse cx="29" cy="56.5" rx="18" ry="4.5" strokeWidth="3" />
-          </svg>
-        </div>
-
-        <div
-          style={{
-            position: "absolute",
-            left: CARD_PADDING + STAMP + 14,
-            top: 12,
-            display: "flex",
+            gap: 9,
+            marginBottom: 16,
             fontFamily: "Bricolage",
-            fontSize: 27,
+            fontSize: 25,
             letterSpacing: "-0.01em",
             lineHeight: 1,
             color: COLORS.encreDouce,
           }}
         >
+          <Heron size={30} color={COLORS.etang} />
           {siteName}
         </div>
+        <div
+          style={{
+            display: "flex",
+            textWrap: "balance",
+            fontFamily: "Bricolage",
+            fontSize: fitted.size,
+            lineHeight: 0.96,
+            letterSpacing: "-0.02em",
+            color: COLORS.etang,
+          }}
+        >
+          {fitted.text}
+        </div>
+        {proof ? (
+          <div
+            style={{
+              display: "flex",
+              marginTop: 14,
+              fontFamily: "Newsreader",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: proofSize(proof),
+              lineHeight: 1.15,
+              color: COLORS.bruyere,
+            }}
+          >
+            {proof}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -318,8 +559,9 @@ export async function renderShareImage({
   focal = { x: 50, y: 50 },
   ...overlayProps
 }: ShareImageInput) {
-  const [background, overlay] = await Promise.all([
-    photo ? cropPhoto(photo, focal) : plainBackground(),
+  const [background, picture, overlay] = await Promise.all([
+    canvas(),
+    photo ? cropPhoto(photo, focal) : null,
     loadFonts()
       .then((fonts) =>
         new ImageResponse(<Overlay {...overlayProps} />, {
@@ -330,7 +572,10 @@ export async function renderShareImage({
       .then((data) => Buffer.from(data)),
   ]);
   const composed = await sharp(background)
-    .composite([{ input: overlay }])
+    .composite([
+      ...(picture ? [{ input: picture, left: 0, top: 0 }] : []),
+      { input: overlay },
+    ])
     .removeAlpha()
     .png({ compressionLevel: 0 })
     .toBuffer();

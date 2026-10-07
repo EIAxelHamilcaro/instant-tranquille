@@ -18,6 +18,13 @@
     "guide": {
       "single": "À {drive} du gîte en voiture",
       "range": "{count} lieux, de {min} à {max} du gîte"
+    },
+    "rose": {
+      "caption": "Un cercle = 15 min de route",
+      "count": "{count, plural, one {# lieu} other {# lieux}} autour du gîte"
+    },
+    "rates": {
+      "figure": "sur {scale}, {platform}"
     }
   }
 }

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
-import { formatDrive } from "@/lib/places";
+import { bearingFrom, formatDrive, type GeoPoint } from "@/lib/places";
 import { formatRating, platformName, ratedPlatforms } from "@/lib/platforms";
 import {
   asMedia,
@@ -17,6 +17,7 @@ import {
   SHARE_TEMPLATE_VERSION,
   type ShareImage,
   type SharePage,
+  type SharePanel,
   type ShareTarget,
   shareImagePath,
 } from "./spec";
@@ -29,6 +30,7 @@ export interface ShareContent {
   proof: string | null;
   photo: Media | null;
   alt: string;
+  panel: SharePanel | null;
 }
 
 const HOME_COMMUNE = "romorantin";
@@ -51,6 +53,8 @@ const GENERIC_PLACE_WORDS = new Set([
   "croisiere",
 ]);
 const SHOWN_PLATFORMS = 2;
+const ROSE_MINUTES = 90;
+const ROSE_LABELLED_RINGS = [30, 60, 90];
 const PAGE_GLOBALS = {
   home: "home-page",
   cottage: "cottage-page",
@@ -92,10 +96,58 @@ function namedPlace(title: string, places: Place[]) {
   );
 }
 
+async function gitePosition(locale: Locale): Promise<GeoPoint | null> {
+  const { lat, lng } =
+    (await getGlobal("site-settings", locale)).contact?.coordinates ?? {};
+
+  return typeof lat === "number" && typeof lng === "number"
+    ? { lat, lng }
+    : null;
+}
+
+function rosePosition(origin: GeoPoint, place: Place) {
+  const bearing = bearingFrom(origin, place);
+  const reach = Math.min(place.driveMin, ROSE_MINUTES) / ROSE_MINUTES;
+
+  return { x: reach * Math.sin(bearing), y: -reach * Math.cos(bearing) };
+}
+
+function rosePanel(
+  origin: GeoPoint | null,
+  places: Place[],
+  highlighted: Place[],
+  subject: Place | undefined,
+  t: ShareTranslator,
+): SharePanel | null {
+  if (!origin || places.length === 0) return null;
+
+  const highlightedIds = new Set(highlighted.map((place) => place.id));
+
+  return {
+    kind: "rose",
+    points: places.map((place) => ({
+      ...rosePosition(origin, place),
+      category: place.category,
+      highlighted: highlightedIds.has(place.id),
+    })),
+    ringLabels: ROSE_LABELLED_RINGS.map(formatDrive),
+    caption: t("rose.caption"),
+    count: t("rose.count", { count: places.length }),
+    subject: subject && {
+      ...rosePosition(origin, subject),
+      label: formatDrive(subject.driveMin),
+    },
+  };
+}
+
+function guideSubject(title: string, places: Place[]) {
+  return places.length === 1 ? places[0] : namedPlace(title, places);
+}
+
 function driveProof(title: string, places: Place[], t: ShareTranslator) {
   if (places.length === 0) return null;
 
-  const subject = places.length === 1 ? places[0] : namedPlace(title, places);
+  const subject = guideSubject(title, places);
   if (subject)
     return t("guide.single", { drive: formatDrive(subject.driveMin) });
 
@@ -169,6 +221,60 @@ async function pageProof(page: SharePage, locale: Locale, t: ShareTranslator) {
     : null;
 }
 
+async function pagePanel(
+  page: SharePage,
+  locale: Locale,
+  t: ShareTranslator,
+): Promise<SharePanel | null> {
+  const settings = await getGlobal("site-settings", locale);
+
+  if (page === "cottage") {
+    const facts = await getTranslations({
+      locale,
+      namespace: "cottage.facts",
+    });
+    const { surface, maxGuests, bedrooms, bathrooms } =
+      settings.propertyDetails ?? {};
+    const figures = [
+      { value: surface, label: facts("surface") },
+      { value: maxGuests, label: facts("guests", { count: maxGuests ?? 0 }) },
+      { value: bedrooms, label: facts("bedrooms", { count: bedrooms ?? 0 }) },
+      {
+        value: bathrooms,
+        label: facts("bathrooms", { count: bathrooms ?? 0 }),
+      },
+    ].flatMap(({ value, label }) =>
+      value ? [{ value: String(value), label }] : [],
+    );
+
+    return figures.length > 0 ? { kind: "figures", figures } : null;
+  }
+
+  if (page === "rates") {
+    const figures = ratedPlatforms(settings)
+      .slice(0, SHOWN_PLATFORMS)
+      .map((platform) => ({
+        value: formatRating(platform.rating ?? 0, locale),
+        label: t("rates.figure", {
+          scale: platform.ratingScale ?? 5,
+          platform: platformName(platform),
+        }),
+      }));
+
+    if (figures.length > 0) return { kind: "figures", figures };
+  }
+
+  const places = await getPlaces(locale);
+
+  return rosePanel(
+    await gitePosition(locale),
+    places,
+    places.filter((place) => place.featured),
+    undefined,
+    t,
+  );
+}
+
 async function pagePhoto(page: SharePage, locale: Locale) {
   const home = () => getGlobal("home-page", locale);
 
@@ -227,9 +333,10 @@ async function pageContent(
     getTranslations({ locale, namespace: "share" }),
     getTranslations({ locale, namespace: "common" }),
   ]);
-  const [proof, photo, global] = await Promise.all([
+  const [proof, photo, panel, global] = await Promise.all([
     pageProof(page, locale, t),
     pagePhoto(page, locale),
+    pagePanel(page, locale, t),
     getGlobal(PAGE_GLOBALS[page], locale),
   ]);
   const title = global.meta?.shareTitle || shortTitle(global.title);
@@ -238,6 +345,7 @@ async function pageContent(
     title,
     proof,
     photo,
+    panel,
     alt: describe(title, photo, common("siteName")),
   };
 }
@@ -246,11 +354,12 @@ async function guideContent(
   guide: Guide,
   locale: Locale,
 ): Promise<ShareContent> {
-  const [t, common, allPlaces, home] = await Promise.all([
+  const [t, common, allPlaces, home, origin] = await Promise.all([
     getTranslations({ locale, namespace: "share" }),
     getTranslations({ locale, namespace: "common" }),
     getPlaces(locale),
     getGlobal("home-page", locale),
+    gitePosition(locale),
   ]);
   const cited = populated<Place>(guide.places);
   const citedIds = new Set(cited.map((place) => place.id));
@@ -269,6 +378,7 @@ async function guideContent(
     title,
     proof: driveProof(title, cited, t),
     photo,
+    panel: rosePanel(origin, allPlaces, cited, guideSubject(title, cited), t),
     alt: describe(title, photo, common("siteName")),
   };
 }
@@ -284,7 +394,7 @@ export async function shareContent(
   return guide ? guideContent(guide, locale) : null;
 }
 
-function contentVersion({ title, proof, photo }: ShareContent) {
+function contentVersion({ title, proof, photo, panel }: ShareContent) {
   const fingerprint = JSON.stringify([
     SHARE_TEMPLATE_VERSION,
     title,
@@ -293,6 +403,7 @@ function contentVersion({ title, proof, photo }: ShareContent) {
     photo?.updatedAt,
     photo?.focalX,
     photo?.focalY,
+    panel,
   ]);
 
   return createHash("sha1").update(fingerprint).digest("hex").slice(0, 10);
